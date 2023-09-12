@@ -1,7 +1,43 @@
-\documentclass[12pt]{report}
-\usepackage[utf8]{inputenc}
-\usepackage{graphicx}
-\graphicspath{ {images/} }
+\documentclass[
+12pt, % The default document font size, options: 10pt, 11pt, 12pt
+%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+english, % ngerman for German
+onehalfspacing, % Single line spacing, alternatives: singlespacing, onehalfspacing or doublespacing
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
+nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
+%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
+%toctotoc, % Uncomment to add the main table of contents to the table of contents
+%parskip, % Uncomment to add space between paragraphs
+%nohyperref, % Uncomment to not load the hyperref package
+headsepline, % Uncomment to get a line under the header
+%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
+%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+]{MastersDoctoralThesis} % The class file specifying the document structure
+
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+
+\usepackage{mathpazo} % Use the Palatino font by default
+
+\usepackage[backend=biber,style=numeric-comp,natbib=true,sorting=none,maxnames=8]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+\addbibresource{biblio.bib} % The filename of the bibliography
+
+\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
+%----------------------------------------------------------------------------------------
+%	MARGIN SETTINGS
+%----------------------------------------------------------------------------------------
+
+\geometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=30mm, %2.5cm, % Inner margin
+	outer=20mm, %3.8cm, % Outer margin
+	bindingoffset=.5cm, % Binding offset
+	top=30mm, %1.5cm, % Top margin
+	bottom=20mm, %1.5cm, % Bottom margin
+	%showframe, % Uncomment to show how the type block is set on the page
+}
 
 \usepackage{lmodern}
 
@@ -18,12 +54,6 @@
 \renewcommand{\contentsname}{Table of contents}
 
 \setcounter{tocdepth}{3}
-
-% === Custom commands ===
-
-\usepackage[dvipsnames]{xcolor}
-
-\newcommand\comment[1]{\textit{\textcolor{Cerulean}{#1}}}
 
 % === Styling ===
 
@@ -43,7 +73,16 @@
 
 \begin{document}
 
-\input{chapters/front_page}
+
+\input{commands.tex}
+\input{colors.tex}
+%\maketitle
+\input{./Couverture-these/pagedegarde}
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+\mainmatter
 
 \tableofcontents
 
