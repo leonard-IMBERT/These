@@ -6,7 +6,7 @@ onehalfspacing, % Single line spacing, alternatives: singlespacing, onehalfspaci
 %draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
 nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
 %liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
-%toctotoc, % Uncomment to add the main table of contents to the table of contents
+toctotoc, % Uncomment to add the main table of contents to the table of contents
 %parskip, % Uncomment to add space between paragraphs
 %nohyperref, % Uncomment to not load the hyperref package
 headsepline, % Uncomment to get a line under the header
@@ -25,6 +25,7 @@ headsepline, % Uncomment to get a line under the header
 \addbibresource{biblio.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
+\usepackage{todonotes}
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ headsepline, % Uncomment to get a line under the header
 	bindingoffset=.5cm, % Binding offset
 	top=30mm, %1.5cm, % Top margin
 	bottom=20mm, %1.5cm, % Bottom margin
-	%showframe, % Uncomment to show how the type block is set on the page
+	%showframe, % Uncomment to show how the type block is set on The page
 }
 
 \usepackage{lmodern}
@@ -44,14 +45,14 @@ headsepline, % Uncomment to get a line under the header
 
 % === Table of content settings ===
 
-\usepackage{tocloft}
-
-\cftsetindents{section}{0em}{2em}
-\cftsetindents{subsection}{2em}{3em}
-
-\renewcommand\cfttoctitlefont{\hfill\Large\bfseries}
-\renewcommand\cftaftertoctitle{\hfill\mbox{}}
-\renewcommand{\contentsname}{Table of contents}
+%\usepackage{tocloft}
+%
+%\cftsetindents{section}{0em}{2em}
+%\cftsetindents{subsection}{2em}{3em}
+%
+%\renewcommand\cfttoctitlefont{\hfill\Large\bfseries}
+%\renewcommand\cftaftertoctitle{\hfill\mbox{}}
+%\renewcommand{\contentsname}{Table of contents}
 
 \setcounter{tocdepth}{3}
 
@@ -78,13 +79,38 @@ headsepline, % Uncomment to get a line under the header
 \input{colors.tex}
 %\maketitle
 \input{./Couverture-these/pagedegarde}
+
+% ============= ABRV ============
+
+\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
+
+  \textbf{NMO} & \textbf{N}eutrino \textbf{M}ass \textbf{O}rdering\\
+  \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory\\
+  \textbf{NO} & \textbf{N}ormal \textbf{O}rdering\\
+  \textbf{IO} & \textbf{I}nverse \textbf{O}rdering\\
+
+\end{abbreviations}
+
+
+% ============ COMMON VALUES ========
+
+\newcommand*{\bnue}{\ensuremath{\bar{\nu}_{e}}}
+
+
 \frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
 
 \pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
 
+\selectlanguage{english}
+
 \mainmatter
 
+% ============== THESIS ========
+
 \tableofcontents
+
+\pagestyle{thesis}
+\singlespacing
 
 \input{chapters/remerciements}
 
@@ -106,5 +132,6 @@ headsepline, % Uncomment to get a line under the header
 
 \chapter{Conclusion}
 
+\printbibliography[heading=bibintoc]
 
 \end{document}

@@ -784,7 +784,7 @@ breaklinks=true,
 \vspace{1cm}
 {\centering \noindent \textcolor{color-ecole}{\rule{\textwidth}{0.2cm}}}
 \vspace{-1cm}
-\selectlanguage{french}
+\selectlanguage{english}
 \section*{\selectfontbackcover\smallTwelve \textcolor{color-ecole}{Titre : }{\selectfontbackcover\mdseries{#1}}} % In this particular case, font style needs to get re-selected locally
 }
 
