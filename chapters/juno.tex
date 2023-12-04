@@ -19,25 +19,39 @@ Previous works \cite{zhan_determination_2008,  zhan_experimental_2009} shows tha
 Where $s_{ij} = \sin \theta_{ij}$, $c_{ij} = \cos \theta_{ij}$, $E$ is the $\bnue$ energy and $L$ is the baseline.
 We can see the sensitivity to the NMO in the dependency to $\Delta m_{32}^2$ and $\Delta m^2_{31}$ causing a phase shift of the spectrum (Figure \ref{fig:juno-spectrum-oscillation}).
 By carefully fitting this spectrum, one can extract the NMO and the oscillation parameters.
-
 \begin{figure}
   \centering
   \includegraphics[height=8cm]{images/juno/Spectrum-OscillationsOnly_dm2_31.png}
-  \caption{Expected number of neutrinos event per MeV in JUNO after 6 years of data taking. The black curve shows the flux if there was no oscillation. The light gray curve shows the oscillation if only the solar terms are taken in account ($\theta_{12}$, $\Delta m_{21}^2$. The blue and red curve shows the spectrum in the case of, respectively, NO and IO. The dependency of the oscillation to the different parameters are schematized by the double sided arrows. We can see the NMO sensitivity by looking at the fine phase shift between the red and the blue curve.}
+  \caption{Expected number of neutrinos event per MeV in JUNO after 6 years of data taking. The black curve shows the flux if there was no oscillation. The light gray curve shows the oscillation if only the solar terms are taken in account ($\theta_{12}$, $\Delta m_{21}^2$). The blue and red curve shows the spectrum in the case of, respectively, NO and IO. The dependency of the oscillation to the different parameters are schematized by the double sided arrows. We can see the NMO sensitivity by looking at the fine phase shift between the red and the blue curve.}
   \label{fig:juno-spectrum-oscillation}
 \end{figure}
 
-\subsubsection{Identification of the mass hierarchy}
+\subsubsection{Identification of the mass ordering}
 
-\todo{Continue here using 2.3 of Neutrino Physics with JUNO}
+To identify the mass ordering, we fit the neutrino energy spectrum under the two hypothesis of NO and IO. Those two fit give us two $\chi^2$, respectively $\chi^2_{NO}$ and $\chi^2_{IO}$. By computing the difference $\Delta \chi ^2 = \chi^2_{NO} - \chi^2_{IO}$ we can determine the most probable mass ordering: NO if $\Delta \chi^2 > 0$ and IO if $\Delta \chi^2 < 0$. Current studies shows that the expected sensitivity the mass ordering would be of $3.4 \sigma$ after 6 years of data taking in nominal setup\cite{an_neutrino_2016}.
 
 \subsubsection{Precise measurement of the oscillations parameters}
 
+The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$ are free parameters in the fit of the oscillation spectrum. The precision on those parameters have been estimated and are shown in figure \ref{fig:juno-param-precision}. Wee see that for $\theta_{12}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$, precision at 6 years is better than the reference precision by an order of magnitude \cite{juno_collaboration_sub-percent_2022}
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=\linewidth]{images/juno/oscillation_params_precision.png}
+  \caption{A summary of precision levels fir the oscillation parameters. The reference value (PDG 2020 \cite{pdg2020}) is compared with 100 days, 6 years and 20 years of JUNO data taking.}
+  \label{fig:juno-param-precision}
+\end{figure}
+
 \subsection{Other physics}
+
+While reactor neutrinos are the main signal, JUNO will of course be sensitive to every neutrinos energetic enough to allow an IBD, and even some other more exotic channels.
 
 \subsubsection{Geoneutrinos}
 
+Geoneutrinos designate the antineutrinos coming from the decay of long-lived radioactive elements inside the Earth. The 1.8 MeV threshold necessary for the IBD makes it possible to measure geoneutrinos from $^238$U and $^232$Th decay chains. The studies of geoneutrinos can help refine the Earth crust models but is also necessary to characterise their signal, as they are a background to the mass ordering and oscillations parameters studies.
+
 \subsubsection{Atmospheric neutrinos}
+
+Atmospheric neutrinos are neutrinos originating from the decay of $\pi$ and $K$ particles that are produced in extensive air showers initiated by the interactions of cosmic rays with the Earth atmosphere. Earth is mostly transparent to neutrinos below the PeV energy, thus JUNO will be able to see neutrinos coming from all directions. Their baseline range is large (15km $\sim$ 13000km), they can have energy between 0.1 GeV and 10 TeV and will contain all neutrino and antineutrinos flavour.
 
 \subsubsection{Beyond standard model neutrinos interactions}
 
