@@ -4,7 +4,7 @@
 
 The first idea of a medium baseline (~60 km) experiment, was explored in 2008 where it was demonstrated that the Neutrino Mass Ordering (NMO) could be determined by a medium baseline experiment if $\sin^2(2\theta_{13}) > 0.005$ without requirements on accurate information of the reactor antineutrino spectra and the value of $\Delta m_{32}^2$. \cite{zhan_determination_2008}. From this idea is born the Jiangmen Underground Neutrino Observatory (JUNO) experiment.
 
-JUNO is a neutrino detection experiment under construction located in China. Its main objectives are the determination of the mass ordering at the 3-4$\sigma$ level in 6 years of data taking and the measurement at the per-mil precision of the oscillation parameters $\Delta m_{21}^2$, $\sin^2 2\theta_{12}$, $\Delta m_{32}^2$ and, with less precision, $\sin^2\theta_{13}$\cite{an_neutrino_2016}.
+JUNO is a neutrino detection experiment under construction located in China. Its main objectives are the determination of the mass ordering at the 3-4$\sigma$ level in 6 years of data taking and the measurement at the per-mil precision of the oscillation parameters $\Delta m_{21}^2$, $\sin^2 \theta_{12}$, $\Delta m_{32}^2$ and, with less precision, $\sin^2\theta_{13}$\cite{an_neutrino_2016}.
 
 \begin{figure}[ht]
   \centering
@@ -58,7 +58,10 @@ The $\bar{\nu}_e$ coming from reactors are emitted from $\beta$-decay of unstabl
 \end{equation}
 where $W_{th}(t)$ is the thermal power of the reactor, $f_i(t)$ is the fraction fission of the $i$th isotope, $e_i$ its thermal energy released in each fission and $S_i(e_\nu)$ the neutrino flux per fission for this isotope. Using this method, the flux uncertainty is expected to be of an order of 2-3 \% \cite{juno_collaboration_sub-percent_2022}.
 
-In addition to those prediction, a satellite experiment named TAO\cite{steiger_tao_2022} will be setup the reactor core Taishan 1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core to identify unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
+In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup the reactor core Taishan -1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core to identify unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
+
+One the current open issue about the reactor neutrino flux is the so-called neutrnino anomaly, an unexpected surplus of neutrino emission in the spectra around 5 MeV \cite{mention_reactor_2011}.
+Multiples scientists are trying to explain this surplus by advanced recaclculation of the nuclei model during beta decay \cite{kopeikin_reevaluating_2021, letourneau_origin_2023} but no consesus on this issue has been reached yet.
 
 \subsection{Reactor neutrino oscillation for NMO and precise measurements}
 
@@ -125,7 +128,7 @@ While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclea
 
 \subsubsection{Geoneutrinos}
 
-Geoneutrinos designate the antineutrinos coming from the decay of long-lived radioactive elements inside the Earth. The 1.8 MeV threshold necessary for the IBD makes it possible to measure geoneutrinos from $^238$U and $^232$Th decay chains. The studies of geoneutrinos can help refine the Earth crust models but is also necessary to characterise their signal, as they are a background to the mass ordering and oscillations parameters studies.
+Geoneutrinos designate the antineutrinos coming from the decay of long-lived radioactive elements inside the Earth. The 1.8 MeV threshold necessary for the IBD makes it possible to measure geoneutrinos from $^{238}$U and $^{232}$Th decay chains. The studies of geoneutrinos can help refine the Earth crust models but is also necessary to characterise their signal, as they are a background to the mass ordering and oscillations parameters studies.
 
 \subsubsection{Atmospheric neutrinos}
 
@@ -170,11 +173,21 @@ All those events represent a non-negligeable part of the spectrum as shown in fi
 
 \section{The JUNO detector}
 
-\todo{1. Expliquer "grossierement" le detecteur, 2. Mettre ici toutes informations qui ne rentrerait pas dans les section suivantes (aka overburden, etc...)}
+The JUNO detector is a scintillator detector buried 693.35 under the ground (1800 meters water equivalent). It consist of Central Detector (CD), a water cherenkov detector and a Top Tracker as scheme in figure \ref{fig:juno-schema}
+The CD is an acrylic vessel containing the 20 ktons of LS. It is supported by a stainless steel structure and is immersed in a water that serve as shielding from external radiation and a cherenkov detector for the background. The top of the experiment is partially covered with the TT, a plastic scintillator detector which is use to detect the atmospheric muons background acting as veto detector.
+The top of the experiment also host the LS purification system, a water purification system, a ventilation system to get rid of the potential radon in the air.
+The CD is observed by two system of photo-multipliers tubes (PMT). They are attached to the steel structure and their electronic readout is partially submersed near them. A third observation system of PMT is also installed on the structure but are facing outward of the CD, instrumenting the water to be cherenkov detector. The CD and the cherenkov detector are optically separated by aluminium sheet \todo{C'est vraiment de l'aluminium ?}. A chimney for LS filling and purification and for calibration operations connects the CD to the experimental hall from the top.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=8cm]{images/juno/drawing_schema.png}
+  \caption{Schematics view of the JUNO detector.}
+  \label{fig:juno-schema}
+\end{figure}
 
 \subsection{Principle of detection}
 
-JUNO will be able to detect neutrinos and measure their energy mainly via the Inverse Beta Decay (IBD) interaction
+The CD will detect the neutrino and measure their energy mainly via an Inverse Beta Decay (IBD) interaction with the proton of the LS:
 \begin{equation*}
   \bar{\nu}_e + p \rightarrow n + e^+
 \end{equation*}
@@ -196,20 +209,80 @@ Once the positron and the neutron will propagate in the detection medium, the li
   \label{fig:IBD}
 \end{figure}
 
-More details about the LS can be found in section \ref{sec:CD}.
+More details about the LS can be found in section \ref{sec:LS}.
 
-The scintillation photons will then be captured by the photo-multipliers (PMTs) surrounding the experiment. The analogue signal, then digitized by the electronic is the signal of our experiment. The signal produced by the positron is subsequently called the prompt signal, and the signal coming from the neutron the delayed signal. This naming convention come from the fact that the positron will deposit its energy rather quickly (few ns) where the neutron will take a bit more time ($\sim$ 236 $\mu$s).
+The scintillation photons have an UV frequency and will be captured by PMTs observing the CD. The analogue signal, then digitized by the electronic is the signal of our experiment. The signal produced by the positron is subsequently called the prompt signal, and the signal coming from the neutron the delayed signal. This naming convention come from the fact that the positron will deposit its energy rather quickly (few ns) where the neutron will take a bit more time ($\sim$ 236 $\mu$s).
 
 \subsection{Central Detector (CD)}
 \label{sec:CD}
 
-\subsubsection{Acrylic containment sphere}
+The central detector, composed of 20 ktons of Liquid Scintillator (LS) is the main part of JUNO. The LS is contained in a spherical acrylic vessel of inner diameter of 35.4 m and a thickness of 120 mm. The CD and its structural support are submerged in a cylindrical water pool of 43.5m diameter and 44 m height. We're confident that the water pool provide sufficient buffer protection in every direction against the rock radioactivity.
+\subsubsection{Acrylic vessel}
+The acrylic vessel is a spherical vessel of 35.4 m inner diameter. It is assembled from 265 acrylic panels, thermo bonded together. The acrylic recipes has been carefully tuned with extensive R\&D to ensure it does not include plasticizer and anti-UV material that would stop the scintillation photons.
+Those panels require to be pure of radioactive materials to not cause background. Current setup where the acrylic panels are molded in cleanrooms of class 10000, let us reach a uranium and thorium contamination of <0.5 ppt. The molding and thermoforming processes is optimized to increase the assemblage transparency in water to >96\%. The acrylic vessel is supported by a stainless steel structure via supporting node (fig \ref{fig:sup_node}). The struccture and the node are designed to be resilient to natrual event such as earthquake and support many times the effective load of the acrylic vessel.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=4cm]{images/juno/node_b.png}
+  \caption{Schematics of the supporting node for the acrylic vessel}
+  \label{fig:sup_node}
+\end{figure}
 
 \subsubsection{Liquid scintillator}
+\label{sec:LS}
 
-\subsubsection{Large photo-multipliers (LPMTs)}
+The Liquid Scintillator (LS) has a similar recipe as the one used in Daya Bay \cite{bay_optimization_2020} but without gadolinium doping. It is made of three components, necessary to shift the wavelength of emitted photon to prevent reabsorption by the LS:
+\begin{enumerate}
+  \item The detection medium is the \textit{linear alkylbenzene} (LAB), selected because of its excellent transparency, high flash point, low chemical reactivity and good light yield. Representing $\sim 98\%$ of the LS, it is the main component with which ionizing particles and gamma interact. Charged particles will collide with its electronic cloud, transferring energy to the molecule, gamma will interact via compton effect with the electronic cloud before finally be absorbed via photoelectric effect.
+  \item The second component of the LS is the \textit{2,5-diphenyloxazole} (PPO). A fraction of the excitation energy of the LAB is transferred to the PPO, mainly via non radiative process \cite{birks_chapter_1964}. The PPO molecules de-excites in the same way, transferring their energy to the bis-MSB. The PPO makes for $~1.5$ \% of the LS.
+  \item The last component is the \textit{p-bis(o-methylstyryl)-benzene} (bis-MSB). Once excited by the PPO, it will emit photon with an average wavelength of $\sim430$ nm (full spectrum in figure \ref{fig:LS_spectrum_and_PMT_sensitivity}) that can be detected by our photo-multipliers systems. It amount for $\sim 0.5$\% of the LS.
+\end{enumerate}
+This formula has been optimized using dedicated studies with a Daya Bay detector \cite{bay_optimization_2020, zhang_complete_2020} to reach the requirements for the JUNO experiment:
+
+\begin{itemize}
+  \item A light yield / MeV of the amount of $10^4$ photons to maximize the statistic in the energy measurement.
+  \item An attenuation length comparable to the size of the detector to prevent losing photons during their propagation in the LS. The final attenuation length is 25.8m \cite{yang_light_2017} to compare with JUNO diameter of 35.4m.
+  \item Uranium/Thorium radiopurity to prevent background signal. The reactor neutrino program require a contamination fraction $F<10^{-15}$ while the solar neutrino program require $F<10^{-17}$.
+\end{itemize}
+
+The LS will be purified before filling to reach the radiopurity and transparency requirements. The LS will frequently be purified and tested in the Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} to ensure that the requirements are kept during the lifetime of the experiment.
+
+\subsubsection{Large Photo-Multipliers (LPMTs)}
+\label{sec:LPMT}
+
+The scintillation light produced by the LS is then collected by Photo-Multipliers Tubes (PMT) that transform the incoming photon into an electric signal. As described in figure \ref{fig:pmt-schem}, the incident photons interact with the photocatode via photoelectric effect producing an electron called a Photo-Electron (PE). This PE is then focused on the dynodes where the high voltage will allow it to be multiplied. After multiple amplification, the electrons are read by the anode producing an electric signal that will need to be digitalized by the readout electronics.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=4cm]{images/juno/pmt_schematic.png}
+  \caption{Schematic of a PMT}
+  \label{fig:pmt-schem}
+\end{figure}
+
+The Large Photo-Multipliers Tubes (LPMT), used in the central detector and in the water pool, are 20-inch (50.8 cm) radius PMTs.$\sim 5000$ dynode-PMTs \cite{noauthor_photomultiplier_nodate} were produced by the Hamamatsu\copyright company and $\sim 15000$ Micro-Channell Plate (MCP) \cite{abusleme_mass_2022} by the NNVT \copyright company . This system is the one responsible for the energy measurement with a energy resolution of $3\%/\sqrt{E}$, resolution necessary for the mass ordering measurement. 
+
+
+%TODO : I'M HERE
+is a system composed of 17612 
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=5cm]{images/juno/LS_spectrum.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[height=5cm]{images/juno/LPMT_efficiency.png}
+  \end{subfigure}
+  \caption{\textbf{On the left:} Quantum efficiency (QE) and emission spectrum of the LAB and the bis-MSB \cite{bay_optimization_2020}. \textbf{On the right:} Sensitivity of the Hamamatsu LPMT depending on the wavelength of the incident photons \cite{noauthor_photomultiplier_nodate}.}
+  \label{fig:LS_spectrum_and_PMT_sensitivity}
+\end{figure}
 
 \subsubsection{Small photo-multipliers (SPMTs)}
+\label{sec:SPMT}
 
 \subsubsection{Data Acquisition System (DAQ)}
 
