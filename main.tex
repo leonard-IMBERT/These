@@ -24,22 +24,25 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[backend=biber,style=numeric-comp,natbib=true,sorting=none,maxnames=8]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 \renewbibmacro{in:}{}
 \DeclareFieldFormat{pages}{#1}
-\addbibresource{biblio.bib} % The filename of the bibliography
+\addbibresource{biblio_fixed.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
-\usepackage{todonotes}
+
+\usepackage{lineno}
+\linenumbers
+
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
 
 \geometry{
-	paper=a4paper, % Change to letterpaper for US letter
-	inner=30mm, %2.5cm, % Inner margin
-	outer=20mm, %3.8cm, % Outer margin
-	bindingoffset=.5cm, % Binding offset
-	top=30mm, %1.5cm, % Top margin
-	bottom=20mm, %1.5cm, % Bottom margin
-	%showframe, % Uncomment to show how the type block is set on The page
+  paper=a4paper, % Change to letterpaper for US letter
+  inner=30mm, %2.5cm, % Inner margin
+  outer=20mm, %3.8cm, % Outer margin
+  bindingoffset=.5cm, % Binding offset
+  top=30mm, %1.5cm, % Top margin
+  bottom=20mm, %1.5cm, % Bottom margin
+  %showframe, % Uncomment to show how the type block is set on The page
 }
 
 \usepackage{lmodern}
@@ -87,7 +90,10 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
+  \textbf{ACU} & \textbf{A}utomatic \textbf{C}alibration \textbf{U}nit \\
   \textbf{CD} & \textbf{C}entral \textbf{D}etector \\
+  \textbf{CLS} & \textbf{C}able \textbf{L}oop \textbf{S}ystem \\
+  \textbf{GT} & \textbf{G}uiding \textbf{T}ube \\
   \textbf{IBD} & \textbf{I}nverse \textbf{B}eta \textbf{D}ecay\\
   \textbf{IO} & \textbf{I}nverse \textbf{O}rdering\\
   \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory\\
@@ -97,7 +103,11 @@ headsepline, % Uncomment to get a line under the header
   \textbf{NO} & \textbf{N}ormal \textbf{O}rdering\\
   \textbf{PE} & \textbf{P}hoto \textbf{E}lectron \\
   \textbf{PMT} & \textbf{P}hoto-\textbf{M}ultipliers \textbf{T}ubes \\
-  \textbf{SPMT} & \textbf{S}mall \textbf{PMT}
+  \textbf{ROV} & \textbf{R}emotely \textbf{O}perated under-LS \textbf{V}ehicle \\
+  \textbf{SPMT} & \textbf{S}mall \textbf{PMT} \\
+  \textbf{TTS} & \textbf{T}ime \textbf{T}ransit \textbf{S}pread \\
+  \textbf{TT} & \textbf{T}op \textbf{T}racker \\
+  \textbf{WCD} & \textbf{W}ater \textbf{C}herenkov \textbf{D}etector \\
 
 \end{abbreviations}
 
