@@ -288,7 +288,7 @@ The LS will frequently be purified and tested in the Online Scintillator Interna
 \subsubsection{Large Photo-Multipliers Tubes(LPMTs)}
 \label{sec:LPMT}
 
-The scintillation light produced by the LS is then collected by Photo-Multipliers Tubes (PMT) that transform the incoming photon into an electric signal. As described in figure \ref{fig:pmt-schem}, the incident photons interact with the photocatode via photoelectric effect producing an electron called a Photo-Electron (PE). This PE is then focused on the dynodes where the high voltage will allow it to be multiplied. After multiple amplification, the electrons are read by the anode producing an electric signal that will need to be digitalized by the readout electronics.
+The scintillation light produced by the LS is then collected by Photo-Multipliers Tubes (PMT) that transform the incoming photon into an electric signal. As described in figure \ref{fig:pmt-schem}, the incident photons interact with the photocatode via photoelectric effect producing an electron called a Photo-Electron (PE). This PE is then focused on the dynodes where the high voltage will allow it to be multiplied. After multiple amplification the resulting charge - in coulomb [C] - is collected by the anode and the resulting electric signal can be digitalized by the readout electronics from which the charge and timing can be extracted.
 
 \begin{figure}[ht]
   \centering
@@ -302,31 +302,29 @@ To maintain the resolution over the lifetime of the experiment, JUNO require a f
 
 The LPMTs electronic are divided in two parts. One "near", located underwater, in proximity of the LPMT to reduce the cable length between the PMT and early electronic. A second one, outside of the detector that is responsible for higher level analysis before sending the data to the DAQ.
 
-The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, causing non linearity in the PMT response that need to be understood and calibrated.
-
-\marginpar{TODO: Relecture: I'm here}
+The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:calib} for more details.
 
 \subsubsection{Small Photo-Multipliers Tubes (SPMTs)}
 \label{sec:SPMT}
 
-The Small PMT (SPMTs), on the other hand, are 3-inch (7.62 cm) PMTs. They will be used in the CD as a secondary detection system. Those 25600 SPMTs will observe the same events as the LPMTs, thus sharing the physics and detector systematics up until the photon conversion. With a detector coverage of 2.7\%, this system will collect $\sim 43$ PE/MeV for a final energy resolution of $\sim 17\%$. This resolution is not enough to measure the MO, $\theta_{13}$, $\Delta m^2_{31}$ but will be sufficient to independently measure $\theta_12$ and $\Delta m^2_{21}$.
+The Small PMT (SPMTs) system is made of 3-inch (7.62 cm) PMTs. They will be used in the CD as a secondary detection system. Those 25600 SPMTs will observe the same events as the LPMTs, thus sharing the physics and detector systematics up until the photon conversion. With a detector coverage of 2.7\%, this system will collect $\sim 43$ PE/MeV for a final energy resolution of $\sim 17\%$. This resolution is not enough to measure the NMO, $\theta_{13}$, $\Delta m^2_{31}$ but will be sufficient to independently measure $\theta_{12}$ and $\Delta m^2_{21}$.
 
 Due to the low PE rate, SPMTs will be running in photo-counting mode in the reactor range thus will be insensitive to non-linearity effect. Also, due to their smaller size and electronics, SPMTs have a better timing resolutions than the LPMTs.
-At higher energy range, like supernovae events, LPMTs will saturate where SPMTs due to their lower PE collection will be able do give measurement of the energy spectrum.
+At higher energy range, like supernovae events, LPMTs will saturate where SPMTs due to their lower PE collection will to produce a reliable measure of the energy spectrum.
 
 The Data Acquisition System (DAQ) is designed to support the event rate of IBD, background, dark noise and supplementary storage buffers are present in the LPMT electronics to withstand the event rate during supernovae burst.
 
 \subsection{Veto detector}
 
-The CD will be bathed in constant background noise coming from numerous, the radioactivity from surrounding rock, the radioactivity of its own components or from the cosmic muons. This background needs to be rejected to ensure the purity of the IBD spectrum. To prevent a big part of them, JUNO use two veto detector that will tag events as background before CD analysis.
+The CD will be bathed in constant background noise coming from numerous sources : the radioactivity from surrounding rock and its own components or from the flux of cosmic muons. This background needs to be rejected to ensure the purity of the IBD spectrum. To prevent a big part of them, JUNO use two veto detector that will tag events as background before CD analysis.
 
 \subsubsection{Cherenkov in water pool}
 
-The Water Cherenkov Detector (WCD) is the instrumentalization of the water buffer around the CD. When high speed charged particles will pass through the water, they will produced cherenkov photons. The light will be collected by 2400 MCP LPMTs installed on the outer surface of the CD structure. The  muons veto strategy is based on a PMT multiplicity condition. WCD PMTs are grouped in ten zones: 5 in the top, 5 in the bottom. Veto are raised either when more than 19 PMTs are triggered in one zone or when two adjacent zones simultaneously trigger more than 13 PMTs. Using this trigger, we expect to reach a muon detection efficiency of 99.5\% while keeping the noise at reasonable level.
+The Water Cherenkov Detector (WCD) is the instrumentalization of the water buffer around the CD. When high speed charged particles will pass through the water, they will produced cherenkov photons. The light will be collected by 2400 MCP LPMTs installed on the outer surface of the CD structure. The  muons veto strategy is based on a PMT multiplicity condition. WCD PMTs are grouped in ten zones: 5 in the top, 5 in the bottom. A veto is raised either when more than 19 PMTs are triggered in one zone or when two adjacent zones simultaneously trigger more than 13 PMTs. Using this trigger, we expect to reach a muon detection efficiency of 99.5\% while keeping the noise at reasonable level.
 
 \subsubsection{Top tracker}
 The JUNO Top Tracker (TT) is a plastic scintillator detector located on the top of the experiment (see figure \ref{fig:tt}). Made from plastic scintillator from OPERA \cite{acquafredda_opera_2009} layered horizontally in 3 layers on the top of the detector, the TT will be able to detect incoming atmospheric muons.
-With its coverage, about 1/3 of the of all atmospheric muons that passing through the CD will also pass through the 3 layer of the detector. While it does not cover the majority of the detector, the TT is particularly effective to detect muons coming through the filling chimney region which might present difficulties from the other subsystems in some classes of events.
+With its coverage, about 1/3 of the of all atmospheric muons that passing through the CD will also pass through the 3 layer of the detector. While it does not cover the majority of the CD, the TT is particularly effective to detect muons coming through the filling chimney region which might present difficulties from the other subsystems in some classes of events.
 \begin{figure}[ht]
   \centering
   \includegraphics[height=5cm]{images/juno/Global_TT_01.png}
@@ -335,13 +333,14 @@ With its coverage, about 1/3 of the of all atmospheric muons that passing throug
 \end{figure}
 
 \section{Calibration strategy}
+\label{sec:calib}
 
 The calibration is a crucial part of the JUNO experiment. Because we are looking at civil reactor neutrino it might be impossible to run measurement without signal, it would need to shut down every reactor from the Taishan and Yangjiang power plants which is realistically impossible. Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest, [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
-It is understood that the CD response will be different depending on the type of particle and on the position on the event due to the absorption length of the LS and the optical response of the acrylic sphere (see section \ref{sec:reco}). The energy response is also expected to be non-linear due to the LS response \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
+It is understood that the CD response will be different depending on the type of particle, due to the interaction with LS, and on the position on the event, due to the absorption length of the LS and the optical response of the acrylic sphere (see section \ref{sec:reco}). The energy response is also expected to be non-linear due to the LS response \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
 
 \subsection{Energy scale calibration}
 
-While electrons and positrons sources would be ideal, for a large LS detector, thin-walled electrons or positrons sources could lead to leakage of radionuclides causing contamination. Instead are considered gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:calib_source}.
+While electrons and positrons sources would be ideal, for a large LS detector thin-walled electrons or positrons sources could lead to leakage of radionuclides causing contamination. Instead are considered gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:calib_source}.
 
 \begin{table}[ht]
   \centering
@@ -394,10 +393,10 @@ From this calibration we call $E_{vis}$ the "visible energy" that is reconstruct
 
 \subsection{Calibration system}
 
-The JUNO detector will need to investigate the non-uniformity in the detector response, more explication can be found in section \ref{sec:reco}. For this we can deploy sources using multiples systems that are schematized in figure \ref{fig:calib} :
+The JUNO detector will need to investigate the non-uniformity in the detector response depending of the position of the event (more details in section \ref{sec:reco}). For this we will able to deploy sources using multiples systems that are schematized in figure \ref{fig:calib} :
 
 \begin{itemize}
-  \item For a one-dimension vertical calculation, the Automatic Calibration Unit (ACU) will be able to deploy multiple radioactive sources or a pulse laser diffuser ball along the central axis of the CD through the top chimney. The source position precision is less than 1cm.
+  \item For a one-dimension vertical calibration, the Automatic Calibration Unit (ACU) will be able to deploy multiple radioactive sources or a pulse laser diffuser ball along the central axis of the CD through the top chimney. The source position precision is less than 1cm.
   \item For off-axis calibration, a calibration source attached to a Cable Loop System (CLS) can be moved on a vertical half-plane by adjusting the length of two connection cable. Two set of CSL will be deployed to provide a 79\% effective coverage of a vertical plane.
   \item A Guiding Tube (GT) will surround the CD to calibrate the non-uniformity of the response at the edge of the detector
   \item A Remotely Operated under-LS Vehicle (ROV) can be deployed to desired location inside LS for a more precise and comprehensive calibration. The ROV will also be equipped with a camera for inspection of the CD.
@@ -451,18 +450,21 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
   \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} simulation simulating the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation
   \item An electronic simulation, simulating the response waveform of the PMTs, tracking it through the digitization process, accounting for effects such as non-linearity, dark noise, Time Transit Spread (TTS), pre-pulsing, after-pulsing and ringing if the waveform. This step is commonly referenced as \textit{Elecsim}.
   \item A waveform reconstruction where the digitized waveform are filtered to remove high-frequency white noise and then deconvoluted to yield time and charge informations of the photons hits on the PMTs. This step is commonly referenced as \textit{Calib}.
-  \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. See section \ref{sec:reco} for more details on the reconstruction.
-  \item Once the singular events are reconstructed, they go through event pairing and classification to select IBD events.
+  \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:reco} for more details on the reconstruction.
+  \item Once the singular events are reconstructed, they go through event pairing and classification to select IBD events. This step is named Event Classification.
+  \item The purified signal is then analysed by the analysis framework which depend of the physics topic of interest.
 \end{itemize}
 
-\section{State of the art of the IBD reconstruction in JUNO}
+The steps Reco and Event Classification are divided into two category of algorithm. Fast but less accurate algorithms that are running during the data taking designed as \textit{Online} algorithms. Those algorithm are used to take the decision to save the event on tape or to throw it away. More accurate algorithms that run on batch of events designed \textit{Offline} algorithms. They are used for the physics analysis and the Offline Reco will be a topic of interest for this thesis.
+
+\section{State of the art of the Offline IBD reconstruction in JUNO}
 \label{sec:reco}
 
-The main reconstruction method currently run in JUNO is a data-driven method based on a likelihood maximization \cite{wu_new_2019, huang_improving_2021}. The first step is to reconstruct the interaction vertex from which the energy reconstruction is dependent. It is also necessary for event pairing and classification.
+The main reconstruction method currently run in JUNO is a data-driven method based on a likelihood maximization \cite{wu_new_2019, huang_improving_2021} using only the LPMTs. The first step is to reconstruct the interaction vertex from which the energy reconstruction is dependent. It is also necessary for event pairing and classification.
 
 \subsection{Interaction vertex reconstruction}
 
-To start the likelihood maximization, a rough estimation of the vertex is made using a charge-based algorithm and a time based algorithm.
+To start the likelihood maximization, a rough estimation of the vertex and of the event timing is needed. We start by estimating the vertex position using a charge based algorithm.
 
 \subsubsection{Charge based algorithm}
 
@@ -472,14 +474,97 @@ The charge-based algorithm is basically base on the charge-weighted average of t
   \vec{r}_{cb} = a\cdot\frac{\sum_i q_i \cdot \vec{r}_i}{\sum_i q_i}
 \end{align}
 
-Where $q_i$ is the reconstructed charge of the pulse of the $i$th PMT and $\vec{r}_i$ is its position. $\vec{r}_0$ is the reconstructed interaction position. $a$ is a scale factor introduced because a weighted average over a 3D sphere is inherently biased. Using calibration we can estimate $a \approx 1.3$ \cite{li_event_2021}. The results in figure \ref{fig:rec:bary} shows that the reconstruction is biased from around 15m and further. This is due to the phenomena called ``total reflection area'' or TR Area.
+Where $q_i$ is the reconstructed charge of the pulse of the $i$th PMT and $\vec{r}_i$ is its position. $\vec{r}_0$ is the reconstructed interaction position. $a$ is a scale factor introduced because a weighted average over a 3D sphere is inherently biased. Using calibration we can estimate $a \approx 1.3$ \cite{li_event_2021}. The results in figure \ref{fig:rec:cbary} shows that the reconstruction is biased from around 15m and further. This is due to the phenomena called ``total reflection area'' or TR Area.
+
+As depicted in the figure \ref{fig:rec:refl} the optical photons, given that they have a sufficiently large incidence angle, can be deviated of their trajectories when passing through the interfaces LS-acrylic and water-acrylic due to the optical index difference. This cause photons to be lost or to be detected by PMT further than anticipated if we consider their rectilinear trajectories. This cause the charge barycenter the be located closer to the center than the vent really is.
+
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=6cm]{images/juno/reco/Reflexion_scenarii.jpg}
+    \caption{Illustration of the different optical photons reflection scenarios. \textbf{1} is the reflection of the photon at the interface LS-acrylic or acrylic-water. \textbf{2} is the transmission of the photons through the interfaces. \textbf{3} is the conduction of the photon in the acrylic.}
+    \label{fig:rec:refl}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=6cm]{images/juno/reco/charge_barycenter.png}
+    \caption{Heatmap of $R_{rec}$ and $R_{rec} - R_{true}$ as a function of $R_{true}$ for 4MeV prompt signals uniformly distributed in the detector calculated by the charge based algorithm}
+    \label{fig:rec:cbary}
+  \end{subfigure}
+  \caption{}
+\end{figure}
+
+It is to be noted that charge based algorithm, in addition to be biased near the edge of the detector, does not provide any information about the timing of the event. Therefore, a time based algorithm needs to be introduced to provide initial values.
+
+\subsubsection{Time based algorithm}
+
+The time based algorithm use the distribution of the time of flight corrections $\Delta t$ (Eq \ref{eq:rec:tof_corr}) of an event to reconstruct its vertex and $t_0$. It follow the following iterations:
+
+\begin{enumerate}
+  \item Use the charge based algorithm to get an initial vertex to start the iteration.
+
+  \item \label{alg:rec:tba} Calculate the time of flight correction for the $i$th PMT using \begin{equation}
+      \label{eq:rec:tof_corr}
+      \Delta t_i (j) = t_i - \mathrm{tof}_i (j)
+    \end{equation}
+    where $j$ is the iteration step, $t_i$ is the timing of the $i$th PMT, and $\mathrm{tof}_i$ is the time-of-flight of the photon considering an rectilinear trajectory and an effective velocity in the LS and water (see \cite{li_event_2021} for detailed description of this effective velocity). Plot the $\Delta t$ distribution and label the peak position as $\Delta t^{\mathrm{peak}}$ (see fig \ref{fig:rec:delta_t_distrib}).
+
+  \item Calculate a correction vector $\vec{\delta} [\vec{r}(j)]$ as \begin{equation}
+      \vec{\delta} [\vec{r}(j)] = \frac{\sum_i \bigg(\frac{\Delta t(j) - \Delta t^{\mathrm{peak}}(j)}{\mathrm{tof}_i(j)} \bigg) \cdot (\vec{r}_0(j) - \vec{r}_i)}{N^{\mathrm{peak}}(j)}
+    \end{equation}
+    where $\vec{r}_0$ is the vertex position at the beginning of this iteration, $\vec{r}_i$ is the position of the $i$th PMT. To minimize the effect of scattering, dark noise and reflection, only the pulse happening in a time window (-10 ns, +5 ns) around $\Delta t^{\mathrm{peak}}$ are considered. $N^{\mathrm{peak}}$ is the number of PE collected in this time-window.
+
+  \item if $\vec{\delta} [\vec{r}(j)] < 1 \mathrm{mm}$ or $j \geq 100$, stop the iteration. Otherwise $\vec{r}_0 (j + 1) = \vec{r}_0 (j) + \vec{\delta} [\vec{r}(j)]$ and go to step \ref{alg:rec:tba}.
+\end{enumerate}
 
 \begin{figure}
-  \centering
-  \includegraphics[height=6cm]{images/juno/reco/charge_barycenter.png}
-  \caption{Heatmap of $R_{rec}$ and $R_{rec} - R_{true}$ as a function of $R_{true}$ for 4MeV prompt signals uniformly distributed in the detector}
-  \label{fig:rec:cbary}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/delta_t_peak_distrib.png}
+    \caption{$\Delta t$ distribution at different iterations step $j$}
+    \label{fig:rec:delta_t_distrib}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/time_based_algorithm.png}
+    \caption{Heatmap of $R_{rec}$ and $R_{rec} - R_{true}$ as a function of $R_{true}$ for 4MeV prompt signals uniformly distributed in the detector calculated by the time based algorithm}
+    \label{fig:rec:time_based_results}
+  \end{subfigure}
 \end{figure}
+
+However because the earliest arrival time is used, $t_i$ is related to the number photoelectrons $N_i^{\mathrm{pe}}$ detected by the PMT \cite{ranucci_analytical_1995, galbiati_time_2006, moszynski_status_1979}. To reduce bias in the vertex reconstruction, the following equation is used to correct $t_i$ into $t'_i$:
+\begin{equation}
+  t'_{i} = t_i - p_0 / \sqrt{N_i^{\mathrm{pe}}} - p_1 - p_2 / N_i^{\mathrm{pe}}
+\end{equation}
+
+The parameters $(p_0, p_1, p_2)$ were optimized to (9.42, 0.74, -4.60) for Hamamatsu PMTs and (41.31, -12.04, -20.02) for NNVT PMTs \cite{li_event_2021}. The results presented in figure \ref{fig:rec:time_based_results} shows that the time based algorithm provide a more accurate vertex and is unbiased even in the TR area. This results $(\vec{r}_0, t_0)$ is used as initial value for the likelihood algorithm.
+
+\subsubsection{Time likelihood algorithm}
+
+The time likelihood algorithm use the residual time expressed as follow
+\begin{equation}
+  t_{\mathrm{res}}^i(\vec{r}_0, t_0) = t_i - \mathrm{tof}_i - t_0
+\end{equation}
+
+In a first order approximation, the scintillator response Probability Density Function (PDF) can be described as the emission time profile of the scintillation photons, the Time Transit Spread (TTS) and the dark noise of the PMTs. The emission time profile $f(t_{\mathrm{res}})$ is described like
+\begin{equation}
+  f(t_{\mathrm{res}}) = \sum_k \frac{\rho_k}{\tau_k} e^{\frac{-t_{\mathrm{res}}}{\tau_k}}, ~ \sum_k \rho_k = 1
+\end{equation}
+as the sum of the $k$ component that emit light in the LS each one characterised by it's decay time $\tau_k$ and intensity fraction $\rho_k$. The TTS component is expressed as a gaussian convolution
+\begin{equation}
+  g(t_{\mathrm{res}}) = \frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-(t_{\mathrm{res}} - \nu)^2}{2\sigma^2}} \cdot f(t_{\mathrm{res}})
+\end{equation}
+where $\sigma$ is the TTS of PMTs and $\nu$ is the average transit time. The dark noise is not correlated with any physical events and considered as constant rate over the time window considered $T$. By normalizing the dark noise probability $\epsilon(t_{\mathrm{res}})$ as $\int_T \epsilon(t_{\mathrm{res}}) dt_{\mathrm{res}} = \epsilon_{\mathrm{dn}}$ , it can be integrated in the PDF as
+\begin{equation}
+  p(t_{\mathrm{res}}) = (1-\epsilon_{\mathrm{dn}}) \cdot g(t_{\mathrm{res}}) + \epsilon(t_{\mathrm{res}})
+\end{equation}
+
+The distribution of the residual time $t_{\mathrm{res}}$ of an event can then be compared to $p(t_{\mathrm{res}})$ and the best fitting vertex $\vec{r}_0$ and $t_0$ can be chosen by minimizing
+\begin{equation}
+  \mathcal{L}(\vec{r}_0, t_0) = - \mathrm{ln} \bigg(\prod_i p(t^i_{\mathrm{res}}) \bigg)
+\end{equation}
 
 \subsection{Energy reconstruction}
 
