@@ -28,6 +28,7 @@ The distance of 53 km has been specifically chosen to maximize the disappearance
 Even if JUNO design (section \ref{sec:juno_detector})  was optimized for the measurement of the NMO, its large detection volume, excellent energy resolution and background level and understanding make it also an excellent detector to measure the flux coming from other neutrino sources. Thus the scientific program of JUNO extends way over reactor antineutrinos. The following section is an overview of the different physics topic JUNO will contribute in the coming years.
 
 \subsection{Reactor neutrino oscillation for NMO and precise measurements}
+\label{sec:nom_precise_measurement}
 Previous works \cite{zhan_determination_2008,  zhan_experimental_2009} shows that oscillation parameters and the NMO can be observed by looking at the $\bnue$ disappearance spectrum coming from medium baseline nuclear reactor. This disappearance probability can be expressed as \cite{an_neutrino_2016} :
 \begin{equation*}
   P(\bnue \rightarrow \bnue) = 1 - \sin^2 2\theta_{12} c^4_{13} \sin^2 \frac{\Delta m^2_{21}L}{4E} - \sin^2 2\theta_{13} \bigg[ c_{12}^2 \sin^2 \frac{\Delta m_{31}^2 L}{4E} + s^2_{12} \sin^2 \frac{\Delta m_{32}^2 L}{4E} \bigg]
@@ -447,7 +448,7 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
 
 \begin{itemize}
   \item Various primary particles simulators for the different kind of events, background and calibration sources.
-  \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} simulation simulating the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation
+  \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} Monte Carlo (MC) simulation simulating the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation
   \item An electronic simulation, simulating the response waveform of the PMTs, tracking it through the digitization process, accounting for effects such as non-linearity, dark noise, Time Transit Spread (TTS), pre-pulsing, after-pulsing and ringing if the waveform. This step is commonly referenced as \textit{Elecsim}.
   \item A waveform reconstruction where the digitized waveform are filtered to remove high-frequency white noise and then deconvoluted to yield time and charge informations of the photons hits on the PMTs. This step is commonly referenced as \textit{Calib}.
   \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:reco} for more details on the reconstruction.
@@ -548,7 +549,7 @@ The time likelihood algorithm use the residual time expressed as follow
   t_{\mathrm{res}}^i(\vec{r}_0, t_0) = t_i - \mathrm{tof}_i - t_0
 \end{equation}
 
-In a first order approximation, the scintillator response Probability Density Function (PDF) can be described as the emission time profile of the scintillation photons, the Time Transit Spread (TTS) and the dark noise of the PMTs. The emission time profile $f(t_{\mathrm{res}})$ is described like
+In a first order approximation, the scintillator time response Probability Density Function (PDF) can be described as the emission time profile of the scintillation photons, the Time Transit Spread (TTS) and the dark noise of the PMTs. The emission time profile $f(t_{\mathrm{res}})$ is described like
 \begin{equation}
   f(t_{\mathrm{res}}) = \sum_k \frac{\rho_k}{\tau_k} e^{\frac{-t_{\mathrm{res}}}{\tau_k}}, ~ \sum_k \rho_k = 1
 \end{equation}
@@ -558,6 +559,7 @@ as the sum of the $k$ component that emit light in the LS each one characterised
 \end{equation}
 where $\sigma$ is the TTS of PMTs and $\nu$ is the average transit time. The dark noise is not correlated with any physical events and considered as constant rate over the time window considered $T$. By normalizing the dark noise probability $\epsilon(t_{\mathrm{res}})$ as $\int_T \epsilon(t_{\mathrm{res}}) dt_{\mathrm{res}} = \epsilon_{\mathrm{dn}}$ , it can be integrated in the PDF as
 \begin{equation}
+  \label{eq:juno:tim_like:dn}
   p(t_{\mathrm{res}}) = (1-\epsilon_{\mathrm{dn}}) \cdot g(t_{\mathrm{res}}) + \epsilon(t_{\mathrm{res}})
 \end{equation}
 
@@ -566,9 +568,72 @@ The distribution of the residual time $t_{\mathrm{res}}$ of an event can then be
   \mathcal{L}(\vec{r}_0, t_0) = - \mathrm{ln} \bigg(\prod_i p(t^i_{\mathrm{res}}) \bigg)
 \end{equation}
 
+The parameter of Eq. \ref{eq:juno:tim_like:dn} can be measured experimentally. The results shown in figure \ref{fig:rec:time_likelihood} used PDF from monte carlo simulation. The results shows that $R_{rec} - R_{true}$ is biased depending on the energy. While this could be corrected using calibration, another algorithm based on charge likelihood was developed to correct this problem.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/juno/reco/time_likelihood_results.png}
+  \caption{Bias of the reconstructed radius R (left), $\theta$ (middle) and $\phi$ (right) for multiple energies by the time likelihood algorithm}
+  \label{fig:rec:time_likelihood}
+\end{figure}
+
+
+\subsubsection{Charge likelihood algorithm}
+
+Similarly to the time likelihood algorithms that use a timing PDF, the charge likelihood algorithm use PE PDF in each PMT depending on the energy and position of the event. With $\mu(\vec{r}_0, E)$ the mean expected number of PE detected by each PMT, the probability to observe $N_{pe}$ in a PMT follow a Poisson distribution. Thus
+\begin{itemize}
+  \item The probability to observe no hit ($N_{pe} = 0$) in the $j$th PMT is $P^{j}_{nohit} (\vec{r}_0, E) = e^{-\mu_j}$
+  \item The probability to observe $N_{pe} \neq 0$ in the $i$th PMT is $P^{i}_{hit} (\vec{r}_0, E) = \frac{\mu^{N^i_{pe}} e^{-\mu_i}}{N^i_{pe}!}$
+\end{itemize}
+
+Therefore, the probability to observe a specific hit pattern can be expressed as
+\begin{equation}
+  P(\vec{r}_0, E) = \prod_j P^j_{nohit}(\vec{r}_0, E) \cdot \prod_i P^i_{hit}(\vec{r}_0, E)
+\end{equation}
+
+The best fit values of $\vec{R}_0$ and $E$ can then be calculated by minimizing the negative log-likelihood
+\begin{equation}
+  \label{eq:rec:charge_likelihood}
+  \mathcal{L}(\vec{r}_0, E) = - \mathrm{ln}(P(\vec{r}_0,E))
+\end{equation}
+
+In principle, $\mu_i(\vec{r}_0, E)$ could be expressed
+\begin{equation}
+  \label{req:rec:mu_i}
+  \mu_i(\vec{r}_0, E) = Y \cdot \frac{\Omega(\vec{r}_0, r_i)}{4 \pi} \cdot \epsilon_i \cdot f(\theta_i) \cdot e^{-\sum_m \frac{d_m}{\zeta_m}}\cdot E + \delta_i
+\end{equation}
+where $Y$ is the energy scale factor, $\Omega(\vec{r}_0, r_i)$ is the solid angle of the $i$th PMT, $\epsilon_i$ is its detection efficiency, $f(\theta_i)$ its angular response, $\zeta_m$ is the attenuation length in the materials and $\delta_i$ the expected number of dark noise.
+
+However Eq. \ref{req:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to used data driven methods to produce the pdf by using the calibrations sources and position described in section \ref{sec:calib}. In the results presented in figures \ref{fig:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/charge_likelihood_res.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/charge_likelihood_bias.png}
+  \end{subfigure}
+  \caption{\textbf{On the left:} Resolution of the reconstructed R as a function of the energy in the TR area ($R^3 > 4000 \mathrm{m}^3 \equiv R > 16 m$) by the charge and time likelihood algorithms. \textbf{On the right:} Bias of the reconstructed R in the TR area for different energies by the charge likelihood algorithm}
+  \label{fig:rec:time_charge_results}
+\end{figure}
+We see that the charge likelihood algorithm show little bias in the TR area and a better resolution than the time likelihood. The figure \ref{fig:rec:all_class} shows the radial resolution of the different algorithm presented for this section, we can see the refinement at each step and that the charge likelihood yield the best results.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/juno/reco/vertex_reco_classique.png}
+  \caption{Radial resolution of the different vertex reconstruction algorithms as a function of the energy}
+  \label{fig:rec:all_class}
+\end{figure}
+
+The charge based likelihood algorithms already give use some information on the energy as Eq. \ref{eq:rec:charge_likelihood} is minimized but the energy can be further refined as shown in the next section.
+
+
 \subsection{Energy reconstruction}
 
-\subsection{Particle identification}
+As explained in section \ref{sec:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibrations sample inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
 
 \subsection{Machine learning for reconstruction}
 
