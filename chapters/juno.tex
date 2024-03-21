@@ -546,6 +546,7 @@ The parameters $(p_0, p_1, p_2)$ were optimized to (9.42, 0.74, -4.60) for Hamam
 
 The time likelihood algorithm use the residual time expressed as follow
 \begin{equation}
+  \label{eq:rec:t_res}
   t_{\mathrm{res}}^i(\vec{r}_0, t_0) = t_i - \mathrm{tof}_i - t_0
 \end{equation}
 
@@ -599,12 +600,12 @@ The best fit values of $\vec{R}_0$ and $E$ can then be calculated by minimizing 
 
 In principle, $\mu_i(\vec{r}_0, E)$ could be expressed
 \begin{equation}
-  \label{req:rec:mu_i}
+  \label{eq:rec:mu_i}
   \mu_i(\vec{r}_0, E) = Y \cdot \frac{\Omega(\vec{r}_0, r_i)}{4 \pi} \cdot \epsilon_i \cdot f(\theta_i) \cdot e^{-\sum_m \frac{d_m}{\zeta_m}}\cdot E + \delta_i
 \end{equation}
 where $Y$ is the energy scale factor, $\Omega(\vec{r}_0, r_i)$ is the solid angle of the $i$th PMT, $\epsilon_i$ is its detection efficiency, $f(\theta_i)$ its angular response, $\zeta_m$ is the attenuation length in the materials and $\delta_i$ the expected number of dark noise.
 
-However Eq. \ref{req:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to used data driven methods to produce the pdf by using the calibrations sources and position described in section \ref{sec:calib}. In the results presented in figures \ref{fig:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
+However Eq. \ref{eq:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to use data driven methods to produce the pdf by using the calibrations sources and position described in section \ref{sec:calib}. In the results presented in figures \ref{fig:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.48\linewidth}
@@ -635,7 +636,92 @@ The charge based likelihood algorithms already give use some information on the 
 
 As explained in section \ref{sec:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibrations sample inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/juno/reco/energy_reco_vars.png}
+  \caption{Definition of the variables used in the energy reconstruction}
+  \label{fig:rec:energy_vars}
+\end{figure}
+
+\subsubsection{Charge estimation}
+
+The most important element in the energy reconstruction is $\mu_i(\vec{r}_0, E)$ described in Eq. \ref{eq:rec:mu_i}. For realistic cases, we also need to take into account the electronics effect that were omitted in the previous section. Those effect will cause a charge smearing due to the uncertainties in the $N_{pe}$ reconstruction. Thus we define $\hat{\mu}^L(\vec{r}_0, E)$ which is the expected $N_{pe}/E$ in the whole detector for an event with visible energy $E_{vis}$ and position $\vec{r}_0$. The position of the event and PMTs are now defined using $(r, \theta, \theta_{pmt})$ as defined in figure \ref{fig:rec:energy_vars}.
+\begin{equation}
+  \hat{\mu}(r, \theta, \theta_{pmt}, E_{vis}) = \frac{1}{E_{vis}} \frac{1}{M} \sum_i^M\frac{\frac{\bar{q}_i}{\hat{Q}_i} - \mu_i^D}{\mathrm{DE}_i}, ~ \mu_i^D = \mathrm{DNR}_i \cdot L
+\end{equation}
+where $i$ runs over the PMTs with the same $\theta_{pmt}$, $\mathrm{DE}_i$ is the detection efficiency of the $i$th PMT. $\mu_i^D$ is the expected number of dark noise photoelectrons in the time window $L$. The time window have been optimized to $L = 280 ~ \mathrm{ns}$ \cite{huang_data-driven_2023}. $\bar{q}_i$ is the average recorded photoelectrons in the time window and $\hat{Q}_i$ is the expected average charge for 1 photoelectron. The $N_{pe}$ map is constructed following the procedure described in \cite{huang_improving_2021}.
+
+\subsubsection{Time estimation}
+
+The second important observable is the hit time of photons that was previously defined in Eq. \ref{eq:rec:t_res}. It is here refined as
+\begin{equation}
+  t_r = t_h - \mathrm{tof} - t_0 = t_{LS} + t_{TT}
+\end{equation}
+where $t_h$ is the time of hit, $t_{LS}$ is the scintillation time and $t_{TT}$ the transit time of PMTs that is described by a gaussian
+\begin{equation}
+  t_{TT} = \mathcal{N}(\overline{\mu_{TT} + t_{d}}, \sigma_{TT})
+\end{equation}
+where $\mu_{TT}$ is the mean transit time in PMTs, $\sigma_{TT}$ is the Transit Time Spread (TTS) of the PMTs and $t_{d}$ is the delay time in the electronics. The effective refraction index of the LS is also corrected to take into account the propagation distance in the detector.
+
+The timing PDF $P_T(t_r | r,d,\mu_l,\mu_d,k)$ can now be generated using calibration sources \cite{huang_data-driven_2023}. This PDF describe the probability that the residual time of the first photon hit is in $[t_r, t_r + \delta]$ with $r$ the radius of the event vertex, $d = |\vec{r} - \vec{r}_{PMT}|$ the propagation distance, $\mu_l$ and $\mu_d$ the expected number of PE and dark noise in the electronic reading window and $k$ is the detected number of PE.
+
+Now let denote $f(t, r, d)$ the probability density function of "photoelectron hit a time t" for an event happening at $r$ where the photons traveled the distance $d$ in the LS
+\begin{equation}
+  F(t, r, d) = \int_t^L f(t', r, d)dt'
+\end{equation}
+Based on the PDF for one photon $k=1$, one can define
+\begin{equation}
+  P^l_T(t|k=n) = I^l_n [f_l(t)F^{n-1}_l(t)]
+\end{equation}
+where the indicator $l$ means that the photons comes from the LS and $I^l_n$ a normalisation factor. To this pdf we add the probability to have photons coming from the dark noise indicated by the indicator $d$ using
+\begin{equation}
+  f_d(t) = 1 / L, ~ F_d(t) = 1 - \frac{t}{L}
+\end{equation}
+and so for the case where only one photon is detected by the PMT ($k=1$)
+\begin{equation}
+  P_T(t|\mu_l, \mu_d, k = 1) = I_1 [ P(1, \mu_l) P(0, \mu_d) f_l(t) + P(0, \mu_l) P(1, \mu_d) f_d(t) ]
+\end{equation}
+where $P(k_\alpha, \mu_\alpha)$ is the Poisson probability to detect $k_\alpha$ PE from $\alpha \in \{l, d\}$ with the condition $k_l + k_d = k$.
+
+Now that we have the individual timing and charge probability we can construct the charge likelihood referred as QMLE:
+\begin{equation}
+  \mathcal{L}(q_1, q_2, ..., q_N | \vec{r}, E_{vis}) = \prod_{j \in \mathrm{unfired}} e^{-\mu_j} \prod_{i \in \mathrm{fired}} \bigg(\sum_{k=1} P_Q(q_i|k) \cdot P(k, \mu_i) \bigg)
+\end{equation}
+where $\mu_i = E_{vis} \hat{\mu_i^L} + \mu_i^D$ and $P(k, \mu_i)$ is the Poisson probability of observing k PE. $P_Q(q_i|k)$ is the charge pdf for $k$ PE. And we can also construct the time likelihood referred as TMLE:
+\begin{equation}
+  \mathcal{L}(t_{1,r}, t_{2,r}, ..., t_{N,r} | \vec{r}, t_0) = \prod_{i \in \mathrm{hit}} \frac{\sum_{k=1}^K P_T(t_{i,r} | r, d, \mu_i^l, \mu_i^d, k) \cdot P(k, \mu^l_i + \mu^d_i)}{\sum_{k=1}^K P(k, \mu^l_i + \mu^d_i)}
+\end{equation}
+where $K$ is cut to 20 PE and hit is the set of hits satisfying $-100 < t_{i,r} < 500$ ns.
+
+Merging those two likelihood give the charge-time likelihood QTMLE
+\begin{equation}
+  \mathcal{L}(q_1, q_2, ..., q_N; t_{1,r}, t_{2,r}, ..., t_{N,r} | \vec{r}, t_0 , E_{vis}) = \mathcal{L}(q_1, q_2, ..., q_N | \vec{r}, E_{vis}) \cdot \mathcal{L}(t_{1,r}, t_{2,r}, ..., t_{N,r} | \vec{r}, t_0)
+\end{equation}
+
+The radial and energy resolutions of the different likelihood are presented in figure \ref{fig:rec:qtmle} (from \cite{huang_data-driven_2023}). We can see the improvement of adding the time information to the vertex reconstruction and that an increase in vertex precision can bring improvement in the energy resolution, especially at low energies.
+
+\begin{figure}[ht]
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/radial_qtmle.png}
+    \caption{Radial resolutions of the likelihood-based algorithm TMLE, QMLE and QTMLE}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/juno/reco/energy_qtmle.png}
+    \caption{Energy resolution of QMLE and QTMLE using different vertex resolutions}
+  \end{subfigure}
+  \caption{}
+  \label{fig:rec:qtmle}
+\end{figure}
+
+Data driven methods prove to be performant in the energy and vertex reconstruction given that we have enough calibrations sources to produce the PDF. In the next section, we'll see another type of data-driven method based on machine learning.
+
 \subsection{Machine learning for reconstruction}
+
+Machine learning (ML) is family of data-driven algorithms that are inferring behavior and results from a training dataset. A overview of methods and detailed explanation of the Neural Network (NN) subfamily can be found in Chapter \ref{sec:ml}.
 
 \subsubsection{Vertex reconstruction}
 
