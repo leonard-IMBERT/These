@@ -336,12 +336,13 @@ With its coverage, about 1/3 of the of all atmospheric muons that passing throug
 \section{Calibration strategy}
 \label{sec:calib}
 
-The calibration is a crucial part of the JUNO experiment. Because we are looking at civil reactor neutrino it might be impossible to run measurement without signal, it would need to shut down every reactor from the Taishan and Yangjiang power plants which is realistically impossible. Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest, [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
-It is understood that the CD response will be different depending on the type of particle, due to the interaction with LS, and on the position on the event, due to the absorption length of the LS and the optical response of the acrylic sphere (see section \ref{sec:reco}). The energy response is also expected to be non-linear due to the LS response \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
+The calibration is a crucial part of the JUNO experiment. Because we are looking at civil reactor neutrino it might be impossible to run measurement without signal, it would need to shut down every reactor from the Taishan and Yangjiang power plants which is realistically impossible. Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest : [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
+It is expected that the CD response will be different depending on the type of particle, due to the interaction with LS, the position on the event and the optical response of the acrylic sphere (see section \ref{sec:reco}).
+We also expect a non-linear energy response of the CD due to the LS properties \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
 
 \subsection{Energy scale calibration}
 
-While electrons and positrons sources would be ideal, for a large LS detector thin-walled electrons or positrons sources could lead to leakage of radionuclides causing contamination. Instead are considered gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:calib_source}.
+While electrons and positrons sources would be ideal, for a large LS detector thin-walled electrons or positrons sources could lead to leakage of radionucleides causing radioactive contamination. Instead, we consider gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:calib_source}.
 
 \begin{table}[ht]
   \centering
@@ -364,7 +365,7 @@ While electrons and positrons sources would be ideal, for a large LS detector th
   \label{tab:calib_source}
 \end{table}
 
-For the $^{68}$Ge source, it'll decay in $^{68}$Ga via electron capture, which will itself $\beta^+$ decay into $^{68}$Zn. The positrons will be absorbed by the enclosure so only the annihilation gamma will be released. In addition, $(\alpha, n)$ sources like $^{241}$Am-Be and $^{241}$Am-$^{13}$C are used to provide both high energy gamma and neutrons, which will later be captured in the LS producing the 2.2 MeV gamma.
+For the $^{68}$Ge source, it will decay in $^{68}$Ga via electron capture, which will itself $\beta^+$ decay into $^{68}$Zn. The positrons will be absorbed by the enclosure so only the annihilation gamma will be released. In addition, $(\alpha, n)$ sources like $^{241}$Am-Be and $^{241}$Am-$^{13}$C are used to provide both high energy gamma and neutrons, which will later be captured in the LS producing the 2.2 MeV gamma.
 
 From this calibration we call $E_{vis}$ the "visible energy" that is reconstructed by our current algorithms and we compare it to the true energy deposited by the calibration source. The results shown in figure \ref{fig:nl} show the expected response of the detector from calibration sources. The non-linearity is clearly visible from the $E_{vis} / E_{true}$ shape. See \cite{juno_collaboration_calibration_2021} for more details.
 
@@ -388,13 +389,13 @@ From this calibration we call $E_{vis}$ the "visible energy" that is reconstruct
     \caption{Electron non-linearity}
     \label{fig:nl:electron}
   \end{subfigure}
-  \caption{Fitted and simulated non linearity of gamma and electron sources and $^{12}$B spectrum. Black points are simulated data while red points are the best fit}
+  \caption{Fitted and simulated non linearity of gamma, electron sources and from the $^{12}$B spectrum. Black points are simulated data. Red curves are the best fits}
   \label{fig:nl}
 \end{figure}
 
 \subsection{Calibration system}
 
-The JUNO detector will need to investigate the non-uniformity in the detector response depending of the position of the event (more details in section \ref{sec:reco}). For this we will able to deploy sources using multiples systems that are schematized in figure \ref{fig:calib} :
+The non-uniformity due to the event position in the detector (more details in section \ref{sec:reco}) will be studied using multiples systems that are schematized in figure \ref{fig:calib}. They allow to position sources at different location in the CD.
 
 \begin{itemize}
   \item For a one-dimension vertical calibration, the Automatic Calibration Unit (ACU) will be able to deploy multiple radioactive sources or a pulse laser diffuser ball along the central axis of the CD through the top chimney. The source position precision is less than 1cm.
@@ -448,15 +449,15 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
 
 \begin{itemize}
   \item Various primary particles simulators for the different kind of events, background and calibration sources.
-  \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} Monte Carlo (MC) simulation simulating the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation
-  \item An electronic simulation, simulating the response waveform of the PMTs, tracking it through the digitization process, accounting for effects such as non-linearity, dark noise, Time Transit Spread (TTS), pre-pulsing, after-pulsing and ringing if the waveform. This step is commonly referenced as \textit{Elecsim}.
+  \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} Monte Carlo (MC) simulation containing the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation.
+  \item An electronic simulation, simulating the response waveform of the PMTs, tracking it through the digitization process, accounting for effects such as non-linearity, dark noise, Time Transit Spread (TTS), pre-pulsing, after-pulsing and ringing if the waveform. It's also the step handling the event triggers and mixing. This step is commonly referenced as \textit{Elecsim}.
   \item A waveform reconstruction where the digitized waveform are filtered to remove high-frequency white noise and then deconvoluted to yield time and charge informations of the photons hits on the PMTs. This step is commonly referenced as \textit{Calib}.
   \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:reco} for more details on the reconstruction.
   \item Once the singular events are reconstructed, they go through event pairing and classification to select IBD events. This step is named Event Classification.
   \item The purified signal is then analysed by the analysis framework which depend of the physics topic of interest.
 \end{itemize}
 
-The steps Reco and Event Classification are divided into two category of algorithm. Fast but less accurate algorithms that are running during the data taking designed as \textit{Online} algorithms. Those algorithm are used to take the decision to save the event on tape or to throw it away. More accurate algorithms that run on batch of events designed \textit{Offline} algorithms. They are used for the physics analysis and the Offline Reco will be a topic of interest for this thesis.
+The steps Reco and Event Classification are divided into two category of algorithm. Fast but less accurate algorithms that are running during the data taking designated as the \textit{Online} algorithms. Those algorithm are used to take the decision to save the event on tape or to throw it away. More accurate algorithms that run on batch of events designated \textit{Offline} algorithms. They are used for the physics analysis. The Offline Reco will be one of the main topic of interest for this thesis.
 
 \section{State of the art of the Offline IBD reconstruction in JUNO}
 \label{sec:reco}
@@ -477,7 +478,7 @@ The charge-based algorithm is basically base on the charge-weighted average of t
 
 Where $q_i$ is the reconstructed charge of the pulse of the $i$th PMT and $\vec{r}_i$ is its position. $\vec{r}_0$ is the reconstructed interaction position. $a$ is a scale factor introduced because a weighted average over a 3D sphere is inherently biased. Using calibration we can estimate $a \approx 1.3$ \cite{li_event_2021}. The results in figure \ref{fig:rec:cbary} shows that the reconstruction is biased from around 15m and further. This is due to the phenomena called ``total reflection area'' or TR Area.
 
-As depicted in the figure \ref{fig:rec:refl} the optical photons, given that they have a sufficiently large incidence angle, can be deviated of their trajectories when passing through the interfaces LS-acrylic and water-acrylic due to the optical index difference. This cause photons to be lost or to be detected by PMT further than anticipated if we consider their rectilinear trajectories. This cause the charge barycenter the be located closer to the center than the vent really is.
+As depicted in the figure \ref{fig:rec:refl} the optical photons, given that they have a sufficiently large incidence angle, can be deviated of their trajectories when passing through the interfaces LS-acrylic and water-acrylic due to the optical index difference. This cause photons to be lost or to be detected by PMT further than anticipated if we consider their rectilinear trajectories. This cause the charge barycenter the be located closer to the center than the event really is.
 
 \begin{figure}[ht]
   \begin{subfigure}[t]{0.48\textwidth}
@@ -581,7 +582,7 @@ The parameter of Eq. \ref{eq:juno:tim_like:dn} can be measured experimentally. T
 
 \subsubsection{Charge likelihood algorithm}
 
-Similarly to the time likelihood algorithms that use a timing PDF, the charge likelihood algorithm use PE PDF in each PMT depending on the energy and position of the event. With $\mu(\vec{r}_0, E)$ the mean expected number of PE detected by each PMT, the probability to observe $N_{pe}$ in a PMT follow a Poisson distribution. Thus
+Similarly to the time likelihood algorithms that use a timing PDF, the charge likelihood algorithm use a PE PDF for each PMT depending on the energy and position of the event. With $\mu(\vec{r}_0, E)$ the mean expected number of PE detected by each PMT, the probability to observe $N_{pe}$ in a PMT follow a Poisson distribution. Thus
 \begin{itemize}
   \item The probability to observe no hit ($N_{pe} = 0$) in the $j$th PMT is $P^{j}_{nohit} (\vec{r}_0, E) = e^{-\mu_j}$
   \item The probability to observe $N_{pe} \neq 0$ in the $i$th PMT is $P^{i}_{hit} (\vec{r}_0, E) = \frac{\mu^{N^i_{pe}} e^{-\mu_i}}{N^i_{pe}!}$
@@ -634,7 +635,7 @@ The charge based likelihood algorithms already give use some information on the 
 
 \subsection{Energy reconstruction}
 
-As explained in section \ref{sec:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibrations sample inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
+As explained in section \ref{sec:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibration samples inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
 
 
 \begin{figure}[ht]
@@ -723,11 +724,96 @@ Data driven methods prove to be performant in the energy and vertex reconstructi
 
 Machine learning (ML) is family of data-driven algorithms that are inferring behavior and results from a training dataset. A overview of methods and detailed explanation of the Neural Network (NN) subfamily can be found in Chapter \ref{sec:ml}.
 
-\subsubsection{Vertex reconstruction}
+The power of ML is the ability to model complex response to a specific problem. In JUNO the reconstruction problematic can be expressed as follow: knowing that each PMT, large or small, detected a given number of PE $Q$ at a given time $t$ and their position is $x,y,z$ where did the energy was deposited and how much energy was it, modeling a function that naively goes:
+\begin{equation}
+    \mathbb{R}^{5 \times N_{pmt}} \longmapsto \mathbb{R}^4
+\end{equation}
+It is worth pointing that while this is already a lot in informations, this is not the rawest representation of the experiment. We could indeed replace the charge and time by the waveform in the time window of the event but that would lead to an input representation size that would exceed our computational limits. Also, due to those computational limits, most of the ML algorithm reduce this input phase space either by structurally encoding the information (pictures, graph), by aggregating it (mean, variance, ...) or by exploiting invariance and equivariance of the experiment (rotational invariance due to the sphericity, ...).
 
-\subsubsection{Energy reconstruction}
+For machine learning to converge to performant algorithm, a large dataset exploring all the phase space of interest is needed. For the following studies, data from the monte carlo simulation presented in section \ref{sec:software} are used for training. When the detector will be finished calibrations sources will be complementarily be used.
+
+\subsubsection{Boosted Decision Tree (BDT)}
+
+On of the most classic ML method used in physics in last years is the Boosted Decision Tree (see chapter \ref{sec:bdt}). They have been explored for vertex reconstruction \cite{qian_vertex_2021} et for energy reconstruction \cite{qian_vertex_2021, gavrikov_energy_2022}.
+
+For vertex and energy reconstruction a BDT was developed using the aggregated informations presented in \ref{tab:rec:bdt_vertex}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{l|r}
+    Parameter & description \\
+    \hline
+    $nHits$ & Total number of hits \\
+    $x_{cc}, y_{cc}, z_{cc}, R_{cc}$ & Coordinates of the center of charge \\
+    $ht_{mean}, ht_{std}$ & Hit time mean and standard deviation
+  \end{tabular}
+  \caption{Features used by the BDT for vertex reconstruction}
+  \label{tab:rec:bdt_vertex}
+\end{table}
+Its reconstruction performances are presented in figure \ref{fig:rec:ml_res}.
+
+A second and more advanced BDT, subsequently named BDTE, that only reconstruct energy use a different set of features \cite{gavrikov_energy_2022}. They are presented in the table \ref{tab:rec:bdte}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    AccumCharge &  $ht_{5\%-2\%}$ \\
+    $R_{cht}$ & $pe_{mean}$ \\
+    $z_{cc}$ & $J_{cht}$ \\
+    $pe_{std}$ & $\phi_{cc}$ \\
+    nPMTs &  $ht_{35\%-30\%}$\\
+    $ht_{kurtosis}$ & $ht_{20\%-15\%}$ \\
+    $ht_{25\%-20\%}$ & $pe_{35\%}$ \\
+    $R_{cc}$ & $ht_{30\%-25\%}$ \\
+    \hline
+
+  \end{tabular}
+  \caption{Features used by the BDTE algorithm. $pe$ and $ht$ reference the charge and hit-time distribution respectively and the percentages are the quantiles of those distributions. $cht$ and $cc$ reference the barycenters of hit time and charge respectively}
+  \label{tab:rec:bdte}
+\end{table}
+
+\subsubsection{Neural Network (NN)}
+The physics have shown a rising for Neural Network (NN) in the past years for event reconstruction, notably in the neutrino community \cite{abbasi_graph_2022, reck_graph_2021, collaboration_convolutional_2021, dune_collaboration_neutrino_2020}. Three type of neural networks have explored for event reconstruction in JUNO Deep Neural Network (DNN), Convolutional Neural Network (CNN) and Graph Network (GNN). More explanation about those neural network can be found in chapter \ref{sec:ml}.
+
+The CNN are using 2D projection of the detector representing it as an image with two channel, one for the charge $Q$ and one for the time $t$. The position of the PMTs is structurally encoded in the pixel containing the information of this PMT. In \cite{qian_vertex_2021}, the pixel is chosen based on a transformation of $\theta$ and $\phi$ coordinates to the 2D plane and rounded to the nearest pixel. A sufficiently large image has been chosen to prevent two PMT to be located in the same pixel. An example of this projection can be found in figure \ref{fig:rec:cnn_proj}. The performances of the CNN can be found in figure \ref{fig:rec:ml_res}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/juno/reco/cnn_proj.png}
+  \caption{Projection of the LPMTs in JUNO on a 2D plane. (a) Show the distribution of all PMTs and (b) and (c) are example of what the charge and time channel looks like respectively}
+  \label{fig:rec:cnn_proj}
+\end{figure}
+
+Using 2D have the upside of encoding a large part of the informations structurally but loose the rotational invariance of the detector. It also give undefined information to the neural network (what is a pixel without PMT ? What should be its charge and time ?), cause deformation in the representation of the detector (sides of projection) and loose topological informations.
+
+One of the way to present structurally the sphericity of JUNO to a NN is to use a graph: A collection of objects $V$ called nodes and relations $E$ called edges, each relation associated to a couple ${v_1, v_2}$ forming the graph $G(E, V)$. Nodes and edges can hold informations or features. In \cite{qian_vertex_2021} the nodes, are geometrical region of the detector as defined by the HealPix \cite{gorski_healpix_2005-1}. The features of the nodes are aggregated informations from the PMTs it contains. The edges contains geographic informations of the nodes relative positions.
+
+This data representation has the advantages to keep the topology of the detector intact. It also permit the use of rotational invariant algorithms for the NN, thus taking advantage of the symmetries of the detector.
+
+The neural network then process the graph using Chebyshev Convolutions \cite{defferrard_convolutional_2017}. The performances of the GNN are presented in figure \ref{fig:rec:ml_res}.
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/juno/reco/ml_vertex.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/juno/reco/ml_energy.png}
+  \end{subfigure}
+  \caption{Radial (left) and energy (right) resolutions of different ML algorithms. The results presented here are from \cite{qian_vertex_2021}. DNN is a deep neural network, BDT is a BDT, ResNet-J and VGG-J are CNN and GNN-J is a GNN.}
+  \label{fig:rec:ml_res}
+\end{figure}
+
+Overall ML algorithms show similar performances as classical algorithms in term of energy reconstructions with the more complex structure CNN and GNN showing better performances than BDT and DNN. For vertex reconstruction, the BDT and DNN show poor performance while CNN are on the level of the classical algorithms.
 
 \section{JUNO sensitivity to NMO and precise measurements}
+
+Once the event is reconstructed, and the energy spectrum is produced, we will need to extract the NMO oscillation parameters from it.
 
 \subsection{Fitting procedure}
 \label{sec:Fit}
