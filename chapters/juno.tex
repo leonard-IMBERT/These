@@ -51,6 +51,7 @@ To reach the desired sensitivity, JUNO must meet multiple requirements but most 
 \end{enumerate}
 
 \subsubsection{$\bar{\nu}_e$ flux coming from nuclear power plants}
+\label{sec:nu_e_flux}
 
 To get such high measurements precision, it is necessary to have a very good understanding of the sources characteristics. For its NMO and precise measurement studies, JUNO will observe the energy spectrum of neutrinos coming from the nuclear power plants Taishan and Yangjiang's cores, located at 53 km of the detector to maximise the disappearance probability of the $\bar{\nu}_e$.
 
@@ -85,7 +86,7 @@ The neutrino flux coming from a reactor at a time $t$ can be predicted using
 \end{equation}
 where $W_{th}(t)$ is the thermal power of the reactor, $f_i(t)$ is the fraction fission of the $i$th isotope, $e_i$ its thermal energy released in each fission and $S_i(e_\nu)$ the neutrino flux per fission for this isotope. Using this method, the flux uncertainty is expected to be of an order of 2-3 \% \cite{juno_collaboration_sub-percent_2022}.
 
-In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup near the reactor core Taishan-1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core. It will help identifying unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
+In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup near the reactor core Taishan-1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core, more details can be found in section \ref{sec:tao}. It will help identifying unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
 
 One  the open issue about reactor anti-neutrinos flux is the so-called neutrino anomaly \cite{mention_reactor_2011}, an unexpected surplus of neutrino emission in the spectra around 5 MeV.
 Multiples scientists are trying to explain this surplus by advanced recalculation of the nuclei model during beta decay \cite{kopeikin_reevaluating_2021, letourneau_origin_2023} but no consensus on this issue has been reached yet.
@@ -215,6 +216,7 @@ The CD has been dimensioned to meet the requirements presented in section \ref{s
     \includegraphics[height=4cm]{images/juno/top_down_view.jpg}
     \caption{Top down view of the JUNO detector under construction}
   \end{subfigure}
+  \caption{}
 \end{figure}
 
 This section cover in details the different components of the detector and the detection systems.
@@ -293,7 +295,7 @@ This formula has been optimized using dedicated studies with a Daya Bay detector
   \item Uranium/Thorium radiopurity to prevent background signal. The reactor neutrino program require a contamination fraction $F<10^{-15}$ while the solar neutrino program require $F<10^{-17}$.
 \end{itemize}
 
-The LS will frequently be purified and tested in the Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} to ensure that the requirements are kept during the lifetime of the experiment.
+The LS will frequently be purified and tested in the Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} to ensure that the requirements are kept during the lifetime of the experiment, more details to be found in section \ref{sec:OSIRIS}.
 
 \subsubsection{Large Photo-Multipliers Tubes (LPMTs)}
 \label{sec:LPMT}
@@ -451,12 +453,40 @@ The preliminary calibration program is depicted in table \ref{tab:calib_prog}.
 \end{table}
 
 \section{Satellite detectors}
+As introduced in section \ref{sec:nu_e_flux} and section \ref{sec:LS}, the precise knowledge and understanding of the detector condition is crucial for the measurements of the NMO and oscillation parameters. Thus two satellite detectors will be setup to monitor the experiment condition. TAO to monitor and understand the $\bar{\nu}_e$ flux and spectrum coming from the nuclear reactor and OSIRIS to monitor the LS response.
+
 \subsection{TAO}
-\subsubsection{Objectives}
+\label{sec:tao}
+The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (< 30m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
+
 \subsubsection{Detector}
+
+The TAO detector is close, in concept, to the CD of JUNO. It is composed of an acrylic vessel containing 2.8 tons of gadolinium-loaded LS instrumented by an array of silicon photomultipliers (SiPM) reaching a 95\% coverage. To efficiently reduce the dark count of those sensors, the detector is cooled to -50 \textcelsius.
+The $\bar{\nu}_e$ will interact with the LS via IBD, producing scintillation light, that will be detected by the SiPMs. From this signal the $\bar{\nu}_e$ energy and the full spectrum reconstructed.
+This spectrum will then be used by JUNO to calibrate the unoscillated spectrum, most notably the fission product fraction that impact the rate and shape of the spectrum. A schema of the detector is presented in figure \ref{fig:tao}.
+
 \subsection{OSIRIS}
-\subsubsection{Objectives}
+\label{sec:OSIRIS}
+The Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} is an ultralow background, 20 m$^3$ LS detector that will be located in JUNO cavern. It aim to monitor the radioactive contamination, purity and overall response of the LS before it is injected in JUNO.
+OSIRIS will be located at the end of the purification chain of JUNO, monitoring that the purified LS meet the JUNO requirements. The setup is optimized to detect the fast coincidences decay of $^{214}\mathrm{Bi}-^{214}\mathrm{Po}$ and $^{212}\mathrm{Bi}-^{212}\mathrm{Po}$, indicators of the decay chains of U and Th respectively.
 \subsubsection{Detector}
+OSIRIS is composed of an acrylic vessel that will contains 17t of LS. The LS is instrumented by a PMT array of 64 20 inch PMTs on the top and the side of the vessel. To reach the necessary background level required by the LS purity measurements, in addition to being 700m underground in the experiment cavern, the acrylic vessel is immersed in a tank of ultra pure water. The water is itself instrumented by another array of 20 inch PMTs, acting as muon veto. A schema of the detector is presented in figure \ref{fig:osiris}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{images/juno/tao_schematic.png}
+    \caption{Schematic of the TAO satellite detector}
+    \label{fig:tao}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{images/juno/osiris_schematic.png}
+    \caption{Schematic of the OSIRIS satellite detector}
+    \label{fig:osiris}
+  \end{subfigure}
+  \caption{}
+\end{figure}
 
 \section{Software}
 \label{sec:software}
@@ -829,8 +859,45 @@ The neural network then process the graph using Chebyshev Convolutions \cite{def
 Overall ML algorithms show similar performances as classical algorithms in term of energy reconstructions with the more complex structure CNN and GNN showing better performances than BDT and DNN. For vertex reconstruction, the BDT and DNN show poor performance while CNN are on the level of the classical algorithms.
 
 \section{JUNO sensitivity to NMO and precise measurements}
+\label{sec:Fit}
 
-Once the event is reconstructed, and the energy spectrum is produced, we will need to extract the NMO oscillation parameters from it.
+Now that the event have been reconstructed, selected and that the non-IBD background have been rejected, we have access to the measured energy flux from JUNO. We consider two spectra, the one measured by the LPMT system and the one measured by the SPMT system. This give rise to three possible analysis: A LPMT only analysis, a SPMT only analysis and a joint analysis. This joint analysis is the subject of the chapter \ref{sec:joint_fit} of this thesis.
+
+The following details about JUNO measurement is common to the three analysis. The details and specific of the joint analysis are detailed in chapter \ref{sec:joint_fit}.
+
+\subsection{Theoretical spectrum}
+
+To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:osc}), the measurements of the calibration and satellite experiments and Monte Carlo simulation:
+\begin{itemize}
+  \item The absolute flux and the fission product fraction calibrated by TAO.
+  \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
+  \item The computed cross-section of $\bar{\nu}_e$ and the LS.
+  \item The estimation of mislabelled event, such as fast neutron events from cosmic muons, using Monte Carlo simulation.
+  \item The measured bias and resolution of the LPMT and SPMT system by the calibration.
+  \item The time dependent reactor parameters (age of fuel, instantaneous power of the reactors, etc...)
+\end{itemize}
+
+These systematics parameters come with their uncertainties that need to be taken into account by the fitting framework. This theoretical spectrum will, in the end, depend of the oscillation parameters of interest $\theta_{13}, \theta_{12}, \Delta m^2_{21}, \Delta m^2_{31}$. Noise parameters can be included in the parameters spectrum such as the earth density $\rho$ between the power plants and JUNO.
 
 \subsection{Fitting procedure}
-\label{sec:Fit}
+
+The theoretical and measured spectra are represented as two histograms depending on the energy. The theoretical spectrum is adjusted with the data using a $\chi^2$ minimization where $\chi^2$ is naively defined as
+\begin{equation}
+  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2}
+\end{equation}
+where $N^i_{th}$ is the number event in the $i$th bin of the theoretical spectrum, $N^i_{data}$ is the number of event in the $i$th bin of the measured spectrum and $\sigma_i$ is the uncertainty of this bin. Two classic statistic test exist Pearson and Neyman where the difference is the estimation of $\sigma_i$ parameters.
+
+This $\sigma_i$ is composed of the systematics uncertainties discussed above but also from the statistic uncertainty of the spectrum. Considering a Poisson process, the statistic uncertainty is estimated as $\sigma_{stat}^i = \sqrt{N^i}$. In a Pearson test, $N^i \equiv N^i_{th}$ whereas in a Neyman test $N^i \equiv N^i_{data}$. Under the assumption that the content of each bin follow a Gaussian distribution (a Poisson with high enough statistic), the two test are equivalent. But studies on Monte Carlo spectrum showed that the Pearson and Neyman statistic are biased in opposite direction. It is easily visible where, for the same data, Pearson will prefer a higher $N^i_{th}$ to reduce the ration $\frac{1}{N^i_{th}}$ whereas Neyman will prefer a lower $N^i_{th}$ to reduce the $(N^i_{th} - N^i_{data})$ term.
+
+This problematic can be circumvented by summing the two test, yielding the CNP statistic test and/or by adding a term
+\begin{equation}
+  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2} \mathbf{- \ln |V|}
+\end{equation}
+where $V$ is the covariance matrix of the theoretical spectrum yielding the PearsonV and CNPV statistic test.
+
+
+The $\chi^2$ is minimized by exploring the parameter phase space via gradient descent.
+
+\subsection{Physics results}
+
+The oscillation parameters are directly extracted from the minimization procedure and the error can be estimated directly from the procedure. For the NMO, the data are fitted under the two assumption of NO and IO. The difference in $\chi^2$ give us the preferred ordering and the significance of our test. Latest studies show that the precision on oscillation parameters after six year of data taking will be of 0.2\%, 0.3\%, 0.5\% and 12.1\% for $\Delta m^2_{31}$, $\Delta m^2_{21}$, $\sin^2\theta_{12}$ and $\sin^2\theta_{13}$ respectively \cite{juno_collaboration_sub-percent_2022}. The expected sensitivity to mass ordering is $3\sigma$ after 6 years \cite{juno_collaboration_juno_2022}.
