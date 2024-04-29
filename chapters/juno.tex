@@ -20,27 +20,27 @@ JUNO is a neutrino detection experiment under construction located in China, in 
   \caption{\textbf{On the left:} Location of the JUNO experiment and its reactor sources in southern china. \textbf{On the right:} Aerial view of the experimental site}
 \end{figure}
 
-For this JUNO will measure the electronic anti-neutrinos ($\bar{\nu}_e$) flux coming from the nuclear reactors of Taishan, Yangjiang, for a total power of 26.6 GW$_{th}$, and the Daya Bay power plant to a lesser extent. All of those cores are the second-generation pressurized water reactors CPR1000, which is a derivative of Framatome M310. Details about the power plants characteristics and their expected flux of $\bar{\nu}_e$ can be found in the table \ref{tab:power_plants}.
+For this JUNO will measure the electronic anti-neutrinos ($\bar{\nu}_e$) flux coming from the nuclear reactors of Taishan, Yangjiang, for a total power of 26.6 GW$_{th}$, and the Daya Bay power plant to a lesser extent. All of those cores are the second-generation pressurized water reactors CPR1000, which is a derivative of Framatome M310. Details about the power plants characteristics and their expected flux of $\bar{\nu}_e$ can be found in the table \ref{tab:juno:power_plants}.
 The distance of 53 km has been specifically chosen to maximize the disappearance probability of the $\bar{\nu}_e$. The data taking is scheduled to start early 2025.
 
 \section{Neutrinos physics in JUNO}
 
-Even if the JUNO design detailed in section \ref{sec:juno_detector} was optimized for the measurement of the NMO, its large detection volume, excellent energy resolution and background level and understanding make it also an excellent detector to measure the flux coming from other neutrino sources. Thus the scientific program of JUNO extends way over reactor antineutrinos. The following section is an overview of the different physics topic JUNO will contribute in the coming years.
+Even if the JUNO design detailed in section \ref{sec:juno:juno_detector} was optimized for the measurement of the NMO, its large detection volume, excellent energy resolution and background level and understanding make it also an excellent detector to measure the flux coming from other neutrino sources. Thus the scientific program of JUNO extends way over reactor antineutrinos. The following section is an overview of the different physics topic JUNO will contribute in the coming years.
 
 \subsection{Reactor neutrino oscillation for NMO and precise measurements}
-\label{sec:nom_precise_measurement}
+\label{sec:juno:nom_precise_measurement}
 Previous works \cite{zhan_determination_2008,  zhan_experimental_2009} shows that oscillation parameters and the NMO can be observed by looking at the $\bnue$ disappearance energy spectrum coming from medium baseline nuclear reactor. This disappearance probability can be expressed as \cite{an_neutrino_2016} :
 \begin{equation*}
   P(\bnue \rightarrow \bnue) = 1 - \sin^2 2\theta_{12} c^4_{13} \sin^2 \frac{\Delta m^2_{21}L}{4E} - \sin^2 2\theta_{13} \bigg[ c_{12}^2 \sin^2 \frac{\Delta m_{31}^2 L}{4E} + s^2_{12} \sin^2 \frac{\Delta m_{32}^2 L}{4E} \bigg]
 \end{equation*}
 Where $s_{ij} = \sin \theta_{ij}$, $c_{ij} = \cos \theta_{ij}$, $E$ is the $\bnue$ energy and $L$ is the baseline.
-We can see the sensitivity to the NMO in the dependency to $\Delta m_{32}^2$ and $\Delta m^2_{31}$ causing a phase shift of the spectrum as we can see in the figure \ref{fig:juno-spectrum-oscillation}.
-By carefully adjusting a theoretical spectrum to the data, one can extract the NMO and the oscillation parameters. The statistic procedure used to adjust the theoretical spectrum is reviewed in more details in the section \ref{sec:Fit}.
+We can see the sensitivity to the NMO in the dependency to $\Delta m_{32}^2$ and $\Delta m^2_{31}$ causing a phase shift of the spectrum as we can see in the figure \ref{fig:juno:juno-spectrum-oscillation}.
+By carefully adjusting a theoretical spectrum to the data, one can extract the NMO and the oscillation parameters. The statistic procedure used to adjust the theoretical spectrum is reviewed in more details in the section \ref{sec:juno:Fit}.
 \begin{figure}
   \centering
   \includegraphics[height=8cm]{images/juno/Spectrum-OscillationsOnly_dm2_31.png}
   \caption{Expected number of neutrinos event per MeV in JUNO after 6 years of data taking. The black curve shows the flux if there was no oscillation. The light gray curve shows the oscillation if only the solar terms are taken in account ($\theta_{12}$, $\Delta m_{21}^2$). The blue and red curve shows the spectrum in the case of, respectively, NO and IO. The dependency of the oscillation to the different parameters are schematized by the double sided arrows. We can see the NMO sensitivity by looking at the fine phase shift between the red and the blue curve.}
-  \label{fig:juno-spectrum-oscillation}
+  \label{fig:juno:juno-spectrum-oscillation}
 \end{figure}
 To reach the desired sensitivity, JUNO must meet multiple requirements but most notably:
 \begin{enumerate}
@@ -51,7 +51,7 @@ To reach the desired sensitivity, JUNO must meet multiple requirements but most 
 \end{enumerate}
 
 \subsubsection{$\bar{\nu}_e$ flux coming from nuclear power plants}
-\label{sec:nu_e_flux}
+\label{sec:juno:nu_e_flux}
 
 To get such high measurements precision, it is necessary to have a very good understanding of the sources characteristics. For its NMO and precise measurement studies, JUNO will observe the energy spectrum of neutrinos coming from the nuclear power plants Taishan and Yangjiang's cores, located at 53 km of the detector to maximise the disappearance probability of the $\bar{\nu}_e$.
 
@@ -75,7 +75,7 @@ To get such high measurements precision, it is necessary to have a very good und
     \hline
   \end{tabular}
   \caption{Characteristics of the nuclear power plants observed by JUNO. The IBD rate are estimated from the baselines, the reactors full thermal power, selection efficiency and the current knowledge of the oscillation parameters}
-  \label{tab:power_plants}
+  \label{tab:juno:power_plants}
 \end{table}
 
 The $\bar{\nu}_e$ coming from reactors are emitted from $\beta$-decay of unstable fission fragments. The Taishan and Yangjiang reactors are Pressurised Water Reactor (PWR), the same type as Daya Bay. In those type of reactor more the 99.7 \% and $\bar{\nu}_e$ are produced by the fissions of four fuel isotopes $^{235}$U, $^{238}$U, $^{239}$Pu and $^{241}$Pu. The neutrino flux per fission of each isotope is determined by the inversion of the measured $\beta$ spectra of fission product \cite{hahn_antineutrino_1989, mueller_improved_2011, von_feilitzsch_experimental_1982, schreckenbach_determination_1985, huber_determination_2011} or by calculation using the nuclear databases \cite{vogel_reactor_1981, dwyer_spectral_2015}.
@@ -86,7 +86,7 @@ The neutrino flux coming from a reactor at a time $t$ can be predicted using
 \end{equation}
 where $W_{th}(t)$ is the thermal power of the reactor, $f_i(t)$ is the fraction fission of the $i$th isotope, $e_i$ its thermal energy released in each fission and $S_i(e_\nu)$ the neutrino flux per fission for this isotope. Using this method, the flux uncertainty is expected to be of an order of 2-3 \% \cite{juno_collaboration_sub-percent_2022}.
 
-In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup near the reactor core Taishan-1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core, more details can be found in section \ref{sec:tao}. It will help identifying unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
+In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup near the reactor core Taishan-1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core, more details can be found in section \ref{sec:juno:tao}. It will help identifying unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
 
 One  the open issue about reactor anti-neutrinos flux is the so-called neutrino anomaly \cite{mention_reactor_2011}, an unexpected surplus of neutrino emission in the spectra around 5 MeV.
 Multiples scientists are trying to explain this surplus by advanced recalculation of the nuclei model during beta decay \cite{kopeikin_reevaluating_2021, letourneau_origin_2023} but no consensus on this issue has been reached yet.
@@ -103,23 +103,23 @@ In addition to all those physics signal, non-neutrinos signal that would mimic a
   \item The signal coming from radioactive decay ($\alpha, ~ \gamma, ~ \beta$) from natural radioactive isotopes in the material of the detector.
   \item Cosmogenic event such as fast neutrons and activated isotopes induced by muons passing through the detector, most notably the spallation on $^{12}$C.
 \end{itemize}
-All those events represent a non-negligeable part of the spectrum as shown in figure \ref{fig:spectrum_with_background}.
+All those events represent a non-negligeable part of the spectrum as shown in figure \ref{fig:juno:spectrum_with_background}.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/juno/spectrum_with_background.png}
   \caption{Expected visible energy spectrum measured with the LPMT system with (grey) and without (black) backgrounds. The background amount for about 7\% of the IBD candidate and are mostly localized below 3 MeV \cite{juno_collaboration_sub-percent_2022}}
-  \label{fig:spectrum_with_background}
+  \label{fig:juno:spectrum_with_background}
 \end{figure}
 
 
 \subsubsection{Identification of the mass ordering}
 
-To identify the mass ordering, we adjust the theoretical neutrino energy spectrum under the two hypothesis of NO and IO. Those give us two $\chi^2$, respectively $\chi^2_{NO}$ and $\chi^2_{IO}$. By computing the difference $\Delta \chi ^2 = \chi^2_{NO} - \chi^2_{IO}$ we can determine the most probable mass ordering and the confidence interval: NO if $\Delta \chi^2 > 0$ and IO if $\Delta \chi^2 < 0$. Current studies shows that the expected sensitivity the mass ordering would be of $3.4 \sigma$ after 6 years of data taking in nominal setup\cite{an_neutrino_2016}. More detailed explanations about the procedure can be found in the section \ref{sec:Fit}.
+To identify the mass ordering, we adjust the theoretical neutrino energy spectrum under the two hypothesis of NO and IO. Those give us two $\chi^2$, respectively $\chi^2_{NO}$ and $\chi^2_{IO}$. By computing the difference $\Delta \chi ^2 = \chi^2_{NO} - \chi^2_{IO}$ we can determine the most probable mass ordering and the confidence interval: NO if $\Delta \chi^2 > 0$ and IO if $\Delta \chi^2 < 0$. Current studies shows that the expected sensitivity the mass ordering would be of $3.4 \sigma$ after 6 years of data taking in nominal setup\cite{an_neutrino_2016}. More detailed explanations about the procedure can be found in the section \ref{sec:juno:Fit}.
 
 \subsubsection{Precise measurement of the oscillations parameters}
 
-The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$ are free parameters in the fit of the oscillation spectrum. The precision on those parameters have been estimated and are shown in table \ref{tab:juno-param-precision}. Wee see that for $\theta_{12}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$, precision at 6 years is better than the reference precision by an order of magnitude \cite{juno_collaboration_sub-percent_2022}
+The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$ are free parameters in the fit of the oscillation spectrum. The precision on those parameters have been estimated and are shown in table \ref{tab:juno:juno-param-precision}. Wee see that for $\theta_{12}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$, precision at 6 years is better than the reference precision by an order of magnitude \cite{juno_collaboration_sub-percent_2022}
 
 
 \begin{table}[ht]
@@ -135,12 +135,12 @@ The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\D
     \hline
   \end{tabular}
   \caption{A summary of precision levels fir the oscillation parameters. The reference value (PDG 2020 \cite{particle_data_group_review_2020}) is compared with 100 days, 6 years and 20 years of JUNO data taking.}
-  \label{tab:juno-param-precision}
+  \label{tab:juno:juno-param-precision}
 \end{table}
 
 \subsection{Other physics}
 
-While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclear reactor, JUNO will be able to detect neutrinos coming from other sources thus allowing for a wide range of physics studies as detailed in the table \ref{tab:signal} and in the following sub-sections.
+While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclear reactor, JUNO will be able to detect neutrinos coming from other sources thus allowing for a wide range of physics studies as detailed in the table \ref{tab:juno:signal} and in the following sub-sections.
 
 \begin{table}[ht]
 \begin{center}
@@ -156,7 +156,7 @@ While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclea
     \hline
   \end{tabular}
   \caption{Detectable neutrino signal in JUNO and the expected signal rates and major background sources}
-  \label{tab:signal}
+  \label{tab:juno:signal}
 \end{center}
 \end{table}
 
@@ -186,16 +186,16 @@ Thanks to JUNO sensitivity, multiple other exotic can be performed on neutrino r
 
 
 \section{The JUNO detector}
-\label{sec:juno_detector}
+\label{sec:juno:juno_detector}
 
-The JUNO detector is a scintillator detector buried 693.35 meters under the ground (1800 meters water equivalent). It consist of Central Detector (CD), a water pool and a Top Tracker (TT) as showed in figure \ref{fig:juno-schema}.
+The JUNO detector is a scintillator detector buried 693.35 meters under the ground (1800 meters water equivalent). It consist of Central Detector (CD), a water pool and a Top Tracker (TT) as showed in figure \ref{fig:juno:juno-schema}.
 The CD is an acrylic vessel containing the 20 ktons of Liquid Scintillator (LS). It is supported by a stainless steel structure and is immersed in that water pool that is used as shielding from external radiation and as a cherenkov detector for the background. The top of the experiment is partially covered by the Top Tracker (TT), a plastic scintillator detector which is use to detect the atmospheric muons background and is acting as a veto detector.
 
 
 The top of the experiment also host the LS purification system, a water purification system, a ventilation system to get rid of the potential radon in the air.
 The CD is observed by two system of Photo-Multipliers Tubes (PMT). They are attached to the steel structure and their electronic readout is submersed near them. A third system of PMT is also installed on the structure but are facing outward of the CD, instrumenting the water to be cherenkov detector. The CD and the cherenkov detector are optically separated by Tyvek sheet. A chimney for LS filling and purification and for calibration operations connects the CD to the experimental hall from the top.
 
-The CD has been dimensioned to meet the requirements presented in section \ref{sec:nom_precise_measurement}:
+The CD has been dimensioned to meet the requirements presented in section \ref{sec:juno:nom_precise_measurement}:
 \begin{itemize}
   \item Its 20 ktons monolithic LS provide a volume sizeable enough, in combination with the expected $\bar{\nu}_e$ flux, to reach the desired statistic in 6 years. Its monolithic nature also allow for a full containment of most of the events, preventing the energy loss in non-instrumented parts that would arise from a segmented detector.
   \item Its large overburden shield it from most of the atmospheric background that would pollute the signal.
@@ -208,7 +208,7 @@ The CD has been dimensioned to meet the requirements presented in section \ref{s
     \centering
     \includegraphics[height=6cm]{images/juno/drawing_schema.png}
     \caption{Schematics view of the JUNO detector.}
-    \label{fig:juno-schema}
+    \label{fig:juno:juno-schema}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
@@ -237,40 +237,40 @@ where $\kappa = (1 + \epsilon_\nu)^2 - \epsilon_\nu^2 \cos^2 \theta \approx 1$, 
 We can see from this equation that the positron energy is strongly correlated to the neutrino energy.
 
 
-The positron and the neutron will then propagate in the detection medium, the Liquid Scintillator (LS), loosing their kinetic energy by exciting the molecule of the LS (more details in section \ref{sec:LS}). Once stopped, the positron will annihilate with an electron from the medium producing two 511 KeV gamma. Those gamma will themselves interact with the LS, exciting it before being absorbed by photoelectrical effect. The neutron will be captured by an hydrogen, emitting a 2.2 MeV gamma in the process. This gamma will also deposit its energy before being absorbed by the LS.
+The positron and the neutron will then propagate in the detection medium, the Liquid Scintillator (LS), loosing their kinetic energy by exciting the molecule of the LS (more details in section \ref{sec:juno:LS}). Once stopped, the positron will annihilate with an electron from the medium producing two 511 KeV gamma. Those gamma will themselves interact with the LS, exciting it before being absorbed by photoelectrical effect. The neutron will be captured by an hydrogen, emitting a 2.2 MeV gamma in the process. This gamma will also deposit its energy before being absorbed by the LS.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=8cm]{images/juno/IDB-JUNO.png}
   \caption{Schematics of an IBD interaction in the central detector of JUNO}
-  \label{fig:IBD}
+  \label{fig:juno:IBD}
 \end{figure}
 
 The scintillation photons have frequency in the UV and will propagate in the LS, being re-absorbed and re-emitted by compton effect before finally be captured by PMTs instrumenting the acrylic sphere. The analog signal of the PMTs digitized by the electronic is the signal of our experiment. The signal produced by the positron is subsequently called the prompt signal, and the signal coming from the neutron the delayed signal. This naming convention come from the fact that the positron will deposit its energy rather quickly (few ns) where the neutron will take a bit more time ($\sim$ 236 $\mu$s).
 
 \subsection{Central Detector (CD)}
-\label{sec:CD}
+\label{sec:juno:CD}
 
 The central detector, composed of 20 ktons of Liquid Scintillator (LS), is the main part of JUNO. The LS is contained in a spherical acrylic vessel supported by a stainless steel structure. The CD and its structural support are submerged in a cylindrical water pool of 43.5m diameter and 44m height. We're confident that the water pool provide sufficient buffer protection in every direction against the rock radioactivity.
 \subsubsection{Acrylic vessel}
 The acrylic vessel is a spherical vessel of inner diameter of 35.4 m and a thickness of 120 mm. It is assembled from 265 acrylic panels, thermo bonded together. The acrylic recipes has been carefully tuned with extensive R\&D to ensure it does not include plasticizer and anti-UV material that would stop the scintillation photons.
-Those panels requires to be pure of radioactive materials to not cause background. Current setup where the acrylic panels are molded in cleanrooms of class 10000, let us reach a uranium and thorium contamination of <0.5 ppt. The molding and thermoforming processes is optimized to increase the assemblage transparency in water to >96\%. The acrylic vessel is supported by a stainless steel structure via supporting node (fig \ref{fig:sup_node}). The structure and the nodes are designed to be resilient to natural catastrophic events such as earthquake and can support many times the effective load of the acrylic vessel.
+Those panels requires to be pure of radioactive materials to not cause background. Current setup where the acrylic panels are molded in cleanrooms of class 10000, let us reach a uranium and thorium contamination of <0.5 ppt. The molding and thermoforming processes is optimized to increase the assemblage transparency in water to >96\%. The acrylic vessel is supported by a stainless steel structure via supporting node (fig \ref{fig:juno:sup_node}). The structure and the nodes are designed to be resilient to natural catastrophic events such as earthquake and can support many times the effective load of the acrylic vessel.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=4cm]{images/juno/node_b.png}
   \caption{Schematics of the supporting node for the acrylic vessel}
-  \label{fig:sup_node}
+  \label{fig:juno:sup_node}
 \end{figure}
 
 \subsubsection{Liquid scintillator}
-\label{sec:LS}
+\label{sec:juno:LS}
 
 The Liquid Scintillator (LS) has a similar recipe as the one used in Daya Bay \cite{bay_optimization_2020} but without gadolinium doping. It is made of three components, necessary to shift the wavelength of emitted photons to prevent their reabsorption:
 \begin{enumerate}
   \item The detection medium, the \textit{linear alkylbenzene} (LAB). Selected because of its excellent transparency, high flash point, low chemical reactivity and good light yield. Accounting for $\sim 98\%$ of the LS, it is the main component with which ionizing particles and gamma interact. Charged particles will collide with its electronic cloud transferring energy to the molecules, gamma will interact via compton effect with the electronic cloud before finally be absorbed via photoelectric effect.
   \item The second component of the LS is the \textit{2,5-diphenyloxazole} (PPO). A fraction of the excitation energy of the LAB is transferred to the PPO, mainly via non radiative process \cite{birks_chapter_1964}. The PPO molecules de-excites in the same way, transferring their energy to the bis-MSB. The PPO makes for $~1.5$ \% of the LS.
-  \item The last component is the \textit{p-bis(o-methylstyryl)-benzene} (bis-MSB). Once excited by the PPO, it will emit photon with an average wavelength of $\sim430$ nm (full spectrum in figure \ref{fig:LS_spectrum_and_PMT_sensitivity}) that can be detected by our photo-multipliers systems. It amount for $\sim 0.5$\% of the LS.
+  \item The last component is the \textit{p-bis(o-methylstyryl)-benzene} (bis-MSB). Once excited by the PPO, it will emit photon with an average wavelength of $\sim430$ nm (full spectrum in figure \ref{fig:juno:LS_spectrum_and_PMT_sensitivity}) that can be detected by our photo-multipliers systems. It amount for $\sim 0.5$\% of the LS.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -285,7 +285,7 @@ The Liquid Scintillator (LS) has a similar recipe as the one used in Daya Bay \c
     \includegraphics[height=5cm]{images/juno/LPMT_efficiency.png}
   \end{subfigure}
   \caption{\textbf{On the left:} Quantum efficiency (QE) and emission spectrum of the LAB and the bis-MSB \cite{bay_optimization_2020}. \textbf{On the right:} Sensitivity of the Hamamatsu LPMT depending on the wavelength of the incident photons \cite{noauthor_photomultiplier_nodate}.}
-  \label{fig:LS_spectrum_and_PMT_sensitivity}
+  \label{fig:juno:LS_spectrum_and_PMT_sensitivity}
 \end{figure}
 
 This formula has been optimized using dedicated studies with a Daya Bay detector \cite{bay_optimization_2020, zhang_complete_2020} to reach the requirements for the JUNO experiment:
@@ -295,18 +295,18 @@ This formula has been optimized using dedicated studies with a Daya Bay detector
   \item Uranium/Thorium radiopurity to prevent background signal. The reactor neutrino program require a contamination fraction $F<10^{-15}$ while the solar neutrino program require $F<10^{-17}$.
 \end{itemize}
 
-The LS will frequently be purified and tested in the Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} to ensure that the requirements are kept during the lifetime of the experiment, more details to be found in section \ref{sec:OSIRIS}.
+The LS will frequently be purified and tested in the Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} to ensure that the requirements are kept during the lifetime of the experiment, more details to be found in section \ref{sec:juno:OSIRIS}.
 
 \subsubsection{Large Photo-Multipliers Tubes (LPMTs)}
-\label{sec:LPMT}
+\label{sec:juno:LPMT}
 
-The scintillation light produced by the LS is then collected by Photo-Multipliers Tubes (PMT) that transform the incoming photon into an electric signal. As described in figure \ref{fig:pmt-schem}, the incident photons interact with the photocatode via photoelectric effect producing an electron called a Photo-Electron (PE). This PE is then focused on the dynodes where the high voltage will allow it to be multiplied. After multiple amplification the resulting charge - in coulomb [C] - is collected by the anode and the resulting electric signal can be digitalized by the readout electronics from which the charge and timing can be extracted.
+The scintillation light produced by the LS is then collected by Photo-Multipliers Tubes (PMT) that transform the incoming photon into an electric signal. As described in figure \ref{fig:juno:pmt-schem}, the incident photons interact with the photocatode via photoelectric effect producing an electron called a Photo-Electron (PE). This PE is then focused on the dynodes where the high voltage will allow it to be multiplied. After multiple amplification the resulting charge - in coulomb [C] - is collected by the anode and the resulting electric signal can be digitalized by the readout electronics from which the charge and timing can be extracted.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=4cm]{images/juno/pmt_schematic.png}
   \caption{Schematic of a PMT}
-  \label{fig:pmt-schem}
+  \label{fig:juno:pmt-schem}
 \end{figure}
 
 The Large Photo-Multipliers Tubes (LPMT), used in the central detector and in the water pool, are 20-inch (50.8 cm) radius PMTs. $\sim 5000$ dynode-PMTs \cite{noauthor_photomultiplier_nodate} were produced by the Hamamatsu$^{\copyright}$ company and $\sim 15000$ Micro-Channel Plate (MCP) \cite{abusleme_mass_2022} by the NNVT$^{\copyright}$ company. This system is the one responsible for the energy measurement with a energy resolution of $3\%/\sqrt{E}$, resolution necessary for the mass ordering measurement. To reach this precision, the system is composed of 17612 PMTs quasi uniformly distributed over the detector for a coverage of 75.2\% reaching $\sim 1800$ PE/MeV or $\sim 2.3 \%$ resolution due to statistic, leaving $\sim 0.7\%$ for the systematic uncertainties. They are located outside the acrylic sphere in the water pool facing the center of the detector.
@@ -314,10 +314,10 @@ To maintain the resolution over the lifetime of the experiment, JUNO require a f
 
 The LPMTs electronic are divided in two parts. One "near", located underwater, in proximity of the LPMT to reduce the cable length between the PMT and early electronic. A second one, outside of the detector that is responsible for higher level analysis before sending the data to the DAQ.
 
-The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:calib} for more details.
+The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:juno:calib} for more details.
 
 \subsubsection{Small Photo-Multipliers Tubes (SPMTs)}
-\label{sec:SPMT}
+\label{sec:juno:SPMT}
 
 The Small PMT (SPMTs) system is made of 3-inch (7.62 cm) PMTs. They will be used in the CD as a secondary detection system. Those 25600 SPMTs will observe the same events as the LPMTs, thus sharing the physics and detector systematics up until the photon conversion. With a detector coverage of 2.7\%, this system will collect $\sim 43$ PE/MeV for a final energy resolution of $\sim 17\%$. This resolution is not enough to measure the NMO, $\theta_{13}$, $\Delta m^2_{31}$ but will be sufficient to independently measure $\theta_{12}$ and $\Delta m^2_{21}$.
 
@@ -335,25 +335,25 @@ The CD will be bathed in constant background noise coming from numerous sources 
 The Water Cherenkov Detector (WCD) is the instrumentation of the water buffer around the CD. When high speed charged particles will pass through the water, they will produced cherenkov photons. The light will be collected by 2400 MCP LPMTs installed on the outer surface of the CD structure. The  muons veto strategy is based on a PMT multiplicity condition. WCD PMTs are grouped in ten zones: 5 in the top, 5 in the bottom. A veto is raised either when more than 19 PMTs are triggered in one zone or when two adjacent zones simultaneously trigger more than 13 PMTs. Using this trigger, we expect to reach a muon detection efficiency of 99.5\% while keeping the noise at reasonable level.
 
 \subsubsection{Top tracker}
-The JUNO Top Tracker (TT) is a plastic scintillator detector located on the top of the experiment (see figure \ref{fig:tt}). Made from plastic scintillator from OPERA \cite{acquafredda_opera_2009} layered horizontally in 3 layers on the top of the detector, the TT will be able to detect incoming atmospheric muons.
+The JUNO Top Tracker (TT) is a plastic scintillator detector located on the top of the experiment (see figure \ref{fig:juno:tt}). Made from plastic scintillator from OPERA \cite{acquafredda_opera_2009} layered horizontally in 3 layers on the top of the detector, the TT will be able to detect incoming atmospheric muons.
 With its coverage, about 1/3 of the of all atmospheric muons that passing through the CD will also pass through the 3 layer of the detector. While it does not cover the majority of the CD, the TT is particularly effective to detect muons coming through the filling chimney region which might present difficulties from the other subsystems in some classes of events.
 \begin{figure}[ht]
   \centering
   \includegraphics[height=5cm]{images/juno/Global_TT_01.png}
   \caption{The JUNO top tracker}
-  \label{fig:tt}
+  \label{fig:juno:tt}
 \end{figure}
 
 \section{Calibration strategy}
-\label{sec:calib}
+\label{sec:juno:calib}
 
 The calibration is a crucial part of the JUNO experiment. Because we are looking at civil reactor neutrino it might be impossible to run measurement without signal, it would need to shut down every reactor from the Taishan and Yangjiang power plants which is realistically impossible. Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest : [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
-It is expected that the CD response will be different depending on the type of particle, due to the interaction with LS, the position on the event and the optical response of the acrylic sphere (see section \ref{sec:reco}).
+It is expected that the CD response will be different depending on the type of particle, due to the interaction with LS, the position on the event and the optical response of the acrylic sphere (see section \ref{sec:juno:reco}).
 We also expect a non-linear energy response of the CD due to the LS properties \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
 
 \subsection{Energy scale calibration}
 
-While electrons and positrons sources would be ideal, for a large LS detector thin-walled electrons or positrons sources could lead to leakage of radionucleides causing radioactive contamination. Instead, we consider gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:calib_source}.
+While electrons and positrons sources would be ideal, for a large LS detector thin-walled electrons or positrons sources could lead to leakage of radionucleides causing radioactive contamination. Instead, we consider gamma sources in the range of the prompt energy of IBDs. The sources are reported in table \ref{tab:juno:calib_source}.
 
 \begin{table}[ht]
   \centering
@@ -373,12 +373,12 @@ While electrons and positrons sources would be ideal, for a large LS detector th
     \hline
   \end{tabular}
   \caption{List of sources and their process considered for the energy scale calibration}
-  \label{tab:calib_source}
+  \label{tab:juno:calib_source}
 \end{table}
 
 For the $^{68}$Ge source, it will decay in $^{68}$Ga via electron capture, which will itself $\beta^+$ decay into $^{68}$Zn. The positrons will be absorbed by the enclosure so only the annihilation gamma will be released. In addition, $(\alpha, n)$ sources like $^{241}$Am-Be and $^{241}$Am-$^{13}$C are used to provide both high energy gamma and neutrons, which will later be captured in the LS producing the 2.2 MeV gamma.
 
-From this calibration we call $E_{vis}$ the "visible energy" that is reconstructed by our current algorithms and we compare it to the true energy deposited by the calibration source. The results shown in figure \ref{fig:nl} show the expected response of the detector from calibration sources. The non-linearity is clearly visible from the $E_{vis} / E_{true}$ shape. See \cite{juno_collaboration_calibration_2021} for more details.
+From this calibration we call $E_{vis}$ the "visible energy" that is reconstructed by our current algorithms and we compare it to the true energy deposited by the calibration source. The results shown in figure \ref{fig:juno:nl} show the expected response of the detector from calibration sources. The non-linearity is clearly visible from the $E_{vis} / E_{true}$ shape. See \cite{juno_collaboration_calibration_2021} for more details.
 
 \begin{figure}[ht]
   \centering
@@ -386,27 +386,27 @@ From this calibration we call $E_{vis}$ the "visible energy" that is reconstruct
     \centering
     \includegraphics[width=\textwidth]{images/juno/gamma_nl.png}
     \caption{Gamma non-linearity}
-    \label{fig:nl:gamma}
+    \label{fig:juno:nl:gamma}
   \end{subfigure}
   \begin{subfigure}[b]{0.37\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/juno/boron_nl.png}
     \caption{Boron non-spectrum}
-    \label{fig:nl:boron}
+    \label{fig:juno:nl:boron}
   \end{subfigure}
   \begin{subfigure}[b]{0.37\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/juno/e-_nl.png}
     \caption{Electron non-linearity}
-    \label{fig:nl:electron}
+    \label{fig:juno:nl:electron}
   \end{subfigure}
   \caption{Fitted and simulated non linearity of gamma, electron sources and from the $^{12}$B spectrum. Black points are simulated data. Red curves are the best fits}
-  \label{fig:nl}
+  \label{fig:juno:nl}
 \end{figure}
 
 \subsection{Calibration system}
 
-The non-uniformity due to the event position in the detector (more details in section \ref{sec:reco}) will be studied using multiples systems that are schematized in figure \ref{fig:calib}. They allow to position sources at different location in the CD.
+The non-uniformity due to the event position in the detector (more details in section \ref{sec:juno:reco}) will be studied using multiples systems that are schematized in figure \ref{fig:juno:calib}. They allow to position sources at different location in the CD.
 
 \begin{itemize}
   \item For a one-dimension vertical calibration, the Automatic Calibration Unit (ACU) will be able to deploy multiple radioactive sources or a pulse laser diffuser ball along the central axis of the CD through the top chimney. The source position precision is less than 1cm.
@@ -419,10 +419,10 @@ The non-uniformity due to the event position in the detector (more details in se
   \centering
   \includegraphics[height=6cm]{images/juno/calib.png}
   \caption{Overview of the calibration system}
-  \label{fig:calib}
+  \label{fig:juno:calib}
 \end{figure}
 
-The preliminary calibration program is depicted in table \ref{tab:calib_prog}.
+The preliminary calibration program is depicted in table \ref{tab:juno:calib_prog}.
 
 \begin{table}[ht]
   \centering
@@ -449,47 +449,47 @@ The preliminary calibration program is depicted in table \ref{tab:calib_prog}.
     \hline
   \end{tabular}
   \caption{Calibration program of the JUNO experiment}
-  \label{tab:calib_prog}
+  \label{tab:juno:calib_prog}
 \end{table}
 
 \section{Satellite detectors}
-As introduced in section \ref{sec:nu_e_flux} and section \ref{sec:LS}, the precise knowledge and understanding of the detector condition is crucial for the measurements of the NMO and oscillation parameters. Thus two satellite detectors will be setup to monitor the experiment condition. TAO to monitor and understand the $\bar{\nu}_e$ flux and spectrum coming from the nuclear reactor and OSIRIS to monitor the LS response.
+As introduced in section \ref{sec:juno:nu_e_flux} and section \ref{sec:juno:LS}, the precise knowledge and understanding of the detector condition is crucial for the measurements of the NMO and oscillation parameters. Thus two satellite detectors will be setup to monitor the experiment condition. TAO to monitor and understand the $\bar{\nu}_e$ flux and spectrum coming from the nuclear reactor and OSIRIS to monitor the LS response.
 
 \subsection{TAO}
-\label{sec:tao}
+\label{sec:juno:tao}
 The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (< 30m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
 
 \subsubsection{Detector}
 
 The TAO detector is close, in concept, to the CD of JUNO. It is composed of an acrylic vessel containing 2.8 tons of gadolinium-loaded LS instrumented by an array of silicon photomultipliers (SiPM) reaching a 95\% coverage. To efficiently reduce the dark count of those sensors, the detector is cooled to -50 \textcelsius.
 The $\bar{\nu}_e$ will interact with the LS via IBD, producing scintillation light, that will be detected by the SiPMs. From this signal the $\bar{\nu}_e$ energy and the full spectrum reconstructed.
-This spectrum will then be used by JUNO to calibrate the unoscillated spectrum, most notably the fission product fraction that impact the rate and shape of the spectrum. A schema of the detector is presented in figure \ref{fig:tao}.
+This spectrum will then be used by JUNO to calibrate the unoscillated spectrum, most notably the fission product fraction that impact the rate and shape of the spectrum. A schema of the detector is presented in figure \ref{fig:juno:tao}.
 
 \subsection{OSIRIS}
-\label{sec:OSIRIS}
+\label{sec:juno:OSIRIS}
 The Online Scintillator Internal Radioactivity Investigation System (OSIRIS) \cite{juno_collaboration_design_2021} is an ultralow background, 20 m$^3$ LS detector that will be located in JUNO cavern. It aim to monitor the radioactive contamination, purity and overall response of the LS before it is injected in JUNO.
 OSIRIS will be located at the end of the purification chain of JUNO, monitoring that the purified LS meet the JUNO requirements. The setup is optimized to detect the fast coincidences decay of $^{214}\mathrm{Bi}-^{214}\mathrm{Po}$ and $^{212}\mathrm{Bi}-^{212}\mathrm{Po}$, indicators of the decay chains of U and Th respectively.
 \subsubsection{Detector}
-OSIRIS is composed of an acrylic vessel that will contains 17t of LS. The LS is instrumented by a PMT array of 64 20 inch PMTs on the top and the side of the vessel. To reach the necessary background level required by the LS purity measurements, in addition to being 700m underground in the experiment cavern, the acrylic vessel is immersed in a tank of ultra pure water. The water is itself instrumented by another array of 20 inch PMTs, acting as muon veto. A schema of the detector is presented in figure \ref{fig:osiris}.
+OSIRIS is composed of an acrylic vessel that will contains 17t of LS. The LS is instrumented by a PMT array of 64 20 inch PMTs on the top and the side of the vessel. To reach the necessary background level required by the LS purity measurements, in addition to being 700m underground in the experiment cavern, the acrylic vessel is immersed in a tank of ultra pure water. The water is itself instrumented by another array of 20 inch PMTs, acting as muon veto. A schema of the detector is presented in figure \ref{fig:juno:osiris}.
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[t]{0.49\linewidth}
     \includegraphics[width=\linewidth]{images/juno/tao_schematic.png}
     \caption{Schematic of the TAO satellite detector}
-    \label{fig:tao}
+    \label{fig:juno:tao}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.49\linewidth}
     \includegraphics[width=\linewidth]{images/juno/osiris_schematic.png}
     \caption{Schematic of the OSIRIS satellite detector}
-    \label{fig:osiris}
+    \label{fig:juno:osiris}
   \end{subfigure}
   \caption{}
 \end{figure}
 
 \section{Software}
-\label{sec:software}
+\label{sec:juno:software}
 
 The simulation, reconstruction and analysis algorithms are all packaged in the JUNO software, subsequently called the software.
 It is composed of multiple components integrated in the SNiPER \cite{lin_application_2017} framework:
@@ -499,7 +499,7 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
   \item A Geant4 \cite{agostinelli_geant4simulation_2003, allison_geant4_2006, allison_recent_2016} Monte Carlo (MC) simulation containing the detectors geometries, a custom optical model for the LS and the supporting structures of the detectors. The Geant4 simulation integrate all relevant physics process for JUNO, validated by the collaboration. This step of the simulation is commonly called \textit{Detsim} and compute up to the production of photo-electrons in the PMTs. The optics properties of the different materials and detector components have been measured beforehand to be used to define the material and surfaces in the simulation.
   \item An electronic simulation, simulating the response waveform of the PMTs, tracking it through the digitization process, accounting for effects such as non-linearity, dark noise, Time Transit Spread (TTS), pre-pulsing, after-pulsing and ringing if the waveform. It's also the step handling the event triggers and mixing. This step is commonly referenced as \textit{Elecsim}.
   \item A waveform reconstruction where the digitized waveform are filtered to remove high-frequency white noise and then deconvoluted to yield time and charge informations of the photons hits on the PMTs. This step is commonly referenced as \textit{Calib}.
-  \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:reco} for more details on the reconstruction.
+  \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:juno:reco} for more details on the reconstruction.
   \item Once the singular events are reconstructed, they go through event pairing and classification to select IBD events. This step is named Event Classification.
   \item The purified signal is then analysed by the analysis framework which depend of the physics topic of interest.
 \end{itemize}
@@ -507,7 +507,7 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
 The steps Reco and Event Classification are divided into two category of algorithm. Fast but less accurate algorithms that are running during the data taking designated as the \textit{Online} algorithms. Those algorithm are used to take the decision to save the event on tape or to throw it away. More accurate algorithms that run on batch of events designated \textit{Offline} algorithms. They are used for the physics analysis. The Offline Reco will be one of the main topic of interest for this thesis.
 
 \section{State of the art of the Offline IBD reconstruction in JUNO}
-\label{sec:reco}
+\label{sec:juno:reco}
 
 The main reconstruction method currently run in JUNO is a data-driven method based on a likelihood maximization \cite{wu_new_2019, huang_improving_2021} using only the LPMTs. The first step is to reconstruct the interaction vertex from which the energy reconstruction is dependent. It is also necessary for event pairing and classification.
 
@@ -523,23 +523,23 @@ The charge-based algorithm is basically base on the charge-weighted average of t
   \vec{r}_{cb} = a\cdot\frac{\sum_i q_i \cdot \vec{r}_i}{\sum_i q_i}
 \end{align}
 
-Where $q_i$ is the reconstructed charge of the pulse of the $i$th PMT and $\vec{r}_i$ is its position. $\vec{r}_0$ is the reconstructed interaction position. $a$ is a scale factor introduced because a weighted average over a 3D sphere is inherently biased. Using calibration we can estimate $a \approx 1.3$ \cite{li_event_2021}. The results in figure \ref{fig:rec:cbary} shows that the reconstruction is biased from around 15m and further. This is due to the phenomena called ``total reflection area'' or TR Area.
+Where $q_i$ is the reconstructed charge of the pulse of the $i$th PMT and $\vec{r}_i$ is its position. $\vec{r}_0$ is the reconstructed interaction position. $a$ is a scale factor introduced because a weighted average over a 3D sphere is inherently biased. Using calibration we can estimate $a \approx 1.3$ \cite{li_event_2021}. The results in figure \ref{fig:juno:rec:cbary} shows that the reconstruction is biased from around 15m and further. This is due to the phenomena called ``total reflection area'' or TR Area.
 
-As depicted in the figure \ref{fig:rec:refl} the optical photons, given that they have a sufficiently large incidence angle, can be deviated of their trajectories when passing through the interfaces LS-acrylic and water-acrylic due to the optical index difference. This cause photons to be lost or to be detected by PMT further than anticipated if we consider their rectilinear trajectories. This cause the charge barycenter the be located closer to the center than the event really is.
+As depicted in the figure \ref{fig:juno:rec:refl} the optical photons, given that they have a sufficiently large incidence angle, can be deviated of their trajectories when passing through the interfaces LS-acrylic and water-acrylic due to the optical index difference. This cause photons to be lost or to be detected by PMT further than anticipated if we consider their rectilinear trajectories. This cause the charge barycenter the be located closer to the center than the event really is.
 
 \begin{figure}[ht]
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[height=6cm]{images/juno/reco/Reflexion_scenarii.jpg}
     \caption{Illustration of the different optical photons reflection scenarios. \textbf{1} is the reflection of the photon at the interface LS-acrylic or acrylic-water. \textbf{2} is the transmission of the photons through the interfaces. \textbf{3} is the conduction of the photon in the acrylic.}
-    \label{fig:rec:refl}
+    \label{fig:juno:rec:refl}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[height=6cm]{images/juno/reco/charge_barycenter.png}
     \caption{Heatmap of $R_{rec}$ and $R_{rec} - R_{true}$ as a function of $R_{true}$ for 4MeV prompt signals uniformly distributed in the detector calculated by the charge based algorithm}
-    \label{fig:rec:cbary}
+    \label{fig:juno:rec:cbary}
   \end{subfigure}
   \caption{}
 \end{figure}
@@ -548,16 +548,16 @@ It is to be noted that charge based algorithm, in addition to be biased near the
 
 \subsubsection{Time based algorithm}
 
-The time based algorithm use the distribution of the time of flight corrections $\Delta t$ (Eq \ref{eq:rec:tof_corr}) of an event to reconstruct its vertex and $t_0$. It follow the following iterations:
+The time based algorithm use the distribution of the time of flight corrections $\Delta t$ (Eq \ref{eq:juno:rec:tof_corr}) of an event to reconstruct its vertex and $t_0$. It follow the following iterations:
 
 \begin{enumerate}
   \item Use the charge based algorithm to get an initial vertex to start the iteration.
 
   \item \label{alg:rec:tba} Calculate the time of flight correction for the $i$th PMT using \begin{equation}
-      \label{eq:rec:tof_corr}
+      \label{eq:juno:rec:tof_corr}
       \Delta t_i (j) = t_i - \mathrm{tof}_i (j)
     \end{equation}
-    where $j$ is the iteration step, $t_i$ is the timing of the $i$th PMT, and $\mathrm{tof}_i$ is the time-of-flight of the photon considering an rectilinear trajectory and an effective velocity in the LS and water (see \cite{li_event_2021} for detailed description of this effective velocity). Plot the $\Delta t$ distribution and label the peak position as $\Delta t^{\mathrm{peak}}$ (see fig \ref{fig:rec:delta_t_distrib}).
+    where $j$ is the iteration step, $t_i$ is the timing of the $i$th PMT, and $\mathrm{tof}_i$ is the time-of-flight of the photon considering an rectilinear trajectory and an effective velocity in the LS and water (see \cite{li_event_2021} for detailed description of this effective velocity). Plot the $\Delta t$ distribution and label the peak position as $\Delta t^{\mathrm{peak}}$ (see fig \ref{fig:juno:rec:delta_t_distrib}).
 
   \item Calculate a correction vector $\vec{\delta} [\vec{r}(j)]$ as \begin{equation}
       \vec{\delta} [\vec{r}(j)] = \frac{\sum_i \bigg(\frac{\Delta t(j) - \Delta t^{\mathrm{peak}}(j)}{\mathrm{tof}_i(j)} \bigg) \cdot (\vec{r}_0(j) - \vec{r}_i)}{N^{\mathrm{peak}}(j)}
@@ -572,14 +572,14 @@ The time based algorithm use the distribution of the time of flight corrections 
     \centering
     \includegraphics[width=\textwidth]{images/juno/reco/delta_t_peak_distrib.png}
     \caption{$\Delta t$ distribution at different iterations step $j$}
-    \label{fig:rec:delta_t_distrib}
+    \label{fig:juno:rec:delta_t_distrib}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/juno/reco/time_based_algorithm.png}
     \caption{Heatmap of $R_{rec}$ and $R_{rec} - R_{true}$ as a function of $R_{true}$ for 4MeV prompt signals uniformly distributed in the detector calculated by the time based algorithm}
-    \label{fig:rec:time_based_results}
+    \label{fig:juno:rec:time_based_results}
   \end{subfigure}
 \end{figure}
 
@@ -588,13 +588,13 @@ However because the earliest arrival time is used, $t_i$ is related to the numbe
   t'_{i} = t_i - p_0 / \sqrt{N_i^{\mathrm{pe}}} - p_1 - p_2 / N_i^{\mathrm{pe}}
 \end{equation}
 
-The parameters $(p_0, p_1, p_2)$ were optimized to (9.42, 0.74, -4.60) for Hamamatsu PMTs and (41.31, -12.04, -20.02) for NNVT PMTs \cite{li_event_2021}. The results presented in figure \ref{fig:rec:time_based_results} shows that the time based algorithm provide a more accurate vertex and is unbiased even in the TR area. This results $(\vec{r}_0, t_0)$ is used as initial value for the likelihood algorithm.
+The parameters $(p_0, p_1, p_2)$ were optimized to (9.42, 0.74, -4.60) for Hamamatsu PMTs and (41.31, -12.04, -20.02) for NNVT PMTs \cite{li_event_2021}. The results presented in figure \ref{fig:juno:rec:time_based_results} shows that the time based algorithm provide a more accurate vertex and is unbiased even in the TR area. This results $(\vec{r}_0, t_0)$ is used as initial value for the likelihood algorithm.
 
 \subsubsection{Time likelihood algorithm}
 
 The time likelihood algorithm use the residual time expressed as follow
 \begin{equation}
-  \label{eq:rec:t_res}
+  \label{eq:juno:rec:t_res}
   t_{\mathrm{res}}^i(\vec{r}_0, t_0) = t_i - \mathrm{tof}_i - t_0
 \end{equation}
 
@@ -608,7 +608,7 @@ as the sum of the $k$ component that emit light in the LS each one characterised
 \end{equation}
 where $\sigma$ is the TTS of PMTs and $\nu$ is the average transit time. The dark noise is not correlated with any physical events and considered as constant rate over the time window considered $T$. By normalizing the dark noise probability $\epsilon(t_{\mathrm{res}})$ as $\int_T \epsilon(t_{\mathrm{res}}) dt_{\mathrm{res}} = \epsilon_{\mathrm{dn}}$ , it can be integrated in the PDF as
 \begin{equation}
-  \label{eq:juno:tim_like:dn}
+  \label{eq:juno:juno:tim_like:dn}
   p(t_{\mathrm{res}}) = (1-\epsilon_{\mathrm{dn}}) \cdot g(t_{\mathrm{res}}) + \epsilon(t_{\mathrm{res}})
 \end{equation}
 
@@ -617,13 +617,13 @@ The distribution of the residual time $t_{\mathrm{res}}$ of an event can then be
   \mathcal{L}(\vec{r}_0, t_0) = - \mathrm{ln} \bigg(\prod_i p(t^i_{\mathrm{res}}) \bigg)
 \end{equation}
 
-The parameter of Eq. \ref{eq:juno:tim_like:dn} can be measured experimentally. The results shown in figure \ref{fig:rec:time_likelihood} used PDF from monte carlo simulation. The results shows that $R_{rec} - R_{true}$ is biased depending on the energy. While this could be corrected using calibration, another algorithm based on charge likelihood was developed to correct this problem.
+The parameter of Eq. \ref{eq:juno:juno:tim_like:dn} can be measured experimentally. The results shown in figure \ref{fig:juno:rec:time_likelihood} used PDF from monte carlo simulation. The results shows that $R_{rec} - R_{true}$ is biased depending on the energy. While this could be corrected using calibration, another algorithm based on charge likelihood was developed to correct this problem.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\linewidth]{images/juno/reco/time_likelihood_results.png}
   \caption{Bias of the reconstructed radius R (left), $\theta$ (middle) and $\phi$ (right) for multiple energies by the time likelihood algorithm}
-  \label{fig:rec:time_likelihood}
+  \label{fig:juno:rec:time_likelihood}
 \end{figure}
 
 
@@ -642,18 +642,18 @@ Therefore, the probability to observe a specific hit pattern can be expressed as
 
 The best fit values of $\vec{R}_0$ and $E$ can then be calculated by minimizing the negative log-likelihood
 \begin{equation}
-  \label{eq:rec:charge_likelihood}
+  \label{eq:juno:rec:charge_likelihood}
   \mathcal{L}(\vec{r}_0, E) = - \mathrm{ln}(P(\vec{r}_0,E))
 \end{equation}
 
 In principle, $\mu_i(\vec{r}_0, E)$ could be expressed
 \begin{equation}
-  \label{eq:rec:mu_i}
+  \label{eq:juno:rec:mu_i}
   \mu_i(\vec{r}_0, E) = Y \cdot \frac{\Omega(\vec{r}_0, r_i)}{4 \pi} \cdot \epsilon_i \cdot f(\theta_i) \cdot e^{-\sum_m \frac{d_m}{\zeta_m}}\cdot E + \delta_i
 \end{equation}
 where $Y$ is the energy scale factor, $\Omega(\vec{r}_0, r_i)$ is the solid angle of the $i$th PMT, $\epsilon_i$ is its detection efficiency, $f(\theta_i)$ its angular response, $\zeta_m$ is the attenuation length in the materials and $\delta_i$ the expected number of dark noise.
 
-However Eq. \ref{eq:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to use data driven methods to produce the pdf by using the calibrations sources and position described in section \ref{sec:calib}. In the results presented in figures \ref{fig:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
+However Eq. \ref{eq:juno:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to use data driven methods to produce the pdf by using the calibrations sources and position described in section \ref{sec:juno:calib}. In the results presented in figures \ref{fig:juno:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.48\linewidth}
@@ -666,35 +666,35 @@ However Eq. \ref{eq:rec:mu_i} assume that the scintillation light yield is linea
     \includegraphics[width=\textwidth]{images/juno/reco/charge_likelihood_bias.png}
   \end{subfigure}
   \caption{\textbf{On the left:} Resolution of the reconstructed R as a function of the energy in the TR area ($R^3 > 4000 \mathrm{m}^3 \equiv R > 16 m$) by the charge and time likelihood algorithms. \textbf{On the right:} Bias of the reconstructed R in the TR area for different energies by the charge likelihood algorithm}
-  \label{fig:rec:time_charge_results}
+  \label{fig:juno:rec:time_charge_results}
 \end{figure}
-We see that the charge likelihood algorithm show little bias in the TR area and a better resolution than the time likelihood. The figure \ref{fig:rec:all_class} shows the radial resolution of the different algorithm presented for this section, we can see the refinement at each step and that the charge likelihood yield the best results.
+We see that the charge likelihood algorithm show little bias in the TR area and a better resolution than the time likelihood. The figure \ref{fig:juno:rec:all_class} shows the radial resolution of the different algorithm presented for this section, we can see the refinement at each step and that the charge likelihood yield the best results.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/juno/reco/vertex_reco_classique.png}
   \caption{Radial resolution of the different vertex reconstruction algorithms as a function of the energy}
-  \label{fig:rec:all_class}
+  \label{fig:juno:rec:all_class}
 \end{figure}
 
-The charge based likelihood algorithms already give use some information on the energy as Eq. \ref{eq:rec:charge_likelihood} is minimized but the energy can be further refined as shown in the next section.
+The charge based likelihood algorithms already give use some information on the energy as Eq. \ref{eq:juno:rec:charge_likelihood} is minimized but the energy can be further refined as shown in the next section.
 
 
 \subsection{Energy reconstruction}
 
-As explained in section \ref{sec:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibration samples inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
+As explained in section \ref{sec:juno:nom_precise_measurement}, energy resolution is crucial for the NMO and oscillation parameters measurements. Thus the energy reconstruction algorithm should take into consideration as much detector effect as possible. The following method is a data driven method based on calibration samples inspired by the charge likelihood algorithm described above \cite{huang_data-driven_2023}.
 
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/juno/reco/energy_reco_vars.png}
   \caption{Definition of the variables used in the energy reconstruction}
-  \label{fig:rec:energy_vars}
+  \label{fig:juno:rec:energy_vars}
 \end{figure}
 
 \subsubsection{Charge estimation}
 
-The most important element in the energy reconstruction is $\mu_i(\vec{r}_0, E)$ described in Eq. \ref{eq:rec:mu_i}. For realistic cases, we also need to take into account the electronics effect that were omitted in the previous section. Those effect will cause a charge smearing due to the uncertainties in the $N_{pe}$ reconstruction. Thus we define $\hat{\mu}^L(\vec{r}_0, E)$ which is the expected $N_{pe}/E$ in the whole detector for an event with visible energy $E_{vis}$ and position $\vec{r}_0$. The position of the event and PMTs are now defined using $(r, \theta, \theta_{pmt})$ as defined in figure \ref{fig:rec:energy_vars}.
+The most important element in the energy reconstruction is $\mu_i(\vec{r}_0, E)$ described in Eq. \ref{eq:juno:rec:mu_i}. For realistic cases, we also need to take into account the electronics effect that were omitted in the previous section. Those effect will cause a charge smearing due to the uncertainties in the $N_{pe}$ reconstruction. Thus we define $\hat{\mu}^L(\vec{r}_0, E)$ which is the expected $N_{pe}/E$ in the whole detector for an event with visible energy $E_{vis}$ and position $\vec{r}_0$. The position of the event and PMTs are now defined using $(r, \theta, \theta_{pmt})$ as defined in figure \ref{fig:juno:rec:energy_vars}.
 \begin{equation}
   \hat{\mu}(r, \theta, \theta_{pmt}, E_{vis}) = \frac{1}{E_{vis}} \frac{1}{M} \sum_i^M\frac{\frac{\bar{q}_i}{\hat{Q}_i} - \mu_i^D}{\mathrm{DE}_i}, ~ \mu_i^D = \mathrm{DNR}_i \cdot L
 \end{equation}
@@ -702,7 +702,7 @@ where $i$ runs over the PMTs with the same $\theta_{pmt}$, $\mathrm{DE}_i$ is th
 
 \subsubsection{Time estimation}
 
-The second important observable is the hit time of photons that was previously defined in Eq. \ref{eq:rec:t_res}. It is here refined as
+The second important observable is the hit time of photons that was previously defined in Eq. \ref{eq:juno:rec:t_res}. It is here refined as
 \begin{equation}
   t_r = t_h - \mathrm{tof} - t_0 = t_{LS} + t_{TT}
 \end{equation}
@@ -747,7 +747,7 @@ Merging those two likelihood give the charge-time likelihood QTMLE
   \mathcal{L}(q_1, q_2, ..., q_N; t_{1,r}, t_{2,r}, ..., t_{N,r} | \vec{r}, t_0 , E_{vis}) = \mathcal{L}(q_1, q_2, ..., q_N | \vec{r}, E_{vis}) \cdot \mathcal{L}(t_{1,r}, t_{2,r}, ..., t_{N,r} | \vec{r}, t_0)
 \end{equation}
 
-The radial and energy resolutions of the different likelihood are presented in figure \ref{fig:rec:qtmle} (from \cite{huang_data-driven_2023}). We can see the improvement of adding the time information to the vertex reconstruction and that an increase in vertex precision can bring improvement in the energy resolution, especially at low energies.
+The radial and energy resolutions of the different likelihood are presented in figure \ref{fig:juno:rec:qtmle} (from \cite{huang_data-driven_2023}). We can see the improvement of adding the time information to the vertex reconstruction and that an increase in vertex precision can bring improvement in the energy resolution, especially at low energies.
 
 \begin{figure}[ht]
   \begin{subfigure}{0.48\linewidth}
@@ -762,7 +762,7 @@ The radial and energy resolutions of the different likelihood are presented in f
     \caption{Energy resolution of QMLE and QTMLE using different vertex resolutions}
   \end{subfigure}
   \caption{}
-  \label{fig:rec:qtmle}
+  \label{fig:juno:rec:qtmle}
 \end{figure}
 
 Data driven methods prove to be performant in the energy and vertex reconstruction given that we have enough calibrations sources to produce the PDF. In the next section, we'll see another type of data-driven method based on machine learning.
@@ -777,13 +777,13 @@ The power of ML is the ability to model complex response to a specific problem. 
 \end{equation}
 It is worth pointing that while this is already a lot in informations, this is not the rawest representation of the experiment. We could indeed replace the charge and time by the waveform in the time window of the event but that would lead to an input representation size that would exceed our computational limits. Also, due to those computational limits, most of the ML algorithm reduce this input phase space either by structurally encoding the information (pictures, graph), by aggregating it (mean, variance, ...) or by exploiting invariance and equivariance of the experiment (rotational invariance due to the sphericity, ...).
 
-For machine learning to converge to performant algorithm, a large dataset exploring all the phase space of interest is needed. For the following studies, data from the monte carlo simulation presented in section \ref{sec:software} are used for training. When the detector will be finished calibrations sources will be complementarily be used.
+For machine learning to converge to performant algorithm, a large dataset exploring all the phase space of interest is needed. For the following studies, data from the monte carlo simulation presented in section \ref{sec:juno:software} are used for training. When the detector will be finished calibrations sources will be complementarily be used.
 
 \subsubsection{Boosted Decision Tree (BDT)}
 
-On of the most classic ML method used in physics in last years is the Boosted Decision Tree (see chapter \ref{sec:bdt}). They have been explored for vertex reconstruction \cite{qian_vertex_2021} et for energy reconstruction \cite{qian_vertex_2021, gavrikov_energy_2022}.
+On of the most classic ML method used in physics in last years is the Boosted Decision Tree (see chapter \ref{sec:ml:bdt}). They have been explored for vertex reconstruction \cite{qian_vertex_2021} et for energy reconstruction \cite{qian_vertex_2021, gavrikov_energy_2022}.
 
-For vertex and energy reconstruction a BDT was developed using the aggregated informations presented in \ref{tab:rec:bdt_vertex}.
+For vertex and energy reconstruction a BDT was developed using the aggregated informations presented in \ref{tab:juno:rec:bdt_vertex}.
 
 \begin{table}[ht]
   \centering
@@ -795,11 +795,11 @@ For vertex and energy reconstruction a BDT was developed using the aggregated in
     $ht_{mean}, ht_{std}$ & Hit time mean and standard deviation
   \end{tabular}
   \caption{Features used by the BDT for vertex reconstruction}
-  \label{tab:rec:bdt_vertex}
+  \label{tab:juno:rec:bdt_vertex}
 \end{table}
-Its reconstruction performances are presented in figure \ref{fig:rec:ml_res}.
+Its reconstruction performances are presented in figure \ref{fig:juno:rec:ml_res}.
 
-A second and more advanced BDT, subsequently named BDTE, that only reconstruct energy use a different set of features \cite{gavrikov_energy_2022}. They are presented in the table \ref{tab:rec:bdte}
+A second and more advanced BDT, subsequently named BDTE, that only reconstruct energy use a different set of features \cite{gavrikov_energy_2022}. They are presented in the table \ref{tab:juno:rec:bdte}
 
 \begin{table}
   \centering
@@ -817,19 +817,19 @@ A second and more advanced BDT, subsequently named BDTE, that only reconstruct e
 
   \end{tabular}
   \caption{Features used by the BDTE algorithm. $pe$ and $ht$ reference the charge and hit-time distribution respectively and the percentages are the quantiles of those distributions. $cht$ and $cc$ reference the barycenters of hit time and charge respectively}
-  \label{tab:rec:bdte}
+  \label{tab:juno:rec:bdte}
 \end{table}
 
 \subsubsection{Neural Network (NN)}
 The physics have shown a rising for Neural Network (NN) in the past years for event reconstruction, notably in the neutrino community \cite{abbasi_graph_2022, reck_graph_2021, collaboration_convolutional_2021, dune_collaboration_neutrino_2020}. Three type of neural networks have explored for event reconstruction in JUNO Deep Neural Network (DNN), Convolutional Neural Network (CNN) and Graph Network (GNN). More explanation about those neural network can be found in chapter \ref{sec:ml}.
 
-The CNN are using 2D projection of the detector representing it as an image with two channel, one for the charge $Q$ and one for the time $t$. The position of the PMTs is structurally encoded in the pixel containing the information of this PMT. In \cite{qian_vertex_2021}, the pixel is chosen based on a transformation of $\theta$ and $\phi$ coordinates to the 2D plane and rounded to the nearest pixel. A sufficiently large image has been chosen to prevent two PMT to be located in the same pixel. An example of this projection can be found in figure \ref{fig:rec:cnn_proj}. The performances of the CNN can be found in figure \ref{fig:rec:ml_res}.
+The CNN are using 2D projection of the detector representing it as an image with two channel, one for the charge $Q$ and one for the time $t$. The position of the PMTs is structurally encoded in the pixel containing the information of this PMT. In \cite{qian_vertex_2021}, the pixel is chosen based on a transformation of $\theta$ and $\phi$ coordinates to the 2D plane and rounded to the nearest pixel. A sufficiently large image has been chosen to prevent two PMT to be located in the same pixel. An example of this projection can be found in figure \ref{fig:juno:rec:cnn_proj}. The performances of the CNN can be found in figure \ref{fig:juno:rec:ml_res}.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\linewidth]{images/juno/reco/cnn_proj.png}
   \caption{Projection of the LPMTs in JUNO on a 2D plane. (a) Show the distribution of all PMTs and (b) and (c) are example of what the charge and time channel looks like respectively}
-  \label{fig:rec:cnn_proj}
+  \label{fig:juno:rec:cnn_proj}
 \end{figure}
 
 Using 2D have the upside of encoding a large part of the informations structurally but loose the rotational invariance of the detector. It also give undefined information to the neural network (what is a pixel without PMT ? What should be its charge and time ?), cause deformation in the representation of the detector (sides of projection) and loose topological informations.
@@ -838,7 +838,7 @@ One of the way to present structurally the sphericity of JUNO to a NN is to use 
 
 This data representation has the advantages to keep the topology of the detector intact. It also permit the use of rotational invariant algorithms for the NN, thus taking advantage of the symmetries of the detector.
 
-The neural network then process the graph using Chebyshev Convolutions \cite{defferrard_convolutional_2017}. The performances of the GNN are presented in figure \ref{fig:rec:ml_res}.
+The neural network then process the graph using Chebyshev Convolutions \cite{defferrard_convolutional_2017}. The performances of the GNN are presented in figure \ref{fig:juno:rec:ml_res}.
 
 
 \begin{figure}[ht]
@@ -853,13 +853,13 @@ The neural network then process the graph using Chebyshev Convolutions \cite{def
     \includegraphics[width=\linewidth]{images/juno/reco/ml_energy.png}
   \end{subfigure}
   \caption{Radial (left) and energy (right) resolutions of different ML algorithms. The results presented here are from \cite{qian_vertex_2021}. DNN is a deep neural network, BDT is a BDT, ResNet-J and VGG-J are CNN and GNN-J is a GNN.}
-  \label{fig:rec:ml_res}
+  \label{fig:juno:rec:ml_res}
 \end{figure}
 
 Overall ML algorithms show similar performances as classical algorithms in term of energy reconstructions with the more complex structure CNN and GNN showing better performances than BDT and DNN. For vertex reconstruction, the BDT and DNN show poor performance while CNN are on the level of the classical algorithms.
 
 \section{JUNO sensitivity to NMO and precise measurements}
-\label{sec:Fit}
+\label{sec:juno:Fit}
 
 Now that the event have been reconstructed, selected and that the non-IBD background have been rejected, we have access to the measured energy flux from JUNO. We consider two spectra, the one measured by the LPMT system and the one measured by the SPMT system. This give rise to three possible analysis: A LPMT only analysis, a SPMT only analysis and a joint analysis. This joint analysis is the subject of the chapter \ref{sec:joint_fit} of this thesis.
 
@@ -867,7 +867,7 @@ The following details about JUNO measurement is common to the three analysis. Th
 
 \subsection{Theoretical spectrum}
 
-To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:osc}), the measurements of the calibration and satellite experiments and Monte Carlo simulation:
+To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements of the calibration and satellite experiments and Monte Carlo simulation:
 \begin{itemize}
   \item The absolute flux and the fission product fraction calibrated by TAO.
   \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
@@ -901,3 +901,10 @@ The $\chi^2$ is minimized by exploring the parameter phase space via gradient de
 \subsection{Physics results}
 
 The oscillation parameters are directly extracted from the minimization procedure and the error can be estimated directly from the procedure. For the NMO, the data are fitted under the two assumption of NO and IO. The difference in $\chi^2$ give us the preferred ordering and the significance of our test. Latest studies show that the precision on oscillation parameters after six year of data taking will be of 0.2\%, 0.3\%, 0.5\% and 12.1\% for $\Delta m^2_{31}$, $\Delta m^2_{21}$, $\sin^2\theta_{12}$ and $\sin^2\theta_{13}$ respectively \cite{juno_collaboration_sub-percent_2022}. The expected sensitivity to mass ordering is $3\sigma$ after 6 years \cite{juno_collaboration_juno_2022}.
+
+\section{Summary}
+
+JUNO is one the biggest new generation neutrino experiment. Its goal, the measurements of oscillation parameters with unprecedented precision and an NMO preference at the 3 sigma confidence level, needs an in depth knowledge and understanding of the detector and the physics at hand. The characterisation and calibration of the detector are of the utmost importance and the understanding of the detector response in its resolution and bias is capital to be able to correctly carry the high precision physics analysis of the neutrino oscillation.
+
+In this thesis, I explore the usage of data-driven reconstruction methods to validate and optimize the reconstruction of IBD events in JUNO in the chapters \ref{sec:jcnn}, \ref{sec:jgnn} and \ref{sec:janne} and the usage of the dual calorimetry in the detection of possible mis-modelisation in the theoretical spectrum \ref{sec:joint_fit}.
+
