@@ -27,7 +27,7 @@ The training procedure follow a simple score reward procedure. During the traini
 
 \section{Artificial Neural Network (NN)}
 
-One other big family of machine learning algorithm is the Artificial Neural Networks (ANN) more commonly designated as Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those component then transmit it's information to the other following a certain efficiency or \textit{weight}.
+One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those component then transmit it's information to the other following a certain efficiency or \textit{weight}.
 Those works influenced scientist and notably Frank Rosenblatt who published in 1958 what is considered the first neural network model the perceptron \cite{rosenblatt_perceptron_1958}.
 
 
@@ -78,24 +78,36 @@ as activation function. Prelu and Sigmoid are also popular choices
 The reasoning behind ReLU and PReLU is that with enough of them, you can mimic any continuous function as illustrated in figure \ref{fig:ml:relu-mimic}. Sigmoid is more used in case of classification, its behavior going hand in hand with the Cross Entropy loss function used in classification problems.
 
 \begin{figure}[ht]
-  \begin{subfigure}[b]{0.48\textwidth}
+  \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[height=6cm]{images/placeholder.jpg}
     \caption{Schema of a FCDNN}
     \label{fig:ml:fcdnn}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.48\textwidth}
+  \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[height=6cm]{images/placeholder.jpg}
     \caption{Illustration of a composition of ReLU matching a function}
     \label{fig:ml:relu-mimic}
   \end{subfigure}
+  \caption{}
 \end{figure}
 
 Due to its simplicity, FCDNN are also used as basic pieces for more complex architecture such as the CNN and GNN that will be presented in the next section.
 
 \subsection{Convolutional Neural Network (CNN)}
+
+Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction. The learning parameters are located in the filters, the network thus learn the optimal filters extract the desired feature. 2D CNN, where the filters are second order tensor that span over third order tensor, are commonly used in image recognition \cite{russakovsky_imagenet_2015} in classification or regression problematics.
+
+The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend double the numbers of filters for each division of the input data.
+The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/placeholder.jpg}
+  \caption{Illustration of a CNN convolution filter}
+\end{figure}
 
 \subsection{Graph Neural Network (GNN)}
 

@@ -19,6 +19,8 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
+\usepackage{multirow}
+
 \usepackage{array} % use array package for table
 
 \usepackage[backend=biber,style=numeric-comp,natbib=true,sorting=none,maxnames=8]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
@@ -96,11 +98,12 @@ headsepline, % Uncomment to get a line under the header
   \textbf{CLS} & \textbf{C}able \textbf{L}oop \textbf{S}ystem \\
   \textbf{CNN} & \textbf{C}onvolutional \textbf{NN} \\
   \textbf{DNN} & \textbf{D}eep \textbf{NN} \\
+  \textbf{FCDNN} & \textbf{F}ully \textbf{C}onnected \textbf{D}eep \textbf{NN} \\
   \textbf{GNN} & \textbf{G}raph \textbf{NN} \\
   \textbf{GT} & \textbf{G}uiding \textbf{T}ube \\
   \textbf{IBD} & \textbf{I}nverse \textbf{B}eta \textbf{D}ecay\\
   \textbf{IO} & \textbf{I}nverse \textbf{O}rdering\\
-  \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory\\
+  \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory \\
   \textbf{LPMT} & \textbf{L}arge \textbf{PMT} \\
   \textbf{LS} & \textbf{L}iquid \textbf{S}cintillator \\
   \textbf{MC} & \textbf{M}onte \textbf{C}arlo simulation \\
@@ -152,8 +155,7 @@ headsepline, % Uncomment to get a line under the header
 
 \input{chapters/machine_learning}
 
-\chapter{Image recognition for IBD reconstruction with the SPMT system}
-\label{sec:jcnn}
+\input{chapters/jcnn.tex}
 
 \chapter{Graph representation of JUNO for IBD reconstruction with the LPMT system}
 \label{sec:jgnn}
