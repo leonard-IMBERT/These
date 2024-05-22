@@ -10,7 +10,7 @@ They are now widely used in a wide variety of domain including natural language 
 
 They are now widely used in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc... Domains where the underlying physic and detector process is complex and highly dimensional. Physicists have traditionally used algorithms where simplification or assumption were made (a good example is the algorithm presented in section \ref{sec:juno:reco}) machine learning could refine and take into account those effects, providing that they have enough data and computing power, thus the appeal for physicist.
 
-
+This chapter present an overview of the different kind of neural networks that will be discussed in this thesis.
 \section{Boosted Decision Tree (BDT)}
 \label{sec:ml:bdt}
 
@@ -98,7 +98,7 @@ Due to its simplicity, FCDNN are also used as basic pieces for more complex arch
 
 \subsection{Convolutional Neural Network (CNN)}
 
-Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction. The learning parameters are located in the filters, the network thus learn the optimal filters extract the desired feature. 2D CNN, where the filters are second order tensor that span over third order tensor, are commonly used in image recognition \cite{russakovsky_imagenet_2015} in classification or regression problematics.
+Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters extract the desired feature. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} in classification or regression problematics.
 
 The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend double the numbers of filters for each division of the input data.
 The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
@@ -110,6 +110,22 @@ The results of the convolution filters is commonly then flattened and feed to a 
 \end{figure}
 
 \subsection{Graph Neural Network (GNN)}
+
+Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in N^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu$ of a node $i$.
+
+To efficiently manipulate such object we need to structurally encode their property in the neural network architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm with each layer of message passing a new set of features is computed for each node following
+\begin{equation}
+  n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
+\end{equation}
+where $\phi_u$ is a differentiable update function, $\Box_j$ is a differentiable update function and $\phi_m$ is a differentiable message function. $\mathcal{N}'_i$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. $\Box$ need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
+
+The edges features can also be updated, either by directly taking the results of $\phi_m$ or by using another message function $\phi_e$.
+
+
+Message passing is a very generic way of describing the process of GNN and it can be specialized for convolutional filtering \cite{defferrard_convolutional_2017}, diffusion \cite{li_diffusion_2018} and many other specific operation. GNN are used in a wide variety of application such as regression problematics, node classification, edge classification, node and edge prediction, ...
+
+
+It is a very versatile but complex tool.
 
 \subsection{Adversarial Neural Network (ANN)}
 

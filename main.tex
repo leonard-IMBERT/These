@@ -21,6 +21,11 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{multirow}
 
+\usepackage{amsmath}    % avoid \dddot clash
+\usepackage{mathtools}  % avoid unicode-math clash
+\usepackage{amsthm} % avoid openbox clash
+\usepackage{amssymb}
+
 \usepackage{array} % use array package for table
 
 \usepackage[backend=biber,style=numeric-comp,natbib=true,sorting=none,maxnames=8]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
