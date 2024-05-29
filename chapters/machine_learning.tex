@@ -7,10 +7,9 @@ Machine Learning (ML) and more specifically Neural Network (NN) are a family of 
 
 They are now widely used in a wide variety of domain including natural language processing, computer vision, speech recognition and, the subject of this thesis, scientific studies.
 
-
 They are now widely used in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc... Domains where the underlying physic and detector process is complex and highly dimensional. Physicists have traditionally used algorithms where simplification or assumption were made (a good example is the algorithm presented in section \ref{sec:juno:reco}) machine learning could refine and take into account those effects, providing that they have enough data and computing power, thus the appeal for physicist.
 
-This chapter present an overview of the different kind of neural networks that will be discussed in this thesis.
+This chapter present an overview of the different kind of machine learning methods and neural networks that will be discussed in this thesis.
 \section{Boosted Decision Tree (BDT)}
 \label{sec:ml:bdt}
 
@@ -129,10 +128,6 @@ It is a very versatile but complex tool.
 
 \subsection{Adversarial Neural Network (ANN)}
 
-\subsubsection{Generative Adversorial Network (GAN)}
+The adversarial machine learning, Adversarial Neural Networks (ANN) in the case of neural network, is a family of unsupervised machine learning algorithms where the learning algorithm (generator) is competing against another algorithm (discriminator). Taking the example of Generative Adversarial Networks, concept initially developed by Goodfellow et al. \cite{goodfellow_generative_2014}, the discriminator goal is to discriminate between data coming from a reference dataset and data produced by the generator.
+The generator goal, on the other hand, is to produce data that the discriminator would not be able to differentiate from data from the reference dataset. The expression of duality between the two models is represented in the loss where, at least a part of it, is driven by the results of the discriminator.
 
-\subsubsection{Reinformcement Learning (RL)}
-
-\subsubsection{Random Search (RS)}
-
-\subsubsection{Bayesian Optimization}

@@ -1,6 +1,5 @@
 \chapter{Image recognition for IBD reconstruction with the SPMT system}
 \label{sec:jcnn}
-This is a test
 \begin{table}[ht]
   \centering
   \begin{tabular}{ | c | c | }
@@ -17,4 +16,74 @@ This is a test
 
   \end{tabular}
 \end{table}
-This is the end of the test
+
+\section{Motivations}
+
+\begin{itemize}
+  \item Promise of machine learning -> Exploit raw data
+  \item Victor already done reco for SPMT
+  \item Can CNN give similar results ? Better results ?
+  \item Multiple reco methods good for reconstruction
+  \item Comparison, difference in behavior
+\end{itemize}
+
+\section{Method and model}
+
+\begin{itemize}
+  \item JUNO is an array of sensor following a quasi uniform and istropic geometric repartition -> Basically pixels -> Image
+  \item CNN is gud for image processing (cite a lot of things)
+  \item Details the architecture (Inspired from VGG 16)
+    \begin{itemize}
+      \item Convolutional layers
+      \item Pooling layers -> Twice the channels when pooling by 2 -> Keep the same "amount" of information
+      \item Dropout (introduce overtraining, maybe introduce overfitting in ML chapter ?)
+      \item Vectorization fed to FCDNN
+    \end{itemize}
+  \item Data is 240x240 images
+    \begin{itemize}
+      \item Following $\theta$ and $\phi$ distribution, explain the coordinate system of JUNO
+      \item Optimized for $\approx$ 1 SPMT/pixel
+      \item 1 Charge channel
+      \item 1 Time channel
+    \end{itemize}
+  \item Discuss data format
+    \begin{itemize}
+      \item Empty pixel ? -> $Q = 0$, $T = 0$, what does it means/says ? 0 = no signal in a way
+      \item Image distortion
+        \begin{itemize}
+          \item \textbf{Maybe speak of this in the conclusion ?} Could be done in two step:
+          \item 1. Reconstruct $\theta$ and $\phi$
+          \item 2. "Rotate" the image so the event is at the center of the image -> Prevent distortion + reconstruction E and R become pseudo rotational invariant (as they should be)
+        \end{itemize}
+      \item 1 Millions MC e+ events for training (900k for train, 50k for validation and 50k for test)
+        \begin{itemize}
+          \item MC for the moment, will need to retrain with mix of calibration data (Good question, is the CNN PID agnostic ?)
+          \item 47 IBD/day -> 1M event is 21k days of data (for reference, 6 years of data is 94k events)
+          \item Events are "optimistic"
+            \begin{itemize}
+              \item No pile-up
+              \item w/o neutrons
+              \item time window is decided by electronics
+              \item We want to reconstruct the E from $\bar{\nu_e}$
+              \item Difference between multiple E -> $E_{vis}$, $E_{rec}$, $E_k$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section{Results}
+
+\begin{itemize}
+  \item Comparison with victor results
+  \item \textbf{More details when I'll look into the retrained data}
+  \item Discuss of the differences
+  \item Discuss of the principle of error decorelation
+    \begin{itemize}
+      \item Possible improvements
+      \item Combining algorithms
+      \item Average sum
+    \end{itemize}
+\end{itemize}
+
+\section{Conclusion}
+Intoduction next chapter
