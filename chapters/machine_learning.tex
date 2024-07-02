@@ -3,17 +3,17 @@
 
 \epigraph{``I have the shape of a human being and organs equivalent to those of a human being. My organs, in fact, are identical to some of those in a prosthetized human being. I have contributed artistically, literally, and scientifically to human culture as much as any human being now alive. What more can one ask?''}{Isaac Asimov, The Complete Robot }
 
-Machine Learning (ML) and more specifically Neural Network (NN) are a family of data-driven algorithm. They are used to model complex distribution from a finite dataset to extract a generalist behavior where they learn, adapt their intrinsic parameters, interactively by computing the performance or \textit{loss} on those dataset. They take advantage of simple microscopic operation such as \textit{if condition}, non-continuous but differentiable function like \textit{ReLU}. Through optimizer and the combination of those microscopic operation, they can yield complex and precise behavior.
+Machine Learning (ML) and more specifically Neural Network (NN) are families of data-driven algorithm. They are used to model complex distributions from a finite dataset to extract a generalist behavior. They learn, adapt their intrinsic parameters, interactively by computing its performance or \textit{loss} on those dataset. They take advantage of simple microscopic operation such as \textit{if condition} or non-continuous but differentiable function like \textit{ReLU}. Through optimizers and the combination of a lot of those microscopic operations, they can obtain complex and precise behaviours.
 
 They are now widely used in a wide variety of domain including natural language processing, computer vision, speech recognition and, the subject of this thesis, scientific studies.
 
-They are now widely used in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc... Domains where the underlying physic and detector process is complex and highly dimensional. Physicists have traditionally used algorithms where simplification or assumption were made (a good example is the algorithm presented in section \ref{sec:juno:reco}) machine learning could refine and take into account those effects, providing that they have enough data and computing power, thus the appeal for physicist.
+We found them in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc..., domains where the underlying physic and detector process is complex and highly dimensional. Physicists have traditionally been forced to use simplifications or assumptions to ease the developmment of algorithms or equations (a good example is the algorithm presented in section \ref{sec:juno:reco}) where machine learning could refine and take into account those effects, provided that they have enough data and computing power.
 
 This chapter present an overview of the different kind of machine learning methods and neural networks that will be discussed in this thesis.
 \section{Boosted Decision Tree (BDT)}
 \label{sec:ml:bdt}
 
-One of the most classic machine learning algorithm used in particle physics is Boosted Decision Tree \cite{breiman_classification_2017} (or more recently Gradient Boosting Machine \cite{friedman_greedy_2001}). The principle of BDT is fairly simple : Based on a set of observables, a serie of decisions, represented as node in a tree, are taken by the algorithm. Each decision point, or node, takes its decision based on a set of trainable parameters leading to a subtree of decision. The process is repeated until it reach the final node, yielding the prediction. A simplistic example is given in figure \ref{fig:ml:bdt}.
+One of the most classic machine learning algorithm used in particle physics is Boosted Decision Tree (BDT) \cite{breiman_classification_2017} (or more recently Gradient Boosting Machine \cite{friedman_greedy_2001}). The principle of a BDT is fairly simple : based on a set of observables, a serie of decisions, represented as node in a tree, are taken by the algorithm. Each decision point, or node, takes its decision based on a set of trainable parameters leading to a subtree of decision. The process is repeated until it reach the final node, yielding the prediction. A simplistic example is given in figure \ref{fig:ml:bdt}.
 
 \begin{figure}
   \centering
@@ -26,16 +26,16 @@ The training procedure follow a simple score reward procedure. During the traini
 
 \section{Artificial Neural Network (NN)}
 
-One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those component then transmit it's information to the other following a certain efficiency or \textit{weight}.
-Those works influenced scientist and notably Frank Rosenblatt who published in 1958 what is considered the first neural network model the perceptron \cite{rosenblatt_perceptron_1958}.
+One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those component then transmit its information to the other following a certain efficiency or \textit{weight}.
+Those works influenced scientist and notably Frank Rosenblatt who published in 1958 what is considered the first neural network model the Perceptron \cite{rosenblatt_perceptron_1958}.
 
 
-Modern neural network still nowadays use the neuron metaphor to represent neural network, but approach them as a graph where the nodes are neurons possessing an activation function and edges holding the weights between those nodes. Most of the modern neural network work with the principle of neurons layers. For example the most basic, fully connected set of layer is a set where each layers possessing the same activation function $F$ and the connection between two layers as a tensor $T^{i}_{j}$ where $i$ is the index of the precedent layer and $j$ the index of the next layer. The propagation from the layer $I$ to $J$ is then described as
+Modern neural network still nowadays use the neuron metaphor to represent neural network, but approach them as a graph where the nodes are neurons possessing an activation function and edges holding the weights between those nodes. Most of the modern neural network work with the principle of neurons layers. Each neurons belong to a layer and takes input from the preceding layer and forward it result to next layer. For example the most basic set layer is the fully connected layer where each of its neurons is connected to every other neurons of the precessing layer. All the neurons posses the same activation function $F$. The connection between two the two layers is expressed as a tensor $T^{i}_{j}$ where $i$ is the index of the precedent layer and $j$ the index of the current layer. The propagation from the layer $I$ to $J$ is then described as
 \begin{equation}
   \label{eq:ml:fully-connected}
   J_{j} = F_J(T_{j}^{i} I_{i} + B_j)
 \end{equation}
-where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}. Most of the modern neural network use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\theta$ in respect of the loss function $\mathcal{L}$ is subtracted to it
+where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}. Most of the modern neural networks use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\theta$ in respect of the loss function $\mathcal{L}$ is subtracted to it
 \begin{equation}
   \theta_{i+1} = \theta_i - \frac{\partial \theta}{\partial \mathcal{L}}
 \end{equation}
@@ -54,7 +54,7 @@ Fully Connected Deep Neural Network (FCDNN) architecture is the natural evolutio
     0 & \mathrm{otherwise}
   \end{cases}
 \end{equation}
-as activation function. Prelu and Sigmoid are also popular choices
+is used as activation function. Prelu and Sigmoid are also popular choices:
 
 
 \begin{minipage}{0.5\linewidth}
@@ -93,12 +93,12 @@ The reasoning behind ReLU and PReLU is that with enough of them, you can mimic a
   \caption{}
 \end{figure}
 
-Due to its simplicity, FCDNN are also used as basic pieces for more complex architecture such as the CNN and GNN that will be presented in the next section.
+Due to its simplicity, FCDNN are also used as basic pieces for more complex architectures such as the CNN and GNN that will be presented in the next section.
 
 \subsection{Convolutional Neural Network (CNN)}
 \label{ml:cnn}
 
-Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters extract the desired feature. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} in classification or regression problematics.
+Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters extract the desired feature. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics.
 
 The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend double the numbers of filters for each division of the input data.
 The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
@@ -111,13 +111,13 @@ The results of the convolution filters is commonly then flattened and feed to a 
 
 \subsection{Graph Neural Network (GNN)}
 
-Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in N^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu$ of a node $i$.
+Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu$ of a node $i$.
 
-To efficiently manipulate such object we need to structurally encode their property in the neural network architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm with each layer of message passing a new set of features is computed for each node following
+To efficiently manipulate such object we need to structurally encode their property in the neural network architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
 \begin{equation}
   n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
 \end{equation}
-where $\phi_u$ is a differentiable update function, $\Box_j$ is a differentiable update function and $\phi_m$ is a differentiable message function. $\mathcal{N}'_i$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. $\Box$ need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
+where $\phi_u$ is a differentiable update function, $\Box_j$ is a differentiable aggregation function and $\phi_m$ is a differentiable message function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. $\Box$ need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
 
 The edges features can also be updated, either by directly taking the results of $\phi_m$ or by using another message function $\phi_e$.
 

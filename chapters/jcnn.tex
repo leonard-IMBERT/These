@@ -38,6 +38,56 @@ Another algorithm was developed in the collaboration for energy and vertex recon
 %      \item Dropout (introduce overtraining, maybe introduce overfitting in ML chapter ?)
 %      \item Vectorization fed to FCDNN
 %    \end{itemize}
+%\end{itemize}
+
+One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. One kind of data representation that is ordered, presenting the same property as a plane is the image, which is a bounded discrete euclidian plane.
+
+Using this representation we can arrange the SPMTs on this plane while keeping most of the neighbouring informations. The pros and cons of this representation is detailed in section \ref{sec:jcnn:data}.
+
+The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see section \ref{ml:cnn}) and has proven its relevance in image processing.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jcnn/vgg16.png}
+  \caption{Graphic representation of the VGG-16 architecture, presenting the different kind of layer composing the architecture.}
+  \label{fig:jcnn:vgg16}
+\end{figure}
+
+\subsection{Model}
+
+The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters which values are presented in table \ref{tab:jcnn:hyper}. $N_{blocks}$ is the number of convolution blocks, a block being composed of two convolutional layers with $3\times3$ filters using ReLU activation function, a $3\times3$ max-pooling layer (except for the last block) and a dropout layer. The number of channels is dependent of the depth of the block $N^i_{channels} = i * N_{channels}, i \in [1..N_{blocks}]$.
+
+The result of the last convolution layer is then flattened then fed forward to the FCDNN. Its configuration is expressed as a sequential of fully connected layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers with a width of 1024 followed by 2 other layers with a width of 512. Finally the last layer is 4 neurons wide without activation function, one for each component of the interaction vertex: Energy, X, Y, Z.
+
+We explore in this work two different activation functions
+\begin{align}
+  (E+V)(E, x, y, z) &= \bigg\langle (E - E_{true})^2 + 0.85 \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2 \bigg\rangle \\
+  (E_r + V_r)(E, x, y, z) &=  \bigg\langle \frac{(E - E_{true}) ^ 2}{E_{true}} + \frac{10}{R} \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2 \bigg\rangle
+\end{align}
+where $R$ is the radius of the CD. With the energy in MeV and the distance in meters, we use the factor 0.85 and 10 to equilibrate the two term of the loss function so they have the same magnitude.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ | c | c | }
+    \hline $N_{blocks}$ & {2, 3, 4} \\
+    \hline $N_{channels}$ & {32, 64, 128} \\
+    \hline
+    \multirow{4}{*}{FCDNN configuration} & 2 * 1024 \\
+                                        & 2 * 2048 + 2 * 1024 \\
+                                        & 3 * 2048 + 3 * 512 \\
+                                        & 2 * 4096 \\
+    \hline
+    Loss & $E+V$, $E_r + V_r$ \\
+    \hline
+  \end{tabular}
+  \caption{Hyperparameters used for the CNN}
+  \label{tab:jcnn:hyper}
+\end{table}
+
+Each one of the combination of those hyperparameters is then tested and compared to each other using the mean loss over an analysis sample.
+
+\subsection{Data representation}
+\label{sec:jcnn:data}
 %  \item Data is 240x240 images
 %    \begin{itemize}
 %      \item Following $\theta$ and $\phi$ distribution, explain the coordinate system of JUNO
@@ -68,44 +118,21 @@ Another algorithm was developed in the collaboration for energy and vertex recon
 %            \end{itemize}
 %        \end{itemize}
 %    \end{itemize}
-%\end{itemize}
 
-One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. One kind of data representation that is ordered, presenting the same property as a plane is the image, which is a bounded discrete euclidian plane.
+The data used during this analysis is monte carlo data using the official JUNO simulation software (see section \ref{sec:juno:software} for details). The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distribution are used so that the CNN does not learn a potential energy distribution, favoring some p;art of the energy spectrum instead of other.
 
-Using this representation we can arrange the SPMTs on this plane while keeping most of the neighbouring informations. The pros and cons of this representation is detailed in section \ref{jcnn:data}.
+This data is represented as $240 \times 240$ images, equivalent to third order tensor, with a charge $Q$ channel and a time $t$ channel. When two SPMTs are in the same pixel, the charges are summed and the lowest of the hit-time is chosen. This choice come from the fact that we expect the photon propagation to be uniform, there should no physical meaning in two signal photons coming one after the other except that the two PMT are at different position. The SPMTs being located close to each other, the reduction of information into the first hit time should not impact to much the reconstruction, at least less than the intrinsic time resolution and statistic uncertainty. The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a signal hit on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the time information for this part of the detector.
 
-The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see section \ref{ml:cnn}) and has proven its relevance in image processing.
+As illustrated in figure \ref{fig:jcnn:pmt_rep} the dimension have been chosen optimized so that at most two SPMTs are in the same pixel while keeping the number of empty pixels relatively low to prevent this kind of issue. While it could be possible to use bigger images 
 
-\subsection{Model}
-
-The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in figure \ref{fig:jcnn:vgg16}
+% TODO: Time to go. Finish this part talking about the problem of having empty pixel while having meaningfull value in the pixel
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[height=6cm]{images/jcnn/vgg16.png}
-  \caption{Graphic representation of the VGG-16 architecture, presenting the different kind of layer composing the architecture.}
-  \label{fig:jcnn:vgg16}
+  \includegraphics[height=6cm]{images/jcnn/pmt_repartition.png}
+  \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
+  \label{fig:jcnn:pmt_rep}
 \end{figure}
-
-\begin{table}[ht]
-  \centering
-  \begin{tabular}{ | c | c | }
-    \hline $N_{blocks}$ & {2, 3, 4} \\
-    \hline $N_{channels}$ & {32, 64, 128} \\
-    \hline
-    \multirow{4}{*}{FCNN configuration} & 2 * 1024 \\
-                                        & 2 * 2048 + 2 * 1024 \\
-                                        & 3 * 2048 + 3 * 512 \\
-                                        & 2 * 4096 \\
-    \hline
-    Loss & $E+V$, $E_r + V_r$ \\
-    \hline
-
-  \end{tabular}
-\end{table}
-
-\subsection{Data representation}
-\label{jcnn:data}
 
 \section{Results}
 
