@@ -10,13 +10,13 @@ Thus it is important to have reconstruction and analysis combined but also dedic
 \section{Motivations}
 
 % -------------- Plan for motivation section ----------------
-%\begin{itemize}
-%  \item Promise of machine learning -> Exploit raw data
-%  \item Victor already done reco for SPMT
-%  \item Can CNN give similar results ? Better results ?
-%  \item Multiple reco methods good for reconstruction
-%  \item Comparison, difference in behavior
-%\end{itemize}
+\begin{itemize}
+  \item Promise of machine learning -> Exploit raw data
+  \item Victor already done reco for SPMT
+  \item Can CNN give similar results ? Better results ?
+  \item Multiple reco methods good for reconstruction
+  \item Comparison, difference in behavior
+\end{itemize}
 
 As explained in chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling complex distribution from a given dataset. In our case, we have access to complete monte-carlo simulation of our detector to produce arbitrary large datasets that could represent multiple years of data taking. Also, due to the nature of monte-carlo simulation we have access to exact truth of the modelled event like the position, energy and nature of the particle.
 
@@ -28,17 +28,17 @@ Another algorithm was developed in the collaboration for energy and vertex recon
 
 \section{Method and model}
 % --------------- Plan for method and model -----------------
-%\begin{itemize}
-%  \item JUNO is an array of sensor following a quasi uniform and istropic geometric repartition -> Basically pixels -> Image
-%  \item CNN is gud for image processing (cite a lot of things)
-%  \item Details the architecture (Inspired from VGG 16)
-%    \begin{itemize}
-%      \item Convolutional layers
-%      \item Pooling layers -> Twice the channels when pooling by 2 -> Keep the same "amount" of information
-%      \item Dropout (introduce overtraining, maybe introduce overfitting in ML chapter ?)
-%      \item Vectorization fed to FCDNN
-%    \end{itemize}
-%\end{itemize}
+\begin{itemize}
+  \item JUNO is an array of sensor following a quasi uniform and istropic geometric repartition -> Basically pixels -> Image
+  \item CNN is gud for image processing (cite a lot of things)
+  \item Details the architecture (Inspired from VGG 16)
+    \begin{itemize}
+      \item Convolutional layers
+      \item Pooling layers -> Twice the channels when pooling by 2 -> Keep the same "amount" of information
+      \item Dropout (introduce overtraining, maybe introduce overfitting in ML chapter ?)
+      \item Vectorization fed to FCDNN
+    \end{itemize}
+\end{itemize}
 
 One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. One kind of data representation that is ordered, presenting the same property as a plane is the image, which is a bounded discrete euclidian plane.
 
@@ -111,57 +111,77 @@ where $\chi$ is a Chi law which probability density function is different from 0
 
 \subsection{Data representation}
 \label{sec:jcnn:data}
-%  \item Data is 240x240 images
-%    \begin{itemize}
-%      \item Following $\theta$ and $\phi$ distribution, explain the coordinate system of JUNO
-%      \item Optimized for $\approx$ 1 SPMT/pixel
-%      \item 1 Charge channel
-%      \item 1 Time channel
-%    \end{itemize}
-%  \item Discuss data format
-%    \begin{itemize}
-%      \item Empty pixel ? -> $Q = 0$, $T = 0$, what does it means/says ? 0 = no signal in a way
-%      \item Image distortion
-%        \begin{itemize}
-%          \item \textbf{Maybe speak of this in the conclusion ?} Could be done in two step:
-%          \item 1. Reconstruct $\theta$ and $\phi$
-%          \item 2. "Rotate" the image so the event is at the center of the image -> Prevent distortion + reconstruction E and R become pseudo rotational invariant (as they should be)
-%        \end{itemize}
-%      \item 1 Millions MC e+ events for training (900k for train, 50k for validation and 50k for test)
-%        \begin{itemize}
-%          \item MC for the moment, will need to retrain with mix of calibration data (Good question, is the CNN PID agnostic ?)
-%          \item 47 IBD/day -> 1M event is 21k days of data (for reference, 6 years of data is 94k events)
-%          \item Events are "optimistic"
-%            \begin{itemize}
-%              \item No pile-up
-%              \item w/o neutrons
-%              \item time window is decided by electronics
-%              \item We want to reconstruct the E from $\bar{\nu_e}$
-%              \item Difference between multiple E -> $E_{vis}$, $E_{rec}$, $E_k$
-%            \end{itemize}
-%        \end{itemize}
-%    \end{itemize}
+\begin{itemize}
+  \item Data is 240x240 images
+    \begin{itemize}
+      \item Following $\theta$ and $\phi$ distribution, explain the coordinate system of JUNO
+      \item Optimized for $\approx$ 1 SPMT/pixel
+      \item 1 Charge channel
+      \item 1 Time channel
+    \end{itemize}
+  \item Discuss data format
+    \begin{itemize}
+      \item Empty pixel ? -> $Q = 0$, $T = 0$, what does it means/says ? 0 = no signal in a way
+      \item Image distortion
+        \begin{itemize}
+          \item \textbf{Maybe speak of this in the conclusion ?} Could be done in two step:
+          \item 1. Reconstruct $\theta$ and $\phi$
+          \item 2. "Rotate" the image so the event is at the center of the image -> Prevent distortion + reconstruction E and R become pseudo rotational invariant (as they should be)
+        \end{itemize}
+      \item 1 Millions MC e+ events for training (900k for train, 50k for validation and 50k for test)
+        \begin{itemize}
+          \item MC for the moment, will need to retrain with mix of calibration data (Good question, is the CNN PID agnostic ?)
+          \item 47 IBD/day -> 1M event is 21k days of data (for reference, 6 years of data is 94k events)
+          \item Events are "optimistic"
+            \begin{itemize}
+              \item No pile-up
+              \item w/o neutrons
+              \item time window is decided by electronics
+              \item We want to reconstruct the E from $\bar{\nu_e}$
+              \item Difference between multiple E -> $E_{vis}$, $E_{rec}$, $E_k$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
 
-The data used during this analysis is monte carlo data using the official JUNO simulation software (see section \ref{sec:juno:software} for details). The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distribution are used so that the CNN does not learn a potential energy distribution, favoring some p;art of the energy spectrum instead of other.
+The data used during this analysis is monte carlo data using the official JUNO simulation software (see section \ref{sec:juno:software} for details). The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distribution are used so that the CNN does not learn a potential energy distribution, favoring some part of the energy spectrum instead of other.
 
-This data is represented as $240 \times 240$ images, equivalent to third order tensor, with a charge $Q$ channel and a time $t$ channel. When two SPMTs are in the same pixel, the charges are summed and the lowest of the hit-time is chosen. This choice come from the fact that we expect the photon propagation to be uniform, there should no physical meaning in two signal photons coming one after the other except that the two PMT are at different position. The SPMTs being located close to each other, the reduction of information into the first hit time should not impact to much the reconstruction, at least less than the intrinsic time resolution and statistic uncertainty. The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a signal hit on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the time information for this part of the detector.
+This data is represented as $240 \times 240$ images, equivalent to third order tensor, with a charge $Q$ channel and a time $t$ channel. The SPMTs are then projected on the plane following illustrated in figure \ref{fig:jcnn:pmt_rep}, the $x$ position is proportional to $theta$ and the $y$ position is defined by $\phi \sin{\theta}$ in spherical coordinates. $\theta = 0$ is defined as being the top of the detector and $phi = 0$ is defined as an arbitrary direction in the detector. In practice, this is the $phi = 0$ given by the MC simulation.
+
+When two SPMTs are in the same pixel, the charges are summed and the lowest of the hit-time is chosen. This choice come from the fact that we expect the photon propagation to be uniform, there should no physical meaning in two signal photons coming one after the other except that the two PMT are at different position. The SPMTs being located close to each other, the reduction of information into the first hit time should not impact to much the reconstruction, at least less than the intrinsic time resolution and statistic uncertainty. The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a signal hit on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the time information for this part of the detector.
 As illustrated in figure \ref{fig:jcnn:pmt_rep} the dimension have been chosen optimized so that at most two SPMTs are in the same pixel while keeping the number of empty pixels relatively low to prevent this kind of issue.
 
 While it could be possible to use bigger images to prevent overlapping, keeping image small images gives multiple advantages:
 \begin{itemize}
   \item As presented in section \ref{sec:jcnn:model}, the convolution filter we use are $3 \times 3$ convolution filter, meaning that if SPMTs would be separated by more that one pixel, the first filter would only see one SPMT per filter. This behavior would be kind of counterproductive as the first convolution block would basically be a transmission layer and would just induce noise in the data.
-  \item 
+  \item It keep the network relatively small, while this do not impact the convolution layers, the flatten operation just before the FCDNN make the number parameters in the first layer of it dependent on the size of the image.
+  \item It reduce the number of empty pixel in the image.
 \end{itemize}
-
-% TODO: Time to go. Finish this part talking about the problem of having empty pixel while having meaningfull value in the pixel
+The question of empty pixel is an important question in this data representation. Their is two kind of empty pixel in the data.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[height=6cm]{images/jcnn/pmt_repartition.png}
-  \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
-  \label{fig:jcnn:pmt_rep}
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
+    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
+    \label{fig:jcnn:pmt_rep}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_event.png}
+    \caption{Example of the charge channel of an event as seen by the CNN \textbf{(Need to redo the title)}}
+    \label{fig:jcnn:event_example}
+  \end{subfigure}
+  \caption{}
 \end{figure}
 
+The first kind is pixel that contain a SPMT but the SPMT did not get hit nor registered any dark noise during the event. In this case, the charge layer is zero, which have a physical meaning but then come the question of the time layer. One could argue that the correct time would be infinity (or the largest number our memory allows us) because the hit ``never'' happened, so extremely far from the time of the event. This cause numerical problem as large number, in the linear operation that are happening in the convolution layers, are more signifiant than smaller value. We could try to encode this feature in another way but no number have any significance due to our time being relative to the trigger of the experiment so $-1$ for example is out of question. Float and Double gives us access to special value such as NaN (Not a Number) \cite{noauthor_ieee_2019} but the behavior is to propagate the NaN which leaves us with NaN for energy and position. We choose to keep the value 0 because it's the absorbing element of multiplication and can be though as no activation in the ReLU activation function.
+
+The second kind of pixel is pixel that do not represent parts of the detector such as the corners of the images. The question is basically the same, what to put in the charge and the time channel. The decision is to set the charge and time at 0 following the reasoning presented above. Its important to keep in mind that the fact that a part of the detector that has not been hit is also an information: There is no signal in this part of the detector. This problematic will be explored in more details in chapter \ref{sec:jgnn}.
+
+Another problematic that happens with this representation, and this is not dependent of the chosen projection, is the deformation in the edges of the image and the loss of the neighbouring information in the for the SPMTs at the edge of the image $\phi \sim 180^\circ$. This deformation and neighbouring loss could be partially circumvented as explained in section \ref{sec:jcnn:prospect}
 \section{Results}
 
 \begin{itemize}
@@ -175,6 +195,9 @@ While it could be possible to use bigger images to prevent overlapping, keeping 
       \item Average sum
     \end{itemize}
 \end{itemize}
+
+\section{Prospect}
+\label{sec:jcnn:prospect}
 
 \section{Conclusion}
 Intoduction next chapter
