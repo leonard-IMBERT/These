@@ -315,7 +315,7 @@ To maintain the resolution over the lifetime of the experiment, JUNO require a f
 
 The LPMTs electronic are divided in two parts. One "near", located underwater, in proximity of the LPMT to reduce the cable length between the PMT and early electronic. A second one, outside of the detector that is responsible for higher level analysis before sending the data to the DAQ.
 
-The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:juno:calib} for more details.
+The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, a wide dynamic range,  causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:juno:calib} for more details.
 
 \subsubsection{Small Photo-Multipliers Tubes (SPMTs)}
 \label{sec:juno:SPMT}
@@ -688,10 +688,20 @@ As explained in section \ref{sec:juno:nom_precise_measurement}, energy resolutio
 
 
 \begin{figure}[ht]
-  \centering
-  \includegraphics[height=6cm]{images/juno/reco/energy_reco_vars.png}
-  \caption{Definition of the variables used in the energy reconstruction}
-  \label{fig:juno:rec:energy_vars}
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/juno/spherical_coordinate_system.png}
+    \caption{Spherical coordinate system used in JUNO for reconstruction}
+    \label{fig:juno:rec:corrdinate_system}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/juno/reco/energy_reco_vars.png}
+    \caption{Definition of the variables used in the energy reconstruction}
+    \label{fig:juno:rec:energy_vars}
+  \end{subfigure}
+  \caption{}
 \end{figure}
 
 \subsubsection{Charge estimation}

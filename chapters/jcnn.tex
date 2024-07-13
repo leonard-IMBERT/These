@@ -1,11 +1,11 @@
 \chapter{Image recognition for IBD reconstruction with the SPMT system}
 \label{sec:jcnn}
 
-As explained in chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photo Tube Multiplier (LPMT) and the Small Photo Multiplier Tubes (SPMT). Both of the system observe the same physics event inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range, a thousands versus a few dozen, and their back-end electronics (see section \ref{sec:juno:LPMT}).
+As explained in chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) and the Small Photomultiplier (SPMT). Both of the system observe the same physics event inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see section \ref{sec:juno:LPMT}, a thousands versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
 
-Due to their differences they are complementary and their strength and weakness. One important point the difference in expected resolution, the LPMT system outperform largely the SPMT system but is subject to effects such as saturation \cite{juno_collaboration_calibration_2021} that could bias the reconstruction, effect that the SPMT system is impervious to. Also, due to the dynamic range of the LPMT, in case of high energy and high density event such as core-collapse supernova, the LPMT system could saturate and the lack of photo-coverage become a benefit.
+They are complementary in their strengths and weaknesses and support each other. One important point is their differences in expected resolution, the LPMT system outperform largely the SPMT system but is subject to effects such as charge  non linearity \cite{juno_collaboration_calibration_2021} that could bias the reconstruction, effect that the SPMT system is impervious to. This topic will be studied in more detail in chapter \ref{sec:joint_fit}. Also, due to the dynamic range of the LPMT, in case of high energy and high density event such as core-collapse supernova, the LPMT system could saturate and the lower photo-coverage become a benefit.
 
-Thus it is important to have reconstruction and analysis combined but also dedicated to each system, taking into account the specificity. The subject of this work is to propose a machine learning algorithm for the SPMT reconstruction based on Convolutional Neural Network (CNN).
+Thus, although event reconstruction algorithm and physics analysis combines both LPMT and SPMT systems, individual approach are key studies to understand the detector and ensure their reliability. This topic will also be studied in more details in chapter \ref{sec:joint_fit}. The subject of this chapter is to propose a machine learning algorithm for the SPMT reconstruction based on Convolutional Neural Network (CNN).
 
 \section{Motivations}
 
@@ -18,13 +18,10 @@ Thus it is important to have reconstruction and analysis combined but also dedic
 %  \item Comparison, difference in behavior
 %\end{itemize}
 
-As explained in chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling complex distribution from a given dataset. In our case, we have access to complete monte-carlo simulation of our detector to produce arbitrary large datasets that could represent multiple years of data taking. Also, due to the nature of monte-carlo simulation we have access to exact truth of the modelled event like the position, energy and nature of the particle.
+As explained in chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling highly dimensional data from a given dataset. In our case, we have access to complete monte-carlo simulation of our detector to produce arbitrary large datasets that could represent multiple years of data taking.
+Ideally ML algorithms would be able to consider the entirety of the information in the detector and converge on the best parameters to yield optimal results, while classical methods where the algorithms could be biased by the prior knowledge of the detector and physics processes. To study this potential phenomena, we will compare our machine algorithm to a classical reconstruction method developed for energy and vertex reconstruction \cite{lebrin_towards_2022}.
 
-One of expectation when using data-driven, and so, machine learning algorithm is that the algorithm will be able to use the entirety of the raw information, preventing any loss in precision due to miss-modeling or simplification of the underlying physic process.
-
-
-Another algorithm was developed in the collaboration for energy and vertex reconstruction \cite{lebrin_towards_2022} and will serve as a performance reference in this work. The two methods will also be studied event by event to try to understand and unveil coherence or incoherence between their performances.
-
+We have access to a very detailed simulation of the detector (section \ref{sec:juno:software}) that will allow us to simulate arbitrary large dataset of data while giving access to the all the physics parameters of the event. Those parameters include the target of our reconstruction algorithms: the vertex and position at with the event happened. As introduced above, we hope that the ML algorithm will be able to used all the informations in the event, meaning that potential mismodelings in our simulation could be exploited by the algorithm. This specific subject will be studied in chapter \ref{sec:janne}.
 
 \section{Method and model}
 % --------------- Plan for method and model -----------------
@@ -40,11 +37,11 @@ Another algorithm was developed in the collaboration for energy and vertex recon
 %    \end{itemize}
 %\end{itemize}
 
-One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. One kind of data representation that is ordered, presenting the same property as a plane is the image, which is a bounded discrete euclidian plane.
-
-Using this representation we can arrange the SPMTs on this plane while keeping most of the neighbouring informations. The pros and cons of this representation is detailed in section \ref{sec:jcnn:data}.
+One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. It is then tempting to represent the detector as a spherical image with the PMT in place of pixel. Two events with two different energy or position would produce two different images.
 
 The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see section \ref{ml:cnn}) and has proven its relevance in image processing.
+
+Some CNN are developed to process spherical images \cite{cohen_spherical_2018} but for the sake of simplicity and as a first approach we decided to go with a planar projection of the detector, approach that has proven its efficiency using the LPMT system (see section \ref{sec:juno:ml}). The details about this planar projection will be discussed in section \ref{sec:jcnn:data}.
 
 \begin{figure}[ht]
   \centering
@@ -56,9 +53,14 @@ The most common approach in machine learning for image processing and image reco
 \subsection{Model}
 \label{sec:jcnn:model}
 
-The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters which values are presented in table \ref{tab:jcnn:hyper}. $N_{blocks}$ is the number of convolution blocks, a block being composed of two convolutional layers with $3\times3$ filters using ReLU activation function, a $3\times3$ max-pooling layer (except for the last block) and a dropout layer. The number of channels is dependent of the depth of the block $N^i_{channels} = i * N_{channels}, i \in [1..N_{blocks}]$.
+The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters that will define the size, complexity and computational power of the NN. The chose hyperparameters are detailed below and their values are presented in table \ref{tab:jcnn:hyper}.
+\begin{itemize}
+  \item $\mathbf{N_{blocks}}$: the number of convolution blocks, a block being composed of two convolutional layers with $3\times3$ filters using ReLU activation function, a $3\times3$ max-pooling layer (except for the last block) and a dropout layer.
+  \item $\mathbf{N_{channels}}$: The number of channels in the first block. The number of channels in the subsequent blocks are calculated using $N^i_{channels} = 2^{i} * N_{channels}, i \in [1..N_{blocks}]$.
+  \item \textbf{FCDNN configuration}: The result of the last convolution layer is flattened then fed to a FCDNN. Its configuration is expressed as a sequence of fully connected linear layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers with a width of 1024 followed by 2 other layers with a width of 512. Finally the last layer is a 4 neurons wide linear layers without activation function. Each neurons of the last layer represent a component of the interaction vertex: Energy, X, Y, Z.
+  \item \textbf{Loss}: The loss function. In this work we study two different loss function $(E+V)$ and $(E_r + V_r)$ detailed below.
+\end{itemize}
 
-The result of the last convolution layer is then flattened then fed forward to the FCDNN. Its configuration is expressed as a sequential of fully connected layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers with a width of 1024 followed by 2 other layers with a width of 512. Finally the last layer is 4 neurons wide without activation function, one for each component of the interaction vertex: Energy, X, Y, Z.
 
 We explore in this work two different activation functions
 \begin{align}
@@ -76,22 +78,22 @@ The idea is that: due to the inherent statistic uncertainty over the number of c
 \begin{table}[ht]
   \centering
   \begin{tabular}{ | c | c | }
-    \hline $N_{blocks}$ & {2, 3, 4} \\
-    \hline $N_{channels}$ & {32, 64, 128} \\
+    \hline $N_{blocks}$ & \{2, 3, 4\} \\
+    \hline $N_{channels}$ & \{32, 64, 128\} \\
     \hline
-    \multirow{4}{*}{FCDNN configuration} & 2 * 1024 \\
+    \multirow{4}{*}{FCDNN configurations} & 2 * 1024 \\
                                         & 2 * 2048 + 2 * 1024 \\
                                         & 3 * 2048 + 3 * 512 \\
                                         & 2 * 4096 \\
     \hline
-    Loss & $E+V$, $E_r + V_r$ \\
+    Loss & \{$E+V$, $E_r + V_r$\} \\
     \hline
   \end{tabular}
-  \caption{Hyperparameters used for the CNN}
+  \caption{Sets of hyperparameters values considered in this study}
   \label{tab:jcnn:hyper}
 \end{table}
 
-Each one of the combination of those hyperparameters is then tested and compared to each other over an analysis sample. We cannot use the mean loss because we consider multiple loss function so we use multiple observables:
+Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{channels} = 32, \mathrm{FCDNN} = (2 * 1024), \mathrm{Loss} = (E+V))$), subsequently designated as configurations, is then tested and compared to each other over an analysis sample. We cannot use the mean loss because we consider multiple loss functions, there is no guarantee that comparison of their numerical value will be meaningful. We use multiple observables to rank the performances of each configuration:
 \begin{itemize}
   \item The mean absolute energy error $\langle E \rangle = \langle | E - E_{true} | \rangle$. It is an indicator of the energy bias of our reconstruction.
   \item The standard deviation of the energy error $\sigma E = \sigma (E - E_{true})$. This the indicator on our precision in energy reconstruction.
@@ -99,15 +101,22 @@ Each one of the combination of those hyperparameters is then tested and compared
   \item The standard deviation of the distance between the true and reconstructed vertex $\sigma V = \sigma |\vec{V} - \vec{V}_{true}|$. This is an indicator if the precision in our vertex reconstruction.
 \end{itemize}
 
-For the vertex indicator, it is worth noting that $\langle V \rangle$ is not expected to be zero and so if unfit to be used for the loss. Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
-\begin{equation}
-  \Delta V = |\vec{V} - \vec{V}_{true}| = \sqrt{\Delta X^2 + \Delta Y^2 + \Delta Z^2}; ~ \Delta X, \Delta Y, \Delta Z \sim \mathcal{N}
-\end{equation}
-then
-\begin{equation}
-  \Delta V \sim \chi
-\end{equation}
-where $\chi$ is a Chi law which probability density function is different from 0 only in $\mathbb{R}^+$
+For the vertex indicator, it is interesting noting that $\langle V \rangle$ is not expected to be zero and so is unfit to be used for the loss.
+
+\textbf{TODO: REMOVE BEFORE END} Passage en francais pour poser les mots : en parler avec benoit. En gros, en utilisant la MSE et au vu des fluctuations statisque auxquelles sont soumis nos données, on s'attend a ce que toute somme quadratique de nos observables ($\lambda_{rec} - \lambda_{true}$) suivent une loi du chi2. C'est interessant car ca veut dire que la "perfection" de $\langle \sum \rangle = 0$ n'est pas réalisable -> AKA MSE = 0 n'est pas realisable. Cela vient de la fluctation de nos donnees. En effet tout l'aleatoric de nos données dans la simulation (et pb pd dans la vrai vie) sont régie par des comportment quasi gaussien. Ainsi tout estimateur de nos observables auront leur erreur gaussienne. Cela soulève une analyse intérssante de l'interpretation du nb de dg de liberté des lois du chi2 produites. En effet, si il n'existe aucune correlation entre erreurs de nos observables (et que gaussienne tout ca tout ca), alors la loi du chi2 possede un $k = N_{obs}$ si ce n'est pas le cas, dans ce cas $k < N_{obs}$ et donc les différents estimateurs peuvent etre exprimés par moins d'observables.
+
+%Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
+%\begin{equation}
+%  \Delta V = |\vec{V} - \vec{V}_{true}| = \sqrt{\Delta X^2 + \Delta Y^2 + \Delta Z^2}; ~ \Delta X, \Delta Y, \Delta Z \sim \mathcal{N}
+%\end{equation}
+%then
+%\begin{equation}
+%  \Delta V \sim \chi
+%\end{equation}
+%where $\chi$ is a Chi law which probability density function is different from 0 only in $\mathbb{R}^+$
+
+\subsection{Data characteristics}
+%TODO: Faire un bestiaire de diofferents type d'event
 
 \subsection{Data representation}
 \label{sec:jcnn:data}
@@ -131,12 +140,18 @@ where $\chi$ is a Chi law which probability density function is different from 0
 %    \end{itemize}
 %\end{itemize}
 
-This data is represented as $240 \times 240$ images, equivalent to third order tensor, with a charge $Q$ channel and a time $t$ channel. The SPMTs are then projected on the plane following illustrated in figure \ref{fig:jcnn:pmt_rep}, the $x$ position is proportional to $theta$ and the $y$ position is defined by $\phi \sin{\theta}$ in spherical coordinates. $\theta = 0$ is defined as being the top of the detector and $phi = 0$ is defined as an arbitrary direction in the detector. In practice, this is the $phi = 0$ given by the MC simulation.
+This data is represented as $240 \times 240$ images, equivalent to third order tensor, with a charge $Q$ channel and a time $t$ channel. The SPMTs are then projected on the plane as illustrated in figure \ref{fig:jcnn:pmt_rep}. The $x$ position is proportional to $\theta$ and the $y$ position is defined by $\phi \sin{\theta}$ in spherical coordinates. $\theta = 0$ is defined as being the top of the detector and $\phi = 0$ is defined as an arbitrary direction in the detector. In practice, this is the $\phi = 0$ given by the MC simulation.
 
-When two SPMTs are in the same pixel, the charges are summed and the lowest of the hit-time is chosen. This choice come from the fact that we expect the photon propagation to be uniform, there should no physical meaning in two signal photons coming one after the other except that the two PMT are at different position. The SPMTs being located close to each other, the reduction of information into the first hit time should not impact to much the reconstruction, at least less than the intrinsic time resolution and statistic uncertainty. The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a signal hit on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the time information for this part of the detector.
+\begin{align}
+  x &= \bigg\lfloor \frac{\theta \cdot H}{\pi} \bigg\rfloor, ~ \theta \in [0, \pi] \\
+  y &= \bigg\lfloor \frac{(\phi + \pi) \sin{\theta} \cdot W}{2\pi}\bigg\rfloor, ~ \phi \in [-\pi, \pi], ~ \theta \in [0, \pi]
+\end{align}
+where $H$ is the height of the image, $W$ the width of the image and $(0,0)$ the top left corner of the image.
+
+When two SPMTs are in the same pixel, the charges are summed and the lowest of the hit-time is chosen. The SPMTs being located close to each other, we expect the time difference between two successive physics signals, two photons being collected, to be small. The first hit time is chosen because it can be considered as the relative propagation time of the photons that went the "straightest", i.e. that went under the less perturbation of the two. The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a signal hit on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the timing information for this part of the detector.
 As illustrated in figure \ref{fig:jcnn:pmt_rep} the dimension have been chosen optimized so that at most two SPMTs are in the same pixel while keeping the number of empty pixels relatively low to prevent this kind of issue.
 
-While it could be possible to use bigger images to prevent overlapping, keeping image small images gives multiple advantages:
+While it could be possible to use larger images (more pixel) to prevent overlapping, keeping image small images gives multiple advantages:
 \begin{itemize}
   \item As presented in section \ref{sec:jcnn:model}, the convolution filter we use are $3 \times 3$ convolution filter, meaning that if SPMTs would be separated by more that one pixel, the first filter would only see one SPMT per filter. This behavior would be kind of counterproductive as the first convolution block would basically be a transmission layer and would just induce noise in the data.
   \item It keep the network relatively small, while this do not impact the convolution layers, the flatten operation just before the FCDNN make the number parameters in the first layer of it dependent on the size of the image.
@@ -162,7 +177,7 @@ The question of empty pixel is an important question in this data representation
   \caption{}
 \end{figure}
 
-The first kind is pixel that contain a SPMT but the SPMT did not get hit nor registered any dark noise during the event. In this case, the charge layer is zero, which have a physical meaning but then come the question of the time layer. One could argue that the correct time would be infinity (or the largest number our memory allows us) because the hit ``never'' happened, so extremely far from the time of the event. This cause numerical problem as large number, in the linear operation that are happening in the convolution layers, are more signifiant than smaller value. We could try to encode this feature in another way but no number have any significance due to our time being relative to the trigger of the experiment so $-1$ for example is out of question. Float and Double gives us access to special value such as NaN (Not a Number) \cite{noauthor_ieee_2019} but the behavior is to propagate the NaN which leaves us with NaN for energy and position. We choose to keep the value 0 because it's the absorbing element of multiplication, absorbing the ``information'' of the parameter it would be multiplied by. It also can be though as no activation in the ReLU activation function.
+The first kind is pixel that contain a SPMT but the SPMT did not get hit nor registered any dark noise during the event. In this case, the charge channel is zero, which have a physical meaning but then come the question of the time layer. One could argue that the correct time would be infinity (or the largest number our memory allows us) because the hit ``never'' happened, so extremely far from the time of the event. This cause numerical problem as large number, in the linear operation that are happening in the convolution layers, are more signifiant than smaller value. We could try to encode this feature in another way but no number have any significance due to our time being relative to the trigger of the experiment so $-1$ for example is out of question. Float and Double gives us access to special value such as NaN (Not a Number) \cite{noauthor_ieee_2019} but the behavior is to propagate the NaN which leaves us with NaN for energy and position. We choose to keep the value 0 because it's the absorbing element of multiplication, absorbing the ``information'' of the parameter it would be multiplied by. It also can be though as no activation in the ReLU activation function.
 
 The second kind of pixel is pixel that do not represent parts of the detector such as the corners of the images. The question is basically the same, what to put in the charge and the time channel. The decision is to set the charge and time at 0 following the reasoning presented above. Its important to keep in mind that the fact that a part of the detector that has not been hit is also an information: There is no signal in this part of the detector. This problematic will be explored in more details in chapter \ref{sec:jgnn}.
 
@@ -182,7 +197,7 @@ Another problematic that happens with this representation, and this is not depen
 %   \end{itemize}
 
 
-In this study we use one million events coming from monte-carlo simulations. To put in perspective, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amount to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training on $\sim 10$ years of data.
+In this study we use one million events coming from the full JUNO official monte-carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). To put in perspective, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amount to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.
 
 While we expect and hope the monte-carlo simulation to give use a realistic representation of the detector, there could be effect, even after the fine-tuning on calibration data, that the simulation cannot handle. Thus, once the calibration will be available, we will need to evaluate, and if needed retrain, the network on calibration data to establish definitive performances.
 
