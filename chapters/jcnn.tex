@@ -39,7 +39,7 @@ We have access to a very detailed simulation of the detector (section \ref{sec:j
 
 One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface on this sphere. It is then tempting to represent the detector as a spherical image with the PMT in place of pixel. Two events with two different energy or position would produce two different images.
 
-The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see section \ref{ml:cnn}) and has proven its relevance in image processing.
+The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see section \ref{sec:ml:cnn}) and has proven its relevance in image processing.
 
 Some CNN are developed to process spherical images \cite{cohen_spherical_2018} but for the sake of simplicity and as a first approach we decided to go with a planar projection of the detector, approach that has proven its efficiency using the LPMT system (see section \ref{sec:juno:ml}). The details about this planar projection will be discussed in section \ref{sec:jcnn:data}.
 
@@ -101,9 +101,6 @@ Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{chan
   \item The standard deviation of the distance between the true and reconstructed vertex $\sigma V = \sigma |\vec{V} - \vec{V}_{true}|$. This is an indicator if the precision in our vertex reconstruction.
 \end{itemize}
 
-For the vertex indicator, it is interesting noting that $\langle V \rangle$ is not expected to be zero and so is unfit to be used for the loss.
-
-\textbf{TODO: REMOVE BEFORE END} Passage en francais pour poser les mots : en parler avec benoit. En gros, en utilisant la MSE et au vu des fluctuations statisque auxquelles sont soumis nos données, on s'attend a ce que toute somme quadratique de nos observables ($\lambda_{rec} - \lambda_{true}$) suivent une loi du chi2. C'est interessant car ca veut dire que la "perfection" de $\langle \sum \rangle = 0$ n'est pas réalisable -> AKA MSE = 0 n'est pas realisable. Cela vient de la fluctation de nos donnees. En effet tout l'aleatoric de nos données dans la simulation (et pb pd dans la vrai vie) sont régie par des comportment quasi gaussien. Ainsi tout estimateur de nos observables auront leur erreur gaussienne. Cela soulève une analyse intérssante de l'interpretation du nb de dg de liberté des lois du chi2 produites. En effet, si il n'existe aucune correlation entre erreurs de nos observables (et que gaussienne tout ca tout ca), alors la loi du chi2 possede un $k = N_{obs}$ si ce n'est pas le cas, dans ce cas $k < N_{obs}$ et donc les différents estimateurs peuvent etre exprimés par moins d'observables.
 
 %Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
 %\begin{equation}
@@ -114,9 +111,6 @@ For the vertex indicator, it is interesting noting that $\langle V \rangle$ is n
 %  \Delta V \sim \chi
 %\end{equation}
 %where $\chi$ is a Chi law which probability density function is different from 0 only in $\mathbb{R}^+$
-
-\subsection{Data characteristics}
-%TODO: Faire un bestiaire de diofferents type d'event
 
 \subsection{Data representation}
 \label{sec:jcnn:data}
@@ -159,24 +153,6 @@ While it could be possible to use larger images (more pixel) to prevent overlapp
 \end{itemize}
 The question of empty pixel is an important question in this data representation. Their is two kind of empty pixel in the data.
 
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
-    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
-    \label{fig:jcnn:pmt_rep}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/jcnn/illustration_event.png}
-    \caption{Example of the charge channel of an event as seen by the CNN \textbf{(Need to redo the title)}}
-    \label{fig:jcnn:event_example}
-  \end{subfigure}
-  \caption{}
-\end{figure}
-
 The first kind is pixel that contain a SPMT but the SPMT did not get hit nor registered any dark noise during the event. In this case, the charge channel is zero, which have a physical meaning but then come the question of the time layer. One could argue that the correct time would be infinity (or the largest number our memory allows us) because the hit ``never'' happened, so extremely far from the time of the event. This cause numerical problem as large number, in the linear operation that are happening in the convolution layers, are more signifiant than smaller value. We could try to encode this feature in another way but no number have any significance due to our time being relative to the trigger of the experiment so $-1$ for example is out of question. Float and Double gives us access to special value such as NaN (Not a Number) \cite{noauthor_ieee_2019} but the behavior is to propagate the NaN which leaves us with NaN for energy and position. We choose to keep the value 0 because it's the absorbing element of multiplication, absorbing the ``information'' of the parameter it would be multiplied by. It also can be though as no activation in the ReLU activation function.
 
 The second kind of pixel is pixel that do not represent parts of the detector such as the corners of the images. The question is basically the same, what to put in the charge and the time channel. The decision is to set the charge and time at 0 following the reasoning presented above. Its important to keep in mind that the fact that a part of the detector that has not been hit is also an information: There is no signal in this part of the detector. This problematic will be explored in more details in chapter \ref{sec:jgnn}.
@@ -203,9 +179,31 @@ While we expect and hope the monte-carlo simulation to give use a realistic repr
 
 The data used during this analysis is monte carlo data using the official JUNO simulation software (see section \ref{sec:juno:software} for details). The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distribution are used so that the CNN does not learn a potential energy distribution, favoring some part of the energy spectrum instead of other.
 
-Those events can be considered as ``optimistic''. There is no pile-up with potential background or other IBD. The neutron is also not simulated, and even if we expect the main neutron signal coming from its capture with a hydrogen nucleus to come well after the time window, there is still potential energy from the neutrons that could be deposited during this time window while it's still thermalizing in the LS.
+Those events can be considered as ``optimistic'' as there is no pile-up with potential background or other IBD.
 
 The dark noise and time window come from the monte-carlo simulation of the electronic and trigger system. The dark noise rate used in this study is coming from studies and calibration of the PMTs outside of the experimental setup \cite{cao_mass_2021, abusleme_mass_2022}.
+
+
+\subsection{Data characteristics}
+%TODO: Faire un bestiaire de diofferents type d'event
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
+    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
+    \label{fig:jcnn:pmt_rep}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_event.png}
+    \caption{Example of the charge channel of an event as seen by the CNN \textbf{(Need to redo the title)}}
+    \label{fig:jcnn:event_example}
+  \end{subfigure}
+  \caption{}
+\end{figure}
 
 \section{Results}
 
