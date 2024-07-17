@@ -211,7 +211,7 @@
 \RequirePackage{booktabs} % Required for better table rules
 
 \RequirePackage{caption} % Required for customising the captions
-\usepackage{subcaption}
+\usepackage[list=true]{subcaption}
 \captionsetup{justification=centerlast,font=small,labelfont=sc,margin=50pt}
 
 \RequirePackage{ifpdf}

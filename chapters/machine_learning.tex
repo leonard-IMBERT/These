@@ -1,3 +1,7 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+
+\begin{document}
 \chapter{Machine learning and Artificial Neural Network}
 \label{sec:ml}
 
@@ -40,7 +44,7 @@ where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. 
 \begin{equation}
   \theta_{i+1} = \theta_i - \frac{\partial \mathcal{L}}{\partial \theta}
 \end{equation}
-$i$ being the training iteration index. This needs the expression of $\mathcal{L}$ dependent of $\theta$ to be differentiable, thus the layer and their activation function also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be completed with first and second order momentum like with the Adam optimizer \cite{kingma_adam_2017}.
+$i$ being the training iteration index. This needs the expression of $\mathcal{L}$ dependent of $\theta$ to be differentiable, thus the layer and their activation function also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be completed with first and second order momentum like with the Adam optimizer \cite{kingma_adam_2017} (more details in section \ref{sec:ml:train}).
 
 This description of neural networks as layer introduced the principle of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describe the NN or its training are designated as \textit{hyperparameters}.
 
@@ -99,29 +103,30 @@ Due to its simplicity, FCDNN are also used as basic pieces for more complex arch
 \subsection{Convolutional Neural Network (CNN)}
 \label{sec:ml:cnn}
 
-Convolutional Neural Networks are a family of neural networks that use discrete convolution filters to process the input data. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters to extract the desired features. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics.
+Convolutional Neural Networks are a family of neural networks that use discrete convolution filters, as illustrated in an example in figure \ref{fig:ml:conv_filter}, to process the input data, often images. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters to extract the desired features. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics.
 
-The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend double the numbers of filters for each division of the input data.
+The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend to double the numbers of filters for each division of the input data.
 The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/ml/convolution_exammple.jpg}
   \caption{Illustration of the effect of a convolution filter. Here we apply a filter with the aim do detect left edges. We see in the resulting image that the left edges of the duck are bright yellow where the right edges are dark blue indicating the contour of the object. The convolution was calculated using \cite{allen_generic-github-userimage-convolution-playground_2024}.}
+  \label{fig:ml:conv_filter}
 \end{figure}
 
-As an example, let's take the Pytorch \cite{ansel_pytorch_2024} example for the MNIST \cite{lecun_gradient-based_1998} dataset which a dataset of black and white images of handwritten digits. Those images are $28 \times 28$ pixels images with only one channel corresponding to the grey level of the pixel. Example of images from this dataset are presented in figure \ref{fig:ml:mnist}
+As an example, let's take the Pytorch \cite{ansel_pytorch_2024} example for the MNIST \cite{lecun_gradient-based_1998}, a dataset of black and white images of handwritten digits. Those images are $28 \times 28$ pixels with only one channel corresponding to the grey level of the pixel. Example of images from this dataset are presented in figure \ref{fig:ml:mnist}
 
 A schema of the CNN used in the Pytorch example is presented in figure \ref{fig:ml:cnn_mnist}. Using this schema as a reference, the trained network is made of:
 \begin{enumerate}
-  \item A convolutional layer of $(3 \times 3)$ filters yielding 32 channels. A bias parameter is applied to each channel for a total of $32 \cdot (3\times3) + 32 = 320$ parameters. The resulting image is $(26\times26\time32)$ (26 per 26 pixels with 32 channels). The ReLU activation function is applied to each pixel.
-  \item A second convolutional layer of $(3 \times 3)$ filters yielding 64 channels. This channel also posses a bias parameter for a total of $64 (3\times3) + 64 = 640$ parameters. Resulting image is $(24\times24\times64)$. Also with with a ReLU activation function.
-  \item Then comes a $(2\times2)$ max pool layer with a stride of 1 meaning that for each channel the max value of pixels in a $(2\time2)$ block is condensed in a single resulting pixel. The resulting image is $(12 \time 12 \time 64)$.
+  \item A convolutional layer of $(3 \times 3)$ filters yielding 32 channels. A bias parameter is applied to each channel for a total of $(32 \cdot (3\times3) + 32) = 320$ parameters. The resulting image is $(26\times26 \times 32)$ (26 per 26 pixels with 32 channels). The ReLU activation function is applied to each pixel.
+  \item A second convolutional layer of $(3 \times 3)$ filters yielding 64 channels. This channel also posses a bias parameter for a total of $(64 \cdot (3\times3) + 64) = 640$ parameters. Resulting image is $(24\times24\times64)$. Also with with a ReLU activation function.
+  \item Then comes a $(2\times2)$ max pool layer with a stride of 1 meaning that for each channel the max value of pixels in a $(2\times2)$ block is condensed in a single resulting pixel. The resulting image is $(12 \times 12 \times 64)$.
   \item This image goes through a dropout layer which will set the pixel to 0 with a probability of 0.25. This help prevent overtraining of the neural network (see section \ref{sec:ml:pitfall} for more details).
-  \item The data is the flattened i.e. condensed into a vector of $(12 \time 12 \time 64) = 9216$ values.
+  \item The data is the flattened i.e. condensed into a vector of $(12 \times 12 \times 64) = 9216$ values.
   \item Then comes a fully connected linear layer (Eq. \ref{eq:ml:fully-connected}) with a ReLU activation that output 128 feature. It needs $(9216 \cdot 128)+ 128 = 1'179'776$ parameters.
   \item This 128 item vector goes through another dropout layer with a probability of $0.5$
-  \item The vector is then transformed through a linear with ReLU activation that output 10 values, one for each digit class (0, 1, 2, ..., 9). It need $(128 \cdot 10) + 128 = 1408$ parameters.
+  \item The vector is then transformed through a linear layer with ReLU activation. It output 10 values, one for each digit class (0, 1, 2, ..., 9). It need $(128 \cdot 10) + 128 = 1408$ parameters.
   \item Finally the 10 values are normalized using a log softmax function $\mathrm{LogSoftmax}(x_i) = \log \bigg(\frac{\exp(x_i)}{\sum_j \exp(x_j)}\bigg)$ to give the probability of the input image to be a certain digit.
 \end{enumerate}
 
@@ -170,36 +175,111 @@ The generator goal, on the other hand, is to produce data that the discriminator
 \subsection{Training procedure}
 \label{sec:ml:train}
 
-A neural network without the adequate training is like an empty shell. If the parameters are not optimized they are, most of the time, initialized to random number and so the output will just be random. The training is a key step in the production of a solid and reliable NN. This section aim to give an overview of the different concept and tools used in the training of our neural network.
+A neural network without the adequate training is like an empty shell. If the parameters are not optimized they are, most of the time, initialized to random number and so the output will just be random. The training is a key step in the production of a solid and reliable NN. This section aim to give an overview of the different concept and tools used in the training of our neural networks.
 
 \subsubsection{Training lifecycle}
 
-The training of NN does not follow strict rules, you could imagine totally different lifecycle but I will describe here the one used in this thesis and the most common one.
+The training of NN does not follow strict rules, you could imagine totally different lifecycle but I will describe here the one used in this thesis, the most common one.
 
-The training is split into \textit{epochs} during which the NN will train on a set of subsamples called \textit{batch}. The size of those batch is called \textit{batch size}. Each batch processing is called a \textit{step}. At the end of each step, the parameters are updated using the loss value over the processed batch. At the end of each epochs, the neural network is evaluated over a test dataset. This test dataset is not used for training (no gradient of the loss is computed) and is used as reference for the network performance and monitor overtraining (see section \ref{sec:ml:pitfall}). Most of the time, the parameters are updated at each step and the optimizer hyperparameters are updated at each epochs.
+The training is split into \textit{epochs} during which the NN will train on a set of subsamples called \textit{batch}. The size of those batch is called \textit{batch size}, a.k.a. the number of data it contains (how many images, how many events,...). Each process of a batch is called a \textit{step}. At the end of each epochs, the neural network is evaluated over a validation dataset. This validation dataset is not used for training (no gradient of the loss is computed) and is used as reference for the network performance and monitor overtraining (see section \ref{sec:ml:pitfall}). Most of the time, the parameters are updated at each step using the mean loss over the batch and the optimizer hyperparameters are updated at each epochs.
 
 \subsubsection{The optimizer}
 
-As briefly introduced section \ref{sec:ml:nn}, the parameters of the neural network are optimized using the gradient descent method. We calculate the gradient of the loss with respect of each parameters and we update the parameters in accord to minimize the loss. This update of parameter is done following an Optimizer policy. Those optimizer depends on hyperparameters. The ones used in this thesis are:
+As briefly introduced section \ref{sec:ml:nn}, the parameters of the neural network are optimized using the gradient descent method. We calculate the gradient of the mean loss over the batch with respect of each parameters and we update the parameters in accord to minimize the loss. The  gradient is computed backward from the loss up to the first layer parameters using the chain rule:
+\begin{equation}
+  \label{eq:ml:backward}
+  \frac{\partial \mathcal{L}}{\partial \theta_1} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \mathcal{L}}{\partial \theta_2} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \theta_3}{\partial \theta_2} \frac{\partial \mathcal{L}}{\partial \theta_3} = \frac{\partial \theta_2}{\partial \theta_1} \prod_{i=2}^{N-1} \frac{\partial \theta_{i+1}}{\partial \theta_i} \frac{\partial \mathcal{L}}{\partial \theta_N}
+\end{equation}
+where $\theta$ is a parameter, $i$ is the layer index. We see here that the gradient of the first layer is dependent of the gradient of all the following layers. We thus need to compute the gradient closest to loss first before computing the gradient of the earlier layers. This is called the \textit{backward propagation}.
+
+This update of the parameters is done following an optimizer policy. Those optimizers depends on hyperparameters. The ones used in this thesis are:
 
 \begin{enumerate}
   \item SGD (Stochastic Gradient Descent). This is the simplest optimizer, it depend on only one hyperparameter, the learning rate $\lambda$ (LR) and update the parameters $\theta$ following \begin{equation}
-      \theta_{i+1} = \theta_i - \lambda \frac{\partial \mathcal{L}}{\partial \theta}\bigg|_{\theta_i}
+      \theta_{t+1} = \theta_t - \lambda \frac{\partial \mathcal{L}}{\partial \theta}\bigg|_{\theta_t}
     \end{equation}
-    where $i$ is the step indice. It is a powefull optimizer but is very sensible to local minima of the loss in the parameter space as illustrated in figure \ref{fig:ml:sgd}.
+    where $t$ is the step index. It is a powerful optimizer but is very sensible to local minima of the loss in the parameters phase space as illustrated in figure \ref{fig:ml:sgd}.
 
-  \item Adam %TODO
+  \item Adam \cite{kingma_adam_2017}. The concept is, in short, to have and SGD but with momentum. Adam possess two momentum $m(\beta_1)$ and $v(\beta_2)$ which are respectively proportional to $\frac{\partial \mathcal{L}}{\partial \theta}$ and $(\frac{\partial \mathcal{L}}{\partial \theta})^2$. $\beta_1$ and $\beta_2$ are hyperparameters that dictate the moment update at each optimization step. The parameters are then upgraded following \begin{align}
+      m_{t+1} &= \beta_1 m_t + (1 - \beta_1) \frac{\partial \mathcal{L}}{\partial \theta} \\
+      v_{t+1} &= \beta_2 v_t + (1 - \beta_2) \bigg(\frac{\partial \mathcal{L}}{\partial \theta}\bigg)^2 \\
+      \theta_{t+1} &= \theta{i} - \lambda \frac{m_{t+1}}{\sqrt{v_{t+1}} + \epsilon}
+    \end{align}
+    where $\epsilon$ is a small number to prevent divergence when $v$ is close to 0. These momentums allow to overcome small local minima in the parameters phase space as illustrated in figure \ref{fig:ml:sgd}.
 \end{enumerate}
 
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[height=6cm]{images/ml/sgd.jpg}
-    \caption{Illustration of SGD falling into a local minimma}
+    \caption{Illustration of SGD falling into a local minima}
     \label{fig:ml:sgd}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{images/ml/Adam.jpg}
+    \caption{Illustration of the Adam momentum allowing it to overcome local minima}
+    \label{fig:ml:adam}
   \end{subfigure}
   \caption{}
 \end{figure}
 
-\subsubsection{Potential pitfall}
+\subsubsection{Scheduler policies}
+
+Sometimes we want to update our hyperparameters or take a set of action during the training procedure. We use for this scheduler policies, for example a common policy is a decrease of the learning rate after each epochs. The reasoning is that if the learning rate is too high, the optimizer will continuously miss the minimum and oscillate around it. By reducing the learning rate, we allow it to make more fine steps in the parameters phase space, hopefully converging to the true minima.
+
+Another policy that is often use is the save of the best model. In some situation, the loss value after each epoch will strongly oscillate or can even worsen. This policy allow us to keep the best version of the model attained during the training phase.
+
+\subsection{Potential pitfalls}
 \label{sec:ml:pitfall}
+
+Apart from being stuck in local minima, there is also other behaviors and effects we want to prevent during training.
+
+\subsubsection{Overtraining}
+This happen when the network learn the specificities of the training dataset instead of a more general representation of the underlying data distribution. This can happen if there is not enough data in comparison to the number of learning parameters, if the data contains some specific signatures specific to the training dataset or if trains for too long on the same dataset. This behavior is illustrated in figure \ref{fig:ml:overtraining}. Overtraining can be fought in multiple ways, for example:
+\begin{itemize}
+  \item \textbf{More data}. By having more data in the training dataset, the network will not be able the specificities of every data.
+  \item \textbf{Less parameters}. By reducing the number of parameters, we reduce the computing and learning capacities of the network. This will force it to fallback to generalist behaviours.
+  \item \textbf{Dropout}. This technique implies to randomly set part of the neural network to 0. By doing this, we force the redundancy in its computing capability and, in a way, modify the data decreasing the possibility for specific learning.
+  \item \textbf{Early stopping}. During the training we monitor the network performance over a validation dataset. The network does not train on this dataset and thus cannot learn its specificities. If the loss on the training dataset diverge too much from the loss on the validation dataset, we can stop the training earlier to prevent it from overtraining.
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/ml/overtraining.jpg}
+    \caption{Illustration of overtraining. The task at hand is to determine depending on two input variable $x$ and $y$ if the data belong to the dataset $A$ or the dataset $B$. The expected boundary between the two dataset is represented in grey. A possible boundary learnt by overtraining is represented in brown.}
+    \label{fig:ml:overtraining}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/ml/vanishing_illus.jpg}
+    \caption{Illustration of a very simple NN}
+    \label{fig:ml:vanishing}
+  \end{subfigure}
+  \caption{}
+\end{figure}
+
+\subsubsection{Gradient vanishing}
+Gradient vanishing is the effect of the gradient being so small for the upper layer that the parameters are barely updated after each step. This cause the network to be unable to converge to the minima.
+
+This comes from the way the gradient descent is calculated. Imagine a simple network composed of three fully connected layers: the input layer, a intermediate layer and the output layer. Let $L$ be the loss, $\theta_1$ the parameter between the input and the intermediate layer and $\theta_2$ the parameter between the intermediate and output layer. This network is schematized in figure \ref{fig:ml:vanishing}.
+
+The gradient for $\theta_1$ will be computed using the chain rule presented in equation \ref{eq:ml:backward}. Because $\theta_1$ depends on $\theta_2$, if the gradient of $\theta_2$ is small, so will be the gradient of $\theta_1$. Now if we would have much more layer, we can see how the subsequent multiplication of small gradients would lead to very small update of the parameters thus ``\textit{vanishing gradient}''.
+
+Multiple actions can be taken to prevent this effect such as:
+\begin{itemize}
+  \item \textbf{Batch normalization}: In this case we apply a normalization layer that will normalize the data so that, let $D$ be the data, $\langle D \rangle = 0$ and $\sigma D = 1$. This help the weight of the network to maintain an appropriate scale.
+  \item \textbf{Residual Network (ResNet)} \cite{he_deep_2016}: Residual network is a technique for neural network in which, instead of just sequentially feeding the results of each layer to the next one, you ask each layer to calculate the residual of the input data. This technique is illustrated in figure \ref{fig:ml:resnet}. 
+\end{itemize}
+
+
+\begin{figure}
+  \centering
+  \includegraphics[height=6cm]{images/ml/resnet.jpg}
+  \caption{Illustration of the ResNet framework}
+  \label{fig:ml:resnet}
+\end{figure}
+\end{document}

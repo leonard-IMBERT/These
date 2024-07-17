@@ -78,12 +78,13 @@ headsepline, % Uncomment to get a line under the header
 \setlength\epigraphrule{0pt}
 %\epigraphfontsize{\small\itshape}
 
-
+\usepackage{subfiles}
 
 
 \title{Mesure de précision des paramètres solaires de mélange de neutrinos avec le système des sPMTs de JUNO et test de l'unitarité de la matrice PMNS}
 \author{Léonard Imbert}
 \date{TODO}
+
 
 \begin{document}
 
@@ -92,50 +93,6 @@ headsepline, % Uncomment to get a line under the header
 \input{colors.tex}
 %\maketitle
 \input{./Couverture-these/pagedegarde}
-
-% ============= ABRV ============
-
-\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
-
-  \textbf{ACU} & \textbf{A}utomatic \textbf{C}alibration \textbf{U}nit \\
-  \textbf{BDT} & \ \textbf{B}oosted \textbf{D}ecision \textbf{T}ree \\
-  \textbf{CD} & \textbf{C}entral \textbf{D}etector \\
-  \textbf{CLS} & \textbf{C}able \textbf{L}oop \textbf{S}ystem \\
-  \textbf{CNN} & \textbf{C}onvolutional \textbf{NN} \\
-  \textbf{DN} & \textbf{D}ark \textbf{N}oise \\
-  \textbf{DNN} & \textbf{D}eep \textbf{NN} \\
-  \textbf{FCDNN} & \textbf{F}ully \textbf{C}onnected \textbf{D}eep \textbf{NN} \\
-  \textbf{GNN} & \textbf{G}raph \textbf{NN} \\
-  \textbf{GT} & \textbf{G}uiding \textbf{T}ube \\
-  \textbf{IBD} & \textbf{I}nverse \textbf{B}eta \textbf{D}ecay\\
-  \textbf{IO} & \textbf{I}nverse \textbf{O}rdering\\
-  \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory \\
-  \textbf{LPMT} & \textbf{L}arge \textbf{PMT} \\
-  \textbf{LS} & \textbf{L}iquid \textbf{S}cintillator \\
-  \textbf{LR} & \textbf{L}earning \textbf{R}ate \\
-  \textbf{MSE} & \textbf{M}ean \textbf{S}quared \textbf{E}rror \\
-  \textbf{MC} & \textbf{M}onte \textbf{C}arlo simulation \\
-  \textbf{ML} & \textbf{M}achine \textbf{L}earning \\
-  \textbf{NMO} & \textbf{N}eutrino \textbf{M}ass \textbf{O}rdering\\
-  \textbf{NN} & \textbf{N}eural \textbf{N}etwork \\
-  \textbf{NO} & \textbf{N}ormal \textbf{O}rdering\\
-  \textbf{NPE} & \textbf{N}umber of \textbf{P}hoto \textbf{E}lectron \\
-  \textbf{OSIRIS} & \textbf{O}nline \textbf{S}cintillator \textbf{I}nternal \textbf{R}adioactivity \textbf{I}nvestigation \textbf{S}ystem \\
-  \textbf{PE} & \textbf{P}hoto \textbf{E}lectron \\
-  \textbf{PMT} & \textbf{P}hoto-\textbf{M}ultipliers \textbf{T}ubes \\
-  \textbf{PReLU} & \textbf{P}arametrized \textbf{Re}ctified \textbf{L}inear \textbf{U}nit \\
-  \textbf{ROV} & \textbf{R}emotely \textbf{O}perated under-LS \textbf{V}ehicle \\
-  \textbf{ReLU} & \textbf{Re}ctified \textbf{L}inear \textbf{U}nit \\
-  \textbf{SGD} & \textbf{S}tochastic \textbf{G}radient \textbf{D}escent \\
-  \textbf{SPMT} & \textbf{S}mall \textbf{PMT} \\
-  \textbf{TAO} & \textbf{T}aishan \textbf{A}ntineutrino \textbf{O}servatory \\
-  \textbf{TR Area} & \textbf{T}otal \textbf{R}eflexion \textbf{Area} \\
-  \textbf{TTS} & \textbf{T}ime \textbf{T}ransit \textbf{S}pread \\
-  \textbf{TT} & \textbf{T}op \textbf{T}racker \\
-  \textbf{WCD} & \textbf{W}ater \textbf{C}herenkov \textbf{D}etector \\
-
-\end{abbreviations}
-
 
 % ============ COMMON VALUES ========
 
@@ -157,15 +114,16 @@ headsepline, % Uncomment to get a line under the header
 \pagestyle{thesis}
 \singlespacing
 
-\input{chapters/remerciements}
+\subfile{chapters/remerciements}
 
 \input{chapters/introduction}
 
 \input{chapters/neutrino_physics}
 
-\input{chapters/juno}
+\subfile{chapters/juno}
+%\input{chapters/juno}
 
-\input{chapters/machine_learning}
+\subfile{chapters/machine_learning}
 
 \input{chapters/jcnn}
 
@@ -178,6 +136,63 @@ headsepline, % Uncomment to get a line under the header
 \input{chapters/joint_fit}
 
 \chapter{Conclusion}
+
+\cleardoublepage
+
+\listoftables \addcontentsline{toc}{chapter}{\listtablename} \mtcaddchapter
+
+\cleardoublepage
+
+\listoffigures \addcontentsline{toc}{chapter}{\listfigurename} \mtcaddchapter
+
+\cleardoublepage
+
+\addcontentsline{toc}{chapter}{\abbrevname}
+% ============= ABRV ============
+
+\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
+
+  \textbf{ACU} & \textbf{A}utomatic \textbf{C}alibration \textbf{U}nit \\
+  \textbf{BDT} & \ \textbf{B}oosted \textbf{D}ecision \textbf{T}ree \\
+  \textbf{CD} & \textbf{C}entral \textbf{D}etector \\
+  \textbf{CLS} & \textbf{C}able \textbf{L}oop \textbf{S}ystem \\
+  \textbf{CNN} & \textbf{C}onvolutional \textbf{NN} \\
+  \textbf{DNN} & \textbf{D}eep \textbf{NN} \\
+  \textbf{DN} & \textbf{D}ark \textbf{N}oise \\
+  \textbf{FCDNN} & \textbf{F}ully \textbf{C}onnected \textbf{D}eep \textbf{NN} \\
+  \textbf{GNN} & \textbf{G}raph \textbf{NN} \\
+  \textbf{GT} & \textbf{G}uiding \textbf{T}ube \\
+  \textbf{IBD} & \textbf{I}nverse \textbf{B}eta \textbf{D}ecay\\
+  \textbf{IO} & \textbf{I}nverse \textbf{O}rdering\\
+  \textbf{JUNO} & \textbf{J}iangmen \textbf{U}nderground \textbf{N}eutrino \textbf{O}bservatory \\
+  \textbf{LPMT} & \textbf{L}arge \textbf{PMT} \\
+  \textbf{LR} & \textbf{L}earning \textbf{R}ate \\
+  \textbf{LS} & \textbf{L}iquid \textbf{S}cintillator \\
+  \textbf{MC} & \textbf{M}onte \textbf{C}arlo simulation \\
+  \textbf{ML} & \textbf{M}achine \textbf{L}earning \\
+  \textbf{MSE} & \textbf{M}ean \textbf{S}quared \textbf{E}rror \\
+  \textbf{NMO} & \textbf{N}eutrino \textbf{M}ass \textbf{O}rdering\\
+  \textbf{NN} & \textbf{N}eural \textbf{N}etwork \\
+  \textbf{NO} & \textbf{N}ormal \textbf{O}rdering\\
+  \textbf{NPE} & \textbf{N}umber of \textbf{P}hoto \textbf{E}lectron \\
+  \textbf{OSIRIS} & \textbf{O}nline \textbf{S}cintillator \textbf{I}nternal \textbf{R}adioactivity \textbf{I}nvestigation \textbf{S}ystem \\
+  \textbf{PE} & \textbf{P}hoto \textbf{E}lectron \\
+  \textbf{PMT} & \textbf{P}hoto-\textbf{M}ultipliers \textbf{T}ubes \\
+  \textbf{PReLU} & \textbf{P}arametrized \textbf{Re}ctified \textbf{L}inear \textbf{U}nit \\
+  \textbf{ROV} & \textbf{R}emotely \textbf{O}perated under-LS \textbf{V}ehicle \\
+  \textbf{ReLU} & \textbf{Re}ctified \textbf{L}inear \textbf{U}nit \\
+  \textbf{ResNet} & \textbf{Res}idual \textbf{Net}work \\
+  \textbf{SGD} & \textbf{S}tochastic \textbf{G}radient \textbf{D}escent \\
+  \textbf{SPMT} & \textbf{S}mall \textbf{PMT} \\
+  \textbf{TAO} & \textbf{T}aishan \textbf{A}ntineutrino \textbf{O}servatory \\
+  \textbf{TR Area} & \textbf{T}otal \textbf{R}eflexion \textbf{Area} \\
+  \textbf{TTS} & \textbf{T}ime \textbf{T}ransit \textbf{S}pread \\
+  \textbf{TT} & \textbf{T}op \textbf{T}racker \\
+  \textbf{WCD} & \textbf{W}ater \textbf{C}herenkov \textbf{D}etector \\
+
+\end{abbreviations}
+
+\cleardoublepage
 
 \printbibliography[heading=bibintoc]
 

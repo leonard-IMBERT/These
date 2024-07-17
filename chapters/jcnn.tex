@@ -1,6 +1,13 @@
 \chapter{Image recognition for IBD reconstruction with the SPMT system}
 \label{sec:jcnn}
 
+\epigraph{\textit{Dave} - Give me the position and momentum, HAL. \\
+\textit{HAL} - I'm afraid I can't do that Dave. \\
+\textit{Dave} - What's the problem ? \\
+\textit{HAL} - I think you know what the problem is just as well as I do. \\
+\textit{Dave} - What are you talking about, HAL? \\
+\textit{HAL} - $\sigma_x \sigma_p \geq \frac{\hbar}{2}$}
+
 As explained in chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) and the Small Photomultiplier (SPMT). Both of the system observe the same physics event inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see section \ref{sec:juno:LPMT}, a thousands versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
 
 They are complementary in their strengths and weaknesses and support each other. One important point is their differences in expected resolution, the LPMT system outperform largely the SPMT system but is subject to effects such as charge  non linearity \cite{juno_collaboration_calibration_2021} that could bias the reconstruction, effect that the SPMT system is impervious to. This topic will be studied in more detail in chapter \ref{sec:joint_fit}. Also, due to the dynamic range of the LPMT, in case of high energy and high density event such as core-collapse supernova, the LPMT system could saturate and the lower photo-coverage become a benefit.
