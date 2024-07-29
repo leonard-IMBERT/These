@@ -68,8 +68,6 @@ The architecture we use is derived from the VGG-16 architecture \cite{simonyan_v
   \item \textbf{Loss}: The loss function. In this work we study two different loss function $(E+V)$ and $(E_r + V_r)$ detailed below.
 \end{itemize}
 
-
-We explore in this work two different activation functions
 \begin{align}
   (E+V)(E, x, y, z) &= \bigg\langle (E - E_{true})^2 + 0.85 \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2 \bigg\rangle \\
   (E_r + V_r)(E, x, y, z) &=  \bigg\langle \frac{(E - E_{true}) ^ 2}{E_{true}} + \frac{10}{R} \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2 \bigg\rangle
@@ -81,6 +79,14 @@ where $R$ is the radius of the CD. With the energy in MeV and the distance in me
 \end{itemize}
 The idea is that: due to the inherent statistic uncertainty over the number of collected Number of Photo Electrons (NPE), the absolute resolution $\sigma (E - E_{true})$ will be larger at higher energy than at low energy. But we expect the \textit{relative} energy resolution $\frac{\sigma(E - E_{true})}{E_true}$ to be smaller at high energy than lower energy as illustrated in figure \ref{fig:juno:rec:qtmle}. Because of this, by using simple MSE the most important part in the loss come from the high energy part of the dataset whereas with a relative MSE, the most important become the low energy events in the dataset. We hope that by using a relative MSE, the neural network will focus on low energy events where the reconstruction is considered the hardest part of the dataset.
 
+
+On top those generated models, we define 4 hand tailored models:
+\begin{itemize}
+  \item ``gen\_0'': $N_{blocks} = 4$, $N_{channels} = 64$, FCDNN configuration: $1024 * 2 + 512 * 2$, Loss $\coloneq E+V$
+  \item ``gen\_1'': $N_{blocks} = 4$, $N_{channels} = 64$, FCDNN configuration: $1024 * 2 + 512 * 2$, Loss $\coloneq E_r+V_r$
+  \item ``gen\_2'': $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\coloneq E+V$
+  \item ``gen\_3'': $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\coloneq E_r+V_r$
+\end{itemize}
 
 \begin{table}[ht]
   \centering
@@ -180,7 +186,13 @@ Another problematic that happens with this representation, and this is not depen
 %   \end{itemize}
 
 
-In this study we use one million events coming from the full JUNO official monte-carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). To put in perspective, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amount to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.
+In this study we will discuss two datasets of one millions events:
+\begin{itemize}
+  \item \textbf{J21}: The first one comes from the JUNO official mc simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the NN the classical algorithm presented in \cite{lebrin_towards_2022} was developped. This dataset is used as a reference for comparison to classical algorithm. The data in this dataset is \textit{detsim} level (see section \ref{sec:juno:software}), so where only the physic is simulated. The charge and time biases and uncertainties are added using toy MC adjusted using \cite{cao_mass_2021, abusleme_mass_2022}.
+  \item \textbf{J23}: The second comes from the JUNO official monte-carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). The data is \textit{calib} level (see section \ref{sec:juno:software}). Here the charge waveform integration, time window resolution and trigger decision are all simulated inside the software. This dataset is more realistic and is used to confirm the performance of our algorithm.
+\end{itemize}
+
+To put in perspective this amount of data, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amount to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.
 
 While we expect and hope the monte-carlo simulation to give use a realistic representation of the detector, there could be effect, even after the fine-tuning on calibration data, that the simulation cannot handle. Thus, once the calibration will be available, we will need to evaluate, and if needed retrain, the network on calibration data to establish definitive performances.
 
@@ -188,29 +200,99 @@ The data used during this analysis is monte carlo data using the official JUNO s
 
 Those events can be considered as ``optimistic'' as there is no pile-up with potential background or other IBD.
 
-The dark noise and time window come from the monte-carlo simulation of the electronic and trigger system. The dark noise rate used in this study is coming from studies and calibration of the PMTs outside of the experimental setup \cite{cao_mass_2021, abusleme_mass_2022}.
-
-
 \subsection{Data characteristics}
-%TODO: Faire un bestiaire de diofferents type d'event
+
+To delve a bit into the kind of data we will use, you can find in figure \ref{fig:jcnn:pmt_rep} the repartition of the SPMTs in the image. The color represent the number of SPMTs per pixel.
 
 \begin{figure}[ht]
   \centering
-  \begin{subfigure}[b]{0.48\textwidth}
+  \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
+  \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
+  \label{fig:jcnn:pmt_rep}
+\end{figure}
+
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
-    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
-    \label{fig:jcnn:pmt_rep}
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_0_charge.png}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.48\textwidth}
+  \begin{subfigure}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\textwidth]{images/jcnn/illustration_event.png}
-    \caption{Example of the charge channel of an event as seen by the CNN \textbf{(Need to redo the title)}}
-    \label{fig:jcnn:event_example}
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_0_time.png}
+  \end{subfigure}
+  \caption{Example of a high energy, radial event. We see a concentration of the charge on the bottom right of the image, clear indication of a high radius event. \textbf{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. \textbf{On the right}: The time channel in nanoseconds.}
+  \label{fig:jcnn:event:hrhe}
+\end{figure}
+
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_1_charge.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_1_time.png}
+  \end{subfigure}
+  \caption{Example of a low energy, radial event. The signal here is way less explicit, we can kind of guess that the event is located in the top middle of the image. \textbf{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. \textbf{On the right}: The time channel in nanoseconds.}
+  \label{fig:jcnn:event:hrle}
+\end{figure}
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_2_charge.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_2_time.png}
+  \end{subfigure}
+  \caption{Example of a high energy, central event. In this image we can see a lot of signal but uniformly spread, this is indicative of a central event. \textbf{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. \textbf{On the right}: The time channel in nanoseconds.}
+  \label{fig:jcnn:event:lrhe}
+\end{figure}
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_3_charge.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/illustration_3_time.png}
+  \end{subfigure}
+  \caption{Example of a low energy, central event. Here there is no clear signal, the uniformity of the distribution should make it central. \textbf{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. \textbf{On the right}: The time channel in nanoseconds.}
+  \label{fig:jcnn:event:lrle}
+\end{figure}
+
+In figures \ref{fig:jcnn:event:hrhe}, \ref{fig:jcnn:event:hrle}, \ref{fig:jcnn:event:lrhe} and \ref{fig:jcnn:event:lrle} are presented events from J23 for different positions and energies. We see some characteristics and we can instinctively understand how the CNN could discriminate different situations.
+
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/pe_mev.png}
+    \caption{Distribution of PE/MeV in the J23 Dataset. This distribution is profiled and fitted using equation \ref{eq:jcnn:pe_per_mev}}
+    \label{fig:jcnn:pe_per_mev}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/jcnn/pe_vs_mev.png}
+    \caption{\textbf{On top}: Distribution of PE vs Energy. \textbf{On bottom}: Using the values extracted in \ref{fig:jcnn:pe_per_mev}, we calculate the ration signal over background + signal}
+    \label{fig:jcnn:pe_vs_mev}
   \end{subfigure}
   \caption{}
 \end{figure}
+
+To give an idea of the strength of the signal in comparison to the dark noise background, figure \ref{fig:jcnn:pe_per_mev} present the distribution of the ration NPE over the deposited energy. Assuming a linear response of the LS we can model:
+\begin{align}
+  NPE_{tot} &= E_{dep} \cdot P_{mev} + D_{N} \\
+  \frac{NPE_{tot}}{E_{dep}} &= P_{mev} + \frac{D_{N}}{E_{dep}} \label{eq:jcnn:pe_per_mev}
+\end{align}
+where $NPE_{tot}$ is the total number of PE detected by the event, $P_{mev}$ is the mean number of PE detected per MeV and $D_{N}$ is the dark noise contribution that is considered energy independent. In the case where the readout time window is dependent of the energy the dark noise contribution become energy dependant, also the LS response is realistically energy dependant but figure \ref{fig:jcnn:pe_per_mev} shows that we hare heavily dominated by statistical uncertainties which is why we are using this simple model.
+
+The fit gives shows a light yield of 40.78 PE/MeV and a dark noise contribution of 4.29 NPE. As shown in figure \ref{fig:jcnn:pe_vs_mev}, the physics makes for 90\% of the signal at low energy.
+
 
 \section{Results}
 
@@ -227,7 +309,70 @@ We define multiple energy in JUNO:
   \item $E_{rec}$: The reconstructed energy by the reconstruction algorithm. The expected value depend on the algorithm we discuss about. For example the algorithm presented in section \ref{sec:juno:reco} is reconstructing $E_{rec}$ while the ones presented in section \ref{sec:juno:ml} reconstruct $E_{dep}$.
 \end{itemize}
 
-In this study, we will set $E_{rec}$ as our target for energy reconstruction. This choice is motivated by the ease with which we can retrieve this information in the monte-carlo data while $E_{vis}$  is less trivial to retrieve.
+In this study, we will set $E_{rec}$ as our target for energy reconstruction. This choice is motivated by the ease with which we can retrieve this information in the monte-carlo data while $E_{vis}$ is less trivial to retrieve.
+
+\subsection{J21 results}
+
+Those results comes from the ``gen\_30'' model, meaning then 30th model generated using the table \ref{tab:jcnn:hyper} or
+\begin{itemize}
+ \item ``gen\_30'': $N_{blocks} = 3$, $N_{channels} = 32$, FCDNN configuration: 2048 * 2 + 1024 * 2, Loss $\coloneq E+V$
+\end{itemize}
+
+The performances of its reconstruction are presented in blue in figure \ref{fig:jcnn:vic_cnn}. Superimposed in black is the performances of the classical algorithm from \cite{lebrin_towards_2022}. By looking at the figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution with the exception of high and low energy event.
+
+This is explained by looking at the true and reconstructed energy distributions in figure \ref{fig:jcnn:edis}. We see that the distribution are similar for energy between 3 and 8 MeV but there is an excess of reconstructed energies around 1.5 and 9 MeV while a lack of reconstructed energy for 1 and 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV. The first observation is a physics phenomena: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few event with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy is deposited. The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region , thus a small variance but the bias become very high (figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvETC.png}
+    \caption{Resolution and bias of energy reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvRTC.png}
+    \caption{Resolution and bias of energy reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvETC.png}
+    \caption{Resolution and bias of radius reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvRTC.png}
+    \caption{Resolution and bias of radius reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvRTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvPTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}
+  \end{subfigure}
+  \caption{Reconstruction performance of the ``gen\_30'' model on J21 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}
+  \label{fig:jcnn:vic_cnn}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jcnn/vic_cnn/e_dis.png}
+  \caption{Distribution of ``gen\_30'' reconstructed energy and true energy of the analysis dataset (J21)}
+  \label{fig:jcnn:edis}
+\end{figure}
+
 
 
 %\begin{itemize}

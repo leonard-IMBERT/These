@@ -48,6 +48,16 @@ $i$ being the training iteration index. This needs the expression of $\mathcal{L
 
 This description of neural networks as layer introduced the principle of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describe the NN or its training are designated as \textit{hyperparameters}.
 
+The loss $\mathcal{L}$ described above is a score representing how well the NN is doing. As seen above, it needs to be differentiable with respect to the parameter of the NN. Depending if we try to minimize or maximize it, it need to posses a minima or a maxima. For example when doing \textit{regression}, i.e. produce a scalar result, a common loss is the Mean Square Error (MSE). Let $i$ be our dataset, $y_i$ be the target scalar, $x_i$ the input data and $f(x_i, \mathbb{\theta})$ the result of the network. The network here is modelled by $f$, and its parameter by the set $\mathbb{\theta}$
+\begin{equation}
+  \mathcal{L} \coloneq MSE = \frac{1}{N} \sum_i^N (y_i - f(x_i))^2
+\end{equation}
+Another common loss function is the Mean Absolute Error (MAE)
+\begin{equation}
+  \mathcal{L} \coloneq MAE = \frac{1}{N} \sum_i^N |y_i - f(x_i)|
+\end{equation}
+
+
 \subsection{Fully Connected Deep Neural Network (FCDNN)}
 \label{sec:ml:fcdnn}
 
@@ -224,9 +234,27 @@ This update of the parameters is done following an optimizer policy. Those optim
   \caption{}
 \end{figure}
 
+The LR is a crucial parameter in the training of NN, as illustrated in figure \ref{fig:ml:optims}. To prevent possible issues, we setup scheduler policies.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{scripts/plots/MAE_illustration.png}
+    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MAE Loss. We see here that it has trouble reaching the minima due to the gradient being constant.}
+    \label{fig:ml:optims:mae}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{scripts/plots/MSE_illustration.png}
+    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MAE Loss. We see two different behavior: A smooth one (orange and red) when the LR is small enough and a more chaotic one when the LR is too high.}
+  \end{subfigure}
+  \caption{Illustration of the SGD optimizer. In blue is the value of the loss function, orange, green and red are the path taken by the optimized parameter during the training for different LR.}
+  \label{fig:ml:optims}
+\end{figure}
+
 \subsubsection{Scheduler policies}
 
-Sometimes we want to update our hyperparameters or take a set of action during the training procedure. We use for this scheduler policies, for example a common policy is a decrease of the learning rate after each epochs. The reasoning is that if the learning rate is too high, the optimizer will continuously miss the minimum and oscillate around it. By reducing the learning rate, we allow it to make more fine steps in the parameters phase space, hopefully converging to the true minima.
+Sometimes we want to update our hyperparameters or take a set of action during the training procedure. We use for this scheduler policies, for example a common policy is a decrease of the learning rate after each epochs. The reasoning is that if the learning rate is too high, the optimizer will continuously miss the minimum and oscillate around it (figure \ref{fig:ml:optims:mae}). By reducing the learning rate, we allow it to make more fine steps in the parameters phase space, hopefully converging to the true minima.
 
 Another policy that is often use is the save of the best model. In some situation, the loss value after each epoch will strongly oscillate or can even worsen. This policy allow us to keep the best version of the model attained during the training phase.
 
