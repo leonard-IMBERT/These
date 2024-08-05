@@ -8,7 +8,7 @@
 \textit{Dave} - What are you talking about, HAL? \\
 \textit{HAL} - $\sigma_x \sigma_p \geq \frac{\hbar}{2}$}
 
-As explained in chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) and the Small Photomultiplier (SPMT). Both of the system observe the same physics event inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see section \ref{sec:juno:LPMT}, a thousands versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
+As explained in chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) and the Small Photomultiplier (SPMT). Both of the system observe the same physics event inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see section \ref{sec:juno:LPMT}), a thousands versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
 
 They are complementary in their strengths and weaknesses and support each other. One important point is their differences in expected resolution, the LPMT system outperform largely the SPMT system but is subject to effects such as charge  non linearity \cite{juno_collaboration_calibration_2021} that could bias the reconstruction, effect that the SPMT system is impervious to. This topic will be studied in more detail in chapter \ref{sec:joint_fit}. Also, due to the dynamic range of the LPMT, in case of high energy and high density event such as core-collapse supernova, the LPMT system could saturate and the lower photo-coverage become a benefit.
 
@@ -318,9 +318,18 @@ Those results comes from the ``gen\_30'' model, meaning then 30th model generate
  \item ``gen\_30'': $N_{blocks} = 3$, $N_{channels} = 32$, FCDNN configuration: 2048 * 2 + 1024 * 2, Loss $\coloneq E+V$
 \end{itemize}
 
-The performances of its reconstruction are presented in blue in figure \ref{fig:jcnn:vic_cnn}. Superimposed in black is the performances of the classical algorithm from \cite{lebrin_towards_2022}. By looking at the figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution with the exception of high and low energy event.
+The performances of its reconstruction are presented in blue in figure \ref{fig:jcnn:vic_cnn}. Superimposed in black is the performances of the classical algorithm from \cite{lebrin_towards_2022}.
 
-This is explained by looking at the true and reconstructed energy distributions in figure \ref{fig:jcnn:edis}. We see that the distribution are similar for energy between 3 and 8 MeV but there is an excess of reconstructed energies around 1.5 and 9 MeV while a lack of reconstructed energy for 1 and 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV. The first observation is a physics phenomena: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few event with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy is deposited. The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region , thus a small variance but the bias become very high (figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
+\subsubsection{Energy reconstruction}
+
+By looking at the figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution with the exception of high and low energy event.
+
+This is explained by looking at the true and reconstructed energy distributions in figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies between 3 and 8 MeV but there is an excess of reconstructed energies around 1.5 and 9 MeV while a lack of reconstructed energy for 1 and 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
+
+The first observation is a physics phenomena: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few event with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy is deposited.
+
+The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region , thus a small variance but the bias become very high (figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
+
 
 \begin{figure}[ht]
   \centering
@@ -352,7 +361,7 @@ This is explained by looking at the true and reconstructed energy distributions 
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvRTC.png}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvTTC.png}
     \caption{Resolution and bias of radius reconstruction vs $\theta$}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC}
   \end{subfigure}
@@ -366,6 +375,66 @@ This is explained by looking at the true and reconstructed energy distributions 
   \label{fig:jcnn:vic_cnn}
 \end{figure}
 
+This behavior also explain the heavy bias at low energy in figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}. The energy bias of the CNN if fairly constant over the energy range, it is interesting to note that the energy bias depending on the radius is equivalent but of opposite sign of the classical algorithm (figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}). This behavior is studied in more detail in section \ref{sec:jcnn:combination}.
+
+\subsubsection{Vertex reconstruction}
+
+For the vertex reconstruction we do not study $x$, $y$ and $z$ independently but we use $R$ as a proxy observable. Figure \ref{fig:jcnn:vic_cnn:cnn_perf} shows the error distribution of the different vertex coordinates. We see that $R$ errors and biases are slightly superior to the cartesian coordinates, thus $R$ is a conservative proxy observable to discuss the subject of vertex reconstruction.
+
+The comparison of radius reconstruction between the classical algorithm and ``gen\_30'' are presented in the figures \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}.
+
+Radius reconstruction is worse than the classical algorithms in all configuration, in energy, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 25cm at low energy to 4cm at higher energy.
+
+When looking over the event radius, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 4 and 10cm of resolution in the central part of the detector $R < 15.2$ m and have a sudden spike of performance where we almost catch up to the classical method for more radial event $R > 15$ m. This is around this threshold that we start to see the effect of the TR area (see section \ref{sec:juno:reco}). In this region, the signal become more localised as shown in figure \ref{fig:jcnn:event:hrhe} versus figure \ref{fig:jcnn:event:lrhe} and the reflection can also present pattern dependant on the radius. This locality and specificity of the information must be helping the CNN to localize the event with more precision.
+
+The precision also worsen when looking at the edge of the image $\theta \approx 0$, $\theta \approx 2\pi$ respectively the top and bottom of the image, and when $\phi \approx -\pi$ and $\phi \approx \pi$ respectively the left and right side of the image. This is the confirmation that the deformation of the image is problematic for the event reconstruction.
+
+The bias in radius reconstruction is about the same order of magnitude depending of the energy but is of opposite sign. As for the energy, this behavior is studied in more details in section \ref{sec:jcnn:combination}. Over radius, $\theta$ and $\phi$ the bias is inconsistent, sometimes event better than the classical reconstruction and but also can much worse than the classical method. This could come from the specialisation of some filters in the convolutional layers for specific part of the detector that would still work ``correctly'' for close part but with much less precision.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_x.png}
+    \caption{Distribution of the error on reconstructed $x$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_x}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_y.png}
+    \caption{Distribution of the error on reconstructed $y$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_y}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_z.png}
+    \caption{Distribution of the error on reconstructed $z$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_z}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_r.png}
+    \caption{Distribution of the error on reconstructed $R$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_r}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_theta.png}
+    \caption{Distribution of the error on reconstructed $\theta$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_theta}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_phi.png}
+    \caption{Distribution of the error on reconstructed $\phi$ by ``gen\_30''}
+    \label{fig:jcnn:vic_cnn:cnn_delta_phi}
+  \end{subfigure}
+  \caption{Error distribution of the different component of the vertex by ``gen\_30''. The reconstructed component are $x$, $y$ and $z$ but we see similar behavior in the error of $R$, $\theta$ and $\phi$.}
+  \label{fig:jcnn:vic_cnn:cnn_perf}
+\end{figure}
+
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/jcnn/vic_cnn/e_dis.png}
@@ -374,6 +443,8 @@ This is explained by looking at the true and reconstructed energy distributions 
 \end{figure}
 
 
+\subsection{Combination of classic and ML estimator}
+\label{sec:jcnn:combination}
 
 %\begin{itemize}
 %  \item We want to reconstruct the E from $\bar{\nu_e}$
