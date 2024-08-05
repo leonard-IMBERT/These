@@ -460,6 +460,50 @@ The bias in radius reconstruction is about the same order of magnitude depending
 %    \end{itemize}
 %\end{itemize}
 
+As it has been presented in previous section, there is instances where the reconstructed energy and vertex behave differently between the classic algorithm. For instanc, if we look at figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the at low energy, the classical algorithm seems to underestimate this radius. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are repectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.
+\begin{align}
+  E[\theta_{N}] = \mu_N + X; ~&~ \mathrm{Var}[\theta_{N}] = \sigma^2_{N} \\
+  E[\theta_{C}] = \mu_C + X; ~&~ \mathrm{Var}[\theta_{C}] = \sigma^2_{C}
+\end{align}
+where $\mu$ is the bias of the estimator and $\sigma^2$ its variance.
+
+Now if we were to combine the two esitmators using a simple mean
+\begin{equation}
+  \label{eq:jcnn:combi}
+  \hat{\theta}(X) = \frac{1}{2} ( \theta_{N}(X) + \theta_{C}(X) ) \\
+\end{equation}
+then the variance and mean would follow
+\begin{align}
+  E[\hat{\theta}] & = \frac{1}{2}E[\theta_N] + \frac{1}{2}E[\theta_X]\\
+                  & = \frac{1}{2}(\mu_N + X + \mu_C + X) \\
+                  & = \frac{1}{2}(\mu_N + \mu_C) + X
+\end{align}
+\begin{align}
+  \mathrm{Var}[\hat{\theta}] & = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + 2 \cdot \frac{1}{4} \cdot \sigma_{NC} \\
+                             & = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + \frac{1}{2} \cdot \sigma_{NC} \\
+                             & = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + \frac{1}{2} \cdot \sigma_{N} \sigma_C \rho_{NC}
+\end{align}
+Where $\sigma_{NC}$ is the covariance between $\theta_N$ and $\theta_C$ and $\rho_{NC}$ their correlation.
+
+We see immediately that if the two estimators are of opposite bias, the bias of the resulting estimator is reduced. For the variance, it depends of $\rho_{NC}$ but in this case if $\sigma^2_C$ is close to $\sigma^2_N$ then even for $\rho_{NC} \lneq 1$ then we can gain in resolution.
+
+By generalising the equation \ref{eq:jcnn:combi} to
+\begin{equation}
+  \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C; ~ \alpha \in [0, 1]
+\end{equation}
+we can determine an optimal $\alpha$ for two combined estimators. The estimators with the smallest variance
+\begin{equation}
+  \alpha = \frac{\sigma_C^2 - \sigma_N \sigma_C \rho_CN}{\sigma_N^2 + \sigma_C^2 - 2\sigma_N \sigma_C \rho_NC}
+\end{equation}
+and the estimator without bias
+\begin{equation}
+  \alpha = \frac{\mu_C}{\mu_C - \mu_N}
+\end{equation}
+See annex \ref{sec:annex:jcnn:alpha} for demonstration.
+
+Its pretty clear from the results shown in figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results.
+
+
 \section{Prospect}
 \label{sec:jcnn:prospect}
 

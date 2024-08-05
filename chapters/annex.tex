@@ -1,0 +1,51 @@
+\chapter{Calculation of optimal $\alpha$ for estimator combination}
+\label{sec:annex:jcnn:alpha}
+
+This annex the details of the determination of the optimal $\alpha$ for estimator combination presented in section \ref{sec:jcnn:combination}.
+
+As a reminder, the combine estimator $\hat{\theta}$ of $X$ is defined as
+\begin{equation}
+  \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C; ~ \alpha \in [0; 1]
+\end{equation}
+where $\theta_N$ and $\theta_C$ are both estimator of X.
+
+\section{Unbiased estimator}
+For the unbiased estimator, it is straight-forward. We search $\alpha$ such as $E[\hat{\theta}] = X$
+\begin{align}
+  E[\hat{\theta}] &= E[\alpha \theta_N + (1-\alpha) \theta_C] \\
+                  &= E[\alpha \theta_N] + E[(1-\alpha) \theta_C] \\
+                  &= \alpha E[\theta_N] + (1-\alpha) E[\theta_C] \\
+                  &= \alpha (\mu_N + X) + (1-\alpha) (\mu_C + X) \\
+                X &= \alpha \mu_N + \mu_C - \alpha \mu_C + X \\
+                0 &= \alpha (\mu_N - \mu_C) + \mu_C \\
+                \\
+                \Rightarrow \alpha &= \frac{\mu_C}{\mu_C - \mu_N}
+\end{align}
+
+\section{Optimal variance estimator}
+
+The $\alpha$ for this estimator is a bit more tricky. By expanding the variance we get
+\begin{align}
+  \mathrm{Var}[\hat{\theta}] &= \mathrm{Var}[\alpha \theta_N + (1-\alpha) \theta_C] \\
+                             &= \mathrm{Var}[\alpha \theta_N] + \mathrm{Var}[(1-\alpha) \theta_C] + \mathrm{Cov}[\alpha(1-\alpha) \theta_N \theta_C] \\
+                             &= \alpha^2 \sigma_N^2 + (1 - \alpha)^2 \sigma_C^2 + 2\alpha(1-\alpha) \sigma_N \sigma_C \rho_{NC}
+\end{align}
+where, as a reminder, $\rho_{NC}$ is the correlation factor between $\theta_C$ and $\theta_N$.
+
+Now we try to find the minima of $\mathrm{Var}[\hat{\theta}]$ with respect to $\alpha$. For this we evaluate the derivative
+\begin{align}
+  \frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &= 2\alpha \sigma_N^2 - 2(1-\alpha) \sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} (1- 2\alpha) \\
+                                                    &= 2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC}
+\end{align}
+then find the minima and maxima of this derivative by evaluating
+\begin{align}
+  \frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &= 0 \\
+  2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} & = 0 \\
+  2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) &= 2\sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC} \\
+  \alpha & = \frac{\sigma_C^2 -  \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}} \label{eq:annex:jcnn:sing}
+\end{align}
+This equation shows only one solution which is a minima. From Eq. \ref{eq:annex:jcnn:sing} arise two singularities:
+\begin{itemize}
+  \item $\sigma_N = \sigma_C = 0$. This is not a problem because as physicists we never measure with an absolute precision, neither us or our detectors are perfect.
+  \item $\sigma_N = \sigma_C$ and $\rho_{CN} = 1$. In this case $\theta_C$ and $\theta_N$ are the same estimator in term of variance thus any value for $\alpha$ yield the same result: an estimator with the same varianve as the original ones.
+\end{itemize}
