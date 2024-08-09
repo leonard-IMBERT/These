@@ -114,6 +114,8 @@ Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{chan
   \item The standard deviation of the distance between the true and reconstructed vertex $\sigma V = \sigma |\vec{V} - \vec{V}_{true}|$. This is an indicator if the precision in our vertex reconstruction.
 \end{itemize}
 
+The models were developped in Python using the pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} gpus. The A100 was split in two so for those training the accessible gpu memory was 20 Gb making it impossible to train somes of the architecture due to memory consumption.
+
 
 %Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
 %\begin{equation}
@@ -322,9 +324,9 @@ The performances of its reconstruction are presented in blue in figure \ref{fig:
 
 \subsubsection{Energy reconstruction}
 
-By looking at the figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution with the exception of high and low energy event.
+By looking at the figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution. Only at the end of the energy range does the resolution get a little better.
 
-This is explained by looking at the true and reconstructed energy distributions in figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies between 3 and 8 MeV but there is an excess of reconstructed energies around 1.5 and 9 MeV while a lack of reconstructed energy for 1 and 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
+This is explained by looking at the true and reconstructed energy distributions in figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies before 8 MeV but there is an excess of event reconstructed with energies around 9 MeV while a lack of them for 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
 
 The first observation is a physics phenomena: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few event with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy is deposited.
 
@@ -375,7 +377,7 @@ The second observation is indeed true in this dataset but has no physical meanin
   \label{fig:jcnn:vic_cnn}
 \end{figure}
 
-This behavior also explain the heavy bias at low energy in figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}. The energy bias of the CNN if fairly constant over the energy range, it is interesting to note that the energy bias depending on the radius is equivalent but of opposite sign of the classical algorithm (figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}). This behavior is studied in more detail in section \ref{sec:jcnn:combination}.
+This behavior also explain the heavy bias at low energy in figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}. The energy bias of the CNN if fairly constant over the energy range, it is interesting to note that the energy bias depending on the radius is a bit worse than the classical method.
 
 \subsubsection{Vertex reconstruction}
 
@@ -383,9 +385,9 @@ For the vertex reconstruction we do not study $x$, $y$ and $z$ independently but
 
 The comparison of radius reconstruction between the classical algorithm and ``gen\_30'' are presented in the figures \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}.
 
-Radius reconstruction is worse than the classical algorithms in all configuration, in energy, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 25cm at low energy to 4cm at higher energy.
+Radius reconstruction is worse than the classical algorithms in all configuration. In energy, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 20cm over the energy range.
 
-When looking over the event radius, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 4 and 10cm of resolution in the central part of the detector $R < 15.2$ m and have a sudden spike of performance where we almost catch up to the classical method for more radial event $R > 15$ m. This is around this threshold that we start to see the effect of the TR area (see section \ref{sec:juno:reco}). In this region, the signal become more localised as shown in figure \ref{fig:jcnn:event:hrhe} versus figure \ref{fig:jcnn:event:lrhe} and the reflection can also present pattern dependant on the radius. This locality and specificity of the information must be helping the CNN to localize the event with more precision.
+When looking over the true event radius, figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 30 and 45cm of resolution. The performances the best for central and radial event.
 
 The precision also worsen when looking at the edge of the image $\theta \approx 0$, $\theta \approx 2\pi$ respectively the top and bottom of the image, and when $\phi \approx -\pi$ and $\phi \approx \pi$ respectively the left and right side of the image. This is the confirmation that the deformation of the image is problematic for the event reconstruction.
 
@@ -460,7 +462,7 @@ The bias in radius reconstruction is about the same order of magnitude depending
 %    \end{itemize}
 %\end{itemize}
 
-As it has been presented in previous section, there is instances where the reconstructed energy and vertex behave differently between the classic algorithm. For instanc, if we look at figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the at low energy, the classical algorithm seems to underestimate this radius. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are repectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.
+As it has been presented in previous section, there is instances where the reconstructed energy and vertex behaves differently between the neural network and  the classic algorithm. For instance, if we look at figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the at low energy, the classical algorithm seems to underestimate this radius. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are respectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.
 \begin{align}
   E[\theta_{N}] = \mu_N + X; ~&~ \mathrm{Var}[\theta_{N}] = \sigma^2_{N} \\
   E[\theta_{C}] = \mu_C + X; ~&~ \mathrm{Var}[\theta_{C}] = \sigma^2_{C}
@@ -501,8 +503,88 @@ and the estimator without bias
 \end{equation}
 See annex \ref{sec:annex:jcnn:alpha} for demonstration.
 
-Its pretty clear from the results shown in figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results.
+Its pretty clear from the results shown in figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results as illustrated in \ref{fig:jcnn:vic_cnn:res_map}.
 
+The map we are using are composed of 20 bins for $R^3$ going from 0 to 5400 m$^3$ (17.54 m) and 50 bins in energy ranging from 1.022 to 10.022 MeV. In the case where we are outside the grid, we use the closest cell.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_r_bias.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_r_res.png}
+  \end{subfigure}
+  \caption{Radius bias (\textbf{on the left}) and resolution(\textbf{on the right}) of the classical algorithm in a $E$, $R^3$ grid}
+  \label{fig:jcnn:vic_cnn:res_map}
+\end{figure}
+
+
+The performance of this weighted mean is presented in figure \ref{fig:jcnn:vic_cnn:Cx30}. We can see that even when the CNN resolution is much worse than the classical algorithm, it can still bring some information thus improving the resolution. This comes from the correlation of the reconstruction error to be smaller than 1 as presented in figure \ref{fig:jcnn:vic_cnn:corr}. We even see some anticorrelation in the radius reconstruction for High radius, high energy, event.
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvETC.png}
+    \caption{Resolution and bias of energy reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvETC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvRTC.png}
+    \caption{Resolution and bias of energy reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvETC.png}
+    \caption{Resolution and bias of radius reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvETC}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvRTC.png}
+    \caption{Resolution and bias of radius reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvTTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvTTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvPTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvPTC}
+  \end{subfigure}
+  \caption{Reconstruction performance of the ``gen\_30'' model on J21, the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022} and the combination of both using weighted mean. The top part of each plot is the resolution and the bottom part is the bias.}
+
+  \label{fig:jcnn:vic_cnn:Cx30}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_cnn_e_corr.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_cnn_r_corr.png}
+  \end{subfigure}
+  \caption{Correlation between CNN and classical method reconstruction (\textbf{on the left}) for energy and (\textbf{on the right}) for radius in a $E$, $R^3$ grid}
+  \label{fig:jcnn:vic_cnn:corr}
+\end{figure}
+
+This technique is not suited for realistic reconstruction, we rely too much on the knowledge of the resolution, bias and correlation between the two methods. While this is possible to determine using simulated data or calibration sources, the real data might differ from our model and we would need to really well understand the behavior of the two system. But this is an excellent tool to indicate potential improvements to algorithms and reconstruction methods, showing with this results a potential upper limit to the reconstruction performances.
+
+\subsection{J23 results}
 
 \section{Prospect}
 \label{sec:jcnn:prospect}

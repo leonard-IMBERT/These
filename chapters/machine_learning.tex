@@ -300,14 +300,37 @@ The gradient for $\theta_1$ will be computed using the chain rule presented in e
 Multiple actions can be taken to prevent this effect such as:
 \begin{itemize}
   \item \textbf{Batch normalization}: In this case we apply a normalization layer that will normalize the data so that, let $D$ be the data, $\langle D \rangle = 0$ and $\sigma D = 1$. This help the weight of the network to maintain an appropriate scale.
-  \item \textbf{Residual Network (ResNet)} \cite{he_deep_2016}: Residual network is a technique for neural network in which, instead of just sequentially feeding the results of each layer to the next one, you ask each layer to calculate the residual of the input data. This technique is illustrated in figure \ref{fig:ml:resnet}. 
+  \item \textbf{Residual Network (ResNet)} \cite{he_deep_2016}: Residual network is a technique for neural network in which, instead of just sequentially feeding the results of each layer to the next one, you ask each layer to calculate the residual of the input data. This technique is illustrated in figure \ref{fig:ml:resnet}.
 \end{itemize}
 
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/ml/resnet.jpg}
   \caption{Illustration of the ResNet framework}
   \label{fig:ml:resnet}
 \end{figure}
+
+\subsubsection{Gradient explosion}
+Gradient explosion happens when the consecutive multiplication of gradient cause exponential grow in the parameter value or if the training lead the network in part of the parameter space where the gradient is significantly higher than usual. For illustration, consider that the loss dependency in $\theta$ follow
+\begin{align*}
+  \mathcal{L}(\theta) &= \frac{\theta^2}{2} + e^{4\theta} \\
+  \frac{\partial \mathcal{L}}{\partial \theta} &= \theta + 4e^{4\theta}
+\end{align*}
+The explosion is illustrated in figure \ref{fig:ml:explosion} where we can see that the loss degrade with each step of optimization. In this illustration it is clear that reducing the learning rate suffice but this behaviour can happens in the middle of the training where the learning rate schedule does not permit reactivity.
+
+There exist solutions to prevent this explosions:
+\begin{itemize}
+  \item \textbf{Gradient clipping}: Is this case we work on the gradient so that the norm of gradient vector does not exceed a certain threshold. In our illustration in figure \ref{fig:ml:explosion} the gradient for $\theta > 0$ could be clipped at 3 for example.
+  \item \textbf{Batch normalization}: For the same reasons as for gradient vanishing, normalizing the input data help reduce erratic behaviour.
+\end{itemize}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{scripts/plots/MSE_explosion_illustration.png}
+  \caption{Illustration of the gradient explosion. Here it can be solved with a lower learning rate but its not always the case.}
+  \label{fig:ml:explosion}
+\end{figure}
+
 \end{document}
