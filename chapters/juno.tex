@@ -52,7 +52,7 @@ To reach the desired sensitivity, JUNO must meet multiple requirements but most 
 \begin{enumerate}
   \item An energy resolution of $3\%/\sqrt{E\mathrm{(MeV)}}$ to be able to distinguish the fine structure of the fast oscillation.
   \item An energy precision of 1\% in order to not err on the location of the oscillation pattern.
-  \item A baseline of 53 $\pm$ 0.5 km to maximise the $\bar{\nu}_e$ oscillation probability.
+  \item A baseline between 40 and 65 km to maximise the $\bar{\nu}_e$ oscillation probability. The optimal baseline would be 58 km and JUNO baseline is 53 km.
   \item At least $\approx$ 100,000 events to limit the spectrum distortion due to statistical uncertainties.
 \end{enumerate}
 
@@ -188,7 +188,12 @@ Core-collapse supernovae in our galaxy are rare events, but they frequently occu
 
 JUNO will also be able to probe for beyond standard model neutrinos interactions. After the main physics topics have been accomplished, JUNO could be upgraded to probe for neutrinoless beta decay ($0\nu\beta\beta$). The detection of such event would give critical informations about the nature of neutrinos, is it a majorana or a dirac particle. JUNO will also be able to probe for neutrinos that would come for the decay or annihilation of Dark Matter inside the sun and neutrinos from putative primordial black hole.
 Through the unitary test of the mixing matrix, JUNO will be able to search for light sterile neutrinos.
-Thanks to JUNO sensitivity, multiple other exotic can be performed on neutrino related beyond standard model interactions.
+Thanks to JUNO sensitivity, multiple other exotic research can be performed on neutrino related beyond standard model interactions.
+
+\subsubsection{Proton decay}
+
+Proton decay is a potential unobserved event where the proton decay by violating the baryon number. This violation is necessary to explain the baryon asymmetry in the universe and is predicted by multiple Grand Unified Theories which unify the  strong, weak and electromagnetic interactions.
+Thanks to its large active volume, JUNO will be able to take measurement of the potential proton decay channel $p \rightarrow \bar{\nu}K^+$. Study \cite{juno_collaboration_juno_2023} show that JUNO should be competitive with the current best limit at $5.9 \times 10^{33}$ years from Super-K. This studies show that JUNO, considering no proton decay events observed, would be be able to rules a limit of $9.6 \times 10^{33}$ years at 90 \% C.L.
 
 
 \section{The JUNO detector}
@@ -233,7 +238,7 @@ The CD will detect the neutrino and measure their energy mainly via an Inverse B
 \begin{equation*}
   \bar{\nu}_e + p \rightarrow n + e^+
 \end{equation*}
-Kinematics calculation shows that this interaction has an energy threshold for the $\bar{\nu}_e$ of $ (m_n + m_e - m_p ) \approx 1.806 ~ \mathrm{MeV}$ \cite{strumia_precise_2003} where $m_\lambda$ is the mass of the $\lambda$ particle.
+Kinematics calculation shows that this interaction has an energy threshold for the $\bar{\nu}_e$ of $ (m_n + m_e - m_p ) \approx 1.806 ~ \mathrm{MeV}$ \cite{strumia_precise_2003}.
 This threshold make the experiment blind to very low energy neutrinos. The residual energy $E_{\nu} - 1.806 ~ \mathrm{MeV}$ is be distributed as kinetic energy between the positron and the neutron.
 The energy of the emitted positron $E_e$ is given by \cite{strumia_precise_2003}
 \begin{equation}
@@ -272,11 +277,11 @@ Those panels requires to be pure of radioactive materials to not cause backgroun
 \subsubsection{Liquid scintillator}
 \label{sec:juno:LS}
 
-The Liquid Scintillator (LS) has a similar recipe as the one used in Daya Bay \cite{bay_optimization_2020} but without gadolinium doping. It is made of three components, necessary to shift the wavelength of emitted photons to prevent their reabsorption:
+The Liquid Scintillator (LS) has a similar recipe as the one used in Daya Bay \cite{bay_optimization_2020} but without gadolinium doping. It is made of three components, necessary to shift the wavelength of emitted photons to prevent their reabsorption and to shift their wavelength to the PMT sensitivity region as illustrated in figure \ref{fig:juno:LS_spectrum_and_PMT_sensitivity}:
 \begin{enumerate}
   \item The detection medium, the \textit{linear alkylbenzene} (LAB). Selected because of its excellent transparency, high flash point, low chemical reactivity and good light yield. Accounting for $\sim 98\%$ of the LS, it is the main component with which ionizing particles and gamma interact. Charged particles will collide with its electronic cloud transferring energy to the molecules, gamma will interact via compton effect with the electronic cloud before finally be absorbed via photoelectric effect.
   \item The second component of the LS is the \textit{2,5-diphenyloxazole} (PPO). A fraction of the excitation energy of the LAB is transferred to the PPO, mainly via non radiative process \cite{birks_chapter_1964}. The PPO molecules de-excites in the same way, transferring their energy to the bis-MSB. The PPO makes for $~1.5$ \% of the LS.
-  \item The last component is the \textit{p-bis(o-methylstyryl)-benzene} (bis-MSB). Once excited by the PPO, it will emit photon with an average wavelength of $\sim430$ nm (full spectrum in figure \ref{fig:juno:LS_spectrum_and_PMT_sensitivity}) that can be detected by our photo-multipliers systems. It amount for $\sim 0.5$\% of the LS.
+  \item The last component is the \textit{p-bis(o-methylstyryl)-benzene} (bis-MSB). Once excited by the PPO, it will emit photon with an average wavelength of $\sim430$ nm (full spectrum in figure \ref{fig:juno:LS_spectrum_and_PMT_sensitivity}) that can thus be detected by our photo-multipliers systems. It amount for $\sim 0.5$\% of the LS.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -322,15 +327,44 @@ The LPMTs electronic are divided in two parts. One "near", located underwater, i
 
 The light yield per MeV induce that a LPMT can collect between 1 and 1000 PE per event, a wide dynamic range,  causing non linearity in the PMT response that need to be understood and calibrated, see section \ref{sec:juno:calib} for more details.
 
+Before performng analysis, the analog readout of the LPMT need to be amplified, digitised and packaged by the readout electronics schematized in figure \ref{fig:juno:lpmt_elec}. This electronic is splitted in two parts: \textit{wet} electronic that are located near the LPMTs, protected in an Underwater Box (UWB) and the \textit{dry} electronics located in deicated rooms outside of the water pool.
+
+The LPMTs are connected to the UWB by groups of three. Each UWB contains:
+\begin{itemize}
+  \item Three high voltage units, each one powering a PMT.
+  \item A global control unit, responsible for the digitization of the waveform, composed of six analog-digital units that produce digitized waveform and a Field Programmable Gate Array (FPGA) that complete the waveform with metadatas such as the local timestamp trigger, etc... Ths FPGA also act as a data buffer when needed by the DAQ and trigger system.
+  \item Additional memory in order to temporally store the data in case of sudden burst of the input rate (such as in the case of nearby supernovae).
+\end{itemize}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/juno/LPMT_readout.png}
+  \caption{The LPMT electronics scheme. It is composed of two part, the \textit{wet} electronics on the left, located underwater and the \textit{dry} electronics on the right. They are connected by Ethernet cable for data transmission and a dedicated low impedance cable for power distribution}
+  \label{fig:juno:lpmt_elec}
+\end{figure}
+
+The \textit{dry} electronic synchronize the signals from the UWBs abd centralise the information of the CD LPMTs. It act as the Global Trigger by sending the UWB data to DAQ in the case if the LPMT multiplicity condition is fulfilled.
+
+
 \subsubsection{Small Photo-Multipliers Tubes (SPMTs)}
 \label{sec:juno:SPMT}
 
 The Small PMT (SPMTs) system is made of 3-inch (7.62 cm) PMTs. They will be used in the CD as a secondary detection system. Those 25600 SPMTs will observe the same events as the LPMTs, thus sharing the physics and detector systematics up until the photon conversion. With a detector coverage of 2.7\%, this system will collect $\sim 43$ PE/MeV for a final energy resolution of $\sim 17\%$. This resolution is not enough to measure the NMO, $\theta_{13}$, $\Delta m^2_{31}$ but will be sufficient to independently measure $\theta_{12}$ and $\Delta m^2_{21}$.
 
+The benefit of this second system is to be able to perform another, independent measure of the same events as the LPMTs, constituing the Dual Calorimetry.
 Due to the low PE rate, SPMTs will be running in photo-counting mode in the reactor range and thus will be insensitive to non-linearity effect. Using this property, the intrinsic charge non linearity of the LPMTs can be measured by comparing the PE count in the SPMTs and LPMTs \cite{han_dual_2021}. Also, due to their smaller size and electronics, SPMTs have a better timing resolutions than the LPMTs.
 At higher energy range, like supernovae events, LPMTs will saturate where SPMTs due to their lower PE collection will to produce a reliable measure of the energy spectrum.
 
-The Data Acquisition System (DAQ) is designed to support the event rate of IBD, background, dark noise and supplementary storage buffers are present in the LPMT electronics to withstand the event rate during supernovae burst.
+The SPMTs will be grouped by pack of 128 to an UWB hosting their electronics as illustrated in figure \ref{fig:juno:spmt_elec}. This underwater box host two high voltage splitter boards, each one supplying 64 SPMTs, an ASIC Battery Card (ABC) and a global control unit.
+
+The ABC board will readout and digitize the charge and time of the 128 SPMTs signals and a FPGA will joint the different metadata. The global control unit will handle the powering and control of the board and will be in charge of the transmition of the data to the DAQ.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/juno/SPMT_readout.png}
+  \caption{Schematic of the JUNO SPMT electronic system (\textbf{left}), and exploded view of the main component of the UWB (\textbf{right})}
+  \label{fig:juno:spmt_elec}
+\end{figure}
 
 \subsection{Veto detector}
 
@@ -353,7 +387,8 @@ With its coverage, about 1/3 of the of all atmospheric muons that passing throug
 \section{Calibration strategy}
 \label{sec:juno:calib}
 
-The calibration is a crucial part of the JUNO experiment. Because we are looking at civil reactor neutrino it might be impossible to run measurement without signal, it would need to shut down every reactor from the Taishan and Yangjiang power plants which is realistically impossible. Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest : [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
+The calibration is a crucial part of the JUNO experiment. The detector will continuously bath in neutrinos coming from the close nuclear power plant, from other sources such as geo neutrinos, the sun and will be exposed to background noise coming from atmospheric muons and natural radioactivity.
+Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest : [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
 It is expected that the CD response will be different depending on the type of particle, due to the interaction with LS, the position on the event and the optical response of the acrylic sphere (see section \ref{sec:juno:reco}).
 We also expect a non-linear energy response of the CD due to the LS properties \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
 
@@ -463,7 +498,7 @@ As introduced in section \ref{sec:juno:nu_e_flux} and section \ref{sec:juno:LS},
 
 \subsection{TAO}
 \label{sec:juno:tao}
-The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (< 30m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
+The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (45m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
 
 \subsubsection{Detector}
 
@@ -885,9 +920,9 @@ The following details about JUNO measurement is common to the three analysis. Th
 
 \subsection{Theoretical spectrum}
 
-To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements of the calibration and satellite experiments and Monte Carlo simulation:
+To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements produced by the calibration, the input from TAO and adjusted Monte Carlo simulations:
 \begin{itemize}
-  \item The absolute flux and the fission product fraction calibrated by TAO.
+  \item The absolute flux and the fission product fraction yield calibrated by TAO.
   \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
   \item The computed cross-section of $\bar{\nu}_e$ and the LS.
   \item The estimation of mislabelled event, such as fast neutron events from cosmic muons, using Monte Carlo simulation.
