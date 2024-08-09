@@ -116,6 +116,8 @@ Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{chan
 
 The models were developped in Python using the pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} gpus. The A100 was split in two so for those training the accessible gpu memory was 20 Gb making it impossible to train somes of the architecture due to memory consumption.
 
+The training of one model takes between 4h and 15h depending of its size, overall training the full 72 model takes around 500 GPU hours. Even with parallel training, this random search hyper-optimisation was time consuming.
+
 
 %Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
 %\begin{equation}
@@ -190,7 +192,7 @@ Another problematic that happens with this representation, and this is not depen
 
 In this study we will discuss two datasets of one millions events:
 \begin{itemize}
-  \item \textbf{J21}: The first one comes from the JUNO official mc simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the NN the classical algorithm presented in \cite{lebrin_towards_2022} was developped. This dataset is used as a reference for comparison to classical algorithm. The data in this dataset is \textit{detsim} level (see section \ref{sec:juno:software}), so where only the physic is simulated. The charge and time biases and uncertainties are added using toy MC adjusted using \cite{cao_mass_2021, abusleme_mass_2022}.
+  \item \textbf{J21}: The first one comes from the JUNO official mc simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the NN the classical algorithm presented in \cite{lebrin_towards_2022} was developped. This dataset is used as a reference for comparison to classical algorithm. The data in this dataset is \textit{detsim} level (see section \ref{sec:juno:software}), so where only the physic is simulated. The charge and time biases and uncertainties are added using toy MC adjusted using \cite{cao_mass_2021, abusleme_mass_2022}. The time window is not based on a selection algorithm but is defined as the first PMT hit for $t_0$ up to $t_0 + 1000$ ns.
   \item \textbf{J23}: The second comes from the JUNO official monte-carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). The data is \textit{calib} level (see section \ref{sec:juno:software}). Here the charge waveform integration, time window resolution and trigger decision are all simulated inside the software. This dataset is more realistic and is used to confirm the performance of our algorithm.
 \end{itemize}
 
@@ -439,9 +441,18 @@ The bias in radius reconstruction is about the same order of magnitude depending
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[height=6cm]{images/jcnn/vic_cnn/e_dis.png}
-  \caption{Distribution of ``gen\_30'' reconstructed energy and true energy of the analysis dataset (J21)}
-  \label{fig:jcnn:edis}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/e_dis.png}
+    \caption{Distribution of ``gen\_30'' reconstructed energy and true energy of the analysis dataset (J21)}
+    \label{fig:jcnn:edis}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/e_dis_42.png}
+    \caption{Distribution of ``gen\_42'' reconstructed energy and true energy of the analysis dataset (J23)}
+    \label{fig:jcnn:edis42}
+  \end{subfigure}
+  \caption{}
 \end{figure}
 
 
@@ -586,8 +597,75 @@ This technique is not suited for realistic reconstruction, we rely too much on t
 
 \subsection{J23 results}
 
-\section{Prospect}
+The J21 simulation is fairly old and newer version, such as J23, include refined measurements of the light yield, reflection indices of materials of the detector, structural elements such as the connecting structure and more realistic dark noise. Additionally, the trigger, waveform integration and time window are defined using the algorithms that will ultimately be used by the collaboration to process real physics events.
+
+We retrained the models defined in \ref{sec:jcnn:model} on the J23 data and used the same selection procedure. The results from the best architecture, ``gen\_42'', are presented in figure \ref{fig:jcnn:vic_cnn:gen42}. Following the table \ref{tab:jcnn:hyper}, ``gen\_42'' is defined as:
+\begin{itemize}
+ \item ``gen\_42'': $N_{blocks} = 3$, $N_{channels} = 64$, FCDNN configuration: 4096 * 2, Loss $\coloneq E+V$
+\end{itemize}
+
+\subsubsection{Energy reconstruction}
+
+The results of the energy reconstruction are presented in figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}. Similarly to what we seen for J21, the resolution is close to the one of the classical algorithm with the exception of the start and end of the spectrum. This come from ``gen\_42'' learning the shape of the distribution and pulling events from the extreme energies, like 1 and 10 MeV, to more common seen energy, like 2 and 9 MeV as illustrated in figure \ref{fig:jcnn:edis42}. The bias disappear with the exception of low and high energy events.
+
+\subsubsection{Vertex reconstruction}
+
+The vertex reconstruction, presented in figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC} is not yet to the level of the classical reconstruction but the degradation is smaller than for ``gen\_32'' being at most a difference of 15cm of resolution and closing to the performance of the classical algorithm in the most favourable condition. ``gen\_42'' has also very little bias in comparison with the classical method with the exception of the transition to the TR area and at the very edge of the detector.
+
+Unfortunately could not rerun the classical algorithms over the J23 data, as the algorithm was optimised for J21 and was not included and maintained over J23. The combination method need for the two estimators to be run on the same set of event, which was impossible without the classical algorithm being maintained for J23.
+
+Overall the resolution improved over the transition from J21 to J23, effect probably coming from a more complete and rigorous simulation.
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvETC.png}
+    \caption{Resolution and bias of energy reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvRTC.png}
+    \caption{Resolution and bias of energy reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvETC.png}
+    \caption{Resolution and bias of radius reconstruction vs energy}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvRTC.png}
+    \caption{Resolution and bias of radius reconstruction vs radius}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvTTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvPTC.png}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC}
+  \end{subfigure}
+  \caption{Reconstruction performance of the ``gen\_42'' model on J23 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}
+  \label{fig:jcnn:vic_cnn:gen42}
+\end{figure}
+
+\section{Conclusion and prospect}
 \label{sec:jcnn:prospect}
 
-\section{Conclusion}
-Intoduction next chapter
+The CNN is a fine tool for event reconstruction in JUNO, and while the reconstruction performances are satisfactory, it show its limitation, the main one concerning the data representation. A lot of training time and resources is consumed going and optimizing over pixel with no physical meaning, the NN needs to optimized itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution.
+
+Those problems could be circumvented, we could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event.
+
+To overcome the problematic of the aggregation of PMT time information and the meaning of the time channel in case of no hit, we could transform this channel into a dimension. This would results in an image with multiple charge channels, each one representing the charge sum in a time interval.
+
+In this thesis, we decided to solve those problem by moving away from the 2D image representation, looking into the graph representation and the Graph Neural Network (GNN). This is be the subject of the next chapter.
