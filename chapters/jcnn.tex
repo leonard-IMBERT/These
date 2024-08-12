@@ -1,3 +1,7 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+
+\begin{document}
 \chapter{Image recognition for IBD reconstruction with the SPMT system}
 \label{sec:jcnn}
 
@@ -672,3 +676,4 @@ Those problems could be circumvented, we could imagine a two part CNN where the 
 To overcome the problematic of the aggregation of PMT time information and the meaning of the time channel in case of no hit, we could transform this channel into a dimension. This would results in an image with multiple charge channels, each one representing the charge sum in a time interval.
 
 In this thesis, we decided to solve those problem by moving away from the 2D image representation, looking into the graph representation and the Graph Neural Network (GNN). This is be the subject of the next chapter.
+\end{document}
