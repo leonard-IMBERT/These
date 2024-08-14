@@ -11,7 +11,7 @@
 
 We previously showed, in chapter \ref{sec:jcnn}, that neural networks are relevant as reconstruction tools in JUNO. Even if they show worse performance, the combination to classical estimator could still bring improvement. We discussed the use of Convolutional Neural Network (CNN) in the previous chapter and their limitation, in particular the limitation of the image representation for the experiment.
 
-In this chapter we propose to use a Graph Neural Network (GNN) to overcome those limitation.
+In this chapter we propose to use a Graph Neural Network (GNN), a Neural Network specialized to process graph as presented in section \ref{sec:ml:gnn}, to overcome those limitations.
 
 \section{Motivation}
 \label{sec:jgnn:motiv}
@@ -27,6 +27,7 @@ From this graph representation, we can construct a neural network that will proc
 In this work we want to take a step further in the graph representation by including the SPMT and including a maximum of raw informations.
 
 \section{Data representation}
+\label{sec:jgnn:data}
 %\begin{itemize}
 %  \item First though
 %    \begin{itemize}
@@ -64,9 +65,9 @@ Excluding self relation, an edge that would go from and to the same node, and co
 The option of connecting PMTs node only to their neighbours could be tempting to reduce the number of edge, but this solution does not translate well in term of internal representation in memory. Edges of sparsely connected nodes can be stored in efficient manner in a sparse matrix but the calculation in itself would often results in the concretization of the full matrix in memory, resulting in an insufficient memory gain during training.
 
 
-We finally decided of a middle ground where:
+We finally decided of a middle ground where we define three \textit{families}:
 \begin{itemize}
-  \item The core of the graph will be composed of nodes representing geometric regions of the detector. We call those nodes {\color{Dandelion} mesh} node. Those mesh nodes are densely connected to each other. We keep their number of the order of magnitude of a thousand to keep the memory consumption low
+  \item The core of the graph will be composed of nodes representing geometric regions of the detector. We call those nodes {\color{Dandelion} mesh} nodes. Those mesh nodes are densely connected to each other. We keep their number of the order of magnitude of a thousand to keep the memory consumption low
   \item All the fired PMTs, PMTs that have been hit, will be represented as nodes. We call those node {\color{red} fired}. Fired nodes are connected to the mesh they geometrically belong.
   \item A final node which will hold global information about the detector and on which we will read the interaction vertex and energy. It's designated as the {\color{blue} I/O} node for input/output. This node will be connected to every mesh nodes.
 \end{itemize}
@@ -80,13 +81,13 @@ The adjacency matrix representing those relation is illustrated in figure \ref{f
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{0.48\linewidth}
+  \begin{subfigure}[t]{0.6\linewidth}
     \includegraphics[width=\linewidth]{images/jgnn/nodes_schema.png}
     \caption{Illustration of the different nodes in our graphs and their relations.}
     \label{fig:jgnn:node_schema}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{0.48\linewidth}
+  \begin{subfigure}[t]{0.39\linewidth}
     \includegraphics[width=\linewidth]{images/jgnn/adjacency_mat.png}
     \caption{Illustration of what a dense adjacency matrix would looks like and the part we a re really interested in. Because Fired $\rightarrow$ Mesh and Mesh $\rightarrow$ I/O relations are undirected, we only consider in practice the top right part of the matrix for those relations.}
     \label{fig:jgnn:adj}
@@ -94,15 +95,82 @@ The adjacency matrix representing those relation is illustrated in figure \ref{f
   \caption{}
 \end{figure}
 
+The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmenntation offer the advantage that almost each mesh have the same number of direct neighbours and it guarantee that each mesh represent the same extent of the detector surface. The segmentation can be infinitly subdivided to provide smaller and smaller pixels. The number of pixel follow the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 3, $N_{pix} = 12 \cdot 4^3 = 768$.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/jgnn/healpix_0.jpg}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/jgnn/healpix_1.jpg}
+  \end{subfigure}
+  \caption{Illustration of the healpix segmentation. \textbf{On the left:} A segmentation of order 0. \textbf{On the right:} A segmentation of order 1}
+  \label{fig:jgnn:healpix}
+\end{figure}
+
+We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {\color{red} fired (F)} and {\color{blue} I/O} have different set of features. The features used in the graph are presented in figure \ref{fig:jgnn:graph_features}. Most of the features are low level informations such as the charge or time information but we include some high order features such as
+\begin{enumerate}
+  \item $P^h_l$: Is the normalized power of the $l$th spherical harmonic. For more details about spherical harmonics in JUNO, see annex \ref{sec:annex:jgnn:harms}.
+  \item $\mathbb{A}$ and $\mathbb{B}$ are informations that represent the likeliness of the interaction vertex to be on the segment between the center of two meshes.
+    \begin{align}
+      \mathbb{A}_{ij} &= (\vec{j} - \vec{i})\cdot\frac{l_1}{D_{ij}} + \vec{i} \\
+      \mathbb{B}_{ij} &= \frac{Q_i}{Q_2} \bigg(\frac{l_2}{l_1}\bigg)^2 \\
+      l_1 &= \frac{1}{2}(D_{ij} - \Delta t \frac{c}{n}) \\
+      l_2 &= \frac{1}{2}(D_{ij} + \Delta t \frac{c}{n})
+    \end{align}
+    where $\vec{i}$ is the position vector of the mesh $i$, $D_{ij}$ is the distance between the center of the meshes $i$ and $j$, $Q_i$ the sum of charges on the mesh $i$, $\Delta t = t_i - t_j$ where $t_i$ the earliest time on the mesh $i$ and $n$ the optical indice of the LS. $\mathbb{A}$ is the vertex to center of mesh distance ratio between $i$ and $j$ based on the time information. For $\mathbb{B}$, the charge ratio evolve with the square of the distance, so the mesh couple with the smallest $\mathbb{B}$ should be the one withe interaction vertex between its two center.
+\end{enumerate}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jgnn/graph_features.png}
+  \caption{Features held by the nodes and edges in the graph. $D^{-1}_{m_1 \rightarrow m_2}$ is the inverse of the distane between two mesh center. The features $P^h_l$, $\mathbb{A}$ and $\mathbb{B}$ are detailled in section \ref{sec:jgnn:data}}
+  \label{fig:jgnn:graph_features}
+\end{figure}
+
+Because our different nodes do not have the same number of features, they live in different spaces. Most library and public algorithms available are designed with node living in the same space in mind, we thus had to develop a custom message passing algorithm.
+
 \section{Message passing algorithm}
-\begin{itemize}
-  \item Need one message passing algorithm per connection (f->m, m->f, m->m, n->io, io->m)
-  \item Allow to select part of the adjacency matrix (see notes)
-  \item Explain message passing layer that was developed
-  \item Reimplementation in C++ using torch framework
-  \item C++ allow also for on the fly data transformation from raw file and minutieuse memory management
-  \item Not updating the edge for the sake of technical simplicity: Commplicated to identify an edge feature from the above algorithm
-\end{itemize}
+%\begin{itemize}
+%  \item Need one message passing algorithm per connection (f->m, m->f, m->m, n->io, io->m)
+%  \item Allow to select part of the adjacency matrix (see notes)
+%  \item Explain message passing layer that was developed
+%  \item Reimplementation in C++ using torch framework
+%  \item C++ allow also for on the fly data transformation from raw file and minutieuse memory management
+%  \item Not updating the edge for the sake of technical simplicity: Commplicated to identify an edge feature from the above algorithm
+%\end{itemize}
+As introduced in previous section and in figure \ref{fig:jgnn:graph_features}, our graphs nodes and edges will have different number of features depending on their nature, meaning that we cannot have a single message passing function. We thus need to define a message passing function for each transition inside or outside a family. Using the notation presented in section \ref{sec:ml:gnn}
+\begin{equation}
+  n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
+\end{equation}
+we need to define
+\begin{align}
+  \phi_{u; f\rightarrow m} ~ &\phi_{m; f\rightarrow m} \\
+  \phi_{u; m\rightarrow f} ~ &\phi_{m; m\rightarrow f} \\
+  \phi_{u; m\rightarrow m} ~ &\phi_{m; m\rightarrow m} \\
+  \phi_{u; m\rightarrow io} ~ &\phi_{m; m\rightarrow io} \\
+  \phi_{u; io\rightarrow m} ~ &\phi_{m; io\rightarrow m}
+\end{align}
+to update the nodes after each layers as illustrated in figure \ref{fig:jgnn:mp_ill}. We would also need update function for the edges but for the sake of technical simplicity in this work, we will limit ourself to the nodes update. A wide variety of message passing algorithm exists, with different use cases and goal behind them. To stay generalist and to match to the best the specificity of our architecture, we implement the following algorithm:
+\begin{equation}
+  \phi_u \coloneq I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + B^{n'}
+\end{equation}
+using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connecetion holding the features indexed by $e$ . The learnable weights are composed of the tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer knowing the relation $e$. $B^{n'}$ is a learnable bias tensor on the new features $n'$.
+If a node have neighbours in different families, the different $I^{n'}_{i'}$ coming from the different $\phi_u$ are summed.
+
+\begin{figure}
+  \centering
+  \includegraphics[height=5cm]{images/jgnn/mp_illus.png}
+  \caption{Illustration of the different update function needed by our GNN}
+  \label{fig:jgnn:mp_ill}
+\end{figure}
+
+We thus have a $W$ and $B$ for each of the $\phi_u$ function we defined above. The $\phi_m$ function is ``hidden'' in the Einstein sum $IAW$. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
+
 
 \section{Data}
 \begin{itemize}

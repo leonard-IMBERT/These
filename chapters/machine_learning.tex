@@ -160,6 +160,7 @@ The final network needs 1'182'144 parameters or, if we consider each parameters 
 
 
 \subsection{Graph Neural Network (GNN)}
+\label{sec:ml:gnn}
 
 Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu$ of a node $i$.
 
