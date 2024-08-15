@@ -161,6 +161,10 @@ to update the nodes after each layers as illustrated in figure \ref{fig:jgnn:mp_
 \end{equation}
 using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connecetion holding the features indexed by $e$ . The learnable weights are composed of the tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer knowing the relation $e$. $B^{n'}$ is a learnable bias tensor on the new features $n'$.
 If a node have neighbours in different families, the different $I^{n'}_{i'}$ coming from the different $\phi_u$ are summed.
+\begin{equation}
+  I^{n'}_{i'} = \sum_\mathcal{N} \phi_{u,\mathcal{N}}
+\end{equation}
+where $\mathcal{N}$ are the neighbouring family and $\phi_{u,\mathcal{N}}$ the update function between the target node family and the neighbour $\mathcal{N}$ family.
 
 \begin{figure}
   \centering
@@ -171,12 +175,66 @@ If a node have neighbours in different families, the different $I^{n'}_{i'}$ com
 
 We thus have a $W$ and $B$ for each of the $\phi_u$ function we defined above. The $\phi_m$ function is ``hidden'' in the Einstein sum $IAW$. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
 
+This operation of message passing is the constituent of our message passing layer designed in this work \textit{JWGLayer}. To this layer, we can adjoin an activation function such as $PReLU$
+\begin{equation}
+  I^{n'}_{i'} = PReLU\bigg(\sum_\mathcal{N} I^n_i A_{i',e}^{i} W_n^{e,n'} + B^{n'} \bigg)
+\end{equation}
+
 
 \section{Data}
-\begin{itemize}
-  \item Present the data (dataset)
-  \item Maybe show an example
-\end{itemize}
+%\begin{itemize}
+%  \item Present the data (dataset)
+%  \item Maybe show an example
+%\end{itemize}
+
+For this study we will be using a 1M positrons event dataset, uniformly distributed in energy with $E_k \in [0, 9]$ MeV and uniformly distributed in the detector. Those events come from the JUNO official simulation version J23.0.1-rc8.dc1 (released the 7th January 2024). All the event are \textit{calib} level, with simulation of the physics, electronics, digitizations and triggers. 900k events will be used for the training, 50k for validation and loss monitoring and 50k for the results analysis in section \ref{sec:jgnn:results}. Each events is between 2k and 12k fired PMTS, resulting in fired nodes being the largest family in our graphs in all circumstances as illustrated in figure \ref{fig:jgnn:tot_hit_e}.
+
+As expected, by comparing the scale between the figure \ref{fig:jgnn:lpmt_hit_e} and \ref{fig:jgnn:spmt_hit_e} we see that the LPMT system is predominant in term of informations in our data. The number of PMT hits grow with energy but do not reach 0 for low energy event due to the dark noise contribution which seems to be around 1000 hits per event for the LPMT system (left limit of figure \ref{fig:jgnn:lpmt_hit_e}) and around 15 hits per event for the SPMT system (left limit of figure \ref{fig:jgnn:spmt_hit_e}) which is consistent with the results show in section \ref{sec:jcnn:data}.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/lpmt_hit_e.png}
+    \caption{}
+    \label{fig:jgnn:lpmt_hit_e}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/spmt_hit_e.png}
+    \caption{}
+    \label{fig:jgnn:spmt_hit_e}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/tot_hit_e.png}
+    \caption{}
+    \label{fig:jgnn:tot_hit_e}
+  \end{subfigure}
+  \caption{Distribution of the number of hits depending on the energy. \textbf{On the right:} for the LPMT system. \textbf{In the middle :} for the SPMT system. \textbf{On the left: } For both system.}
+\end{figure}
+
+The structure seen in the distribution in figure \ref{fig:jgnn:lpmt_hit_e} comes from the shape of the number of hits depending on the radius as shown in figures \ref{fig:jgnn:lpmt_hit_r} and \ref{fig:jgnn:spmt_hit_r} where the number of hit decrease with radius. It is important to understand that this is not representative of the number of PE per event and the decrease in hits over the radius means that the PE are just more concentrated in a smaller number of PMTs.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/lpmt_hit_r.png}
+    \caption{}
+    \label{fig:jgnn:lpmt_hit_r}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/spmt_hit_r.png}
+    \caption{}
+    \label{fig:jgnn:spmt_hit_r}
+  \end{subfigure}
+  \caption{Distribution of the number of hits depending on the radius. \textbf{On the right:} for the LPMT system. \textbf{On the right :} for the SPMT system. To prevent the superposition of structure of different scales we limit ourselves to the energy range $E_{true} \in [0, 9]$.}
+\end{figure}
+
+
 
 \section{Model}
 \begin{itemize}
@@ -187,6 +245,7 @@ We thus have a $W$ and $B$ for each of the $\phi_u$ function we defined above. T
 \end{itemize}
 
 \section{Results}
+\label{sec:jgnn:results}
 Present the results
 
 \section{Conclusion}

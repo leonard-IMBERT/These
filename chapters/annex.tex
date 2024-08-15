@@ -127,34 +127,6 @@ We have clearly shown in this analysis the relevance the of relative harmonic po
   \item Combination of the degree power: Here we combined the radius reconstructed by the different degree via a simple mean but we shown in section \ref{sec:jcnn:combination} and annex \ref{sec:annex:jcnn:alpha} that this is note the optimal way to combine estimator. A more refined algorithm probably exist to take into account the predicting power of each order.
 \end{itemize}
 
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_energy_dependency.png}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[width=\linewidth]{images/jgnn/harmonic/rel_power_energy_dependency.png}
-  \end{subfigure}
-  \caption{Scatter plot of the absolute and relative power, respectively on the left and right plot, of the $l=0$ harmonic. The color indicate the radius of the event.}
-  \label{fig:annex:jgnn:harmonic:energy_dependent}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_fit.png}
-  \caption{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. \textbf{Part 1}}
-  \label{fig:annex:jgnn:harmonic:fit1}
-\end{figure}
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_fit_pt2.png}
-  \caption{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. \textbf{Part 2}}
-  \label{fig:annex:jgnn:harmonic:fit2}
-\end{figure}
-
-
-
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
@@ -201,7 +173,34 @@ We have clearly shown in this analysis the relevance the of relative harmonic po
     \caption{}
   \end{subfigure}
 
-  \caption{Charge repartition in JUNO as seen by the Healpix segmentation. Those are Healpix map of order 5 (i.e. 12288 pixels:width). The color represent the summed charge of the PMTs in each pixels. The color scale is logarithmic. The view have been centered to prevent event deformations.}
+  \caption{Charge repartition in JUNO as seen by the Healpix segmentation. Those are Healpix map of order 5 (i.e. 12288 pixels). The color represent the summed charge of the PMTs in each pixels. The color scale is logarithmic. The view have been centered to prevent event deformations.}
   \label{fig:annex:jgnn:harmonic:events}
 \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_energy_dependency.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/jgnn/harmonic/rel_power_energy_dependency.png}
+  \end{subfigure}
+  \caption{Scatter plot of the absolute and relative power, respectively on the left and right plot, of the $l=0$ harmonic. The color indicate the radius of the event.}
+  \label{fig:annex:jgnn:harmonic:energy_dependent}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_fit.png}
+  \caption{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. \textbf{Part 1}}
+  \label{fig:annex:jgnn:harmonic:fit1}
+\end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/jgnn/harmonic/power_fit_pt2.png}
+  \caption{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. \textbf{Part 2}}
+  \label{fig:annex:jgnn:harmonic:fit2}
+\end{figure}
+
 \end{document}
