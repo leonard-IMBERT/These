@@ -128,7 +128,7 @@ We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/jgnn/graph_features.png}
-  \caption{Features held by the nodes and edges in the graph. $D^{-1}_{m_1 \rightarrow m_2}$ is the inverse of the distane between two mesh center. The features $P^h_l$, $\mathbb{A}$ and $\mathbb{B}$ are detailled in section \ref{sec:jgnn:data}}
+  \caption{Features held by the nodes and edges in the graph. $D^{-1}_{m_1 \rightarrow m_2}$ is the inverse of the distane between two mesh center. The features $P^h_l$, $\mathbb{A}$ and $\mathbb{B}$ are detailed in section \ref{sec:jgnn:data}}
   \label{fig:jgnn:graph_features}
 \end{figure}
 
@@ -237,12 +237,50 @@ The structure seen in the distribution in figure \ref{fig:jgnn:lpmt_hit_e} comes
 
 
 \section{Model}
+%\begin{itemize}
+%  \item Present number of layers etc...
+%  \item Discuss hyperparameters optimisation
+%  \item Random search is not viable with the accessible hardware (too time consuming) -> 90h per trainng
+%  \item By hand optimization -> around 70 iterations and tests.
+%\end{itemize}
+
+In this section we'll discuss the different layer composing the final version of the model. As introduced above, each JWGLayer is defined by the number of features on the nodes and edges of the output graph, assuming it takes as input the graph from the precedent layer. For simplicity, when discussing a graph configuration, it will be presented as follow: \{ {\color{red} $N_{f}$},  {\color{Dandelion} $N_{m}$}, {\color{blue} $N_{IO}$}, $N_{f\rightarrow m}$, $N_{m \rightarrow m}$, $N_{m \rightarrow f}$ \} where
 \begin{itemize}
-  \item Present number of layers etc...
-  \item Dicsucss hyperparamters optimisation
-  \item Random search is not viable with the accessible hardware (too time consuming) -> 90h per trainng
-  \item By hand optimization -> around 70 iterations and tests.
+  \item {\color{red} $N_{f}$} is the number of feature on the fired nodes.
+  \item {\color{Dandelion} $N_{m}$} is the number of features on the mesh nodes.
+  \item {\color{blue} $N_{IO}$} is the number of features on the I/O node.
+  \item $N_{f\rightarrow m}$ is the number of features on the edges between the fired and mesh nodes.
+  \item $N_{m \rightarrow m}$ is the number of features on the edges between two mesh nodes.
+  \item $N_{m \rightarrow f}$ is the number of features on the edges between the mesh nodes and the I/O node.
 \end{itemize}
+
+Because we do not change the number of features on the edges, we can simplify the notation to \{{\color{red} $N_{f}$}, {\color{Dandelion} $N_{m}$}, {\color{blue} $N_{IO}$}\}. As an example, the input graph configuration, following the figure \ref{fig:jgnn:graph_features}, is \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13}, 5, 8, 5 \} or, without the edge features, \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13} \}.
+
+The final version of the model, called JWGv7.3.0 is composed of
+\begin{itemize}
+  \item An JWGLayer, converting the input graph to \{ 32, 32, 32 \} with a PReLU activation function.
+  \item 6 hidden JWGLayer, processing the data to \{ 32, 32, 32 \} graphs with a PReLU activation function.
+  \item A flatten layer that flatten the features of the I/O and mesh nodes to a $(32 * 768 + 32) = 24608$ dimensions vector.
+  \item 2 fully connected layers of 2048 neurons with a PReLU activation function.
+  \item 2 fully connected layers of 512 neurons with a PReLU activation function.
+  \item A final, fully connected layer of 4 neurons acting as the output of the network.
+\end{itemize}
+
+\section{Training}
+
+The optimizer used for training is the Adam optimizer and default hyperparameters ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e-8$) with a learning rate $\lambda = $ 1e-8. The training last 200 epochs of 800 steps. We use a batch size of 8. The learning rate is constant during the first 20 epochs then exponentially decrease with a rate of 0.99. The model saved is the model with the best validation loss during the training. The validation is computed over a single batch.
+
+\section{Optimization}
+
+Due to the extensive training time, up to 90h per training on the more complex architectures, and the heavy memory consumption of the models that would often exceed the 20GB limit of the V100, random search was not a realistic approach to the hyper optimisation. We were able to extend the memory limit to 40GB thanks to a local A100 GPU card available at the lab.
+
+The hyperparameters optimization was thus done ``by hand'', by looking at the results of the previous training and tinker hyperparameters that seems to play a role in the training. During this process, the model went into some heavy refactoring. At the start, the message passing algorithm was not the one presented above but each $\phi_u$ and $\phi_m$ function were FCDNN. The memory consumption and gradient vanishing caused is what made us pivot to the final message passing algorithm presented above.
+
+Even the features on the graph went under investigation, with the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{Dandelion} mesh} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  > 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.
+
+Substantial effort went to the data processing process before the training. Due to the volatile nature of the graph features during the optimization, the current code do not take preprocessed data and compute the observables, adjacency matrix, etc... on the fly. This data processing is carried out on the CPU, using a worker pool to allow for multiprocessing the data. The raw data are coming from root file produced by the collaboration software, the Event Data Model (EDM) used internally by the collaboration \cite{li_design_2017} had to be interfaced to our code, interface maintained through the evolution of the collaboration software. For the harmonic power calculation, we migrated from the Healpix library to Ducc0 \cite{reinecke_ducc0_2024} for a more fine control of the multithreading.
+
+Over the course of the project, the model went over more than 60 different configurations to end on the one presented in this chapter.
 
 \section{Results}
 \label{sec:jgnn:results}

@@ -304,6 +304,11 @@ where $NPE_{tot}$ is the total number of PE detected by the event, $P_{mev}$ is 
 
 The fit shows a light yield of 40.78 PE/MeV and a dark noise contribution of 4.29 NPE. As shown in figure \ref{fig:jcnn:pe_vs_mev}, the physics makes for 90\% of the signal at low energy.
 
+\section{Training}
+
+The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e-8$). The learning rate was reduce exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the epoch.
+
+The training was composed of 30 epochs, each epoch constituted of 10k steps using a batch size of 64 events. The validation was computed over a 100 steps on the validation dataset.
 
 \section{Results}
 
