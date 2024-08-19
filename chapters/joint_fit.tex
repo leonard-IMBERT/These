@@ -23,7 +23,17 @@
 %
 %   + Plan du chapitre.
 
+JUNO is an experiment of precise measurements, where we try to observe small fluctuation in the energy spectrum and have the ambition to achieve sub-percent precision on the oscillation parameters measurement. It is crucial to understand extremely well the reconstruction and the effect we are dealing with. The challenge reside in the standard technology used in the detector, scintillator observed by PMT, but in a scale never seen before, for scintillator volume as for its PMT. Understanding every effect that goes in the detector can become extremely complicated. Being able to compare the results of the same experiment with two systems is thus precious, this is the origin the dual calorimetry with the LPMT and SPMT system.
 
+The resolution and bias of the reconstruction needs to be extremely well characterized: the target resolution of 3\% \cite{juno_collaboration_juno_2022} is unprecedented as is required to be able to distinguished between Normal Ordering (NO) and Inverse Ordering (IO). The non-linearity uncertainty needs to be contained under 1\% or the risk appear to measure the wrong ordering \cite{han_dual_2021}.
+
+One of the possible non-linearity source, that will be used as a reference source in this chapter, is the charge non-linearity (QNL) that will be detailed in next section. The dual calorimetry will be able to solve this problem, using calibrations method and measurements that will be used to correct it \cite{han_dual_2021}.
+
+More generally, comparing the results of the two system will allow to detect potential issues on the calibration or reconstruction. This is done in this thesis by comparing directly the spectra and oscillation parameters measurements of the two system.
+
+The study of the independents results of the two system can bring some informations \cite{cabrera_multi-calorimetry_2023} but this is missing the important correlation that should be present between the two system: they see the same events, in the same scintillator, their bound to be correlated. We explore in this chapter a preliminary study of the impact of those correlation via multiple methods and the impact of QNL at various degree.
+
+In the next section will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach}, I present the approaches and assumptions in this study. In section \ref{sec:joint_fit:framework} I present the fit framework used and following in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusion and perspectives in \ref{sec:joint_fit:conclusion}.
 \section{Motivations}
 % II)  Motivations
 % --------------------------
@@ -66,13 +76,14 @@
 %          Tourne autour de la capacité, utile en            général, à réaliser un fit joint.
 
 \section{Approach}
+\label{sec:joint_fit:approach}
 % III) Démarche
 % -----------------------
 %
 %   (a) Simulation d'échantillons toys.
 %
 %          --- C'est la base de cette étude.
-%          --- Dans chaque toy, nous générons un spectre vrai de l'E_nu qui est le point de départ commun de la production des deux spectres reconstruits des LPMT et des sPMt. 
+%          --- Dans chaque toy, nous générons un spectre vrai de l'E_nu qui est le point de départ commun de la production des deux spectres reconstruits des LPMT et des sPMt.
 %          --- Puis nous ajoutons de façon simplifiée (pas nécessaire d'en dire plus ici, voir la sous - section sur IBDgen) les effets de reco pour avoir dans chaque toy deux spectres.
 %          --- Nous étudions plus loin l'effet de la l'exposition sur la sensibilité de la méthode. Donc cet exercice est répété pour plusieurs statistiques (100 jours, 1 an, 2 ans, 6 ans).
 %
@@ -110,6 +121,7 @@
 
 
 \section{Fit framework}
+\label{sec:joint_fit:framework}
 % IV) Le framework de fit.
 % ---------------------------------------
 %
@@ -123,6 +135,7 @@
 %   (c) Le framework de fit intégré.
 
 \section{Technical challenges}
+\label{sec:joint_fit:tech}
 % V) Tes développements techniques.
 % -----------------------------------------------------------
 %
@@ -134,6 +147,7 @@
 % À ce stade, le lecteur doit comprendre comment tout est fait en pratique, et réaliser la quantité de travail technique que cela a demandé.
 
 \section{Results}
+\label{sec:joint_fit:results}
 % VI) Résultats
 % ----------------------
 %
@@ -169,6 +183,7 @@
 %
 
 \section{Conclusion and perspectives}
+\label{sec:joint_fit:conclusion}
 % Vll) Discussions, perspectives
 
 \end{document}
