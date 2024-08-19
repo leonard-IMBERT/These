@@ -9,7 +9,7 @@
 %  \item Re state the context
 %\end{itemize}
 
-We previously showed, in chapter \ref{sec:jcnn}, that neural networks are relevant as reconstruction tools in JUNO. Even if they show worse performance, the combination to classical estimator could still bring improvement. We discussed the use of Convolutional Neural Network (CNN) in the previous chapter and their limitation, in particular the limitation of the image representation for the experiment.
+We previously showed, in chapter \ref{sec:jcnn}, that neural networks are relevant as reconstruction tools in JUNO. Even if they show worse performances, the combination with classical estimators could still bring improvements. We discussed the use of Convolutional Neural Network (CNN) in the previous chapter and their limitations, more specifically the limitation of the image as data representation for the experiment.
 
 In this chapter we propose to use a Graph Neural Network (GNN), a Neural Network specialized to process graph as presented in section \ref{sec:ml:gnn}, to overcome those limitations.
 
@@ -20,9 +20,11 @@ In this chapter we propose to use a Graph Neural Network (GNN), a Neural Network
 %  \item Explain that graph can be a solution
 %\end{itemize}
 
-As explained in chapter \ref{sec:juno} the JUNO sensors, the Large Photomultipliers (LPMT) and Small Photomultipliers (SPMT), are arranged on a spherical plane, pointing to the center of the detector. When trying to represent this plane as a 2D image, due to the inherent problem of the projection, some part of the image are distorted and part of the image do not have any physical meaning (see section  \ref{sec:jcnn:data}). A way to represent the data without inducing deformation is the Graph, an object composed of a collection of nodes and a collection edges representing the relation between the nodes.
+As explained in chapter \ref{sec:juno} the JUNO sensors, the Large Photomultipliers (LPMT) and Small Photomultipliers (SPMT), are arranged on a spherical plane. When trying to represent this plane as a 2D image, due to the inherent problem of the projection, some part of the image are distorted and part of the image do not have any physical meaning (see section  \ref{sec:jcnn:data}). A way to represent the data without inducing deformation is the graph, an object composed of a collection of nodes and edges representing the relation between the nodes.
 
-From this graph representation, we can construct a neural network that will process the data while keeping the properties of it. For example the rotational invariance, i.e. the energy and radius of the event do change if we rotate our referential. An approach was already proposed in JUNO by Qian et al. \cite{qian_vertex_2021} where each node of the graph are like pixels, they represent geometric region of the detector and are connected with their neighbours. The LPMT informations are then aggregated on those nodes. The network then process the data using the equivalent of convolution but on graph \cite{defferrard_convolutional_2017}.
+From this graph representation, we can construct a neural network that will process the data while keeping some interesting properties. For example the rotational invariance, i.e. the energy and radius of the event do change by rotation our referential. For more details see section \ref{sec:ml:gnn}. Graph representation also has the advantage to be able to encode global and higher order informations.
+
+An approach was already proposed in JUNO by Qian et al. \cite{qian_vertex_2021} where each nodes of the graph are like pixels, they represent geometric region of the detector and are connected with their neighbours. The LPMT informations are then aggregated on those nodes. The network then process the data using the equivalent of convolution but on graph \cite{defferrard_convolutional_2017}.
 
 In this work we want to take a step further in the graph representation by including the SPMT and including a maximum of raw informations.
 
@@ -58,17 +60,17 @@ In this work we want to take a step further in the graph representation by inclu
 %  \item Need a custom message passing options
 %\end{itemize}
 
-In an ideal world we would want to have every PMTs represented as node in the graph, each PMT being hit is an informations but the fact that PMTs were not hit is also an important information. It's by being aware of the whole of the system that we are able to give meaning to a subpart. As a reminder, in the Central Detector (CD), JUNO will posses 17612 LPMTs and 25600 SPMTs for a total of 43212 PMTs. This amount of information in itself is still manageable by modern computer if it were to be used in a neural network but when defining the relations between the nodes, it become a bit more tricky.
+In an ideal world we would like to have every PMTs represented as node in the graph, each PMT being hit is an informations but the fact that PMTs were not hit is also an important information. It's by being aware of the whole of the system that we are able to give meaning to a subpart. As a reminder, in the Central Detector (CD), JUNO will posses 17612 LPMTs and 25600 SPMTs for a total of 43212 PMTs. This amount of information in itself is still manageable by modern computer if it were to be used in a neural network but when defining the relations between the nodes, it become a bit more tricky.
 
-Excluding self relation, an edge that would go from and to the same node, and considering the relation to be undirected, the edge from $A$ to $B$ is the same from $B$ to $A$, the amount of edge is given by $\frac{n(n-1)}{2}$ which for 43212 PMTs amount for $933'616'866$ edges. If we encode an information with double precision (64 bits) in what we call an adjacency matrix, each information we want to encode in the relation would consume 4 GB of data. When adding the overhead due to gradient computation during training, this would put us over the memory capacity of a single V100 gpu card (20 GB of memory). We could use parallel training to distribute the training over multiple GPU but we considered that the technical difficulty to deploy this solution was not worth the trouble.
+Excluding self relation and considering the relation to be undirected, the edge from $A$ to $B$ is the same from $B$ to $A$, the amount of necessary edges is given by $\frac{n(n-1)}{2}$ which for 43212 PMTs amount for $933'616'866$ edges. If we encode an information with double precision (64 bits) in what we call an adjacency matrix, each information we want to encode in the relation would consume 4 GB of data. When adding the overhead due to gradient computation during training, this would put us over the memory capacity of a single V100 gpu card (20 GB of memory). We could use parallel training to distribute the training over multiple GPU but we considered that the technical challenge to deploy this solution was not worth the trouble.
 
-The option of connecting PMTs node only to their neighbours could be tempting to reduce the number of edge, but this solution does not translate well in term of internal representation in memory. Edges of sparsely connected nodes can be stored in efficient manner in a sparse matrix but the calculation in itself would often results in the concretization of the full matrix in memory, resulting in an insufficient memory gain during training.
+The option of connecting PMTs node only to their neighbours could be tempting to reduce the number of edge, but this solution does not translate well in term of internal representation in memory. Edges of sparsely connected nodes can be stored in efficient manner in a sparse matrix but the calculation in itself would often results in the concretization of the full matrix in memory, resulting in no memory gain during training.
 
 
-We finally decided of a middle ground where we define three \textit{families}:
+We finally decided of a middle ground where we define three \textit{families} of nodes:
 \begin{itemize}
-  \item The core of the graph will be composed of nodes representing geometric regions of the detector. We call those nodes {\color{Dandelion} mesh} nodes. Those mesh nodes are densely connected to each other. We keep their number of the order of magnitude of a thousand to keep the memory consumption low
-  \item All the fired PMTs, PMTs that have been hit, will be represented as nodes. We call those node {\color{red} fired}. Fired nodes are connected to the mesh they geometrically belong.
+  \item The core of the graph is composed of nodes representing geometric regions of the detector. We call those nodes {\color{Dandelion} mesh} nodes. Those mesh nodes are densely connected to each other. We keep their number low to gain in memory consumption.
+  \item All the fired PMTs, that have been hit, will be represented as nodes. We call those node {\color{red} fired}. Fired nodes are connected to the mesh they geometrically belong.
   \item A final node which will hold global information about the detector and on which we will read the interaction vertex and energy. It's designated as the {\color{blue} I/O} node for input/output. This node will be connected to every mesh nodes.
 \end{itemize}
 Those nodes and their relations are illustrated in figure \ref{fig:jgnn:node_schema}. From this representation, we end up with three distinct adjacency adjacency matrix
@@ -89,13 +91,13 @@ The adjacency matrix representing those relation is illustrated in figure \ref{f
   \hfill
   \begin{subfigure}[t]{0.39\linewidth}
     \includegraphics[width=\linewidth]{images/jgnn/adjacency_mat.png}
-    \caption{Illustration of what a dense adjacency matrix would looks like and the part we a re really interested in. Because Fired $\rightarrow$ Mesh and Mesh $\rightarrow$ I/O relations are undirected, we only consider in practice the top right part of the matrix for those relations.}
+    \caption{Illustration of what a dense adjacency matrix would looks like and the part we are really interested in. Because Fired $\rightarrow$ Mesh and Mesh $\rightarrow$ I/O relations are undirected, we only consider in practice the top right part of the matrix for those relations.}
     \label{fig:jgnn:adj}
   \end{subfigure}
   \caption{}
 \end{figure}
 
-The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmenntation offer the advantage that almost each mesh have the same number of direct neighbours and it guarantee that each mesh represent the same extent of the detector surface. The segmentation can be infinitly subdivided to provide smaller and smaller pixels. The number of pixel follow the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 3, $N_{pix} = 12 \cdot 4^3 = 768$.
+The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbours and it guarantee that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follow the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 3, $N_{pix} = 12 \cdot 4^3 = 768$.
 
 \begin{figure}
   \centering
@@ -122,13 +124,13 @@ We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {
       l_1 &= \frac{1}{2}(D_{ij} - \Delta t \frac{c}{n}) \\
       l_2 &= \frac{1}{2}(D_{ij} + \Delta t \frac{c}{n})
     \end{align}
-    where $\vec{i}$ is the position vector of the mesh $i$, $D_{ij}$ is the distance between the center of the meshes $i$ and $j$, $Q_i$ the sum of charges on the mesh $i$, $\Delta t = t_i - t_j$ where $t_i$ the earliest time on the mesh $i$ and $n$ the optical indice of the LS. $\mathbb{A}$ is the vertex to center of mesh distance ratio between $i$ and $j$ based on the time information. For $\mathbb{B}$, the charge ratio evolve with the square of the distance, so the mesh couple with the smallest $\mathbb{B}$ should be the one withe interaction vertex between its two center.
+    where $\vec{i}$ is the position vector of the mesh $i$, $D_{ij}$ is the distance between the center of the meshes $i$ and $j$, $Q_i$ the sum of charges on the mesh $i$, $\Delta t = t_i - t_j$ where $t_i$ the earliest time on the mesh $i$ and $n$ the optical index of the LS. $\mathbb{A}$ is the vertex between center of meshes distance ratio between $i$ and $j$ based on the time information. For $\mathbb{B}$, the charge ratio evolve with the square of the distance, so the mesh couple with the smallest $\mathbb{B}$ should be the one with the interaction vertex between its two center.
 \end{enumerate}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/jgnn/graph_features.png}
-  \caption{Features held by the nodes and edges in the graph. $D^{-1}_{m_1 \rightarrow m_2}$ is the inverse of the distane between two mesh center. The features $P^h_l$, $\mathbb{A}$ and $\mathbb{B}$ are detailed in section \ref{sec:jgnn:data}}
+  \caption{Features held by the nodes and edges in the graph. $D^{-1}_{m_1 \rightarrow m_2}$ is the inverse of the distance between two mesh center. The features $P^h_l$, $\mathbb{A}$ and $\mathbb{B}$ are detailed in section \ref{sec:jgnn:data}}
   \label{fig:jgnn:graph_features}
 \end{figure}
 
@@ -157,9 +159,14 @@ we need to define
 \end{align}
 to update the nodes after each layers as illustrated in figure \ref{fig:jgnn:mp_ill}. We would also need update function for the edges but for the sake of technical simplicity in this work, we will limit ourself to the nodes update. A wide variety of message passing algorithm exists, with different use cases and goal behind them. To stay generalist and to match to the best the specificity of our architecture, we implement the following algorithm:
 \begin{equation}
-  \phi_u \coloneq I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + B^{n'}
+  \phi_u \coloneq I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + I^n_i S^{n'}_{n} + B^{n'}
 \end{equation}
-using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connecetion holding the features indexed by $e$ . The learnable weights are composed of the tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer knowing the relation $e$. $B^{n'}$ is a learnable bias tensor on the new features $n'$.
+using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connections holding the features indexed by $e$ . The learnable weights are composed of:
+\begin{itemize}
+  \item The tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer knowing the relation $e$.
+  \item $B^{n'}$ which is a learnable bias tensor on the new features $n'$.
+  \item $S^{n'}_n$ which can be viewed as a self loop relation where the node update itself based on the previous layer informations.
+\end{itemize}
 If a node have neighbours in different families, the different $I^{n'}_{i'}$ coming from the different $\phi_u$ are summed.
 \begin{equation}
   I^{n'}_{i'} = \sum_\mathcal{N} \phi_{u,\mathcal{N}}
@@ -173,11 +180,13 @@ where $\mathcal{N}$ are the neighbouring family and $\phi_{u,\mathcal{N}}$ the u
   \label{fig:jgnn:mp_ill}
 \end{figure}
 
-We thus have a $W$ and $B$ for each of the $\phi_u$ function we defined above. The $\phi_m$ function is ``hidden'' in the Einstein sum $IAW$. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
+We thus have a $S$, $W$ and $B$ for each of the $\phi_u$ function we defined above. The $IAW$ sum can be seen as the $\phi_m$ function and $IS+B$ as the second part of the $phi_u$ function. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
 
-This operation of message passing is the constituent of our message passing layer designed in this work \textit{JWGLayer}. To this layer, we can adjoin an activation function such as $PReLU$
+The expression above only update the node features. We could update the edges, using the results of $\phi_m$ for example, but for technical simplicity we only update the nodes and keep the edges constant.
+
+This operation of message passing is the constituent of our message passing layer, designed in this work as \textit{JWGLayer}. To this layer, we can adjoin an activation function such as $PReLU$
 \begin{equation}
-  I^{n'}_{i'} = PReLU\bigg(\sum_\mathcal{N} I^n_i A_{i',e}^{i} W_n^{e,n'} + B^{n'} \bigg)
+  I^{n'}_{i'} = PReLU\bigg(\sum_\mathcal{N} I^n_i A_{i',e}^{i} W_n^{e,n'} +  I^n_i S^{n'}_{n} + B^{n'} \bigg)
 \end{equation}
 
 
@@ -234,6 +243,8 @@ The structure seen in the distribution in figure \ref{fig:jgnn:lpmt_hit_e} comes
   \caption{Distribution of the number of hits depending on the radius. \textbf{On the right:} for the LPMT system. \textbf{On the right :} for the SPMT system. To prevent the superposition of structure of different scales we limit ourselves to the energy range $E_{true} \in [0, 9]$.}
 \end{figure}
 
+No quality cut is applied here, we rely only on the trigger system. It means that event that would not trigger are not present in the dataset but for events that triggered twice, it happens rarely, the two trigger are considered as two separate event.
+
 
 
 \section{Model}
@@ -276,7 +287,7 @@ Due to the extensive training time, up to 90h per training on the more complex a
 
 The hyperparameters optimization was thus done ``by hand'', by looking at the results of the previous training and tinker hyperparameters that seems to play a role in the training. During this process, the model went into some heavy refactoring. At the start, the message passing algorithm was not the one presented above but each $\phi_u$ and $\phi_m$ function were FCDNN. The memory consumption and gradient vanishing caused is what made us pivot to the final message passing algorithm presented above.
 
-Even the features on the graph went under investigation, with the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{Dandelion} mesh} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  > 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.
+Even the features on the graph went under investigation. With the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{red} fired} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  > 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.
 
 Substantial effort went to the data processing process before the training. Due to the volatile nature of the graph features during the optimization, the current code do not take preprocessed data and compute the observables, adjacency matrix, etc... on the fly. This data processing is carried out on the CPU, using a worker pool to allow for multiprocessing the data. The raw data are coming from root file produced by the collaboration software, the Event Data Model (EDM) used internally by the collaboration \cite{li_design_2017} had to be interfaced to our code, interface maintained through the evolution of the collaboration software. For the harmonic power calculation, we migrated from the Healpix library to Ducc0 \cite{reinecke_ducc0_2024} for a more fine control of the multithreading.
 

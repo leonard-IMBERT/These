@@ -56,11 +56,11 @@ This equation shows only one solution which is a minima. From Eq. \ref{eq:annex:
 \chapter{Charge spherical harmonics analysis}
 \label{sec:annex:jgnn:harms}
 
-When looking at JUNO event we can clearly see some pattern in the charge repartition based on the event radius as illustrated in figure \ref{fig:annex:jgnn:harmonic:events}. When dealing with identifying features and pattern on a spherical plane, the astrophysics community have been using, with success, the spherical harmonic decomposition. The principle is similar to a frequency analysis via Fourier transform. It comes to saying that a function $f(r, \theta, \phi)$, here our charge repartition of the spherical plane constructed by our PMTs, can be expressed
+When looking at JUNO events we can clearly see some pattern in the charge repartition based on the event radius as illustrated in figure \ref{fig:annex:jgnn:harmonic:events}. When dealing with identifying features and pattern on a spherical plane, the astrophysics community have been using, with success, the spherical harmonic decomposition. The principle is similar to a frequency analysis via Fourier transform. It comes to saying that a function $f(r, \theta, \phi)$, here our charge repartition of the spherical plane constructed by our PMTs, can be expressed
 \begin{equation}
   f(r, \theta, \phi) = \sum_{l=0}^{\infty} \sum_{m=-l}^l a^m_l r^l Y^m_l(\theta, \phi)
 \end{equation}
-where $a^m_l$ are constants complex factor, $Y^m_l(\theta, \phi) = Ne^{im\phi}P^m_l(\cos\theta)$ are the spherical harmonics of degree $l$ and order $m$ and $P^m_l$ their associated Legendre Polynomials. Those harmonics are illustrated in figure \ref{fig:annex:jgnn:harmonic:ill}. Buy reducing the problem to the unit sphere $r=1$, we get rid of the term $r^l$. The Healpix library \cite{gorski_healpix_2005} offer function to efficiently find the $a^m_l$ factor from a given Healpix map.
+where $a^m_l$ are constants complex factor, $Y^m_l(\theta, \phi) = Ne^{im\phi}P^m_l(\cos\theta)$ are the spherical harmonics of degree $l$ and order $m$ and $P^m_l$ their associated Legendre Polynomials. Those harmonics are illustrated in figure \ref{fig:annex:jgnn:harmonic:ill}. By reducing the problem to the unit sphere $r=1$, we get rid of the term $r^l$. The Healpix library \cite{gorski_healpix_2005} offer function to efficiently find the $a^m_l$ factor from a given Healpix map.
 
 \begin{figure}
   \centering
@@ -69,7 +69,7 @@ where $a^m_l$ are constants complex factor, $Y^m_l(\theta, \phi) = Ne^{im\phi}P^
   \label{fig:annex:jgnn:harmonic:ill}
 \end{figure}
 
-For the following analysis, we will define the \textit{Power} of an harmonic as
+For the above decomposition, we will define the \textit{Power} of an harmonic as
 \begin{equation}
   S_{ff}(l) = \frac{1}{2l + 1} \sum_{m=-l}^l |a_l^m|^2
 \end{equation}
@@ -78,7 +78,7 @@ and the \textit{Relative Power} as:
   P^h_l = \frac{S_{ff}(l)}{\sum_l S_{ff}(l)}
 \end{equation}
 
-For this study we will use 10k positron events with $E_{kin} \in [0; 9]$ MeV uniformly distributed in the CD from the JUNO official simulation version J23.0.1-rc8.dc1 (released the 7th January 2024). All the event are \textit{calib} level, with simulation of the physics, electronics, digitizations and triggers. We first take a sub-set of 1k events and look at the power and relative power distribution depending on the radius and harmonic degree $l$. The results are shown in figure \ref{fig:annex:jgnn:harmonic:radius_dependent}. While don't see any pattern in absolute power but it is pretty clear that we see a correlation between the relative power of $l=0$ and the radius of the event.
+For this study we will use 10k positron events with $E_{kin} \in [0; 9]$ MeV uniformly distributed in the CD from the JUNO official simulation version J23.0.1-rc8.dc1 (released the 7th January 2024). All the event are \textit{calib} level, with simulation of the physics, electronics, digitizations and triggers. We first take a sub-set of 1k events and look at the power and relative power distribution depending on the radius and harmonic degree $l$. The results are shown in figure \ref{fig:annex:jgnn:harmonic:radius_dependent}. While don't see any pattern in absolute power, it is pretty clear that there is a correlation between the relative power of $l=0$ and the radius of the event.
 
 \begin{figure}[ht]
   \centering
@@ -97,17 +97,17 @@ When applying the same study but dependent on the energy, no clear correlation a
 
 In figures \ref{fig:annex:jgnn:harmonic:fit1} and \ref{fig:annex:jgnn:harmonic:fit2} are presented the distribution of the relative power of each harmonic for $l \in [0, 11]$. The relation between the radius and the relative power become even more clear, especially for the first harmonics $l \in [0, 4]$. After that for $l > 4$ their relative power is close to 0 for central event, thus loosing power. It also interesting to note the change of behavior in the TR area, clearly visible for $l = 1$ and $l = 2$.
 
-As an erzats of reconstruction algorithm, we fit each of those distribution with a 9th degree polynomial for simplicity which give us the relation
+As an erzats of reconstruction algorithm, we fit each of those distribution with a 9th degree polynomial which give us the relation
 \begin{equation}
   F(R^3) \longmapsto P^h_l
 \end{equation}
-We do it this way because some of the distribution have multiple solution for a given relative power, for example $l = 1$. We now \textit{just} need to find
+We do it this way because some of the distribution have multiple solution for a given relative power, for example $l = 1$, while each radius give only one power. We now \textit{just} need to find
 \begin{equation}
   F^{-1}(P^h_l) \longmapsto R^3
 \end{equation}
 Inverting a 9th degree polynomial is hard, if not impossible. The presence of multiple roots for the same power complexify the task even more. To circumvent this problem, we reconstruct the radius by locating the minima of $(F(R^3) - \hat{P}^h_l)^2$ where $\hat{P}^h_l$ is the measured power fraction.
 
-To distinguish between multiple possible minima, we use as a starting point the radius given by the procedure on $l = 0$ that, by looking at the fit in figure \ref{fig:annex:jgnn:harmonic:fit1}, should present only one minima. We also impose bound on the possible reconstructed $R^3$ as $R^3 \in [R^3_0 - 100, R^3_0 + 100]$ where $R^3_0$ is the reconstructed $R^3$ by the harmonic $l=0$.
+To distinguish between multiple possible minima, we use as a starting point the radius given by the procedure on $l = 0$ that, by looking at the fit in figure \ref{fig:annex:jgnn:harmonic:fit1}, should only present one minima. For $l > 0$ we also impose bound on the possible reconstructed $R^3$ as $R^3 \in [R^3_0 - 100, R^3_0 + 100]$ where $R^3_0$ is the reconstructed $R^3$ by the harmonic $l=0$.
 
 The minimization algorithm used are the Bent algorithm for $l=0$ and the Bounded algorithm for $l > 0$ provided by the Scipy library \cite{virtanen_scipy_2020}. We then do the mean of the reconstructed radius from the different harmonics. The reconstruction results are shown in figure \ref{fig:annex:jgnn:harmonic:reco}. The performance seems correct but we see heavy fluctuation in the bias. To really be used as a reconstruction algorithm, the method needs to be refined as discussed in the next section.
 
@@ -120,7 +120,7 @@ The minimization algorithm used are the Bent algorithm for $l=0$ and the Bounded
 
 \section*{Conclusion}
 
-We have clearly shown in this analysis the relevance the of relative harmonic power for radius reconstruction, and provided an erzats of a reconstruction algorithm. We will not delve further in this thesis but if we wanted to refine this algorithm multiple point need to be addressed:
+We have clearly shown in this analysis the relevance the of relative harmonic power for radius reconstruction, and provided an erzats of a reconstruction algorithm. We will not delve further in this thesis but if we wanted to refine this algorithm multiple paths can be explored:
 \begin{itemize}
   \item No energy signature in the harmonics: This is surprising that there is no correlation between the energy and the amplitude of the harmonics. We know that the energy is heavily correlated with the total number of photoelectrons collected, it would be unintuitive that we see no relation.
   \item Localization of the event: We shown here the relation between the relative power of the harmonic and the radius but don't get any information about the $\theta$ and $\phi$ spherical coordinates. This information is probably hidden in the individual power of each order $m$ of the degree $l$. This intuition comes from the figure \ref{fig:annex:jgnn:harmonic:ill} where in the higher degree $l$ we see that the order $m$ are oriented. Intuitively, the order should be able to indicate a direction where the signal is more powerful.

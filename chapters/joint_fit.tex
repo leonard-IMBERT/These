@@ -1,3 +1,174 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+\begin{document}
 \chapter{Joint fit between the SPMT and LPMT spectra}
 \epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
 \label{sec:joint_fit}
+% I)  Introduction globale.
+% -------------------------------------
+% ... Aborder les points suivants de manière succinte, pour donner une vision d'ensemble...
+%
+%     + JUNO est une expérience de physique de précision : il sera indispensable de comprendre très précisément les effets de reconstruction. C'est  d'autant  plus un défi que Juno emploie une technologie standard en physique des neutrinos (sphère ou cuve de scintillateur liquide  + PMT) mais l'amène dans une configuration extrême et inédite (très gros volume de scintillation, PMT de 30 pouces, etc...) où comprendre les effets de détection peut s'avérer difficile. Il est possible de rater quelque chose. Pouvoir comparer les données et résultats issus de deux systèmes indépendants, soumis à des problèmes différents, est donc précieux. C'est l'origine du dev de sPMT en plus des LPMT.
+%
+%     + L'importance cruciale de la maîtrise de la reconstruction : résolution à mieux que 3% et biais très inférieur à 1% sur la connaissance de la non linéarité sous peine d'incapacité à mesurer la NMO.
+% Rappeler cet élément majeur : si on se trompe de 1%, on conclut à la mauvaise NMO. Utiliser la figure donnée dans la thèse de Yang pour appuyer ce point.
+%
+%    + Une source possible de non linéarité difficile à détecter à ce stade est la QNL. (Voir section suivante pour définition complète).
+%
+%     + La DC répond à cela. Elle interviendra notamment en fournissant des méthodes de calibration permettant de corriger la QNL. Ne pas en dire plus, ref these Yang.
+%
+%     + Plus generalement : Comparer deux systèmes pour détecter des problèmes sur la calibration ou la reco de l'un des deux. C'est ce que l'on fait dans cette thèse en comparant directement les résultats de la mesure des params d'oscillation.
+%
+%    + Une difficulté à étudier : la corrélation entre les deux systèmes : pas suffisant de comparer l'écart entre les valeurs centrales aux incertitudes individuelles. Nous proposons dans ce chapitre une exploration préliminaire testant différentes méthodes, en prédisant la sensibilité de ces méthodes à la présence QNL à divers degrés.
+%
+%   + Plan du chapitre.
+
+
+\section{Motivations}
+% II)  Motivations
+% --------------------------
+%
+%   (a) Écart entre les résultats sPMT et LPMT
+%       -- Tout écart significatif entre les résultats obtenus avec les deux systèmes signale un problème, et est donc intéressant, quelle que soit l'origine du problème.
+%      -- Les deux systèmes ont une sensibilité équivalente à theta_12 et dm2_12. Ce sont donc ces deux paramètres que nous comparerons.
+%     -- Pour détecter un écart significatif, on ne peut se contenter de comparer l'écart à la racine de la somme quad des erreurs individuelles. En effet, une grande partie de l'incertitude provient des incertitudes statistiques sur le spectre vrai de l'énergie des antineutrinos. Ce spectre étant le même pour les deux systèmes, les erreurs stats sur spectres reconstruits par les deux systèmes sont très corrélées. Si la reconstruction de l'E avait une résolution et un biais nul dans les deux systèmes, alors l'incertitude statistiques entre les mêmes bins des deux spectres serait 100% corrélée. Dans la réalité, les effets de reconstruction, en partie aléatoires, diminue cette corrélation. Elle reste néanmoins un élément central dans ce travail.
+%
+%    -- Notre travail dans cette partie de la thèse a été de mettre au point plusieurs tests statistiques pertinents pour détecter un écart entre le système des LPMT et celui des sPMT.
+%      + Un premier objectif est de fournir les distributions des tests statistiques dans le cas où il n'existe pas de source de désaccord imprévue entre les deux systèmes. La valeur obtenue dans les données réelles pourra être comparée à ces distributions pour déduire des p-values.
+%     + Pour évaluer une sensibilité, nous avons besoin de simuler une différence concrète. Nous choisissons de nous intéresser à un effet plausible, la QNL (voir prochaine sous-section). Nous soulignons cependant que la méthode peut être utile quelle que soit la source d'une différence entre LPMT et sPMT (problème dans la calibration, réglage fin de la simulation insuffisant pour un bon data/MC, etc...)
+%
+%
+%   (b) Explications sur la QNL. (  ~ 1 p)
+%
+%       -- Rappeler que la réponse en E du détecteur est sujette à plusieurs sources de non linéarité. La principale est la NL dans la scintillation de photons. Une autre source est la QNL.
+%
+%      -- Définition, origine, etc.
+%
+%      -- Une façon de modéliser : la formule de Yang sur les Q_LPMT.
+%          * Insérer les figures que tu as produites récemment (voir slack le 8 juillet à 17h39 et 17h52) : N_ph/N_ph_qnl vs. Etrue, pour différentes valeurs de gamma_qnl. Cela permet au lecteur de rapidement comprendre l'impact du PB.
+%         * Fais le lien entre alpha_qnl et gamma_qnl, pour expliquer que plus tard, on ne testera que avec alpha_qnl, c'est à dire en simulant un effet global sur l'Erec pour générer plus vite.
+%         * Dans ces figures, tu t'arrêtes à gamma_qnl = 1% <=> alpha_qnl = 0.3 %, je pense que tu peux aller jusqu'au 5% (regarde ce qui est fait chez Yang et dans la publi multicalo). Aussi bien à 0.5%, qu'à 1% et  qu'à 5%, donne le alpha_QNL correspondant, puis introduis-le dans IBDgen pour produire une spectre oscillé biaisé par la QNL, à comparer dans une figure au spectre sans QNL. Le but est de donner une idée de l'impact sur la NMO.
+% En tout cas convaincre qu'il y en a un. Si Steven peut produire un delta-chi2, ce serait super.
+%
+% Remarques :
+%       -- C'est un point important, donc il faut que cela soit auto-contenu au maximum.
+%       -- S'inspirer de la publi multicalo, et de la thèse de Yang.
+%       -- Citer ces deux sources, mais seulement en complément.
+%
+%
+%  (c) Blinding ?
+%
+%
+%
+%  (d) Motivations techniques
+%
+%       -- À compléter à partir de mes notes.
+%          Tourne autour de la capacité, utile en            général, à réaliser un fit joint.
+
+\section{Approach}
+% III) Démarche
+% -----------------------
+%
+%   (a) Simulation d'échantillons toys.
+%
+%          --- C'est la base de cette étude.
+%          --- Dans chaque toy, nous générons un spectre vrai de l'E_nu qui est le point de départ commun de la production des deux spectres reconstruits des LPMT et des sPMt. 
+%          --- Puis nous ajoutons de façon simplifiée (pas nécessaire d'en dire plus ici, voir la sous - section sur IBDgen) les effets de reco pour avoir dans chaque toy deux spectres.
+%          --- Nous étudions plus loin l'effet de la l'exposition sur la sensibilité de la méthode. Donc cet exercice est répété pour plusieurs statistiques (100 jours, 1 an, 2 ans, 6 ans).
+%
+%   (b) Fits séparés
+%     --- Fit individuel LPMT puis sPMT dans chaque toy.
+%     --- Les N_toys résultats permettent d'établir la corrélation entre les param d'oscillations mesurés par les deux fits quand la génération ne suppose pas d'effets de reco imprévus.
+%          => Description du test statistique
+%
+%
+%  (c) Fit joint
+%
+%     --- Un fit de chi2, ajustant aux deux spectres 2 pdf distinctes (par la modèle de reconstruction qu'elles supposent).
+%
+%     --- Les paramètres ajustés par le fit sont :  ...
+%
+%     --- Les paramètres fixes, ou contraints par un pull term : ...
+%
+%     --- Les pdf sont distinctes, mais les valeurs des paramètres d'oscillations sont communes aux deux fits.
+%
+%     --- Pour tenir compte d'un biais dû à un effet de reco imprévu, delta_th et delta_dm ajoutés à th12 et dm2_12 dans la pdf appliquée au spectre LPMT.
+%
+%     --- Nous avons là par défaut deux spectres de 410 bins, donc un spectre global de 820 bins. Nous effectuons un fit de chi2 : besoin d'une matrice de corrélation. Dans la plupart des fits joints entre spectres (comme lorsque l'on combine plusieurs expériences) la matrice de covariance statistique totale (celle entre les 820 bins dans notre cas) est diagonale car les différents spectres sont indépendants statistiquement. Là, nous avons pour défi de déterminer les corrélations statistiques entre les deux spectres. Expliqué en section xx.
+%
+%
+%    => La statistique de test.
+%
+%
+%   (d) Les suppositions
+%
+%       --- Nous travaillons en traitant que des erreurs statistiques. Cela se justifie pour un travail exploratoire dans la mesure où une grande partie des effets syst sont totalement corrélés (ceux qui affectent le spectre vrai des neutrinos et des bruits de fond, voir table XX -- systèmatiques du papier Subpercent. )
+%
+%        --- L'essentiel de nos résultats supposent les effets de détection décorrélés entre LPMT et sPMT. Ils sont par ailleurs introduits de manière simpliste (simple tirage gaussien supposant une résolution gaussienne ne dépendant pas de la position de l'intéraction dans le détecteur --conforme à la publi Subpercent et à la dernière publi NMO). Ce choix se justifie pour un travail exploratoire par la nécessité de produire un grand nombre de toys malgré une puissance de calcul limitée. Un premier raffinement de cette approche tenant compte des corrélations entre les deux reconstructions est présenté en fin de chapitre. Il s'appuie sur la simulation complète du détecteur, et sur notre algo CNN de reco sPMT, le seul disponible à ce jour.
+%
+%        ---- La QNL est introduite de manière un peu simpliste pour l'instant (appliquée à nouveau juste en fonction de l'énergie de l'IBD). Rappeler que tu as tout de même établi une correspondance (alpha_qnl vs. gamma_qnl) en commençant à faire le boulot qu'il faudrait faire : l'appliquer au niveau des PMT (ce qui tient compte des effets de position de l'intéraction).
+
+
+\section{Fit framework}
+% IV) Le framework de fit.
+% ---------------------------------------
+%
+% ... Description plus ou moins détaillée suivant qu'il a, ou non, déjà été décrit ailleurs...
+%
+%   (a) Introduction avec rapide overview
+%
+%
+%   (b) La partie standalone : IBD-gen
+%
+%   (c) Le framework de fit intégré.
+
+\section{Technical challenges}
+% V) Tes développements techniques.
+% -----------------------------------------------------------
+%
+%   (a) Pour générer les divers toys et pdf dont on a besoin, avec ou sans QNL.
+%      --- Bien préciser les deux façons de générer des toys : dans IBDgen, ou dans le fmwk intégré, à partir de la matrice de corr et de Choleski.
+%
+%    (b)  Pour que le framework intégré soit capable de faire un fit joint.
+%
+% À ce stade, le lecteur doit comprendre comment tout est fait en pratique, et réaliser la quantité de travail technique que cela a demandé.
+
+\section{Results}
+% VI) Résultats
+% ----------------------
+%
+%    (a) Validations techniques.
+%
+%        i- Les test Asimov sans QNL que nous avions faits, pour valider que le fit joint est OK techniquement (joint vs. Moyenne pondérée des fit individuels) et notamment que la matrice a été mise correctement.
+%
+%        ii- Tous les autres que je n'ai plus en tête.
+%
+%   (b) La matrice de covariance
+%
+%      i- méthode théorique
+%         --- explications
+%         --- résultats
+%      ii- méthode toys
+%             Idem
+%      iii- la méthode basée sur les données sniper.
+%            Idem
+%      iv- comparaison
+%         --- commentaires et conclusion.
+%
+%     Préciser ou rappeler ici que
+%         --- pour nos tests, nous nous basons sur l'hypo H0 et donc nous générons la matrice sans QNL.
+%         --- les corrélations dépendent peu de la forme du spectre ou se sa stat.
+%
+%
+%   (c) Résultats fit séparés
+%
+%
+%   (d) Résultats fits joints
+%
+%   (e) Résultats avec corrélations reco_spmt vs. reco_lmpt mieux prises en compte
+%
+
+\section{Conclusion and perspectives}
+% Vll) Discussions, perspectives
+
+\end{document}
