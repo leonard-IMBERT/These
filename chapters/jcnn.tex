@@ -121,7 +121,7 @@ We cannot use the mean loss because we consider multiple loss functions, there i
 
 The models were developped in Python using the pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} gpus. The A100 was split in two, thus the accessible gpu memory was 20 Gb making it impossible to train some of the architectures due to memory consumption.
 
-The training was monitored in realtime by a custom tooling that was developed during this thesis, DataMo \cite{tigri_leonard-imbertdatamo_2024}.
+The training was monitored in realtime by a custom tooling that was developed during this thesis, DataMo \cite{imbert_leonard-imbertdatamo_2024}.
 
 The training of one model takes between 4h and 15h depending of its size, overall training the full 72 model takes around 500 GPU hours. Even with parallel training, this random search hyper-optimisation was time consuming.
 

@@ -34,6 +34,7 @@ More generally, comparing the results of the two system will allow to detect pot
 The study of the independents results of the two system can bring some informations \cite{cabrera_multi-calorimetry_2023} but this is missing the important correlation that should be present between the two system: they see the same events, in the same scintillator, their bound to be correlated. We explore in this chapter a preliminary study of the impact of those correlation via multiple methods and the impact of QNL at various degree.
 
 In the next section will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach}, I present the approaches and assumptions in this study. In section \ref{sec:joint_fit:framework} I present the fit framework used and following in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusion and perspectives in \ref{sec:joint_fit:conclusion}.
+
 \section{Motivations}
 % II)  Motivations
 % --------------------------
@@ -47,6 +48,18 @@ In the next section will discuss the motivations behind this study. In section \
 %      + Un premier objectif est de fournir les distributions des tests statistiques dans le cas où il n'existe pas de source de désaccord imprévue entre les deux systèmes. La valeur obtenue dans les données réelles pourra être comparée à ces distributions pour déduire des p-values.
 %     + Pour évaluer une sensibilité, nous avons besoin de simuler une différence concrète. Nous choisissons de nous intéresser à un effet plausible, la QNL (voir prochaine sous-section). Nous soulignons cependant que la méthode peut être utile quelle que soit la source d'une différence entre LPMT et sPMT (problème dans la calibration, réglage fin de la simulation insuffisant pour un bon data/MC, etc...)
 %
+\subsection{Discrepancies between the SPMT and LPMT results}
+
+As discussed in the introduction of this chapter, the SPMT system and the LPMT system will observe the same events. This mean that, after calibration, if the two system show significant differences in their results this is the signal of potential overlook of an effect or problem. Being able to detect such differences is thus crucial as, as discussed above, even the smallest deviation from our model could lead to the impossibility to measure the Mass Ordering (MO) or even worse, wrong our measurement.
+
+The two system are expected to have the same sensitivity to the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ \cite{juno_collaboration_sub-percent_2022}. We will thus rely on the measurement of those two parameters to detect potential discrepancies.
+
+We could just look at the value and compare them to the estimated independent error of the two system, but we believe and will demonstrate in this chapter that the independent study of the two system is missing a lot of informations, and that, by taking into account the statistic and systematic correlations between the two systems, we can produce much more powerful statistical test.
+
+Our work in this chapter is to develop such tools. The first step is, of course, to verify that in the case of no discrepancies, the results are coherent with the independent analysis. This will give us the distribution of those statistical test in absence of discrepancies. When we will have real data, we will be able to compare it to those distribution to obtain a p-value characterizing the absence of those potential discrepancies.
+
+To evaluate the power of our methods, we need to simulate a concrete discrepancy. We decide to study a plausible effect, the Charge Non-Linearity (QNL) that is detailed next section, but the goal of those tools is to be discrepancy agnostic, as those discrepancies could come from a variety of source (calibration issue, insufficient simulation tuning, etc...)
+
 %
 %   (b) Explications sur la QNL. (  ~ 1 p)
 %
@@ -65,7 +78,31 @@ In the next section will discuss the motivations behind this study. In section \
 %       -- S'inspirer de la publi multicalo, et de la thèse de Yang.
 %       -- Citer ces deux sources, mais seulement en complément.
 %
-%
+
+\subsection{Charge Non-Linearity (QNL)}
+
+The CD energy response is subject of two kind on non-linearity, the first one is the LS response non-linearity where the LS photo-production not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The second one is the LPMT response non-linearity where the charge read from the LPMT is not linear in respect to the number of collected Photo-Electron (PE) (see section \ref{sec:juno:calib}).
+
+The LS non-linearity comes from physics sources. Particles interaction in the LS will produce mainly scintillation light as discussed in section \ref{sec:juno:LS} but will also produce some cherenkov light (< 10\% of the collected light). Both mechanisms posses intrinsic non-linearity, for the Cherenkov emission it's dependent on the velocity of charged particle velocity while the scintillation photon-yield follow a so-called Birk's law with a "quenching" effect depending on the energy and type of particle \cite{particle_data_group_review_2020}. This results in a channel wise QNL.
+
+The LPMT response non-linearity can come from sheer saturation when subject to a high rate of photon inducing a gain non-linearity or come from readout effects such as the electronic noise, the overshoot, the integration time window and even the waveform algorithm. All of those effects results in a channel wise QNL.
+
+Precedent studies \cite{han_dual_2021} suggest a model to emulate this non-linearity response that will be used in this work. We thus define to effect, the channel wise non-linearity that would be applied to each LPMT readout
+\begin{equation}
+  \frac{Q_{rec}}{Q_{true}} = \frac{-\gamma_{qnl}}{9} Q_{true} + \frac{\gamma_{qnl} + 9}{9}
+\end{equation}
+where $Q_{rec}$ is the reconstructed number of PE by the PMT, $Q_{true}$ is true number of PE that hit the PMT, and $\gamma_{qnl}$ is a factor representing the amplitude of the non-linearity.
+
+We also define an event-wise non-linearity characterized by
+\begin{equation}
+  \frac{E_{vis}}{E_{true}} = \frac{-\alpha_{qnl}}{9} E_{true} + \frac{\alpha_{qnl} + 9}{9}
+\end{equation}
+where $E_{vis}$ is the visible energy that can be collected by the detector and $E_{true}$ is the true deposited energy.
+
+
+
+
+
 %  (c) Blinding ?
 %
 %

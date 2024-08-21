@@ -432,7 +432,7 @@ From this calibration we call $E_{vis}$ the "visible energy" that is reconstruct
   \begin{subfigure}[b]{0.37\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/juno/boron_nl.png}
-    \caption{Boron non-spectrum}
+    \caption{Boron spectrum}
     \label{fig:juno:nl:boron}
   \end{subfigure}
   \begin{subfigure}[b]{0.37\textwidth}
@@ -441,7 +441,7 @@ From this calibration we call $E_{vis}$ the "visible energy" that is reconstruct
     \caption{Electron non-linearity}
     \label{fig:juno:nl:electron}
   \end{subfigure}
-  \caption{Fitted and simulated non linearity of gamma, electron sources and from the $^{12}$B spectrum. Black points are simulated data. Red curves are the best fits}
+  \caption{Fitted and simulated non linearity of gamma, electron sources and from the $^{12}$B spectrum. Black points are simulated data. Red curves are the best fits. Figures taken from \cite{juno_collaboration_calibration_2021}.}
   \label{fig:juno:nl}
 \end{figure}
 
@@ -492,6 +492,20 @@ The preliminary calibration program is depicted in table \ref{tab:juno:calib_pro
   \caption{Calibration program of the JUNO experiment}
   \label{tab:juno:calib_prog}
 \end{table}
+
+\subsection{Instrumental non-linearity calibration}
+
+As mentioned in the introduction of this section, we expect an instrumental non-linearity due to the LPMT system saturating. This results in the LPMT underestimating the number of collected photo-electrons. This non-linearity is illustrated in figure \ref{fig:juno:instr_nl}. This non-linearity would consequently convolve with the LS non-linearity. To correct this effect, the LPMT are first calibrated to the channel level using the dual calorimetry calibration technique which consist of comparing the LPMT and SPMT calorimetry calibration using a tunable light source covering the range of 0 to 100 PE per LPMT channel.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=5cm]{images/juno/instr_non_linearity.png}
+  \caption{Event-level instrumental non-linearity, defined as the ratio of the total measured LPMT charge to the true charge for events uniformly distributed in the detector.The solid red line represents event-level non-linearity without the channel-level correction, with position non-uniformity obtained at 1 MeV applied, in an extreme hypothetical scenario of 50\% non-linearity over 100 PEs for the LPMTs. The dashed blue line represents that after the channel-level correction. The gray band shows the residual uncertainty of 0.3\%, after the channel-level correction. Figure taken from \cite{juno_collaboration_calibration_2021}.}
+  \label{fig:juno:instr_nl}
+\end{figure}
+
+Within such range, the SPMT serve as an approximate linear reference since SPMT operate primarily operate in photo-counting mode in this range. Using this technique, the residual non-linearity in the LPMT response due to the saturation effect is under 0.3 \%.
+
 
 \section{Satellite detectors}
 As introduced in section \ref{sec:juno:nu_e_flux} and section \ref{sec:juno:LS}, the precise knowledge and understanding of the detector condition is crucial for the measurements of the NMO and oscillation parameters. Thus two satellite detectors will be setup to monitor the experiment condition. TAO to monitor and understand the $\bar{\nu}_e$ flux and spectrum coming from the nuclear reactor and OSIRIS to monitor the LS response.
