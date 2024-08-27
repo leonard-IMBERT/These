@@ -311,6 +311,7 @@ The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimize
 The training was composed of 30 epochs, each epoch constituted of 10k steps using a batch size of 64 events. The validation was computed over a 100 steps on the validation dataset.
 
 \section{Results}
+\label{sec:jcnn:results}
 
 Before presenting the results, lets discuss the different observables.
 
@@ -518,7 +519,7 @@ By generalising the equation \ref{eq:jcnn:combi} to
 \end{equation}
 we can determine an optimal $\alpha$ for two combined estimators. The estimators with the smallest variance
 \begin{equation}
-  \alpha = \frac{\sigma_C^2 - \sigma_N \sigma_C \rho_CN}{\sigma_N^2 + \sigma_C^2 - 2\sigma_N \sigma_C \rho_NC}
+  \alpha = \frac{\sigma_C^2 - \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2\sigma_N \sigma_C \rho_{NC}}
 \end{equation}
 and the estimator without bias
 \begin{equation}

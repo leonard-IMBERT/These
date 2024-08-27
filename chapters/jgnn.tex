@@ -97,7 +97,7 @@ The adjacency matrix representing those relation is illustrated in figure \ref{f
   \caption{}
 \end{figure}
 
-The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbours and it guarantee that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follow the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 3, $N_{pix} = 12 \cdot 4^3 = 768$.
+The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbours and it guarantee that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follow the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 2, $N_{pix} = 12 \cdot 4^2 = 192$.
 
 \begin{figure}
   \centering
@@ -267,15 +267,29 @@ In this section we'll discuss the different layer composing the final version of
 
 Because we do not change the number of features on the edges, we can simplify the notation to \{{\color{red} $N_{f}$}, {\color{Dandelion} $N_{m}$}, {\color{blue} $N_{IO}$}\}. As an example, the input graph configuration, following the figure \ref{fig:jgnn:graph_features}, is \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13}, 5, 8, 5 \} or, without the edge features, \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13} \}.
 
-The final version of the model, called JWGv7.3.0 is composed of
+The final version of the model, called JWGv8.4.0 is composed of
 \begin{itemize}
-  \item An JWGLayer, converting the input graph to \{ 32, 32, 32 \} with a PReLU activation function.
-  \item 6 hidden JWGLayer, processing the data to \{ 32, 32, 32 \} graphs with a PReLU activation function.
-  \item A flatten layer that flatten the features of the I/O and mesh nodes to a $(32 * 768 + 32) = 24608$ dimensions vector.
+  \item An JWGLayer, converting the input graph to \{ 64, 512, 2048 \} with a PReLU activation function.
+  \item 3 resnet layers, each of them composed of
+    \begin{enumerate}
+      \item 2 JWG layers with a PReLU activation function. They do not change the dimension of the graph
+      \item A sum layer that sums the features in the input graph with the one computed from the JWG layers
+    \end{enumerate}
+  \item A flatten layer that flatten the features of the I/O and mesh nodes in a vector.
   \item 2 fully connected layers of 2048 neurons with a PReLU activation function.
   \item 2 fully connected layers of 512 neurons with a PReLU activation function.
   \item A final, fully connected layer of 4 neurons acting as the output of the network.
 \end{itemize}
+A schematic of the model is presented in figure \ref{fig:jgnn:model-schematic}.
+
+
+\begin{figure}
+  \centering
+  \includegraphics[height=6cm]{images/jgnn/jwgv8_4.png}
+  \caption{Schema of the JWGv8.4.0 architecture, the colored triplet is the graph configuration after each JWG layers}
+  \label{fig:jgnn:model-schematic}
+\end{figure}
+
 
 \section{Training}
 
@@ -295,15 +309,111 @@ Over the course of the project, the model went over more than 60 different confi
 
 \section{Results}
 \label{sec:jgnn:results}
-Present the results
+
+The reconstruction performance of ``JWGv8.4'' are presented in figure \ref{fig:jgnn:results} and compared to the ``Omilrec'' algorithm, the official IBD reconstruction algorithm in JUNO. Omilrec is based on the QTMLE reconstruction method that was presented in section \ref{sec:juno:reco}.
+
+We also present the results of the optimal variance combination of the two algorithm labelled as ``JWG 8.4 x Omilrec'' where the reconstructed target $\hat{theta}$ is the weighted sum of the result of the two estimator JWGv8.4 $\theta_J$ and Omilrec $\theta_O$.
+\begin{equation}
+  \hat{\theta} = \alpha \theta_J + (1 - \alpha) \theta_O; ~ \alpha \in [0, 1]
+\end{equation}
+For more details about the combination and the computation of $\alpha$, refer to annex \ref{sec:annex:jcnn:variance}.
+
+One thing that need to be addressed before discussing results is that the Omilrec algorithm do not reconstruct the deposited energy $E_{dep}$ but reconstruct the visible energy $E_{vis}$. The difference between those two different observables comes from the event-wise and channel-wise non-linearity, presented in \ref{sec:juno:calib}. The multiples energy observables are already discussed in section \ref{sec:jcnn:results}. For the following results, the systematic bias of Omilrec that appear due, to the comparison to $E_{true}$ instead of $E_{vis}$ is corrected using a 5th degree polynomial
+\begin{equation}
+  \frac{E_{true}}{E_{rec}} = \sum_{i=0}^5 P_i E_{true}^i
+\end{equation}
+The fitted distribution and the corresponding fit is presented in figure \ref{fig:jgnn:e_rec_correction}. The value fitted for this correction are presented in table \ref{tab:jgnn:omil_params}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l|r|}
+    $P_0$                        &      1.24541   +/-   0.00585121  \\
+    $P_1$                        &    -0.168079   +/-   0.00716387  \\
+    $P_2$                        &    0.0489947   +/-   0.00312875  \\
+    $P_3$                        &  -0.00747111   +/-   0.000622003 \\
+    $P_4$                        &  0.000570998   +/-   5.7296e-05  \\
+    $P_5$                        & -1.72588e-05   +/-   1.98355e-06 \\
+  \end{tabular}
+  \caption{Parameters of the 5th degree polynomial used to correct Omilrec reconstructed energy.}
+  \label{tab:jgnn:omil_params}
+\end{table}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jgnn/e_rec_e_true_comp.png}
+  \caption{Comparison between Omilrec $E_{rec}$ and the true energy $E_{true}$. The profile of the distribution $E_{true}/E_{rec}$ vs $E_{rec}$ is fitted with a 5th degree polynomial.}
+  \label{fig:jgnn:e_rec_correction}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MSBvTE.png}
+    \caption{Resolution and bias of energy reconstruction vs energy}
+    \label{fig:jgnn:MESBvETC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MESBvRT.png}
+    \caption{Resolution and bias of energy reconstruction vs radius}
+    \label{fig:jgnn:MESBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MESBvET.png}
+    \caption{Resolution and bias of radius reconstruction vs energy}
+    \label{fig:jgnn:MSBvETC}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MSBvRT.png}
+    \caption{Resolution and bias of radius reconstruction vs radius}
+    \label{fig:jgnn:MSBvRTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MSBvTT.png}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \label{fig:jgnn:MSBvTTC}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/jgnn/MSBvPT.png}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \label{fig:jgnn:MSBvPTC}
+  \end{subfigure}
+  \caption{Reconstruction performance of the Omilrec algorithm based on QTMLE presented in section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter and the combination between the two as presented in section \ref{sec:jcnn:combination}. The top part of each plot is the resolution and the bottom part is the bias.}
+  \label{fig:jgnn:results}
+\end{figure}
+
+Overall, energy and radius resolutions are not on par with Omilrec. We see from the energy dependent energy resolution in fig \ref{fig:jgnn:MESBvETC} that our resolution is a bit more than twice the resolution of Omilrec and the combination brings no improvements. Same observation for the energy resolution depending on the radius.
+
+The radius resolution, presented in the figures \ref{fig:jgnn:MSBvETC}, \ref{fig:jgnn:MSBvRTC}, \ref{fig:jgnn:MSBvTTC} and \ref{fig:jgnn:MSBvPTC} is much worse than the Omilrec one. This comes a bit as a surprise, as the energy reconstruction is dependent on the vertex reconstruction to correct for the non-uniformity and non-linearity effect. This mean that either the GNN could outperform the classical methods if the vertex was correctly reconstructed, or that somewhere the GNN reconstruct the vertex correctly but has trouble to formulate it in x,y,z coordinates on the latest layer.
+
+The GNN behaviours are close to Omilrec, indicating that the same information is used in the same way by both algorithms, just that the GNN seems to be less fine-tuned than Omilrec. If the precedent reasoning is true, it would mean that by adding more parameters, more layer or a higher pixelisation of the Healpix representation, the GNN could reach Omilrec performances.
+
+
 
 \section{Conclusion}
-\begin{itemize}
-  \item For now:
-  \item Not competitive
-  \item Aggregation on mesh nodes seems to loose informations
-  \item Maybe too complex ?
-  \item Next step would be to have the waveform dirrectly included
-\end{itemize}
+
+%\begin{itemize}
+%  \item For now:
+%  \item Not competitive
+%  \item Aggregation on mesh nodes seems to loose informations
+%  \item Maybe too complex ?
+%  \item Next step would be to have the waveform dirrectly included
+%\end{itemize}
+
+In this chapter, I present a proposition for a GNN architecture to reconstruct the energy and position of the prompt signal of an IBD interaction. The GNN is not competitive in terms of resolution with the more classical method Omilrec, which is the state of the art reconstruction method for IBD in the JUNO collaboration, but show encouraging results that could be exploited by going further in the optimisation of the hyper parameters. The message passing algorithm is still pretty naive and could probably be refined for JUNO's need.
+
+Another possible improvement is to find a way to increase the Healpix pixelisation. Through our different work on reconstruction and by looking at the different classical methods, it seems that the time information is crucial for the vertex reconstruction, and thus for the energy reconstruction. While we are keeping every raw informations about the fired PMTs, it is possible that the aggregation on mesh nodes could cause the information loss and it has been noticed that allowing more channels to the hidden layer mesh nodes improve the resolution. This observation can be compared to the convolutional GNN presented section \ref{sec:juno:ml} that has similar performance with the classical method with an order 5 Healpix segmentation resulting in 3072 pixels, comforting the need of a finer pixelisation, or more parameters dedicated to aggregation through an increase of channels on the mesh nodes. Both of those improvements require some heavy memory optimisations, distributed training or more powerful hardware to address the memory consumption issue.
+
+A final possible improvement would be to go further in the proximity of raw information. The charge and time used in the PMTs are extracted from a waveform, we could imagine a world where the full PMT waveform in the trigger window would be set of channels on the PMT node.
+
+
 
 \end{document}

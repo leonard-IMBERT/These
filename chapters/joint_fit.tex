@@ -87,33 +87,65 @@ The LS non-linearity comes from physics sources. Particles interaction in the LS
 
 The LPMT response non-linearity can come from sheer saturation when subject to a high rate of photon inducing a gain non-linearity or come from readout effects such as the electronic noise, the overshoot, the integration time window and even the waveform algorithm. All of those effects results in a channel wise QNL.
 
-Precedent studies \cite{han_dual_2021} suggest a model to emulate this non-linearity response that will be used in this work. We thus define to effect, the channel wise non-linearity that would be applied to each LPMT readout
+Precedent studies \cite{han_dual_2021} suggest a model to emulate this non-linearity response that will be used in this work. We thus define the channel wise non-linearity that would be applied to each LPMT readout
 \begin{equation}
+  \label{eq:joint_fit:gamma_yang}
   \frac{Q_{rec}}{Q_{true}} = \frac{-\gamma_{qnl}}{9} Q_{true} + \frac{\gamma_{qnl} + 9}{9}
 \end{equation}
 where $Q_{rec}$ is the reconstructed number of PE by the PMT, $Q_{true}$ is true number of PE that hit the PMT, and $\gamma_{qnl}$ is a factor representing the amplitude of the non-linearity.
 
 We also define an event-wise non-linearity characterized by
 \begin{equation}
+  \label{eq:joint_fit:alpha_yang}
   \frac{E_{vis}}{E_{true}} = \frac{-\alpha_{qnl}}{9} E_{true} + \frac{\alpha_{qnl} + 9}{9}
 \end{equation}
-where $E_{vis}$ is the visible energy that can be collected by the detector and $E_{true}$ is the true deposited energy.
+where $E_{vis}$ is the visible energy that can be collected by the detector and $E_{true}$ is the true deposited energy. An example of the effect of such event-wise QNL is presented in figure \ref{fig:joint_fit:spectrums_comp}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=5cm]{images/joint_fit/spectrums.png}
+  \caption{Two oscillated spectrums of 1e7 event expected in JUNO. In red the spectrums without supplementary QNL. In blue the same spectrum but where an event-wise QNL $\alpha_{qnl} = 10\%$ is added.}
+  \label{fig:joint_fit:spectrums_comp}
+\end{figure}
 
 
+Using 1M from the JUNO official simulation J23.0.1-rc8.dc1 (released the 7th January 2024), we simulated events up to the photon collection in LPMTs and simulated an additional channel-wise QNL by applying the equation \ref{eq:joint_fit:gamma_yang} to the number of collected photons.
 
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/gamma_eff.png}
+    \caption{Distribution of ratio of collected nPE after the additional QNL over the number of nPE that would be collected for different $\gamma_{qnl}$. We select event with an interaction radius $R < 4$m to not be affected by the non-uniformity.}
+    \label{fig:joint_fit:ratio_distrib}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/gamma_to_alpha.png}
+    \caption{Ratio of collected nPE after the additional QNL over the number of nPE that would be collected at different energies. We select event with an interaction radius $R < 4$m to not be affected by the non-uniformity. The dots represent the mean of the distribution in figure \ref{fig:joint_fit:ratio_distrib} and the dashed line are the equivalent event-wise non-linearity from eq \ref{eq:joint_fit:alpha_yang}. The hatched zone is the residual non-linearity expected after calibration \cite{juno_collaboration_calibration_2021}.}
+    \label{fig:joint_fit:gamma_v_alpha}
+  \end{subfigure}
+  \caption{}
+\end{figure}
 
+In figure \ref{fig:joint_fit:ratio_distrib} we show the the distribution of the ratio $\frac{Q_{rec}}{Q_{true}}$ for central events ($R < 4$m) and different value of $\gamma_{qnl}$. In figure \ref{fig:joint_fit:ratio_distrib} we show the mean of this distribution as function of the energy. We show effective $\alpha_{qnl}$ for each value of $\gamma_{qnl}$. We see that using the event-wise QNL is equivalent to the mean behavior of using channel-wise QNL.
+
+When using channel-wise non-linearity, we need to simulate a number of PE per LPMT, the process can be quite tedious if we want a realistic simulation so in this study we are only using event-wize non-linearity to make the process simpler. This event-wise non-linearity will be characterized by $\alpha_{qnl}$.
 
 %  (c) Blinding ?
-%
+%  L: Pas expert du sujet (mais alors pas du tout). Je me souviens de la discussion avec steven ou on pourrait ainsi appliquer nos outils avant l'unblidding et ainsi verifier que tout vas bien avant de regarder les resultats ?
 %
 %
 %  (d) Motivations techniques
 %
 %       -- À compléter à partir de mes notes.
-%          Tourne autour de la capacité, utile en            général, à réaliser un fit joint.
+%          Tourne autour de la capacité, utile en général, à réaliser un fit joint.
+%  L: En gros dire que c'est pratique de savoir le faire ?
 
 \section{Approach}
 \label{sec:joint_fit:approach}
+
+In this section we detail the testing procedure behind each of our tools.
+
 % III) Démarche
 % -----------------------
 %
@@ -123,12 +155,38 @@ where $E_{vis}$ is the visible energy that can be collected by the detector and 
 %          --- Dans chaque toy, nous générons un spectre vrai de l'E_nu qui est le point de départ commun de la production des deux spectres reconstruits des LPMT et des sPMt.
 %          --- Puis nous ajoutons de façon simplifiée (pas nécessaire d'en dire plus ici, voir la sous - section sur IBDgen) les effets de reco pour avoir dans chaque toy deux spectres.
 %          --- Nous étudions plus loin l'effet de la l'exposition sur la sensibilité de la méthode. Donc cet exercice est répété pour plusieurs statistiques (100 jours, 1 an, 2 ans, 6 ans).
-%
+
+\subsection{Data production}
+
+The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
+
+We will study the effect of exposure on our methods at different threshold: 100 days, 1 year, 2 year and finally 6 years which is the nominal data taking period for the NMO analysis.
+
+Those spectra are generated for different QNL, $\alpha_{qnl} = 0$, no spectrum distortion, and for $\alpha_{qnl} \in {0.01, 0.005, 0.003, 0.002, 0.001}$. As a reminder, the calibration guarantee a residual event-wise non-linearity $\alpha_{qnl} \leq 0.003$ \cite{juno_collaboration_calibration_2021}.
+
+The first test does not require any fitting and we are just comparing the LPMT and SPMT spectra using the expected statistical correlation matrix in the case $\alpha_{qnl} = 0$, for details about the generation of this correlation matrix, refer to section \ref{sec:joint_fit:cov_mat}. This test is the indicative $\chi^2$ test or $\chi^2_{ind}$ test. In this test we produce a $\chi^2$ representing show the incompatibility between the LPMT and SPMT spectra:
+\begin{align}
+  \Delta_i &= h_{L,i} - h_{S,i} \\
+  U &= A V A^T \\
+  \chi^2_{ind} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
+\end{align}
+Where $h_{L,i}$ and $h_{S,i}$ are the content of the $i$th bin of the LPMT and SPMT bin respectively. $V$ is the covariance matrix of the LPMT + SPMT spectrum. $A$ is a transfers matrix such as:
+\begin{equation}
+  A_{ij} = \frac{\partial \Delta_i}{\partial h_j} = \frac{\partial(h_{L, i} - h_{S, i})}{\partial h_j}
+\end{equation}
+Thus $A_{ij} = 1$ if $i = j$ and $A_{ij} = -1$ if $j$ is the SPMT bin corresponding to the $i$ LPMT bin.
+
+This $\chi^2_{ind}$ is minimal when the statistic between the bins of the LPMT and SPMT spectra follow the covariance matrix $V$. By looking at the distribution of this $\chi^2_{ind}$ when $\alpha_{qnl} = 0$ we can produce p-values for the values found when $\alpha_{qnl} \neq 0$.
+
 %   (b) Fits séparés
 %     --- Fit individuel LPMT puis sPMT dans chaque toy.
 %     --- Les N_toys résultats permettent d'établir la corrélation entre les param d'oscillations mesurés par les deux fits quand la génération ne suppose pas d'effets de reco imprévus.
-%          => Description du test statistique
-%
+%          => Description du test statistiques
+
+\subsection{Individual fits}
+
+Each of the spectra, LPMT and SPMT, are then fitted individually with and without 
+
 %
 %  (c) Fit joint
 %
@@ -168,6 +226,8 @@ where $E_{vis}$ is the visible energy that can be collected by the detector and 
 %
 %
 %   (b) La partie standalone : IBD-gen
+\subsection{IBD generator}
+\label{sec:joint_fit:ibd-gen}
 %
 %   (c) Le framework de fit intégré.
 
@@ -209,7 +269,9 @@ where $E_{vis}$ is the visible energy that can be collected by the detector and 
 %     Préciser ou rappeler ici que
 %         --- pour nos tests, nous nous basons sur l'hypo H0 et donc nous générons la matrice sans QNL.
 %         --- les corrélations dépendent peu de la forme du spectre ou se sa stat.
-%
+\subsection{Covariance matrix}
+\label{sec:joint_fit:cov_mat}
+
 %
 %   (c) Résultats fit séparés
 %
