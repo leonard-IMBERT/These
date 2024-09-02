@@ -164,11 +164,11 @@ We will study the effect of exposure on our methods at different threshold: 100 
 
 Those spectra are generated for different QNL, $\alpha_{qnl} = 0$, no spectrum distortion, and for $\alpha_{qnl} \in {0.01, 0.005, 0.003, 0.002, 0.001}$. As a reminder, the calibration guarantee a residual event-wise non-linearity $\alpha_{qnl} \leq 0.003$ \cite{juno_collaboration_calibration_2021}.
 
-The first test does not require any fitting and we are just comparing the LPMT and SPMT spectra using the expected statistical correlation matrix in the case $\alpha_{qnl} = 0$, for details about the generation of this correlation matrix, refer to section \ref{sec:joint_fit:cov_mat}. This test is the indicative $\chi^2$ test or $\chi^2_{ind}$ test. In this test we produce a $\chi^2$ representing show the incompatibility between the LPMT and SPMT spectra:
+The first test does not require any fitting and we are just comparing the LPMT and SPMT spectra using the expected statistical correlation matrix in the case $\alpha_{qnl} = 0$, for details about the generation of this correlation matrix, refer to section \ref{sec:joint_fit:cov_mat}. This test is the spectrum $\chi^2$ test or $\chi^2_{spe}$ test. In this test we produce a $\chi^2$ representing show the incompatibility between the LPMT and SPMT spectra:
 \begin{align}
   \Delta_i &= h_{L,i} - h_{S,i} \\
   U &= A V A^T \\
-  \chi^2_{ind} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
+  \chi^2_{spe} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
 \end{align}
 Where $h_{L,i}$ and $h_{S,i}$ are the content of the $i$th bin of the LPMT and SPMT bin respectively. $V$ is the covariance matrix of the LPMT + SPMT spectrum. $A$ is a transfers matrix such as:
 \begin{equation}
@@ -176,7 +176,7 @@ Where $h_{L,i}$ and $h_{S,i}$ are the content of the $i$th bin of the LPMT and S
 \end{equation}
 Thus $A_{ij} = 1$ if $i = j$ and $A_{ij} = -1$ if $j$ is the SPMT bin corresponding to the $i$ LPMT bin.
 
-This $\chi^2_{ind}$ is minimal when the statistic between the bins of the LPMT and SPMT spectra follow the covariance matrix $V$. By looking at the distribution of this $\chi^2_{ind}$ when $\alpha_{qnl} = 0$ we can produce p-values for the values found when $\alpha_{qnl} \neq 0$.
+This $\chi^2_{spe}$ is minimal when the statistic between the bins of the LPMT and SPMT spectra follow the covariance matrix $V$. By looking at the distribution of this $\chi^2_{spe}$ when $\alpha_{qnl} = 0$ we can produce p-values for the values found when $\alpha_{qnl} \neq 0$.
 
 %   (b) Fits séparés
 %     --- Fit individuel LPMT puis sPMT dans chaque toy.
@@ -185,7 +185,22 @@ This $\chi^2_{ind}$ is minimal when the statistic between the bins of the LPMT a
 
 \subsection{Individual fits}
 
-Each of the spectra, LPMT and SPMT, are then fitted individually with and without 
+Each of the spectra, LPMT and SPMT, are then fitted individually with and without the presence of QNL over multiples toys. The results allow us to compute the correlation between the oscillations parameters measured by both of the systems when there is no QNL allowing us to compute a $\chi^2$ representing the compatibility between the oscillation parameters measured by the SPMT and by the LPMT. Because the SPMT system is not sensible to thel oscillation parameters $\Delta m^2_{31}$ and $\theta_{13}$, the test is only done on the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$. We can thus produce the individual chi square $\chi^2_{ind}$
+
+\begin{align}
+  \Delta_\lambda &= \lambda_{L} - \lambda_{S} \\
+  \vec{\Delta} &= [ \Delta_{\theta_{12}} ~ \Delta_{\Delta m^2_{21}} ] \\
+  U &= A V A^T \\
+  \chi^2_{ind} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
+\end{align}
+
+where $\lambda_{L}$ and $\lambda_{S}$ are the measured parameters by the LPMT and SPMT systems respectively. The differents $\lambda$ considered are $\theta_{12}$ and $\Delta m^2_{21}$. $V$ here is the $4\times 4$ covariance matrix between the parameters $\theta_{12, L}$, $\Delta m^2_{21, L}$, $\theta_{12, S}$ and  $\Delta m^2_{21, S}$. $A$ is the transfer matrix that allow to compute the covariance matrix de $\vec{\Delta}$ from $V$ following
+
+\begin{equation}
+  A_{ij} = \frac{\partial \Delta_i}{\partial j}; ~ i \in \{ \theta_{12}, \Delta m^2_{21} \}; ~ j \in \{ \theta_{12, L}, \Delta m^2_{21, L}, \theta_{12, S}, \Delta m^2_{21, S} \}
+\end{equation}
+
+Same as described abose, by comparing the distribution of this $\chi^2_{ind}$ when $\alpha_{qnl} = 0$ and $\alpha_{qnl} \neq 0$ we can compute the power of this test in term of p-values.
 
 %
 %  (c) Fit joint
@@ -204,7 +219,72 @@ Each of the spectra, LPMT and SPMT, are then fitted individually with and withou
 %
 %
 %    => La statistique de test.
-%
+
+\subsection{Joint fit}
+
+\subsubsection{Standard joint fit}
+
+The final step is to produce a joint fit between the two spectra. In this case we adjust our model, the oscillated spectrum, over two spectrum as the same time. We minimize a $\chi^2_{joint}$ defined over the two spectra, the LPMT and SPMT one
+\begin{align}
+  \Delta_i &= D_{i} - T_{i} \\
+  \chi^2_{joint} &= \vec{\Delta}^T V^{-1} \vec{\Delta}
+\end{align}
+where $D_{i}$ is the content of the $i$th bin measured, from the data, and $T_{i}$ is the theoretical number of event in this bin. $V$ is the covariance matrix of our spectrum.
+
+$T$ is the fitted function and depend on multiple parameters
+\begin{itemize}
+  \item The oscillation parameters $\theta_{12}$, $\Delta m^2_{21}$, $\theta_{13}$ and $\Delta m^2_{31}$. Those parameters can be free, have a pull term or be fixed during the fit.
+  \item We take into account in the data production the matter effect and parametrize them by the parameter $\rho$ which is the effective rock density between the reactors and the experiment. Same as the oscillation parameters, this parameter can be free, pulled or fixed.
+  \item The exposure of the considered data which is just a normalization factor in front of the theoretical spectrum. This parameter is fixed at the start of the fit.
+\end{itemize}
+
+In the standard joint fit, the free parameters are $\theta_{12}$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\theta_{13}$ is fixed to the PDG prefered value. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error
+\begin{equation}
+  \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}}
+\end{equation}
+
+$\theta_{13}$ is the parameter on which we are least accurate. It's fixed to nominal value to prevent degeneracy.
+
+The covariance matrix is produced from a correlation matrix $C$ (see section \ref{sec:joint_fit:corr_mat} - Correlation matrix below).
+\begin{equation}
+  V_{ij} = \sigma_{i} \sigma_{j} C_{ij}
+\end{equation}
+where $\sigma_{i}$ is the uncertainty on the number of event in the $i$th bin. We consider in this study that the content of each bin follow a Poisson statistic and that thus the uncertainty is $\sigma_i = \sqrt{N_i}$ where $N_i$ is the content of the $i$th bin. The content of each bin can come from two sources the data and the theoretical spectrum $\sigma_i = \sqrt{D_i}$ (Pearson test) and $\sigma_i = \sqrt{T_i}$ (Neyman test). Precedent studies have show that both Pearson and Neyman tests show bias at low statistic, we thus use the Pearson V test where
+
+\begin{equation}
+  \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}} + \mathrm{ln} | V |
+\end{equation}
+and the covariance matrix $V$ is computed using the data spectrum for the uncertainty.
+
+\subsubsection{Delta joint fit}
+
+Using the same structure we define a second joint fit, the Delta joint fit where, in addition to everything that was discussed above, we add two other parameters $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ and split the theoretical $T(\theta_{12}, \Delta m^2_{21}, ...)$ spectrum in two
+\begin{equation}
+\begin{split}
+           &T_{LPMT} \equiv T(\theta_{12} + \delta \theta_{12}, \Delta m^2_{21} + \delta \Delta m^2_{21}, ...) \\
+           &T_{SPMT} \equiv T(\theta_{12}                     , \Delta m^2_{21}                         , ...)
+\end{split}
+\end{equation}
+
+If the there is no additional effect between the LPMT and the SPMT spectra, the fit should converge to $\delta \theta_{12} = \delta \Delta m^2_{21} = 0$. By observing the dispersion of those parameter we can define the probability $P(\alpha_{qnl} = 0 | (\delta \theta_{12}, \delta \Delta m^2_{21}))$ and use the median value of $(\delta \theta_{12}, \delta \Delta m^2_{21})$ when $\alpha_{qnl} \neq 0$ to define a sensibility.
+
+The last test we explore in this thesis is to fit the same spectrum with the standard joint fit that we consider as the hypothesis without distortion $H_0$ and the hypothesis where there can be a distortion, the delta joint fit designed as the $H_1$ hypothesis. By looking at the dispersion of $\chi^2_{joint,H_0} - \chi^2_{joint,H_1}$ we can extract a sensibility to potential distortion.
+
+\subsubsection{Data and theoretical spectrum generation}
+
+To implement the joint fit, we have technically two data spectra and two theoretical spectra. The data in this study are produced using an IBD generator \textit{IBD gen}, see section \ref{sec:joint_fit:ibd-gen}. The theoretical spectrum are produced the same way as data spectrum but with much higher statistics, $10^7$ events to compare with the $\approx 10^5$ events after 6 years. The two spectrum, that we get as a collection of event, are binned in two histograms from 0.8 to 9 MeV of reconstructed energy with bins of 0.02 MeV each resulting in 410 bins per spectrum. An illustration of the theoretical spectrum can be found in figure \ref{fig:joint_fit:delta:theo}. The assumption of Poissonian statistic for the number of event per bin is valid for N > 30 thus we cut spectrum at 7.5 MeV / 335 bins for the fit.
+
+\begin{figure}
+  \centering
+  \includegraphics[height=6cm]{images/joint_fit/theoretical_spectrum.png}
+  \caption{Theoretical LPMT spectrum at nominal oscillation values binned using 410 from 0.8 to 9 MeV. It is rescaled to correspond to the amount of event expected in 6 years of data taking. The black line represent the 335 bin cut}
+  \label{fig:joint_fit:delta:theo}
+\end{figure}
+
+\subsubsection{Correlation matrix}
+\label{sec:joint_fit:corr_mat}
+
+
 %
 %   (d) Les suppositions
 %
