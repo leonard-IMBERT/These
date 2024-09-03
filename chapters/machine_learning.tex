@@ -7,17 +7,17 @@
 
 \epigraph{``I have the shape of a human being and organs equivalent to those of a human being. My organs, in fact, are identical to some of those in a prosthetized human being. I have contributed artistically, literally, and scientifically to human culture as much as any human being now alive. What more can one ask?''}{Isaac Asimov, The Complete Robot }
 
-Machine Learning (ML) and more specifically Neural Network (NN) are families of data-driven algorithm. They are used to model complex distributions from a finite dataset to extract a generalist behavior. They learn, adapt their intrinsic parameters, interactively by computing its performance or \textit{loss} on those dataset. They take advantage of simple microscopic operation such as \textit{if condition} or non-continuous but differentiable function like \textit{ReLU}. Through optimizers and the combination of a lot of those microscopic operations, they can obtain complex and precise behaviours.
+Machine Learning (ML) and more specifically Neural Network (NN) are families of data-driven algorithms. They are used to model complex distributions from a finite dataset to extract a generalist behavior. They learn, adapt their intrinsic parameters, interactively by computing their performances or \textit{loss} on those datasets. They take advantage of simple microscopic operations such as \textit{if condition} or non-continuous but differentiable function like \textit{ReLU} in heavy numbers to model macroscopic complex and precise behaviours.
 
 They are now widely used in a wide variety of domain including natural language processing, computer vision, speech recognition and, the subject of this thesis, scientific studies.
 
-We found them in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc..., domains where the underlying physic and detector process is complex and highly dimensional. Physicists have traditionally been forced to use simplifications or assumptions to ease the developmment of algorithms or equations (a good example is the algorithm presented in section \ref{sec:juno:reco}) where machine learning could refine and take into account those effects, provided that they have enough data and computing power.
+We found them in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc..., domains where the underlying physic and detector processes are complex and highly dimensional. Physicists have traditionally been forced to use simplifications or assumptions to ease the developmment of algorithms or equations (a good example is the algorithm presented in section \ref{sec:juno:reco}) where machine learning could refine and take into account those effects, provided that they have enough data and computing power.
 
 This chapter present an overview of the different kind of machine learning methods and neural networks that will be discussed in this thesis.
 \section{Boosted Decision Tree (BDT)}
 \label{sec:ml:bdt}
 
-One of the most classic machine learning algorithm used in particle physics is Boosted Decision Tree (BDT) \cite{breiman_classification_2017} (or more recently Gradient Boosting Machine \cite{friedman_greedy_2001}). The principle of a BDT is fairly simple : based on a set of observables, a serie of decisions, represented as node in a tree, are taken by the algorithm. Each decision point, or node, takes its decision based on a set of trainable parameters leading to a subtree of decision. The process is repeated until it reach the final node, yielding the prediction. A simplistic example is given in figure \ref{fig:ml:bdt}.
+One of the most classic machine learning algorithm used in particle physics is Boosted Decision Tree (BDT) \cite{breiman_classification_2017} (or more recently Gradient Boosting Machine \cite{friedman_greedy_2001}). The principle of a BDT is fairly simple : based on a set of observables, a serie of decisions, represented as node in a tree, are taken by the algorithm. Each decision point, or node, takes its decision based on a set of trainable parameters leading to a subtree of decisions. The process is repeated until it reach the final node, yielding the prediction. A simplistic example is given in figure \ref{fig:ml:bdt}.
 
 \begin{figure}
   \centering
@@ -31,22 +31,22 @@ The training procedure follow a simple score reward procedure. During the traini
 \section{Artificial Neural Network (NN)}
 \label{sec:ml:nn}
 
-One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those component then transmit its information to the other following a certain efficiency or \textit{weight}.
+One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those components then transmit its information to the other following a certain efficiency or \textit{weight}.
 Those works influenced scientist and notably Frank Rosenblatt who published in 1958 what is considered the first neural network model the Perceptron \cite{rosenblatt_perceptron_1958}.
 
 
-Modern neural network still nowadays use the neuron metaphor to represent neural network, but approach them as a graph where the nodes are neurons possessing an activation function and edges holding the weights, or \textit{parameters} in modern literature, between those nodes. Most of the modern neural network work with the principle of neurons layers. Each neurons belong to a layer and takes input from the preceding layer and forward it result to next layer. For example the most basic set layer is the fully connected layer where each of its neurons is connected to every other neurons of the precessing layer. All the neurons posses the same activation function $F$. The connection between two the two layers is expressed as a tensor $T^{i}_{j}$ where $i$ is the index of the precedent layer and $j$ the index of the current layer. The propagation from the layer $I$ to $J$ is then described as
+Modern neural network still nowadays use the neuron metaphor to represent neural network, but approach them as a graph where the nodes are neurons possessing an activation function and edges holding the weights, or \textit{parameters} in modern literature, between those nodes. Most of the modern neural network work with the principle of neurons layers. Each neurons belong to a layer and takes input from the preceding layer and forward it result to next layer. For example the most basic couple of layers is the fully connected layers where each neurons of the input layer is connected to every other neurons of ouput layer. All the neurons posses the same activation function $F$. The connection between the two layers is expressed as a tensor $T^{i}_{j}$ where $i$ is the index of the precedent layer and $j$ the index of the next layer. The propagation from the layer $I$ to $J$ is then described as
 \begin{equation}
   \label{eq:ml:fully-connected}
   J_{j} = F_J(T_{j}^{i} I_{i} + B_j)
 \end{equation}
-where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}. Most of the modern neural networks use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\theta$ in respect of the loss function $\mathcal{L}$ is subtracted to it
+where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}. Most of the modern neural networks use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\theta$ in respect of the loss function $\mathcal{L}$ is subtracted each optimisation step
 \begin{equation}
   \theta_{i+1} = \theta_i - \frac{\partial \mathcal{L}}{\partial \theta}
 \end{equation}
-$i$ being the training iteration index. This needs the expression of $\mathcal{L}$ dependent of $\theta$ to be differentiable, thus the layer and their activation function also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be completed with first and second order momentum like with the Adam optimizer \cite{kingma_adam_2017} (more details in section \ref{sec:ml:train}).
+$i$ being the training step index. This induce $\mathcal{L}$  needs to be differentiable with respect to $\theta$, thus the layers and their activation functions also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be extended with first and second order momentums like in the Adam optimizer \cite{kingma_adam_2017} (more details in section \ref{sec:ml:train}).
 
-This description of neural networks as layer introduced the principle of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describe the NN or its training are designated as \textit{hyperparameters}.
+This description of neural networks as layers introduced the principles of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describes the NN or its training are designated as \textit{hyperparameters}.
 
 The loss $\mathcal{L}$ described above is a score representing how well the NN is doing. As seen above, it needs to be differentiable with respect to the parameter of the NN. Depending if we try to minimize or maximize it, it need to posses a minima or a maxima. For example when doing \textit{regression}, i.e. produce a scalar result, a common loss is the Mean Square Error (MSE). Let $i$ be our dataset, $y_i$ be the target scalar, $x_i$ the input data and $f(x_i, \mathbb{\theta})$ the result of the network. The network here is modelled by $f$, and its parameter by the set $\mathbb{\theta}$
 \begin{equation}
@@ -61,7 +61,7 @@ Another common loss function is the Mean Absolute Error (MAE)
 \subsection{Fully Connected Deep Neural Network (FCDNN)}
 \label{sec:ml:fcdnn}
 
-Fully Connected Deep Neural Network (FCDNN) architecture is the natural evolution of the Perceptron. The input data is represented as a first order tensor $I_j$ and then fed forward to multiple fully connected layers (Eq \ref{eq:ml:fully-connected}) as presented in the figure \ref{fig:ml:fcdnn}. Most of the time, the classic ReLU function
+The Fully Connected Deep Neural Network (FCDNN) architecture is the natural evolution of the Perceptron. The input data is represented as a first order tensor $I_j$ and then fed forward to multiple fully connected layers (Eq \ref{eq:ml:fully-connected}) as presented in the figure \ref{fig:ml:fcdnn}. Most of the time, the classic ReLU function
 \begin{equation}
   \label{sec:ml:relu}
   \mathrm{ReLU}(x) = \begin{cases}
@@ -94,28 +94,28 @@ The reasoning behind ReLU and PReLU is that with enough of them, you can mimic a
 \begin{figure}[ht]
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[height=6cm]{images/placeholder.jpg}
+    \includegraphics[height=6cm]{images/ml/fcdnn_scheme.jpg}
     \caption{Schema of a FCDNN}
     \label{fig:ml:fcdnn}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[height=6cm]{images/placeholder.jpg}
-    \caption{Illustration of a composition of ReLU matching a function}
+    \includegraphics[height=6cm]{images/ml/relu_approx.png}
+    \caption{Illustration of a composition of ReLU ``approximating'' a function. (1) No ReLU is taking effect (2) One ReLU is activating (3) Another ReLU is activating}
     \label{fig:ml:relu-mimic}
   \end{subfigure}
   \caption{}
 \end{figure}
 
-Due to its simplicity, FCDNN are also used as basic pieces for more complex architectures such as the CNN and GNN that will be presented in the next section.
+Due to its simplicity, FCDNN are also used as basic pieces for more complex architectures such as the CNN and GNN that will be presented in the next sections.
 
 \subsection{Convolutional Neural Network (CNN)}
 \label{sec:ml:cnn}
 
 Convolutional Neural Networks are a family of neural networks that use discrete convolution filters, as illustrated in an example in figure \ref{fig:ml:conv_filter}, to process the input data, often images. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters to extract the desired features. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics.
 
-The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend to double the numbers of filters for each division of the input data.
+The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend to grow the numbers of filters for each division of the input data.
 The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
 
 \begin{figure}[ht]
@@ -130,14 +130,14 @@ As an example, let's take the Pytorch \cite{ansel_pytorch_2024} example for the 
 A schema of the CNN used in the Pytorch example is presented in figure \ref{fig:ml:cnn_mnist}. Using this schema as a reference, the trained network is made of:
 \begin{enumerate}
   \item A convolutional layer of $(3 \times 3)$ filters yielding 32 channels. A bias parameter is applied to each channel for a total of $(32 \cdot (3\times3) + 32) = 320$ parameters. The resulting image is $(26\times26 \times 32)$ (26 per 26 pixels with 32 channels). The ReLU activation function is applied to each pixel.
-  \item A second convolutional layer of $(3 \times 3)$ filters yielding 64 channels. This channel also posses a bias parameter for a total of $(64 \cdot (3\times3) + 64) = 640$ parameters. Resulting image is $(24\times24\times64)$. Also with with a ReLU activation function.
+  \item A second convolutional layer of $(3 \times 3)$ filters yielding 64 channels. This channel also posses a bias parameter for a total of $(64 \cdot (3\times3) + 64) = 640$ parameters. Resulting image is $(24\times24\times64)$. This channel also apply a ReLU activation function.
   \item Then comes a $(2\times2)$ max pool layer with a stride of 1 meaning that for each channel the max value of pixels in a $(2\times2)$ block is condensed in a single resulting pixel. The resulting image is $(12 \times 12 \times 64)$.
-  \item This image goes through a dropout layer which will set the pixel to 0 with a probability of 0.25. This help prevent overtraining of the neural network (see section \ref{sec:ml:pitfall} for more details).
+  \item This image goes through a dropout layer which will set the pixel to 0 with a probability of 0.25. This help prevent overtraining the neural network (see section \ref{sec:ml:pitfall} for more details).
   \item The data is the flattened i.e. condensed into a vector of $(12 \times 12 \times 64) = 9216$ values.
   \item Then comes a fully connected linear layer (Eq. \ref{eq:ml:fully-connected}) with a ReLU activation that output 128 feature. It needs $(9216 \cdot 128)+ 128 = 1'179'776$ parameters.
   \item This 128 item vector goes through another dropout layer with a probability of $0.5$
   \item The vector is then transformed through a linear layer with ReLU activation. It output 10 values, one for each digit class (0, 1, 2, ..., 9). It need $(128 \cdot 10) + 128 = 1408$ parameters.
-  \item Finally the 10 values are normalized using a log softmax function $\mathrm{LogSoftmax}(x_i) = \log \bigg(\frac{\exp(x_i)}{\sum_j \exp(x_j)}\bigg)$ to give the probability of the input image to be a certain digit.
+  \item Finally the 10 values are normalized using a log softmax function $\mathrm{LogSoftmax}(x_i) = \log \bigg(\frac{\exp(x_i)}{\sum_j \exp(x_j)}\bigg)$. Each of those values are the probability of the input image to be a certain digit.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -162,15 +162,28 @@ The final network needs 1'182'144 parameters or, if we consider each parameters 
 \subsection{Graph Neural Network (GNN)}
 \label{sec:ml:gnn}
 
-Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu$ of a node $i$.
+Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$ with $k_n$ and $k_e$ the number of features on the nodes and edges respectively. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon \in [0, k_e]$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu \in [0, k_n]$ of a node $i$.
 
-To efficiently manipulate such object we need to structurally encode their property in the neural network architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
+To efficiently manipulate such object we need to structurally encode their property in the neural network computing architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
 \begin{equation}
   n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
 \end{equation}
 where $\phi_u$ is a differentiable update function, $\Box_j$ is a differentiable aggregation function and $\phi_m$ is a differentiable message function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. $\Box$ need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
 
 The edges features can also be updated, either by directly taking the results of $\phi_m$ or by using another message function $\phi_e$.
+
+To explain this process, let's take the situation presented in figure \ref{fig:ml:gnn:message_passing}. We start with an input graph on left, in this case the message passing algorithm is mixing the color on each nodes and produce nodes of mixed color. For simplicity, the $\phi_m$ and $\phi_u$ function are the identity, they take a color and output the same color.
+
+Let's look at what's happening in the node 4. It has 3 neighbours and is a neighbour of itself. The four resulting $\phi_m$ extract the color of each nodes and then feed them to the $\Box$ function. The $\Box$ function just equally distribute the color in the node. Finally the $\phi_u$ function just update the node with the output of $\Box$.
+
+Interestingly we see that the new node 4 does not have any yellow, the color of node 1. But if we were to run the message passing algorithm again, it would get some as node 2 is now partially yellow. If color here represent information, we see that multiple step are needed so that each node is ``aware'' of the informations the other nodes possess.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/message_passing.png}
+  \caption{Illustration of the message passing algorithm. The detailed explanation can be found in section \ref{sec:ml:gnn}}
+  \label{fig:ml:gnn:message_passing}
+\end{figure}
 
 
 Message passing is a very generic way of describing the process of GNN and it can be specialized for convolutional filtering \cite{defferrard_convolutional_2017}, diffusion \cite{li_diffusion_2018} and many other specific operation. GNN are used in a wide variety of application such as regression problematics, node classification, edge classification, node and edge prediction, ...

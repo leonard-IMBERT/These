@@ -63,24 +63,25 @@ To get such high measurements precision, it is necessary to have a very good und
 
 \begin{table}[ht]
   \centering
-  \begin{tabular}{l c c c c}
+  \begin{tabular}{l c c}
     \hline
-    Reactor & Power (GW$_{th}$) & Baseline (km) & IBD Rate (day$^{-1}$) & Relative Flux (\%) \\
+    Reactor & Power (GW$_{th}$) & Baseline (km) \\
     \hline
-    Taishan    & 9.2  & 52.71 & 15.1 & 32.1 \\
-    $~$ Core 1 & 4.6  & 52.77 & 7.5  & 16.0 \\
-    $~$ Core 2 & 4.6  & 52.64 & 7.6  & 16.1 \\
-    Yangjiang  & 17.4 & 52.46 & 29.0 & 61.5 \\
-    $~$ Core 1 & 2.9  & 52.74 & 4.8  & 10.1 \\
-    $~$ Core 2 & 2.9  & 52.82 & 4.7  & 10.1 \\
-    $~$ Core 3 & 2.9  & 52.41 & 4.8  & 10.3 \\
-    $~$ Core 4 & 2.9  & 52.49 & 4.8  & 10.2 \\
-    $~$ Core 5 & 2.9  & 52.11 & 4.9  & 10.4 \\
-    $~$ Core 6 & 2.9  & 52.19 & 4.9  & 10.4 \\
-    Daya Bay   & 17.4 & 215   & 3.0  & 6.4  \\
+    Taishan    & 9.2  & 52.71 \\
+    $~$ Core 1 & 4.6  & 52.77 \\
+    $~$ Core 2 & 4.6  & 52.64 \\
+    Yangjiang  & 17.4 & 52.46 \\
+    $~$ Core 1 & 2.9  & 52.74 \\
+    $~$ Core 2 & 2.9  & 52.82 \\
+    $~$ Core 3 & 2.9  & 52.41 \\
+    $~$ Core 4 & 2.9  & 52.49 \\
+    $~$ Core 5 & 2.9  & 52.11 \\
+    $~$ Core 6 & 2.9  & 52.19 \\
+    Daya Bay   & 17.4 & 215   \\
+    Huizhou    & 17.4 & 265   \\
     \hline
   \end{tabular}
-  \caption{Characteristics of the nuclear power plants observed by JUNO. The IBD rate are estimated from the baselines, the reactors full thermal power, selection efficiency and the current knowledge of the oscillation parameters}
+  \caption{Characteristics of the nuclear power plants observed by JUNO.}
   \label{tab:juno:power_plants}
 \end{table}
 
@@ -193,7 +194,7 @@ Thanks to JUNO sensitivity, multiple other exotic research can be performed on n
 \subsubsection{Proton decay}
 
 Proton decay is a potential unobserved event where the proton decay by violating the baryon number. This violation is necessary to explain the baryon asymmetry in the universe and is predicted by multiple Grand Unified Theories which unify the  strong, weak and electromagnetic interactions.
-Thanks to its large active volume, JUNO will be able to take measurement of the potential proton decay channel $p \rightarrow \bar{\nu}K^+$. Study \cite{juno_collaboration_juno_2023} show that JUNO should be competitive with the current best limit at $5.9 \times 10^{33}$ years from Super-K. This studies show that JUNO, considering no proton decay events observed, would be be able to rules a limit of $9.6 \times 10^{33}$ years at 90 \% C.L.
+Thanks to its large active volume, JUNO will be able to take measurement of the potential proton decay channel $p \rightarrow \bar{\nu}K^+$ \cite{juno_collaboration_juno_2023} thanks to the timing resolution of the SPMT system. Studies show that JUNO should be competitive with the current best limit at $5.9 \times 10^{33}$ years from Super-K. This studies show that JUNO, considering no proton decay events observed, would be be able to rules a limit of $9.6 \times 10^{33}$ years at 90 \% C.L.
 
 
 \section{The JUNO detector}
@@ -351,8 +352,8 @@ The \textit{dry} electronic synchronize the signals from the UWBs abd centralise
 
 The Small PMT (SPMTs) system is made of 3-inch (7.62 cm) PMTs. They will be used in the CD as a secondary detection system. Those 25600 SPMTs will observe the same events as the LPMTs, thus sharing the physics and detector systematics up until the photon conversion. With a detector coverage of 2.7\%, this system will collect $\sim 43$ PE/MeV for a final energy resolution of $\sim 17\%$. This resolution is not enough to measure the NMO, $\theta_{13}$, $\Delta m^2_{31}$ but will be sufficient to independently measure $\theta_{12}$ and $\Delta m^2_{21}$.
 
-The benefit of this second system is to be able to perform another, independent measure of the same events as the LPMTs, constituing the Dual Calorimetry.
-Due to the low PE rate, SPMTs will be running in photo-counting mode in the reactor range and thus will be insensitive to non-linearity effect. Using this property, the intrinsic charge non linearity of the LPMTs can be measured by comparing the PE count in the SPMTs and LPMTs \cite{han_dual_2021}. Also, due to their smaller size and electronics, SPMTs have a better timing resolutions than the LPMTs.
+The benefit of this second system is to be able to perform another, independent measure of the same events as the LPMTs, constituing the Dual Calorimetry useful for calibrationa and, as it we will explore in this thesis, for physics analysis.
+Due to the low PE rate, SPMTs will be running in photo-counting mode in the reactor range and thus will be insensitive to LPMT intrisic effect (see section \ref{sec:juno:calib}). Using this property, the intrinsic charge non linearity of the LPMTs can be measured by comparing the PE count in the SPMTs and LPMTs \cite{han_dual_2021}. Also, due to their smaller size and electronics, SPMTs have a better timing resolutions than the LPMTs.
 At higher energy range, like supernovae events, LPMTs will saturate where SPMTs due to their lower PE collection will to produce a reliable measure of the energy spectrum.
 
 The SPMTs will be grouped by pack of 128 to an UWB hosting their electronics as illustrated in figure \ref{fig:juno:spmt_elec}. This underwater box host two high voltage splitter boards, each one supplying 64 SPMTs, an ASIC Battery Card (ABC) and a global control unit.
@@ -512,7 +513,7 @@ As introduced in section \ref{sec:juno:nu_e_flux} and section \ref{sec:juno:LS},
 
 \subsection{TAO}
 \label{sec:juno:tao}
-The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (45m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
+The Taishan Antineutrino Observatory (TAO) \cite{juno_collaboration_tao_2020, steiger_tao_2022} is a ton-level gadolinium doped liquid scintillator detector that will be located near the Taishan-1 reactor. It aim to measure the $\bar{\nu}_e$ spectrum at very low distance (44m) from the reactor to measure a quasi-unoscillated spectrum. TAO also aim to provide a major contribution to the so-called reactor anomaly \cite{mention_reactor_2011}. Its requirement are to the level of 2 \% energy resolution at 1 MeV.
 
 \subsubsection{Detector}
 
@@ -967,7 +968,7 @@ The $\chi^2$ is minimized by exploring the parameter phase space via gradient de
 
 \subsection{Physics results}
 
-The oscillation parameters are directly extracted from the minimization procedure and the error can be estimated directly from the procedure. For the NMO, the data are fitted under the two assumption of NO and IO. The difference in $\chi^2$ give us the preferred ordering and the significance of our test. Latest studies show that the precision on oscillation parameters after six year of data taking will be of 0.2\%, 0.3\%, 0.5\% and 12.1\% for $\Delta m^2_{31}$, $\Delta m^2_{21}$, $\sin^2\theta_{12}$ and $\sin^2\theta_{13}$ respectively \cite{juno_collaboration_sub-percent_2022}. The expected sensitivity to mass ordering is $3\sigma$ after 6 years \cite{juno_collaboration_juno_2022}.
+The oscillation parameters are directly extracted from the minimization procedure and the error can be estimated directly from the procedure. For the NMO, the data are fitted under the two assumption of NO and IO. The difference in $\chi^2$ give us the preferred ordering and the significance of our test. Latest studies show that the precision on oscillation parameters after six year of data taking will be of 0.2\%, 0.3\%, 0.5\% and 12.1\% for $\Delta m^2_{31}$, $\Delta m^2_{21}$, $\sin^2\theta_{12}$ and $\sin^2\theta_{13}$ respectively \cite{juno_collaboration_sub-percent_2022}. The expected sensitivity to mass ordering is $3\sigma$ after 6.5 years \cite{juno_collaboration_juno_2022}.
 
 \section{Summary}
 

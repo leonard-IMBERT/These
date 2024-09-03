@@ -163,7 +163,7 @@ to update the nodes after each layers as illustrated in figure \ref{fig:jgnn:mp_
 \end{equation}
 using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connections holding the features indexed by $e$ . The learnable weights are composed of:
 \begin{itemize}
-  \item The tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer knowing the relation $e$.
+  \item The tensor $W_n^{e,n'}$ which represent the passage from the previous feature domain $n$, the previous layer, to the current domain $n'$, this layer, knowing the relation $e$.
   \item $B^{n'}$ which is a learnable bias tensor on the new features $n'$.
   \item $S^{n'}_n$ which can be viewed as a self loop relation where the node update itself based on the previous layer informations.
 \end{itemize}
@@ -180,7 +180,7 @@ where $\mathcal{N}$ are the neighbouring family and $\phi_{u,\mathcal{N}}$ the u
   \label{fig:jgnn:mp_ill}
 \end{figure}
 
-We thus have a $S$, $W$ and $B$ for each of the $\phi_u$ function we defined above. The $IAW$ sum can be seen as the $\phi_m$ function and $IS+B$ as the second part of the $phi_u$ function. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
+We thus have a $S$, $W$ and $B$ for each of the $\phi_u$ function we defined above. The $IAW$ sum can be seen as the $\phi_m$ function and $IS+B$ as the second part of the $\phi_u$ function. Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.
 
 The expression above only update the node features. We could update the edges, using the results of $\phi_m$ for example, but for technical simplicity we only update the nodes and keep the edges constant.
 
@@ -269,7 +269,7 @@ Because we do not change the number of features on the edges, we can simplify th
 
 The final version of the model, called JWGv8.4.0 is composed of
 \begin{itemize}
-  \item An JWGLayer, converting the input graph to \{ 64, 512, 2048 \} with a PReLU activation function.
+  \item An JWGLayer, converting the input graph \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13} \} to \{ 64, 512, 2048 \} with a PReLU activation function.
   \item 3 resnet layers, each of them composed of
     \begin{enumerate}
       \item 2 JWG layers with a PReLU activation function. They do not change the dimension of the graph
@@ -297,13 +297,13 @@ The optimizer used for training is the Adam optimizer and default hyperparameter
 
 \section{Optimization}
 
-Due to the extensive training time, up to 90h per training on the more complex architectures, and the heavy memory consumption of the models that would often exceed the 20GB limit of the V100, random search was not a realistic approach to the hyper optimisation. We were able to extend the memory limit to 40GB thanks to a local A100 GPU card available at the lab.
+Due to the extensive training time, up to 90h per training on the more complex architectures, and the heavy memory consumption of the models that would often exceed the 20GB limit of the V100, random search was not a realistic approach to the hyper optimisation. We were able to extend the memory limit to 40GB thanks to a local A100 GPU card available inside the laboratory.
 
-The hyperparameters optimization was thus done ``by hand'', by looking at the results of the previous training and tinker hyperparameters that seems to play a role in the training. During this process, the model went into some heavy refactoring. At the start, the message passing algorithm was not the one presented above but each $\phi_u$ and $\phi_m$ function were FCDNN. The memory consumption and gradient vanishing caused is what made us pivot to the final message passing algorithm presented above.
+The hyperparameters optimization was thus done ``by hand'', by looking at the results of the previous training and tinker hyperparameters that seems to play a role in the training. During this process, the model went into some heavy refactoring. At the start, the message passing algorithm was not the one presented above but each $\phi_u$ and $\phi_m$ function were FCDNN. Due to problems of memory consumption and gradient vanishing we pivoted to the message passing algorithm presented above.
 
 Even the features on the graph went under investigation. With the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{red} fired} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  > 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.
 
-Substantial effort went to the data processing process before the training. Due to the volatile nature of the graph features during the optimization, the current code do not take preprocessed data and compute the observables, adjacency matrix, etc... on the fly. This data processing is carried out on the CPU, using a worker pool to allow for multiprocessing the data. The raw data are coming from root file produced by the collaboration software, the Event Data Model (EDM) used internally by the collaboration \cite{li_design_2017} had to be interfaced to our code, interface maintained through the evolution of the collaboration software. For the harmonic power calculation, we migrated from the Healpix library to Ducc0 \cite{reinecke_ducc0_2024} for a more fine control of the multithreading.
+Substantial effort went to the data processing process, transforming JUNO files into understandable graphs, before the training. Due to the volatile nature of the graph features during the optimization, the current code do not take preprocessed data and compute the observables, adjacency matrix, etc... on the fly. This data processing is carried out on the CPU, using a worker pool to allow for multiprocess. The raw data are coming from ROOT file produced by the collaboration software, the Event Data Model (EDM) used internally by the collaboration \cite{li_design_2017} had to be interfaced to our code, interface maintained through the evolution of the collaboration software. For the harmonic power calculation, we migrated from the Healpix library to Ducc0 \cite{reinecke_ducc0_2024} for a more fine control of the multithreading.
 
 Over the course of the project, the model went over more than 60 different configurations to end on the one presented in this chapter.
 
