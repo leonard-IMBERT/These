@@ -80,6 +80,7 @@ To evaluate the power of our methods, we need to simulate a concrete discrepancy
 %
 
 \subsection{Charge Non-Linearity (QNL)}
+\label{sec:joint_fit:qnl}
 
 The CD energy response is subject of two kind on non-linearity, the first one is the LS response non-linearity where the LS photo-production is not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The second one is the LPMT response non-linearity where the charge read from the LPMT is not linear in respect to the number of collected Photo-Electron (PE) (see section \ref{sec:juno:calib}).
 
@@ -158,7 +159,7 @@ In this section we detail the testing procedure behind each of our tools.
 
 \subsection{Data production}
 
-The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{\nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
+The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{\nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:framework:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
 
 We will study the effect of exposure on our methods at different threshold: 100 days, 1 year, 2 year and finally 6 years which is the nominal data taking period for the NMO analysis.
 
@@ -238,23 +239,24 @@ $T$ is the fitted function and depend on multiple parameters
   \item The exposure of the considered data which is just a normalization factor in front of the theoretical spectrum. This parameter is fixed at the start of the fit.
 \end{itemize}
 
-In the standard joint fit, the free parameters are $\theta_{12}$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\theta_{13}$ is fixed to the PDG prefered value. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error
+In the standard joint fit, the free parameters are $\theta_{12}$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\theta_{13}$ is fixed to the PDG favorite value. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error
 \begin{equation}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}}
 \end{equation}
 
 $\theta_{13}$ is the parameter on which we are least accurate. It's fixed to nominal value to prevent degeneracy.
 
-The covariance matrix is produced from a correlation matrix $C$ (see section \ref{sec:joint_fit:corr_mat} - Correlation matrix below).
+The covariance matrix is produced from a correlation matrix $C$
 \begin{equation}
   V_{ij} = \sigma_{i} \sigma_{j} C_{ij}
 \end{equation}
 where $\sigma_{i}$ is the uncertainty on the number of event in the $i$th bin. We consider in this study that the content of each bin follow a Poisson statistic and that thus the uncertainty is $\sigma_i = \sqrt{N_i}$ where $N_i$ is the content of the $i$th bin. The content of each bin can come from two sources the data and the theoretical spectrum $\sigma_i = \sqrt{D_i}$ (Pearson test) and $\sigma_i = \sqrt{T_i}$ (Neyman test). Precedent studies have show that both Pearson and Neyman tests show bias at low statistic, we thus use the Pearson V test where
-
 \begin{equation}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}} + \mathrm{ln} | V |
 \end{equation}
 and the covariance matrix $V$ is computed using the data spectrum for the uncertainty.
+
+The estimation of the covariance is crucial in this study as the strength of this test rely on the systematic and statistical correlations between the LPMT and SPMT spectrum. The generation methods and results of this matrix is detailed in section \ref{sec:joint_fit:cov_mat}.
 
 \subsubsection{Delta joint fit}
 
@@ -270,9 +272,9 @@ If the there is no additional effect between the LPMT and the SPMT spectra, the 
 
 The last test we explore in this thesis is to fit the same spectrum with the standard joint fit that we consider as the hypothesis without distortion $H_0$ and the hypothesis where there can be a distortion, the delta joint fit designed as the $H_1$ hypothesis. By looking at the dispersion of $\chi^2_{joint,H_0} - \chi^2_{joint,H_1}$ we can extract a sensibility to potential distortion.
 
-\subsubsection{Data and theoretical spectrum generation}
+\subsection{Data and theoretical spectrum generation}
 
-To implement the joint fit, we have technically two data spectra and two theoretical spectra. The data in this study are produced using an IBD generator \textit{IBD gen}, see section \ref{sec:joint_fit:ibd-gen}. The theoretical spectrum are produced the same way as data spectrum but with much higher statistics, $10^7$ events to compare with the $\approx 10^5$ events after 6 years. The two spectrum, that we get as a collection of event, are binned in two histograms from 0.8 to 9 MeV of reconstructed energy with bins of 0.02 MeV each resulting in 410 bins per spectrum. An illustration of the theoretical spectrum can be found in figure \ref{fig:joint_fit:delta:theo}. The assumption of Poissonian statistic for the number of event per bin is valid for N > 30 thus we cut spectrum at 7.5 MeV / 335 bins for the fit.
+To implement the joint fit, we have technically two data spectra and two theoretical spectra. The data in this study are produced using an IBD generator \textit{IBD gen}, see section \ref{sec:joint_fit:framework:ibd-gen}. The theoretical spectrum are produced the same way as data spectrum but with much higher statistics, $10^7$ events to compare with the $\approx 10^5$ events after 6 years. The two spectrum, that we get as a collection of event, are binned in two histograms from 0.8 to 9 MeV of reconstructed energy with bins of 0.02 MeV each resulting in 410 bins per spectrum. An illustration of the theoretical spectrum can be found in figure \ref{fig:joint_fit:delta:theo}. The low number of events in the tail of the spectrum can cause instability due to the low statistic, we thus cut the spectrum at 7.5 MeV / 335 bins for the fit.
 
 \begin{figure}
   \centering
@@ -280,10 +282,6 @@ To implement the joint fit, we have technically two data spectra and two theoret
   \caption{Theoretical LPMT spectrum at nominal oscillation values binned using 410 from 0.8 to 9 MeV. It is rescaled to correspond to the amount of event expected in 6 years of data taking. The black line represent the 335 bin cut}
   \label{fig:joint_fit:delta:theo}
 \end{figure}
-
-\subsubsection{Correlation matrix}
-\label{sec:joint_fit:corr_mat}
-
 
 %
 %   (d) Les suppositions
@@ -294,9 +292,29 @@ To implement the joint fit, we have technically two data spectra and two theoret
 %
 %        ---- La QNL est introduite de manière un peu simpliste pour l'instant (appliquée à nouveau juste en fonction de l'énergie de l'IBD). Rappeler que tu as tout de même établi une correspondance (alpha_qnl vs. gamma_qnl) en commençant à faire le boulot qu'il faudrait faire : l'appliquer au niveau des PMT (ce qui tient compte des effets de position de l'intéraction).
 
+\subsection{Limitations}
 
-\section{Fit framework}
+In this work we are only working considering the statistical errors. We can ignore systematic effects, such as effects that would affect the neutrino spectrum or the background spectrum, as they are entirely correlated between the two systems. The details of those systematic effects can be found in \cite{juno_collaboration_sub-percent_2022}.
+
+Most of our results assume decorrelated detection effects between the SPMT and LPMT system. Their respective reconstruction effect are simulated using simple gaussian drawing on the resolution, independent from their position. This approach was used in previous sensibility and precision studies \cite{juno_collaboration_sub-percent_2022, abusleme_potential_2024}. The potential effect of those reconstruction effects and a first attempt to take them into account are explored in section \ref{sec:joint_fit:cov_mat}.
+
+Even if the goal of this work is to propose deformation agnostic tools, the QNL we use in this study is simplistic as we consider event-wise, position uniform deformation. We show in figure \ref{fig:joint_fit:ratio_distrib} and \ref{fig:joint_fit:gamma_v_alpha} that event-wise QNl is equivalent to the mean behaviour of channel-wise QNL but a more complete study would simulate channel-wise deformation for each event.
+
+\section{Fit software}
 \label{sec:joint_fit:framework}
+
+In this section, I describe the ft framework that was used in this study. The software is composed of two part as illustrated in figure \ref{fig:joint_fit:framework}: A standalone part composed of ROOT \cite{brun_root-projectroot_2022} macros, and the Avenue framework.
+
+The Avenue framework is responsible for the spectrum and config reading, transforming the raw collection of event into spectrums, managing the physics effect such as the oscillation, computing and minimizing the $\chi^2$ with the help of the RooFit library. The macros are invoking, if necessary, the Avenue framework and are the entry point for fitting, generating the necessary inputs quantitity such as the spectrums and correlation matrix, analysing the fit results and managing jobs for distributed computing.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/joint_fit/fit_framework.png}
+  \caption{Schematic description of the fit framework}
+  \label{fig:joint_fit:framework}
+\end{figure}
+
+In this section we will focus on the IBD generator in section \ref{sec:joint_fit:framework:ibd-gen} and the fit macro in itself in section \ref{sec:joint_fit:framework:fit}.
 % IV) Le framework de fit.
 % ---------------------------------------
 %
@@ -307,12 +325,54 @@ To implement the joint fit, we have technically two data spectra and two theoret
 %
 %   (b) La partie standalone : IBD-gen
 \subsection{IBD generator}
-\label{sec:joint_fit:ibd-gen}
+\label{sec:joint_fit:framework:ibd-gen}
+
+The IBD generator is a standalone generator used to produce oscillated and non oscillated spectrum as seen in the JUNO experiment. It takes as inputs physics parameters and a collection of histograms, values and function provided by JUNO to its analysis groups referred as the JUNO common inputs.
+
+The arguments allow to enable or disable effect such as non-uniformity and non-linearity. It finally take as an argument the number of event to generate $N_{evt}$. Optionally, we generate an effective number of event $N$ by drawing in a Poisson distribution of mean $N_{evt}$.
+
+Then for each event we
+\begin{enumerate}
+  \item Choose randomly following the reactor power fraction the reactor from which the neutrino come.
+  \item Generate a random position in the detector following a uniform distribution in the detector.
+  \item Draw a random neutrino energy $E_{\nu}$ from the expected neutrino emission spectrum of every reactor. This spectrum is calculated by:
+    \begin{enumerate}
+      \item Computing the power spectrum of each isotopes $^{235}$U, $^{238}$U, $^{239}$Pu, $^{241}$Pu using the Huber-Mueller model \cite{huber_determination_2011, mueller_improved_2011}.
+      \item Summing the contribution of each isotopes following the respective fission fraction [0.58, 0.07, 0.30, 0.05] as reported in \cite{ma_improved_2013}.
+      \item The power of each reactor is then adjusted by their distance from the detector, the detector efficiency and their mean duty cycle (11 of 12 month).
+      \item The total spectrum is then finally adjusted by taking into account the correction of the Day Bay bump \cite{daya_bay_collaboration_measurement_2016}, adjustment due to spent nuclear fuel and due to the non-equilibrium.
+    \end{enumerate}
+  \item \textit{(Optional)} Compute the survival probability due to oscillation at nominal oscillation parameters value. If the neutrino does not survive, the event is rejected and start from step (1).
+  \item Compute the emitted positron energy $E_{pos}$ from the mass difference. If the neutrino does not have enough energy reject the event and start from step (1).
+  \item Compute the deposited energy $E_{dep}$ by incrementing $E_{pos}$ by 511 keV to account for the positron annihilation. We do not consider cases where some of the energy leak outside of the detector.
+  \item Correct the deposited energy with the expected event-wise non-linearity from \cite{juno_collaboration_calibration_2021} to obtain the visible energy $E_{vis}$.
+  \item \textit{(Optional)} Add a custom non-linearity as described in section \ref{sec:joint_fit:qnl}. This non linearity is characterized by $\alpha_{qnl}$ to obtain $E_{\alpha}$.
+  \item Finally, using the expected resolution of the LPMT and SPMT system provided in the JUNO common inputs, we draw from a gaussian characterized by those resolution the reconstructed energy $E_{rec}$ or $E_{lpmt}$ and $E_{spmt}$ for each system.
+\end{enumerate}
+
+The events are stored as n-tuples and are not yet bin at the end of this step.
+
 %
 %   (c) Le framework de fit intégré.
 
-\section{Technical challenges}
-\label{sec:joint_fit:tech}
+\subsection{Fit}
+\label{sec:joint_fit:framework:fit}
+
+The fit macro is the core of this fitting procedure. This macro is responsible for loading the fit configuration and setup the Avenue framework. Using Avenue, it will setup the data files, theoretical spectrum, choose the binning, $\chi^2$, etc... It also have the possibility to generate toys on the fly based on the theoretical spectrum. Given this theoretical spectrum we can randomize the bin content either by:
+\begin{enumerate}
+  \item Drawing the bin content in a Poisson distribution with the bin content as parameter.
+  \item Drawing the bin content in a Gaussian distribution with the bin content as mean and variance. The bin content is then rounded to the nearest integer.
+  \item Drawing the bin difference following a given covariance matrix using the Choleski decomposition. This matrix is at least the statistical covariance matrix but can also contain systematic uncertainties.
+    \begin{align}
+      V &= LL^T \\
+      \mathbf{R} &\sim \mathcal{N}(0, 1) \\
+      \tilde{\mathbf{h}} &= \lceil \mathbf{h} + L\mathbf{R} \rfloor \\
+    \end{align}
+    where $V$ is covariance matrix used to produce the fluctuations, $\mathbf{R}$ is a draw in a multinomal distribution of mean 0 and variance 1, $\mathbf{h}$ the bin content of the theoretical spectrum and $\tilde{\mathbf{h}}$ the bin content of the generated toy.
+\end{enumerate}
+
+The first two methods allow for the fast production of statistics toys while the third allow for the production of statistical and systematical dependent toys. Unfortunately, none of those methods are fitted to produce toy with a QNL different from the theoretical spectrum. The uncertainty on the reconstructed energy $\sigma E_{rec}$ being dependent on $E_{vis}/E_{\alpha}$ makes that we would need to deconvolute the reconstruction effect from the theoretical spectrum. It is much easier to just produce those toys from the IBD generator.
+
 % V) Tes développements techniques.
 % -----------------------------------------------------------
 %
@@ -322,6 +382,8 @@ To implement the joint fit, we have technically two data spectra and two theoret
 %    (b)  Pour que le framework intégré soit capable de faire un fit joint.
 %
 % À ce stade, le lecteur doit comprendre comment tout est fait en pratique, et réaliser la quantité de travail technique que cela a demandé.
+\section{Technical challenges and development}
+\label{sec:joint_fit:tech}
 
 \section{Results}
 \label{sec:joint_fit:results}
