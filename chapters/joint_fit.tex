@@ -159,7 +159,9 @@ In this section we detail the testing procedure behind each of our tools.
 
 \subsection{Data production}
 
-The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{\nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:framework:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
+\subsubsection{IBD spectra}
+
+The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{\nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. The parameters of the reactors come from JUNO official database, shared among all physics analysis, the JUNO common inputs. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:framework:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
 
 We will study the effect of exposure on our methods at different threshold: 100 days, 1 year, 2 year and finally 6 years which is the nominal data taking period for the NMO analysis.
 
@@ -178,6 +180,17 @@ Where $h_{L,i}$ and $h_{S,i}$ are the content of the $i$th bin of the LPMT and S
 Thus $A_{ij} = 1$ if $i = j$ and $A_{ij} = -1$ if $j$ is the SPMT bin corresponding to the $i$ LPMT bin.
 
 This $\chi^2_{spe}$ is minimal when the statistic between the bins of the LPMT and SPMT spectra follow the covariance matrix $V$. By looking at the distribution of this $\chi^2_{spe}$ when $\alpha_{qnl} = 0$ we can produce p-values for the values found when $\alpha_{qnl} \neq 0$.
+
+\subsubsection{Background spectra}
+
+The JUNO common inputs provides only LPMT background spectra. Those background spectra are already smeared by the LPMT resolution and thus needs to be regenrated to be smeared following the SPMT resolution. Luckily the SPMT resolution is greater that the LPMT, alowing us to oversmear the spectrum using
+\begin{equation}
+  \label{eq:joint_fit:oversmear}
+  S(E) = L(E) \star \frac{1}{\sqrt{|\Delta \sigma^2|} \sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}; ~ |\Delta \sigma^2| = \sigma_L^2 - \sigma_S^2
+\end{equation}
+Where $S(E)$ is the SPMT spectrum, $L(E)$ the LPMT spectrum, $\sigma_L$ and $\sigma_S$ the LPMT and SPMT resolution respectively. This formula is valid under the assumption that the LPMT and SPMT smearing are gaussian and that the LPMT and SPMT have the same bias. Those two assumption are valid in the context of the IBD spectrum production as detailed in section \ref{sec:joint_fit:framework:ibd-gen}.
+The demonstration of equation \ref{eq:joint_fit:oversmear} can be found in annex \ref{sec:annex:oversmearing}.
+
 
 %   (b) Fits séparés
 %     --- Fit individuel LPMT puis sPMT dans chaque toy.
@@ -385,6 +398,12 @@ The first two methods allow for the fast production of statistics toys while the
 \section{Technical challenges and development}
 \label{sec:joint_fit:tech}
 
+The fit framework Avenue was already partially developed with multispectrum fitting in mind but a lot technical development was necessary to allow for a joint fit. The first step was to migrate the framework from ROOT5 (last release in March 2018) to ROOT6 (v6.26.06 released in July 2022) to ensure compatibility with the data coming from the JUNO colaboration and benefit of the improvement and corrections that came with ROOT6. This allow us to updgrade the C++ standard from C++11 to C++17. A substantial effort has been done to modernize the code, generalizing the function via templating to help readability and using smart pointer to prevent possible memory leaks.
+
+The Avenue framework had to be adapted, notably on the chi-square calculation and spectrum generation to correctly take into account the correlation between the SPMT and LPMT spectrum. The delta joint fit requiring two more parameters over a spectrum twice as large as before with LPMT takes much more time, around 15h for 6 years exposure, than the single LPMT fit. Thus the framework and the fit macro had to be updated with ditributed calculation in mind. Notably the aggregation of fit results could be done in a single file instead of managing a file per fit. In case of numerous toy, the hard drive access time could lead to long analysis time.
+
+While the IBD generator was already able to generate LPMT and SPMT spectrum, it was not designed for generating correlated spectrum. As detailed in section \ref{sec:joint_fit:framework:ibd-gen}, up to the reconstruction effect, the two spectrum need to share the same generation else the two spectrum would be decorelated and it would be like we would run two different experiment.
+
 \section{Results}
 \label{sec:joint_fit:results}
 % VI) Résultats
@@ -395,7 +414,77 @@ The first two methods allow for the fast production of statistics toys while the
 %        i- Les test Asimov sans QNL que nous avions faits, pour valider que le fit joint est OK techniquement (joint vs. Moyenne pondérée des fit individuels) et notamment que la matrice a été mise correctement.
 %
 %        ii- Tous les autres que je n'ai plus en tête.
-%
+
+\subsection{Validation}
+
+The first step is to confirm that the updated fit framework is able to reproduce existing results and that the joint fit behave as expected, meaning
+\begin{itemize}
+  \item Without QNL, the individual (\textit{LPMT} and \textit{SPMT}) fit converge to the parameter nominal value and that their errors in the ones reported in existing analysis such as \cite{juno_collaboration_sub-percent_2022}.
+  \item The standard joint fit with an independent covariance matrix (\textit{Indep Standard joint}), meaning that the covariance between the LPMT and SPMT spectra is 0, believe to have twice as much information and thus believe to have a grater precision than the the individual fits.
+  \item The standard joint (\textit{Standard joint}) fit but with a correlated covariance matrix has errors similiar to the LPMT individual fit as the LPMT drive the precision on $\theta_{13}$ and $\Delta m^2_{31}$ and that the LPMT as SPMT are expected to have the same precision on $\theta_{12}$ and $\Delta m^2_{21}$.
+  \item The delta joint (\textit{Delta joint}) fit with covariance matrix have the same resolution as the standard joint fit. The supplementary parameter $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ should not bring supplementaty precision.
+\end{itemize}
+
+The italicized name are the name used in the results reports to identify each fit. We also look into the \textit{Indep Delta joint} which is the fit with the supplementary delta parameters but the covariance between the LPMT and SPMT spectra is 0 and the \textit{Weighted} results where
+\begin{equation}
+  \frac{1}{\sigma^2_{Weighted}} = \frac{1}{\sigma^2_{LPMT}} \cdot \frac{1}{\sigma^2_{SPMT}}
+\end{equation}
+We expect the weighted resolution to be similar to the \textit{Indep Standard joint} as, in both of those test, we do not consider the correlation between the SPMT and LPMT results.
+
+\subsubsection{Asimov studies}
+
+We ran the the tests presented above on the updated framework, the results are reported in table \ref{tab:joint_fit:asimov_results}. All those test are ran considering statistics error only, 6 years exposure with all backgrounds, Pearson $\chi^2$ (covariance is estimated using data spectrum) and $\theta_{13}$ fixed to nominal value. For the \textit{SPMT} fit $\Delta m^2_{31}$ is fixed at nominal value as the SPMT system is net expected to be sensitive to this parameter.
+
+\begin{table}[ht]
+  \begin{footnotesize}
+  \centering
+  \begin{tabular}{l | c | c | c | c | c | c }
+                                    & $\Delta m^2_{21}$ error  & $\delta \Delta m^2_{21}$ error & $\theta_{12}$ error   & $\delta \theta_{12}$ error  & $\Delta m^2_{31}$ error & $\chi^2$ \\
+                                    \hline
+  LPMT                                 & 1.29936e-07   &               & 1.33852e-03   &               & 4.39399e-06   & 3.23088e-18 \\
+  SPMT                                 & 1.38297e-07   &               & 1.38653e-03   &               &               & 2.87502e-18 \\
+  Indep Standard joint                 & 9.48731e-08   &               & 9.86765e-04   &               & 4.39212e-06   & 6.10592e-18 \\
+  Standard joint                       & 1.29723e-07   &               & 1.18342e-03   &               & 4.39287e-06   & 3.38055e-18 \\
+  Weighted                             & 9.46966e-08   &               & 9.63002e-04   &               &               & \\
+  \hline
+  Delta joint                            & 1.35780e-07   & 3.43529e-08   & 1.38236e-03   & 1.46865e-04   & 4.39309e-06   & 3.38055e-18 \\
+  Indep Delta joint                      & 1.38297e-07   & 1.89391e-07   & 1.38653e-03   & 1.87830e-03   & 4.39241e-06   & 6.10592e-18 \\
+  \hline
+  \hline
+  \multicolumn{7}{c}{Fixed $\Delta m^2_{21}$ and $\Delta m^2_{31}$} \\
+  \hline
+  Indep Standard joint &               &               & 9.33082e-04   &               &               & 4.82955e-26 \\
+  LPMT                 &               &               & 1.27032e-03   &               &               & 2.58849e-26 \\
+  SMPT                 &               &               & 1.31070e-03   &               &               & 2.24106e-26 \\
+  Weighted             &               &               & 9.12193e-04   &               &               & \\
+  \hline
+  \hline
+  \multicolumn{7}{c}{Fixed $\Delta m^2_{31}$ and$\theta_{12}$} \\
+  \hline
+  Indep Standard joint          & 8.97117e-08   &               &               &               &               & 6.10617e-18 \\
+  SPMT                          & 1.30734e-07   &               &               &               &               & 2.87522e-18 \\
+  LPMT                          & 1.23319e-07   &               &               &               &               & 3.23095e-18 \\
+  Weighted                      & 8.97066e-08   &               &               &               &               & \\
+  \end{tabular}
+  \end{footnotesize}
+  \caption{Results of the asimov studies of the updated framework. All results are asimov fit, considering 6 years exposure, $\theta_{13}$ is fixed to nominal value, $\chi^2$ is pearson meaning that he error is esitmated using the data spectrum}
+  \label{tab:joint_fit:asimov_results}
+
+\end{table}
+
+In every cases presented above, the fit converges to the parameters nominal value thus only the errors are presented.
+
+We observe, as expected, that $\sigma_{Weighted} \approx \sigma_{Indep~Standard~joint}$ with the exception of $\sigma \theta_{12}$. This could from the slight difference in statistic between the SPMT and LPMT spectra. Indeed, due to a larger smearing in energy resolution, event that would be in the spectra range [0.8, 7.5] MeV are smeared outside the spectrum. This deficit is partially compensated by event outside the spectrum coming back in this range but we expect very few event outside the spectrum in comparison to event at the edges of it. Thus the event deficit is not totally compensated. $\theta_{12}$ being mainly driven by the amplitude of the spectrum (see illustration \ref{fig:juno:juno-spectrum-oscillation}), that's why we think this the origin of the difference.
+
+The second observation is that $\sigma_{Standard~joint} \approx \sigma_{LPMT}$. Once the covariance matrix between the LPMT and SPMT is correctly introduced, the fit ``understand'' that it does not have supplementary information and the LPMT system, which have the best precision, dominate the resolution.
+
+Finally for the \textit{Delta} fit, the error on $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ are of the same order of magnitude than the errors on $\theta_{12}$ and $\Delta m^2_{21}$ in the absence of the covariance matrix. As the LPMT and SPMT spectra are not connected through the covariance matrix, the delta parameters are unconstrained thus the similar errors. Once the covariance matrix is introduced, the delta are much more constrained and present errors an order of magnitude smaller than the error om their respective parameters.
+
+Overall, the asimov studies are satisfactory. The joint fit behave as expected and the errors on the delta parameters are significantly smaller than the error on their respective parameters, indicating great potential if the converge to value different from 0.
+
+\subsubsection{Toy studies}
+
+
 %   (b) La matrice de covariance
 %
 %      i- méthode théorique
