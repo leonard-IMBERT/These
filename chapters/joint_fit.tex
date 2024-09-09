@@ -214,7 +214,7 @@ where $\lambda_{L}$ and $\lambda_{S}$ are the measured parameters by the LPMT an
   A_{ij} = \frac{\partial \Delta_i}{\partial j}; ~ i \in \{ \theta_{12}, \Delta m^2_{21} \}; ~ j \in \{ \theta_{12, L}, \Delta m^2_{21, L}, \theta_{12, S}, \Delta m^2_{21, S} \}
 \end{equation}
 
-Same as described abose, by comparing the distribution of this $\chi^2_{ind}$ when $\alpha_{qnl} = 0$ and $\alpha_{qnl} \neq 0$ we can compute the power of this test in term of p-values.
+Same as described above, by comparing the distribution of this $\chi^2_{ind}$ when $\alpha_{qnl} = 0$ and $\alpha_{qnl} \neq 0$ we can compute the power of this test in term of p-values.
 
 %
 %  (c) Fit joint
@@ -240,6 +240,7 @@ Same as described abose, by comparing the distribution of this $\chi^2_{ind}$ wh
 
 The final step is to produce a joint fit between the two spectra. In this case we adjust our model, the oscillated spectrum, over two spectrum as the same time. We minimize a $\chi^2_{joint}$ defined over the two spectra, the LPMT and SPMT one
 \begin{align}
+  \label{eq:joint_fit:pearson}
   \Delta_i &= D_{i} - T_{i} \\
   \chi^2_{joint} &= \vec{\Delta}^T V^{-1} \vec{\Delta}
 \end{align}
@@ -252,12 +253,26 @@ $T$ is the fitted function and depend on multiple parameters
   \item The exposure of the considered data which is just a normalization factor in front of the theoretical spectrum. This parameter is fixed at the start of the fit.
 \end{itemize}
 
-In the standard joint fit, the free parameters are $\theta_{12}$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\theta_{13}$ is fixed to the PDG favorite value. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error
+In the standard joint fit, the free parameters are $\sin^2(2\theta_{12})$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\sin^2(2\theta_{13})$ is fixed to the PDG favorite value. For simplicity, we refer to $\sin^2(2\theta_{12})$ and $\sin^2(2\theta_{13})$ as $\theta_{12}$ and $\theta_{13}$ respectively. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error. The PDG nominal values used in this study can be found in table \ref{tab:joint_fit:pdg_value}.
 \begin{equation}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}}
 \end{equation}
 
-$\theta_{13}$ is the parameter on which we are least accurate. It's fixed to nominal value to prevent degeneracy.
+
+\begin{table}
+  \centering
+  \begin{tabular}{c|c|c|c}
+    $\sin^2(2\theta_{12})$    & $\Delta m^2_{21}$                       & $\Delta m^2_{31}$      & $\sin^2(2\theta_{13})$ \\
+    \hline
+    $0.851^{+0.020}_{-0.018}$ & $7.53 \pm 0.18 \times 10^{-5}$ eV$^2$   & $2.5283 \pm 0.034 \times 10^{-3}$ eV$^2$  & $0.0.8523 \pm 0.00268$
+  \end{tabular}
+  \caption{Nominal PDG value \cite{particle_data_group_review_2020}. All value are reported assuming Normal Ordering.}
+  \label{tab:joint_fit:pdg_value}
+\end{table}
+
+
+
+$\theta_{13}$ is the parameter on which we are least accurate. It's fixed to nominal value to prevent degeneracy (table \ref{tab:joint_fit:pdg_value}).
 
 The covariance matrix is produced from a correlation matrix $C$
 \begin{equation}
@@ -265,6 +280,7 @@ The covariance matrix is produced from a correlation matrix $C$
 \end{equation}
 where $\sigma_{i}$ is the uncertainty on the number of event in the $i$th bin. We consider in this study that the content of each bin follow a Poisson statistic and that thus the uncertainty is $\sigma_i = \sqrt{N_i}$ where $N_i$ is the content of the $i$th bin. The content of each bin can come from two sources the data and the theoretical spectrum $\sigma_i = \sqrt{D_i}$ (Pearson test) and $\sigma_i = \sqrt{T_i}$ (Neyman test). Precedent studies have show that both Pearson and Neyman tests show bias at low statistic, we thus use the Pearson V test where
 \begin{equation}
+  \label{eq:joint_fit:pearsonV}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}} + \mathrm{ln} | V |
 \end{equation}
 and the covariance matrix $V$ is computed using the data spectrum for the uncertainty.
@@ -296,6 +312,8 @@ To implement the joint fit, we have technically two data spectra and two theoret
   \label{fig:joint_fit:delta:theo}
 \end{figure}
 
+All the IBD spectra presented and used in this study are produced assuming Normal Ordering using the PDG nominal value \cite{particle_data_group_review_2020} for oscillation parameters. Those values are reported in table \ref{tab:joint_fit:pdg_value}.
+
 %
 %   (d) Les suppositions
 %
@@ -318,7 +336,7 @@ Even if the goal of this work is to propose deformation agnostic tools, the QNL 
 
 In this section, I describe the ft framework that was used in this study. The software is composed of two part as illustrated in figure \ref{fig:joint_fit:framework}: A standalone part composed of ROOT \cite{brun_root-projectroot_2022} macros, and the Avenue framework.
 
-The Avenue framework is responsible for the spectrum and config reading, transforming the raw collection of event into spectrums, managing the physics effect such as the oscillation, computing and minimizing the $\chi^2$ with the help of the RooFit library. The macros are invoking, if necessary, the Avenue framework and are the entry point for fitting, generating the necessary inputs quantitity such as the spectrums and correlation matrix, analysing the fit results and managing jobs for distributed computing.
+The Avenue framework is responsible for the spectrum and configuration reading, transforming the raw collection of event into spectra, managing the physics effect such as the oscillation, computing and minimizing the $\chi^2$ with the help of the RooFit library. The macros are invoking, if necessary, the Avenue framework and are the entry point for fitting, generating the necessary inputs quantity such as the spectra and correlation matrix, analysing the fit results and managing jobs for distributed computing.
 
 \begin{figure}[ht]
   \centering
@@ -398,7 +416,7 @@ The first two methods allow for the fast production of statistics toys while the
 \section{Technical challenges and development}
 \label{sec:joint_fit:tech}
 
-The fit framework Avenue was already partially developed with multispectrum fitting in mind but a lot technical development was necessary to allow for a joint fit. The first step was to migrate the framework from ROOT5 (last release in March 2018) to ROOT6 (v6.26.06 released in July 2022) to ensure compatibility with the data coming from the JUNO colaboration and benefit of the improvement and corrections that came with ROOT6. This allow us to updgrade the C++ standard from C++11 to C++17. A substantial effort has been done to modernize the code, generalizing the function via templating to help readability and using smart pointer to prevent possible memory leaks.
+The fit framework Avenue was already partially developed with multispectrum fitting in mind but a lot technical development was necessary to allow for a joint fit. The first step was to migrate the framework from ROOT5 (last release in March 2018) to ROOT6 (v6.26.06 released in July 2022) to ensure compatibility with the data coming from the JUNO collaboration and benefit of the improvement and corrections that came with ROOT6. This allow us to upgrade the C++ standard from C++11 to C++17. A substantial effort has been done to modernize the code, generalizing the function via templating to help readability and using smart pointer to prevent possible memory leaks.
 
 The Avenue framework had to be adapted, notably on the chi-square calculation and spectrum generation to correctly take into account the correlation between the SPMT and LPMT spectrum. The delta joint fit requiring two more parameters over a spectrum twice as large as before with LPMT takes much more time, around 15h for 6 years exposure, than the single LPMT fit. Thus the framework and the fit macro had to be updated with ditributed calculation in mind. Notably the aggregation of fit results could be done in a single file instead of managing a file per fit. In case of numerous toy, the hard drive access time could lead to long analysis time.
 
@@ -427,7 +445,7 @@ The first step is to confirm that the updated fit framework is able to reproduce
 
 The italicized name are the name used in the results reports to identify each fit. We also look into the \textit{Indep Delta joint} which is the fit with the supplementary delta parameters but the covariance between the LPMT and SPMT spectra is 0 and the \textit{Weighted} results where
 \begin{equation}
-  \frac{1}{\sigma^2_{Weighted}} = \frac{1}{\sigma^2_{LPMT}} \cdot \frac{1}{\sigma^2_{SPMT}}
+  \frac{1}{\sigma^2_{Weighted}} = \frac{1}{\sigma^2_{LPMT}} + \frac{1}{\sigma^2_{SPMT}}
 \end{equation}
 We expect the weighted resolution to be similar to the \textit{Indep Standard joint} as, in both of those test, we do not consider the correlation between the SPMT and LPMT results.
 
@@ -483,6 +501,73 @@ Finally for the \textit{Delta} fit, the error on $\delta \theta_{12}$ and $\delt
 Overall, the asimov studies are satisfactory. The joint fit behave as expected and the errors on the delta parameters are significantly smaller than the error on their respective parameters, indicating great potential if the converge to value different from 0.
 
 \subsubsection{Toy studies}
+
+Once we validated that the asimov study is yielding coherent results, we study the behaviour of toy studies. The above asimov study is using the Pearson $\chi^2$ (Eq. \ref{eq:joint_fit:pearson}) without pull parameter, we show in figure \ref{fig:joint_fit:abs_standard_pearson} the effect of using a simple Pearson $\chi^2$. We see that $\sin^2(2\theta_{12})$ (reported as $\theta_{12}$ for simplicity) is biased of about $0.5\sigma$ and $\Delta m^2_{21}$ biased of about $0.1\sigma$. When introducing the PearsonV $\chi^2$ (Eq. \ref{eq:joint_fit:pearsonV}) the bias disappear as reported in figure \ref{fig:joint_fit:abs_standard_pearsonV}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/joint_fit/absolute_standard_joint_pearson.png}
+  \caption{Distribution of BFP - nominal value for 1000 toy Standard joint fit. 6 years exposure, all background, \textbf{Pearson} $\chi^2$, $\theta_{13}$ fixed.}
+  \label{fig:joint_fit:abs_standard_pearson}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{images/joint_fit/absolute_standard_joint_pearsonV.png}
+  \caption{Distribution of BFP - nominal value for 1000 toy Standard joint fit. 6 years exposure, all background, \textbf{PearsonV} $\chi^2$, $\theta_{13}$ fixed.}
+  \label{fig:joint_fit:abs_standard_pearsonV}
+\end{figure}
+
+When the supplementary parameters are introduced in the Delta Joint fit, the fit is stable as shown in the results figure \ref{fig:joint_fit:delta_fit}. The resolutions on the oscillation parameters are slightly worse in the Delta joint fit due to the supplementary freedom. As seen in the asimov studies, the resolution of the $\delta$ parameters is an order of magnitude smaller than their respective parameters, indicating that they can be powerful tools to detect discrepancies between the SPMT and LPMT spectra.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.98\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/joint_fit/normal_delta_joint.png}
+  \end{subfigure}
+
+  \begin{subfigure}[t]{0.66\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/joint_fit/supp_delta_joint.png}
+  \end{subfigure}
+
+  \caption{Distribution of BFP - nominal value for 5000 toy Delta joint fit. 6 years exposure, all background, \textbf{PearsonV} $\chi^2$, $\theta_{13}$ fixed.}
+  \label{fig:joint_fit:delta_fit}
+\end{figure}
+
+\subsubsection{Effect of supplementary QNL on the LPMT spectrum}
+
+Now that we know that the framework and joint fit behave correctly on unbiased data, we test the effect of introducing the QNL, as presented in Eq. \ref{eq:joint_fit:alpha_yang}, in the LPMT spectrum. To test the effect, we consider a QNL $\alpha_{qnl} = 1\%$. For reference, this is about three time the expected residual QNL after calibration ($\alpha_{qnl} = 0.3\%$ \cite{juno_collaboration_calibration_2021}). We use a covariance matrix assuming no QNL. The effect of this QNL on the spectrum is illustrated in figure \ref{fig:joint_fit:anom_aqnl}. In table \ref{tab:joint_fit:qnl_results} we report the results of the different scenarios.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/joint_fit/AnominalAQNL.png}
+  \caption{\textbf{Top:} Theoretical spectrum without QNL (in red) and with $\alpha_{qnl} = 1\%$ (in blue). \textbf{Bottom:} Ratio between the theoretical spectrum with and without QNL.}
+  \label{fig:joint_fit:anom_aqnl}
+\end{figure}
+
+
+
+%\begin{table}
+%  \begin{footnotesize}
+%  \centering
+%  \begin{tabular}{l|lr|lr|lr|lr|lr|}
+%    Mean (standard deviation)  & \multicolumn{2}{c|}{$\theta_{12}$} & \multicolumn{2}{c|}{$\Delta m^2_{21}$} & \multicolumn{2}{c|}{$\Delta m^2_{31}$} & \multicolumn{2}{c|}{$\delta \theta_{12}$} & \multicolumn{2}{c|}{$\delta \Delta m^2_{21}$} \\
+%    \hline
+%    LPMT            & -0.904 & (0.968) & -0.3141 & (0.998)   &  -1.74         & (0.992)           &\multicolumn{2}{c|}{Irrelevant} & \multicolumn{2}{c|}{Irrelevant}  \\
+%    SPMT            & 0.188  & (0.975) & -0.0752 & (1.019)   & \multicolumn{2}{c|}{Not sensitive} &\multicolumn{2}{c|}{Irrelevant} & \multicolumn{2}{c|}{Irrelevant}  \\
+%    Indep Standard  & -0.502 & (1.328) & -0.2758 & (1.407)   & -1.731         & (0.992)           &\multicolumn{2}{c|}{Irrelevant} & \multicolumn{2}{c|}{Irrelevant}  \\
+%    Standard        & -6.01  & (1.201) & -1.511  & (1.031)   & -1.82          & (1.275)           &\multicolumn{2}{c|}{Irrelevant} & \multicolumn{2}{c|}{Irrelevant}  \\
+%    Indep Delta     & 0.184  & (0.973) & -0.704  & (1.019)   & -1.737         & (0.990)           & -0.787     & (0.146) & -0.168 & (0.219) \\
+%    Delta           & 0.136  & (0.974) & -0.687  & (1.028)   & -1.74          & (0.993)           & -10.88     & (1.628) & 1.727  & (0.995)
+%  \end{tabular}
+%  \end{footnotesize}
+%  \caption{Results of the different fit scenarios on QNL distorted data $\alpha_{qnl} = 1\%$. For SPMT $\Delta m^2_{31}$ is fixed at nominal value. The $\chi^2$ is PearsonV. The correlation matrix used to fit suppose no QNL in the spectrum.}
+%  \label{tab:joint_fit:qnl_results}
+%\end{table}
+
+
 
 
 %   (b) La matrice de covariance
