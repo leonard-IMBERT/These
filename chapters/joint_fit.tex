@@ -675,6 +675,95 @@ By summing the two obtained covariance matrix, we can extract a correlation matr
 
 \subsubsection{Empiric method}
 
+The second method is the empric way where we generate toys and just compute the empirical correlation between the bin contents.
+\begin{equation}
+  \mathrm{Corr}(\theta_i, \theta_j) = \frac{\mathbb{E}[\theta_i \theta_j] - \mathbb{E}[\theta_i] \mathbb{E}[\theta_j]}{\sigma \theta_i \sigma \theta_j}
+\end{equation}
+
+We thus generate $10^7$ event using the IBD generator presented in section \ref{sec:joint_fit:framework:ibd-gen}, then produce spectra from this finite set of events, meaning we must choose a number $N$ of toy each composed of $M$ event in a manner to not have the best estimate.
+
+Due to the nature of our estimator, the estimated correlation coefficient is subject to statistical fluctuation as any estimator. There is no definite formula to compute the standard deviation of the correlation coefficient as suggested in this study \cite{gnambs_brief_2023} but all cited formula depend solely on the number of samples, in our case the number of toy $N$, and the correlation coefficient. This is indicate that maximizing the number of toy is the right decision, even if each toy posses only one sole event.
+
+To study this rather counter intuitive observation (How can a spectrum with only one event can be representative of the experiment ?), I present in figure \ref{fig:joint_fit:empirical_cor} the upper left corner of the estimated correlation matrix for different configurations of N and M in the limit of $10^7$ total event. Wee see in figure \ref{fig:joint_fit:empirical_cor:small} that if the toy number $N$ is too low, the statistical noise make the correlation pattern almost completely disappear, in figure \ref{fig:joint_fit:empirical_cor:medium} we see clearly the same correlation patter as in the theoretical matrix in figure \ref{fig:joint_fit:th_cor_mat}.
+On the final matrix in figure \ref{fig:joint_fit:empirical_cor:cheff_kiss} the pattern is clearly visible, but we see a shade of anti-correlation around the spectrum that was not present in the theoretical correlation matrix.
+
+\begin{figure}[ht]
+  \begin{subfigure}[t]{0.33\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/estimated_corr_N_100_M_100000.png}
+    \caption{}
+    \label{fig:joint_fit:empirical_cor:small}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.33\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/estimated_corr_N_100000_M_100.png}
+    \caption{}
+    \label{fig:joint_fit:empirical_cor:medium}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.33\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/estimated_corr_N_10000000_M_1.png}
+    \caption{}
+    \label{fig:joint_fit:empirical_cor:cheff_kiss}
+  \end{subfigure}
+  \caption{Upper left corner of the estimated correlation matrix between the LPMT and SPMT spectrum for different configuration of $N$ toy with different number of $M$ events per toy}
+  \label{fig:joint_fit:empirical_cor}
+\end{figure}
+
+
+The difference between the element of the theoretical and the empiric correlation matrix are presented in figure \ref{fig:joint_fit:th_em_diff}. We that the difference between the two is very small with a bias of $1.8 \cdot 10^{-3}$ and a standard deviation of $1.9 \cdot 10^{-3}$ while the interesting correlation are of the order $10^{-2}$. Also as presented in figure \ref{fig:joint_fit:th_em_diff_mat}, the most extreme differences comes from the low end of the spectrum.
+
+This low energy difference could be explained as the theoretical does not take into account event that would be smeared from outside the spectrum. $E < 0.8$, MeV back inside the spectrum thus missing on the potential correlations.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/th_em_corr_diff.png}
+    \caption{}
+    \label{fig:joint_fit:th_em_diff}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.49\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/th_em_corr_diff_mat.png}
+    \caption{}
+    \label{fig:joint_fit:th_em_diff_mat}
+  \end{subfigure}
+  \caption{Difference between the element of the theoretical and empiric correlation matrix}
+\end{figure}
+
+These empirical correlation matrix still pose an issue: These matrix needs to be inverted for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrix to be positive definite, which is not guarantee using this empirical methods. Furthermore, wee see in those empirical matrix unexpected behavior and spectrum signature in these anti-correlation. For this reason we use the theoretical matrix for the studies presented in this thesis.
+
+\subsubsection{Empirical matrix from fully simulated event}
+
+The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and constructing an empirical matrix from those events.
+
+\textbf{TODO}
+
+
+\subsection{Statistical tests}
+
+In this part, I present the results of the statistical presented in section \ref{sec:joint_fit:approach}.
+
+\subsubsection{$\chi^2_{spe}$}
+
+The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LPMT ans SPMT spectra under constraints of the correlation matrix between the two. The results for different exposure can be found in figure \ref{fig:joint_fit:chi2_spec}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_spec_100d.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_spec_1y.png}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_spec_2y.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_spec_6y.png}
+  \end{subfigure}
+  \caption{Distribution of the $\chi^2_{spe}$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \label{fig:joint_fit:chi2_spec}
+\end{figure}
+
 
 %
 %   (c) Résultats fit séparés
