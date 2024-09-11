@@ -631,11 +631,11 @@ The first step is to compute the statistical uncertainty of the input spectrum w
 $\eta_m$ can thus be defined as
 \begin{equation}
   \label{eq:joint_fit:cov_ana:eta}
-  \eta_i  = \sum_j^n = G(i, \sigma(E_i))(j) \theta_j
+  \eta_i  = \sum_j^n G(i, \sigma(E_i))(j) \theta_j
 \end{equation}
 where $G(i, \sigma(E_i))(j)$ is the smearing function defined as
 \begin{equation}
-  G(i, \sigma(E_i))(j) = \int_{\lfloor E_j\rfloor}^{\lceil E_j \rceil} \frac{1}{\sigma(E_i)\sqrt{2\pi}} e^{-\frac{(E_i-E_j)^2}{2\sigma(E_i)^2}}
+  G(i, \sigma(E_i))(j) = \int_{\lfloor E_j\rfloor}^{\lceil E_j \rceil} \frac{1}{\sigma(E_i)\sqrt{2\pi}} e^{-\frac{(E_i-E)^2}{2\sigma(E_i)^2}} \dd{E}
 \end{equation}
 where $E_i$ is the mean energy in the bin $i$ and $\lfloor E_i\rfloor$ and $\lceil E_i \rceil$ are the lower and higher energy bound of the $i$th bin respectively.
 
@@ -652,7 +652,7 @@ where $V$ is the uncorrelated covariance matrix simply defined, under the assump
   V_{ij} = \sqrt{\theta_i \theta_j}
 \end{equation}
 
-Now we just need to consider the uncertainty on the smearing $\sigma \eta_i$, considering no uncertainty on the unsmeared spectrum. From Eq. \ref{eq:joint_fit:cov_ana:eta}, the $G(i, j) \equiv G(i, \sigma(E_i))(j)$ are independent from each other $\forall i, j$. This mean that this covariance matrix is diagonal, we only need $\sigma G(i, j)$. We can derive this term from two equation:
+Now we just need to consider the uncertainty on the smearing $\sigma \eta_i$, considering no uncertainty on the unsmeared spectrum. From Eq. \ref{eq:joint_fit:cov_ana:eta}, the $G(i, j) \equiv G(i, \sigma(E_i))(j)$ are considered independents from each other $\forall i, j$. This mean that this covariance matrix is diagonal, we only need $\sigma G(i, j)$. We can derive this term from two equation:
 \begin{itemize}
   \item The term $G(i, j)\theta_j$ represent the number of event smeared from the bin $j$ that end up in the bin $i$. This is a number, we thus assume poissonian statistic so that $\sigma[G(i, j)\theta_j] = \sqrt{G(i, j) \theta_k}$.
   \item Using basic error propagation we can say that $\sigma^2[G(i, j)\theta_j] =\theta_j^2 \sigma^2G(i, j) + G(i, j)^2 \sigma^2 \theta_j$.
@@ -712,6 +712,8 @@ The difference between the element of the theoretical and the empiric correlatio
 
 This low energy difference could be explained as the theoretical does not take into account event that would be smeared from outside the spectrum. $E < 0.8$, MeV back inside the spectrum thus missing on the potential correlations.
 
+The second big difference between the empirical and theoretical correlation matrix is the anti-correlation of magnitude $\approx -5\cdot 10^{-3}$ around the spectrum. In the theoretical correlation matrix, we are under the assumption that $G(i, j)$ is uncorrelated from $G(i, k)$ but this is not true in the case of a finite dataset. $G(i, j)$ represent the number of event that migrate from the bin $i$ to $j$, in the case of a finite number of event to distribute between the bins, the number of event that can be distributed in the bin $k$ is constrained by the number of event distributed in the bin $j$ thus the anti-correlation between this two bins.
+
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[t]{0.49\linewidth}
@@ -727,7 +729,7 @@ This low energy difference could be explained as the theoretical does not take i
   \caption{Difference between the element of the theoretical and empiric correlation matrix}
 \end{figure}
 
-These empirical correlation matrix still pose an issue: These matrix needs to be inverted for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrix to be positive definite, which is not guarantee using this empirical methods. Furthermore, wee see in those empirical matrix unexpected behavior and spectrum signature in these anti-correlation. For this reason we use the theoretical matrix for the studies presented in this thesis.
+These empirical correlation matrix still pose an issue: These matrix needs to be inverted for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrix to be positive definite, which is not guarantee using this empirical methods. Due to this issue, the theoretical matrix is used in the studies presented in this thesis.
 
 \subsubsection{Empirical matrix from fully simulated event}
 
@@ -740,11 +742,18 @@ The last study on the correlation matrix between the LPMT and SPMT spectrum cons
 
 In this part, I present the results of the statistical presented in section \ref{sec:joint_fit:approach}.
 
-\subsubsection{$\chi^2_{spe}$}
+\subsubsection{Test $\chi^2_{spe}$}
 
-The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LPMT ans SPMT spectra under constraints of the correlation matrix between the two. The results for different exposure can be found in figure \ref{fig:joint_fit:chi2_spec}
+The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LPMT ans SPMT spectra under constraints of the correlation matrix between the two.
+\begin{equation}
+  \chi^2_{spe} = \bm{\Delta h} V_{spe} \bm{\Delta h}^T; ~ \bm{\Delta h} = \{ (h_0^L - h_0^S), ..., (h_n^L - h_n^S) \}
+\end{equation}
+where $h_i^L$ and $h_i^S$ is the content of the $i$th bin the LPMT and SPMT spectra. For details about the calculation of $V_{spe}$, see section \ref{sec:joint_fit:approach}.
 
-\begin{figure}[ht]
+The results for different exposure can be found in figure \ref{fig:joint_fit:chi2_spec}. To give an idea of the significance of this test, we provide the median p-value for each test $\alpha_{qnl} \neq 0$. As expected, the power of this test rises as the exposure does. We see significant discrimination at 6 years for $\alpha_{qnl} \geq 0.3 \%$ where the p-value for $\alpha_{qnl} = 3\%$ is 0.5\%.
+
+
+\begin{figure}[th]
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_spec_100d.png}
@@ -764,6 +773,95 @@ The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LP
   \label{fig:joint_fit:chi2_spec}
 \end{figure}
 
+This test rely only on the estimated covariance matrix between the two spectra, requiring no fit at all making it a very lightweight test that can still provide good indication of potential unknown deformation between the two spectrum.
+
+
+\subsubsection{Test $\chi^2_{ind}$}
+
+The $\chi^2_{ind}$ is the chi-square that represent the agreement between the measured oscillation parameters $\theta_{12}$ a $\Delta m^2_{21}$. This test is defined as
+\begin{equation}
+  \chi^2_{ind} = \bm{\Delta \lambda} V_{ind} \bm{\Delta \lambda}^T; ~ \bm{\Delta \lambda} = \{\theta_{12}^L - \theta_{12}^S, (\Delta m^2_{21})^L - (\Delta m^2_{21})^S\}
+\end{equation}
+where $\theta^L_{12}$ and $(\Delta m^2_{21})^L$ are the oscillation parameters measured by the LPMT system. Same for $\theta_{12}^S$ and $(\Delta m^2_{21})^S$ for the SPMT system. We use $V_{ind}$ computed for $\alpha_{qnl} = 0$. For more details about the calculation of $V_{ind}$ see section \ref{sec:joint_fit:approach}.
+
+The results are presented in figure \ref{fig:joint_fit:chi2_ind}. This test does not require any joint fit or covariance matrix estimation between the two spectrum, it just need the estimated covariance matrix between the four parameters. We see that the p-value are much less significant than the other tests, this is because this test possess much less information about the relation between the LPMT and SPMT systems.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_ind_100d.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_ind_1y.png}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_ind_2y.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_ind_6y.png}
+  \end{subfigure}
+  \caption{Distribution of the $\chi^2_{ind}$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \label{fig:joint_fit:chi2_ind}
+\end{figure}
+
+This test is the most straightforward as it require only the fit of the two spectra and the estimation of the parameters covariances, but is also the less powerful.
+
+\subsubsection{$\delta$ parameters significance}
+
+This test consist in observing the value of the $\delta$ parameters in the Delta Joint fit and compare them with their dispersion in the case $\alpha_{qnl} = 0$. The results are presented in figures \ref{fig:joint_fit:chi2_delta} and \ref{fig:joint_fit:chi2_delta_m}.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_100d.png}
+    \caption{100 days exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_1y.png}
+    \caption{1 year exposure}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_2y.png}
+    \caption{2 years exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_6y.png}
+    \caption{6 years exposure}
+  \end{subfigure}
+  \caption{Distribution of the $\delta \sin^2(2\theta_{12})$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \label{fig:joint_fit:chi2_delta}
+\end{figure}
+
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_m_100d.png}
+    \caption{100 days exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_m_1y.png}
+    \caption{1 year exposure}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_m_2y.png}
+    \caption{2 years exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_delta_m_6y.png}
+    \caption{6 years exposure}
+  \end{subfigure}
+  \caption{Distribution of the $\delta \Delta m^2_{21}$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \label{fig:joint_fit:chi2_delta_m}
+\end{figure}
+
+We can see that the $\delta \Delta m^2_{21}$ has a very small discrimination power even at 6 years exposure with a p-value of 33\% for $\alpha_{qnl} = 0.3\%$.
 
 %
 %   (c) Résultats fit séparés
