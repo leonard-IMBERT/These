@@ -751,7 +751,7 @@ The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LP
 \end{equation}
 where $h_i^L$ and $h_i^S$ are the contents of the $i$th bins of the LPMT and SPMT spectra. For details about the calculation of $V_{spe}$, see section \ref{sec:joint_fit:approach}.
 
-The results for different exposures can be found in figure \ref{fig:joint_fit:chi2_spec}. To give an idea of the significance of this test, we provide the median p-value for each test $\alpha_{qnl} \neq 0$. As expected, the power of this test rises as the exposure does. We see significant discrimination at 6 years for $\alpha_{qnl} \geq 0.3 \%$ where the p-value for $\alpha_{qnl} = 3\%$ is 0.5\%.
+The results for different exposures can be found in figure \ref{fig:joint_fit:chi2_spec}. To give an idea of the significance of this test, we provide the median p-value for each test $\alpha_{qnl} \neq 0$. As expected, the power of this test rises as the exposure does. We see significant discrimination at 6 years for $\alpha_{qnl} \geq 0.3 \%$ where the p-value for $\alpha_{qnl} = 3\%$ is $0.005 \pm 0.0022$.
 
 
 \begin{figure}[th]
@@ -806,7 +806,7 @@ The results are presented in figure \ref{fig:joint_fit:chi2_ind}. This test does
   \label{fig:joint_fit:chi2_ind}
 \end{figure}
 
-This test is the most straightforward as it require only the fit of the two spectra and the estimation of the parameters covariances, but is also the less powerful.
+This test is the most straightforward as it require only the fit of the two spectra and the estimation of the parameters covariances, but is also the less powerful with a p value for $\alpha_{qnl} = 0.3\%$ of $0.09 \pm 0.009$.
 
 \subsubsection{$\delta$ parameters significance}
 
@@ -861,7 +861,7 @@ This test involves observing the values of the $\delta$ parameters in the Delta 
   \label{fig:joint_fit:chi2_delta_m}
 \end{figure}
 
-We can see that the $\delta \Delta m^2_{21}$ has a very small discriminative power (figure \ref{fig:joint_fit:chi2_delta_m}) even at 6 years exposure with a p-value of 33\% for $\alpha_{qnl} = 0.3\%$. On the other hand $\delta \theta_{12}$ (figure \ref{fig:joint_fit:chi2_delta}) has much more discriminative power with a p-value for $\alpha_{qnl} = 0.3\%$ of 2.5\%. This test with a single joint fit seems to be still less powerful than the $\chi^2_{spe}$. This can be explained as this method only get information through the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ missing potential informations contained in $\Delta m^2_{31}$.
+We can see that the $\delta \Delta m^2_{21}$ has a very small discriminative power (figure \ref{fig:joint_fit:chi2_delta_m}) even at 6 years exposure with a p-value of $0.34 \pm 0.01$ for $\alpha_{qnl} = 0.3\%$. On the other hand $\delta \theta_{12}$ (figure \ref{fig:joint_fit:chi2_delta}) has much more discriminative power with a p-value for $\alpha_{qnl} = 0.3\%$ of $0.025 \pm 0.005$. This test with a single joint fit seems to be still less powerful than the $\chi^2_{spe}$. This can be explained as this method only get information through the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ missing potential informations contained in $\Delta m^2_{31}$.
 
 \subsubsection{Hypothesis test}
 
@@ -891,7 +891,7 @@ In this last test we consider the two fit Standard Joint and Delta Joint as two 
   \label{fig:joint_fit:chi2_H}
 \end{figure}
 
-This test is the most complex, requiring two fit and the covariance matrix between the LPMT and SPMT spectra. The results are good, close to the $\chi^2_{spe}$, one with a p-value at 6 years for $\alpha_{qnl} = 0.3\%$ of 0.01.
+This test is the most complex, requiring two fit and the covariance matrix between the LPMT and SPMT spectra. The results are good, close to the $\chi^2_{spe}$, one with a p-value at 6 years for $\alpha_{qnl} = 0.3\%$ of $0.01 \pm 0.003$.
 
 As explained in section \label{sec:joint_fit:data_gen}, the spectra used for the fit are cut at 335 bins / 7.5 MeV to prevent instability, while in $\chi^2_{spe}$ we use full 410 bins spectra. The $\chi^2_{spe}$ thus has more informations that the hypothesis test leading to this difference in power.
 
