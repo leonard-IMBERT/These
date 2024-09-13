@@ -23,17 +23,19 @@
 %
 %   + Plan du chapitre.
 
-JUNO is an experiment of precise measurements, where we try to observe small fluctuation in the energy spectrum and have the ambition to achieve sub-percent precision on the oscillation parameters measurement. It is crucial to understand extremely well the reconstruction and the effect we are dealing with. The challenge reside in the standard technology used in the detector, scintillator observed by PMT, but in a scale never seen before, for scintillator volume as for its PMT. Understanding every effect that goes in the detector can become extremely complicated. Being able to compare the results of the same experiment with two systems is thus precious, this is the origin the dual calorimetry with the LPMT and SPMT system.
+JUNO is an experiment of precise measurements, where we try to observe small fluctuation in the energy spectrum and with the goal to achieve sub-percent precision on the oscillation parameters measurement.
+A precise and complete understanding of the reconstruction and detector effects is thus crucial.
+The challenge reside in the technology used in the detector, which, while based on well known technology: scintillator observed by PMT, is being deployed on a scale never seen before, in term of scintillator volume and  PMT size. Understanding every effects that goes in the detector can become extremely complicated. The ability to compare the results of the same experiment with two systems is thus extremely precious, this is the origin the dual calorimetry with the LPMT and SPMT system.
 
-The resolution and bias of the reconstruction needs to be extremely well characterized: the target resolution of 3\% \cite{juno_collaboration_juno_2022} is unprecedented as is required to be able to distinguished between Normal Ordering (NO) and Inverse Ordering (IO). The non-linearity uncertainty needs to be contained under 1\% or the risk appear to measure the wrong ordering \cite{han_dual_2021}.
+The resolution and bias of the reconstruction needs to be extremely well characterized: the target resolution of 3\% \cite{juno_collaboration_juno_2022} is unprecedented and is necessary to be able to distinguished between Normal Ordering (NO) and Inverse Ordering (IO). The non-linearity uncertainty needs to be constrained under 1\% as exceeding this value, the risk appear to measure the wrong ordering \cite{han_dual_2021}.
 
-One of the possible non-linearity source, that will be used as a reference source in this chapter, is the charge non-linearity (QNL) that will be detailed in next section. The dual calorimetry will be able to solve this problem, using calibrations method and measurements that will be used to correct it \cite{han_dual_2021}.
+One of the possible source of non-linearity, which will be used as a reference in this chapter, is the charge non-linearity (QNL) that will be discussed in next section. The dual calorimetry can address this issue, using calibrations methods and measurements that will be employed to correct it \cite{han_dual_2021}.
 
-More generally, comparing the results of the two system will allow to detect potential issues on the calibration or reconstruction. This is done in this thesis by comparing directly the spectra and oscillation parameters measurements of the two system.
+More generally, comparing the results of the two systems will allow for the detection of potential issues on the calibration or reconstruction. This is done in this thesis by comparing directly the spectra and oscillation parameters measurements of the two systems.
 
-The study of the independents results of the two system can bring some informations \cite{cabrera_multi-calorimetry_2023} but this is missing the important correlation that should be present between the two system: they see the same events, in the same scintillator, their bound to be correlated. We explore in this chapter a preliminary study of the impact of those correlation via multiple methods and the impact of QNL at various degree.
+The study of the independent results of the two system can provide some informations \cite{cabrera_multi-calorimetry_2023} but this is missing the important correlation that should be present between the two systems: they see the same events, in the same scintillator, they're bound to be correlated. We explore in this chapter a preliminary study of the impact of those correlations via multiple methods and the impact of QNL at various degrees.
 
-In the next section will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach}, I present the approaches and assumptions in this study. In section \ref{sec:joint_fit:framework} I present the fit framework used and following in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusion and perspectives in \ref{sec:joint_fit:conclusion}.
+In the next section we will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach}, I present the approaches and assumptions in this study. In section \ref{sec:joint_fit:framework}, I present the fit framework used, and then, in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusions and perspectives in \ref{sec:joint_fit:conclusion}.
 
 \section{Motivations}
 % II)  Motivations
@@ -50,15 +52,15 @@ In the next section will discuss the motivations behind this study. In section \
 %
 \subsection{Discrepancies between the SPMT and LPMT results}
 
-As discussed in the introduction of this chapter, the SPMT system and the LPMT system will observe the same events. This mean that, after calibration, if the two system show significant differences in their results this is the signal of potential overlook of an effect or problem. Being able to detect such differences is thus crucial as, as discussed above, even the smallest deviation from our model could lead to the impossibility to measure the Mass Ordering (MO) or even worse, wrong our measurement.
+As discussed in the introduction of this chapter, the SPMT  and LPMT systems will observe the same events. This mean that, after calibration, if the two system show significant differences in their results this is the signal of potential overlook of an effect or problem. Being able to detect such differences is thus crucial, as discussed above, even the smallest deviation from our model could lead to the impossibility to measure the Mass Ordering (MO) or even worse, wrong our measurement.
 
-The two system are expected to have the same sensitivity to the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ \cite{juno_collaboration_sub-percent_2022}. We will thus rely on the measurement of those two parameters to detect potential discrepancies.
+The two systems are expected to have the same sensitivity to the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ \cite{juno_collaboration_sub-percent_2022}. We will thus rely on the measurement of those two parameters to detect potential discrepancies.
 
-We could just look at the value and compare them to the estimated independent error of the two system, but we believe and will demonstrate in this chapter that the independent study of the two system is missing a lot of informations, and that, by taking into account the statistic and systematic correlations between the two systems, we can produce much more powerful statistical test.
+We could just look at the value and compare them to the estimated independent error of the two system, but we believe and will demonstrate in this chapter that the independent study of the two system is missing a lot of informations, and that, by taking into account the statistic and systematic correlations between the two systems, we can produce much more powerful statistical tests.
 
-Our work in this chapter is to develop such tools. The first step is, of course, to verify that in the case of no discrepancies, the results are coherent with the independent analysis. This will give us the distribution of those statistical test in absence of discrepancies. When we will have real data, we will be able to compare it to those distribution to obtain a p-value characterizing the absence of those potential discrepancies.
+Our work in this chapter is to develop such tools. The first step is, of course, to verify that in the case of no discrepancies, the results are coherent with the independent analysis. This will give us the distribution of those statistical test in absence of discrepancies. When we will have real data, we will be able to compare it to those distributions to compute a p-value characterizing the absence of those potential discrepancies.
 
-To evaluate the power of our methods, we need to simulate a concrete discrepancy. We decide to study a plausible effect, the Charge Non-Linearity (QNL) that is detailed next section, but the goal of those tools is to be discrepancy agnostic, as those discrepancies could come from a variety of source (calibration issue, insufficient simulation tuning, etc...)
+To evaluate the power of our methods, we need to simulate a concrete difference between the two spectra. We have decided to study a plausible effect, the Charge Non-Linearity (QNL) that is detailed next section. But the goal of those tools is to be discrepancy agnostic, as those discrepancies could come from a variety of source (calibration issue, insufficient simulation tuning, etc...)
 
 %
 %   (b) Explications sur la QNL. (  ~ 1 p)
@@ -82,13 +84,13 @@ To evaluate the power of our methods, we need to simulate a concrete discrepancy
 \subsection{Charge Non-Linearity (QNL)}
 \label{sec:joint_fit:qnl}
 
-The CD energy response is subject of two kind on non-linearity, the first one is the LS response non-linearity where the LS photo-production is not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The second one is the LPMT response non-linearity where the charge read from the LPMT is not linear in respect to the number of collected Photo-Electron (PE) (see section \ref{sec:juno:calib}).
+The CD energy response is subject to two kinds of non-linearity, the first one is the LS response non-linearity, where the LS photo-production is not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The second one is the LPMT response non-linearity where the charge read from the LPMT is not linear with respect to the number of collected Photo-Electrons (PE) (see section \ref{sec:juno:calib}).
 
-The LS non-linearity comes from physics sources. Particles interaction in the LS will produce mainly scintillation light as discussed in section \ref{sec:juno:LS} but will also produce some cherenkov light (< 10\% of the collected light). Both mechanisms posses intrinsic non-linearity, for the Cherenkov emission it's dependent on the velocity of charged particle velocity while the scintillation photon-yield follow a so-called Birk's law with a "quenching" effect depending on the energy and type of particle \cite{particle_data_group_review_2020}. This results in a event-wise QNL.
+The LS non-linearity comes from physic sources. Particle interactions in the LS will produce mainly scintillation light, as discussed in section \ref{sec:juno:LS}, but will also produce some Cherenkov light (< 10\% of the collected light). Both mechanisms possess intrinsic non-linearity, for the Cherenkov emission it depends on the velocity of charged particle velocity while the scintillation photon-yield follows a so-called Birk's law with a "quenching" effect depending on the energy and type of particle \cite{particle_data_group_review_2020}. This results in am event-wise QNL.
 
-The LPMT response non-linearity can come from sheer saturation when subject to a high rate of photon inducing a gain non-linearity or come from readout effects such as the electronic noise, the overshoot, the integration time window and even the waveform algorithm. All of those effects results in a channel-wise QNL.
+The LPMT response non-linearity can come from sheer saturation when subject to a high photon rate inducing a gain non-linearity or come from readout effects such as electronic noise, overshoot, the integration time window and even the waveform algorithm. All of these effects result in a channel-wise QNL.
 
-Precedent studies \cite{han_dual_2021} suggest a model to emulate this non-linearity response that will be used in this work. We thus define the channel wise non-linearity that would be applied to each LPMT readout
+Precedent studies \cite{han_dual_2021} suggest a model to emulate the non-linearity response that will be used in this work. We define the channel wise non-linearity that would be applied to each LPMT readout
 \begin{equation}
   \label{eq:joint_fit:gamma_yang}
   \frac{Q_{rec}}{Q_{true}} = \frac{-\gamma_{qnl}}{9} Q_{true} + \frac{\gamma_{qnl} + 9}{9}
@@ -100,17 +102,17 @@ We also define an event-wise non-linearity characterized by
   \label{eq:joint_fit:alpha_yang}
   \frac{E_{vis}}{E_{true}} = \frac{-\alpha_{qnl}}{9} E_{true} + \frac{\alpha_{qnl} + 9}{9}
 \end{equation}
-where $E_{vis}$ is the visible energy that can be collected by the detector and $E_{true}$ is the true deposited energy. An example of the effect of such event-wise QNL is presented in figure \ref{fig:joint_fit:spectrums_comp}.
+where $E_{vis}$ is the visible energy that is collected by the detector and $E_{true}$ is the true deposited energy. An example of the effect of such event-wise QNL is presented in figure \ref{fig:joint_fit:spectrums_comp}.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=5cm]{images/joint_fit/spectrums.png}
-  \caption{Two oscillated spectrums of 1e7 event expected in JUNO. In red the spectrums without supplementary QNL. In blue the same spectrum but where an event-wise QNL $\alpha_{qnl} = 10\%$ is added.}
+  \caption{Two oscillated spectra of 1e7 event expected in JUNO. In red the spectrum without supplementary QNL. In blue the same spectrum but where an event-wise QNL $\alpha_{qnl} = 10\%$ is introduced.}
   \label{fig:joint_fit:spectrums_comp}
 \end{figure}
 
 
-Using 1M from the JUNO official simulation J23.0.1-rc8.dc1 (released the 7th January 2024), we simulated events up to the photon collection in LPMTs and simulated an additional channel-wise QNL by applying the equation \ref{eq:joint_fit:gamma_yang} to the number of collected photons.
+Using 1M events from the JUNO official simulation J23.0.1-rc8.dc1 (released on 7th January 2024), we simulated events up to the photon collection in LPMTs and introduced an additional channel-wise QNL by using the equation \ref{eq:joint_fit:gamma_yang} to modify the number of collected photons.
 
 \begin{figure}
   \centering
@@ -122,15 +124,15 @@ Using 1M from the JUNO official simulation J23.0.1-rc8.dc1 (released the 7th Jan
   \hfill
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/joint_fit/gamma_to_alpha.png}
-    \caption{Ratio of collected nPE after the additional QNL over the number of nPE that would be collected at different energies. We select event with an interaction radius $R < 4$m to not be affected by the non-uniformity. The dots represent the mean of the distribution in figure \ref{fig:joint_fit:ratio_distrib} and the dashed line are the equivalent event-wise non-linearity from eq \ref{eq:joint_fit:alpha_yang}. The hatched zone is the residual non-linearity expected after calibration \cite{juno_collaboration_calibration_2021}.}
+    \caption{Ratio of collected nPE after the additional QNL over the number of nPE that would be collected at different energies. We select event with an interaction radius $R < 4$m to not be affected by the non-uniformity. The dots represent the mean of the distributions in figure \ref{fig:joint_fit:ratio_distrib} and the dashed line are the equivalent event-wise non-linearity from eq \ref{eq:joint_fit:alpha_yang}. The hatched zone is the residual non-linearity expected after calibration \cite{juno_collaboration_calibration_2021}.}
     \label{fig:joint_fit:gamma_v_alpha}
   \end{subfigure}
   \caption{}
 \end{figure}
 
-In figure \ref{fig:joint_fit:ratio_distrib} we show the the distribution of the ratio $\frac{Q_{rec}}{Q_{true}}$ for central events ($R < 4$m) and different value of $\gamma_{qnl}$. In figure \ref{fig:joint_fit:ratio_distrib} we show the mean of this distribution as function of the energy. We show effective $\alpha_{qnl}$ for each value of $\gamma_{qnl}$. We see that using the event-wise QNL is equivalent to the mean behavior of using channel-wise QNL.
+In figure \ref{fig:joint_fit:ratio_distrib} we show the distribution of the ratio $\frac{Q_{rec}}{Q_{true}}$ for central events ($R < 4$m) and different values of $\gamma_{qnl}$. In figure \ref{fig:joint_fit:ratio_distrib}, we show the mean of this distribution as a function of the energy. We also present the effective $\alpha_{qnl}$ for each value of $\gamma_{qnl}$. We observe that using the event-wise QNL is equivalent to the mean behavior of using channel-wise QNL.
 
-When using channel-wise non-linearity, we need to simulate a number of PE per LPMT, the process can be quite tedious if we want a realistic simulation so in this study we are only using event-wize non-linearity to make the process simpler. This event-wise non-linearity will be characterized by $\alpha_{qnl}$.
+When using channel-wise non-linearity, we need to simulate a number of PE per LPMT, the process can be quite tedious if we want a realistic simulation. So in this study we are only using event-wise non-linearity to make the process simpler. This event-wise non-linearity will be characterized by $\alpha_{qnl}$ in this work.
 
 %  (c) Blinding ?
 %  L: Pas expert du sujet (mais alors pas du tout). Je me souviens de la discussion avec steven ou on pourrait ainsi appliquer nos outils avant l'unblidding et ainsi verifier que tout vas bien avant de regarder les resultats ?
@@ -145,7 +147,7 @@ When using channel-wise non-linearity, we need to simulate a number of PE per LP
 \section{Approach}
 \label{sec:joint_fit:approach}
 
-In this section we detail the testing procedure behind each of our tools.
+In this section, we detail the testing procedure for each of our tools.
 
 % III) Démarche
 % -----------------------
@@ -161,34 +163,34 @@ In this section we detail the testing procedure behind each of our tools.
 
 \subsubsection{IBD spectra}
 
-The first step is the generation of data on which we run our tools. In this study we are producing monte-carlo toy. In each toy we generate an $\bar{\nu}_e$ energy spectrum coming from the Taishan, Yangjiang and Dayabay reactor power plant, the reactor used as source for the NMO analysis. The parameters of the reactors come from JUNO official database, shared among all physics analysis, the JUNO common inputs. This is the starting point of the two observed spectrum, the LPMT and SPMT spectrum. On those spectrum, we add the physics effect such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:framework:ibd-gen}). On top on those effect, we apply the reconstruction resolution of each systems to their respective spectra. We end up with the two LPMT and SPMT spectrum.
+The first step involves generating the data on which we our tools will be tested. In this study we use Monte-Carlo toys. For each toy we generate a $\bar{\nu}_e$ energy spectrum from the Taishan, Yangjiang and Dayabay nuclear power plants, the reactors used as source for the NMO analysis. The reactors parameters comes from JUNO official database, which shared among all physics analysis, the JUNO common inputs. This provides the initial spectra for the LPMT and SPMT systems. We then incorporate physic effects such as the LS non-linearity etc... (more details in section \ref{sec:joint_fit:framework:ibd-gen}). Finally, we apply the reconstruction resolution for each system to their respective spectra, resulting in the final LPMT and SPMT spectra.
 
 We will study the effect of exposure on our methods at different threshold: 100 days, 1 year, 2 year and finally 6 years which is the nominal data taking period for the NMO analysis.
 
-Those spectra are generated for different QNL, $\alpha_{qnl} = 0$, no spectrum distortion, and for $\alpha_{qnl} \in \{0.01, 0.005, 0.003, 0.002, 0.001\}$. As a reminder, the calibration guarantee a residual event-wise non-linearity $\alpha_{qnl} \leq 0.003$ \cite{juno_collaboration_calibration_2021}.
+These spectra are generated for different QNL, $\alpha_{qnl} = 0$ (no spectrum distortion) and for $\alpha_{qnl} \in \{0.01, 0.005, 0.003, 0.002, 0.001\}$. As a reminder, the calibration guarantees a residual event-wise non-linearity of $\alpha_{qnl} \leq 0.003$ \cite{juno_collaboration_calibration_2021}.
 
-The first test does not require any fitting and we are just comparing the LPMT and SPMT spectra using the expected statistical correlation matrix in the case $\alpha_{qnl} = 0$, for details about the generation of this correlation matrix, refer to section \ref{sec:joint_fit:cov_mat}. This test is the spectrum $\chi^2$ test or $\chi^2_{spe}$ test. In this test we produce a $\chi^2$ representing show the incompatibility between the LPMT and SPMT spectra:
+The first test does not require any fitting, we are just comparing the LPMT and SPMT spectra using the expected statistical correlation matrix in the case $\alpha_{qnl} = 0$. For details about the generation of this correlation matrix, refer to section \ref{sec:joint_fit:cov_mat}. This test is the spectrum $\chi^2$ or $\chi^2_{spe}$. In this test we compute a $\chi^2$ representing the compatibility between the LPMT and SPMT spectra:
 \begin{align}
   \Delta_i &= h_{L,i} - h_{S,i} \\
   U &= A V A^T \\
   \chi^2_{spe} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
 \end{align}
-Where $h_{L,i}$ and $h_{S,i}$ are the content of the $i$th bin of the LPMT and SPMT bin respectively. $V$ is the covariance matrix of the LPMT + SPMT spectrum. $A$ is a transfers matrix such as:
+Where $h_{L,i}$ and $h_{S,i}$ are the contents of the $i$th bin of the LPMT and SPMT spectra respectively. $V$ is the covariance matrix of the LPMT + SPMT spectra. $A$ is a transformation matrix defined as:
 \begin{equation}
   A_{ij} = \frac{\partial \Delta_i}{\partial h_j} = \frac{\partial(h_{L, i} - h_{S, i})}{\partial h_j}
 \end{equation}
-Thus $A_{ij} = 1$ if $i = j$ and $A_{ij} = -1$ if $j$ is the SPMT bin corresponding to the $i$ LPMT bin.
+Thus, $A_{ij} = 1$ if $i = j$, and $A_{ij} = -1$ if $j$ is the SPMT bin corresponding to the $i$ LPMT bin.
 
 This $\chi^2_{spe}$ is minimal when the statistic between the bins of the LPMT and SPMT spectra follow the covariance matrix $V$. By looking at the distribution of this $\chi^2_{spe}$ when $\alpha_{qnl} = 0$ we can produce p-values for the values found when $\alpha_{qnl} \neq 0$.
 
 \subsubsection{Background spectra}
 
-The JUNO common inputs provides only LPMT background spectra. Those background spectra are already smeared by the LPMT resolution and thus needs to be regenrated to be smeared following the SPMT resolution. Luckily the SPMT resolution is greater that the LPMT, alowing us to oversmear the spectrum using
+The JUNO common inputs provide only LPMT background spectra. These background spectra are already smeared by the LPMT resolution and thus need to be regenerated to be smeared to account for the SPMT resolution. Fortunately the SPMT resolution is greater than that of the LPMT, allowing us to apply additional smearing to the spectrum using
 \begin{equation}
   \label{eq:joint_fit:oversmear}
   S(E) = L(E) \star \frac{1}{\sqrt{|\Delta \sigma^2|} \sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}; ~ |\Delta \sigma^2| = \sigma_L^2 - \sigma_S^2
 \end{equation}
-Where $S(E)$ is the SPMT spectrum, $L(E)$ the LPMT spectrum, $\sigma_L$ and $\sigma_S$ the LPMT and SPMT resolution respectively. This formula is valid under the assumption that the LPMT and SPMT smearing are gaussian and that the LPMT and SPMT have the same bias. Those two assumption are valid in the context of the IBD spectrum production as detailed in section \ref{sec:joint_fit:framework:ibd-gen}.
+Where $S(E)$ is the SPMT spectrum, $L(E)$ the LPMT spectrum, $\sigma_L$ and $\sigma_S$ the LPMT and SPMT resolution respectively. This formula is valid under the assumption that the LPMT and SPMT smearing are gaussian and that the LPMT and SPMT have the same bias. Those two assumptions are valid in the context of the IBD spectrum production as detailed in section \ref{sec:joint_fit:framework:ibd-gen}.
 The demonstration of equation \ref{eq:joint_fit:oversmear} can be found in annex \ref{sec:annex:oversmearing}.
 
 
@@ -199,17 +201,14 @@ The demonstration of equation \ref{eq:joint_fit:oversmear} can be found in annex
 
 \subsection{Individual fits}
 
-Each of the spectra, LPMT and SPMT, are then fitted individually with and without the presence of QNL over multiples toys. The results allow us to compute the correlation between the oscillations parameters measured by both of the systems when there is no QNL allowing us to compute a $\chi^2$ representing the compatibility between the oscillation parameters measured by the SPMT and by the LPMT. Because the SPMT system is not sensible to thel oscillation parameters $\Delta m^2_{31}$ and $\theta_{13}$, the test is only done on the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$. We can thus produce the individual chi square $\chi^2_{ind}$
-
+Each of the spectra, LPMT and SPMT, are then fitted individually with and without the presence of QNL over multiples toys. The results allow us to compute the correlation between the oscillations parameters measured by both of the systems when there is no QNL allowing us to compute a $\chi^2$ representing the compatibility between the measurements of the systems. Because the SPMT system is not sensible to the oscillation parameters $\Delta m^2_{31}$ and $\theta_{13}$, the test is only done on the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$. We can thus produce the individual chi square $\chi^2_{ind}$
 \begin{align}
   \Delta_\lambda &= \lambda_{L} - \lambda_{S} \\
   \vec{\Delta} &= [ \Delta_{\theta_{12}} ~ \Delta_{\Delta m^2_{21}} ] \\
   U &= A V A^T \\
   \chi^2_{ind} &= \vec{\Delta}^T U^{-1} \vec{\Delta}
 \end{align}
-
-where $\lambda_{L}$ and $\lambda_{S}$ are the measured parameters by the LPMT and SPMT systems respectively. The differents $\lambda$ considered are $\theta_{12}$ and $\Delta m^2_{21}$. $V$ here is the $4\times 4$ covariance matrix between the parameters $\theta_{12, L}$, $\Delta m^2_{21, L}$, $\theta_{12, S}$ and  $\Delta m^2_{21, S}$. $A$ is the transfer matrix that allow to compute the covariance matrix de $\vec{\Delta}$ from $V$ following
-
+where $\lambda_{L}$ and $\lambda_{S}$ are the measured parameters by the LPMT and SPMT systems respectively. The different $\lambda$ considered are $\theta_{12}$ and $\Delta m^2_{21}$. $V$ here is the $4\times 4$ covariance matrix between the parameters $\theta_{12, L}$, $\Delta m^2_{21, L}$, $\theta_{12, S}$ and  $\Delta m^2_{21, S}$. $A$ is the transformation matrix that allow us to compute the covariance matrix de $\vec{\Delta}$ from $V$ following
 \begin{equation}
   A_{ij} = \frac{\partial \Delta_i}{\partial j}; ~ i \in \{ \theta_{12}, \Delta m^2_{21} \}; ~ j \in \{ \theta_{12, L}, \Delta m^2_{21, L}, \theta_{12, S}, \Delta m^2_{21, S} \}
 \end{equation}
@@ -238,7 +237,7 @@ Same as described above, by comparing the distribution of this $\chi^2_{ind}$ wh
 
 \subsubsection{Standard joint fit}
 
-The final step is to produce a joint fit between the two spectra. In this case we adjust our model, the oscillated spectrum, over two spectrum as the same time. We minimize a $\chi^2_{joint}$ defined over the two spectra, the LPMT and SPMT one
+The final step is to produce a joint fit between the two spectra. In this case we adjust our model, the oscillated spectrum, over two spectra as the same time. We minimize a $\chi^2_{joint}$ defined over the two spectra, the LPMT and SPMT one
 \begin{align}
   \label{eq:joint_fit:pearson}
   \Delta_i &= D_{i} - T_{i} \\
@@ -249,11 +248,13 @@ where $D_{i}$ is the content of the $i$th bin measured, from the data, and $T_{i
 $T$ is the fitted function and depend on multiple parameters
 \begin{itemize}
   \item The oscillation parameters $\theta_{12}$, $\Delta m^2_{21}$, $\theta_{13}$ and $\Delta m^2_{31}$. Those parameters can be free, have a pull term or be fixed during the fit.
-  \item We take into account in the data production the matter effect and parametrize them by the parameter $\rho$ which is the effective rock density between the reactors and the experiment. Same as the oscillation parameters, this parameter can be free, pulled or fixed.
+  \item We take into account in the data production the matter effect and parametrize it by the parameter $\rho$, the effective rock density between the reactors and the experiment. Same as the oscillation parameters, this parameter can be free, pulled or fixed.
   \item The exposure of the considered data which is just a normalization factor in front of the theoretical spectrum. This parameter is fixed at the start of the fit.
 \end{itemize}
 
-In the standard joint fit, the free parameters are $\sin^2(2\theta_{12})$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\sin^2(2\theta_{13})$ is fixed to the PDG favorite value. For simplicity, we refer to $\sin^2(2\theta_{12})$ and $\sin^2(2\theta_{13})$ as $\theta_{12}$ and $\theta_{13}$ respectively. Both of the LPMT and SPMT system are sensible to $\theta_{12}$ and $\Delta m^2_{21}$, thus the terms are totally free and the starting value are the PDG nominal. Only the LPMT system is sensible to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and error. The PDG nominal values used in this study can be found in table \ref{tab:joint_fit:pdg_value}.
+In the standard joint fit, the free parameters are $\sin^2(2\theta_{12})$, $\Delta m^2_{21}$ and $\Delta m^2_{31}$. $\sin^2(2\theta_{13})$ is fixed to the PDG nominal value. For simplicity, we refer to $\sin^2(2\theta_{12})$ and $\sin^2(2\theta_{13})$ as $\theta_{12}$ and $\theta_{13}$ respectively.
+
+Both of the LPMT and SPMT systems are sensitive to $\theta_{12}$ and $\Delta m^2_{21}$, thus these parameters are totally free and start at the PDG nominal value. Only the LPMT system is sensitive to $\Delta m^2_{31}$, we let it free so we can observe the effect of the deformation on it while the solar parameters $\theta_{12}$, $\Delta m^2_{21}$ are constrained by the SPMT system. To prevent $\Delta m^2_{31}$ to take absurd value, we add a pull term using the PDG nominal value and errors. The PDG nominal values used in this study can be found in table \ref{tab:joint_fit:pdg_value}.
 \begin{equation}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}}
 \end{equation}
@@ -266,7 +267,7 @@ In the standard joint fit, the free parameters are $\sin^2(2\theta_{12})$, $\Del
     \hline
     $0.851^{+0.020}_{-0.018}$ & $7.53 \pm 0.18 \times 10^{-5}$ eV$^2$   & $2.5283 \pm 0.034 \times 10^{-3}$ eV$^2$  & $0.0.8523 \pm 0.00268$
   \end{tabular}
-  \caption{Nominal PDG value \cite{particle_data_group_review_2020}. All value are reported assuming Normal Ordering.}
+  \caption{Nominal PDG2020 value \cite{particle_data_group_review_2020}. All value are reported assuming Normal Ordering.}
   \label{tab:joint_fit:pdg_value}
 \end{table}
 
@@ -278,7 +279,7 @@ The covariance matrix is produced from a correlation matrix $C$
 \begin{equation}
   V_{ij} = \sigma_{i} \sigma_{j} C_{ij}
 \end{equation}
-where $\sigma_{i}$ is the uncertainty on the number of event in the $i$th bin. We consider in this study that the content of each bin follow a Poisson statistic and that thus the uncertainty is $\sigma_i = \sqrt{N_i}$ where $N_i$ is the content of the $i$th bin. The content of each bin can come from two sources the data and the theoretical spectrum $\sigma_i = \sqrt{D_i}$ (Pearson test) and $\sigma_i = \sqrt{T_i}$ (Neyman test). Precedent studies have show that both Pearson and Neyman tests show bias at low statistic, we thus use the Pearson V test where
+where $\sigma_{i}$ is the uncertainty on the number of event in the $i$th bin. We consider in this study that the content of each bin follow a Poisson statistic, thus the uncertainty is $\sigma_i = \sqrt{N_i}$ where $N_i$ is the content of the $i$th bin. The bin content used for the uncertainty can come from two sources: the data and the theoretical spectra $\sigma_i = \sqrt{D_i}$ (Pearson test) and $\sigma_i = \sqrt{T_i}$ (Neyman test). Precedent studies have show that both Pearson and Neyman tests show bias at low statistic, we thus use the Pearson V test where
 \begin{equation}
   \label{eq:joint_fit:pearsonV}
   \chi^2_{joint} = \vec{\Delta}^T V^{-1} \vec{\Delta} + \frac{\Delta m^2_{31} - \Delta m^2_{31,PDG}}{\sigma_{31, PDG}} + \mathrm{ln} | V |
@@ -297,23 +298,23 @@ Using the same structure we define a second joint fit, the Delta joint fit where
 \end{split}
 \end{equation}
 
-If the there is no additional effect between the LPMT and the SPMT spectra, the fit should converge to $\delta \theta_{12} = \delta \Delta m^2_{21} = 0$. By observing the dispersion of those parameter we can define the probability $P(\alpha_{qnl} = 0 | (\delta \theta_{12}, \delta \Delta m^2_{21}))$ and use the median value of $(\delta \theta_{12}, \delta \Delta m^2_{21})$ when $\alpha_{qnl} \neq 0$ to define a sensibility.
+If the there is no additional distortion between the LPMT and the SPMT spectra, the fit should converge to $\delta \theta_{12} = \delta \Delta m^2_{21} = 0$. By observing the dispersion of those parameters we can define the probability $P(\alpha_{qnl} = 0 | (\delta \theta_{12}, \delta \Delta m^2_{21}))$ and use the median value of $(\delta \theta_{12}, \delta \Delta m^2_{21})$ when $\alpha_{qnl} \neq 0$ to define a p-value.
 
-The last test we explore in this thesis is to fit the same spectrum with the standard joint fit that we consider as the hypothesis without distortion $H_0$ and the hypothesis where there can be a distortion, the delta joint fit designed as the $H_1$ hypothesis. By looking at the dispersion of $\chi^2_{joint,H_0} - \chi^2_{joint,H_1}$ we can extract a sensibility to potential distortion.
+The last test we explore in this thesis is to fit the same spectrum with the Standard Joint fit, that we consider as the hypothesis without distortion $H_0$, and the Delta Joint fit, designated as the $H_1$ hypothesis. By looking at the dispersion of $\chi^2_{joint,H_0} - \chi^2_{joint,H_1}$ we can extract a sensitivity to potential distortion.
 
 \subsection{Data and theoretical spectrum generation}
 \label{sec:joint_fit:data_gen}
 
-To implement the joint fit, we have technically two data spectra and two theoretical spectra. The data in this study are produced using an IBD generator \textit{IBD gen}, see section \ref{sec:joint_fit:framework:ibd-gen}. The theoretical spectrum are produced the same way as data spectrum but with much higher statistics, $10^7$ events to compare with the $\approx 10^5$ events after 6 years. The two spectrum, that we get as a collection of event, are binned in two histograms from 0.8 to 9 MeV of reconstructed energy with bins of 0.02 MeV each resulting in 410 bins per spectrum. An illustration of the theoretical spectrum can be found in figure \ref{fig:joint_fit:delta:theo}. The low number of events in the tail of the spectrum can cause instability due to the low statistic, we thus cut the spectrum at 7.5 MeV / 335 bins for the fit.
+To implement the joint fit, we have technically two data spectra and two theoretical spectra. The data in this study are produced using an IBD generator \textit{IBD gen}, see section \ref{sec:joint_fit:framework:ibd-gen}. The theoretical spectrum are produced the same way as data spectrum but with much higher statistics, $10^7$ events to compare with the $\approx 10^5$ events for 6 years statistic. The two spectrum, that we get as a collection of events, are binned in two histograms from 0.8 to 9 MeV of reconstructed energy with bins of 0.02 MeV each, resulting in 410 bins per spectrum. An illustration of the theoretical spectrum can be found in figure \ref{fig:joint_fit:delta:theo}. The low number of events in the tail of the spectrum can cause instability due to the low statistic, we thus cut the spectrum at 7.5 MeV / 335 bins for the fit.
 
 \begin{figure}
   \centering
   \includegraphics[height=6cm]{images/joint_fit/theoretical_spectrum.png}
-  \caption{Theoretical LPMT spectrum at nominal oscillation values binned using 410 from 0.8 to 9 MeV. It is rescaled to correspond to the amount of event expected in 6 years of data taking. The black line represent the 335 bin cut}
+  \caption{Theoretical LPMT spectrum at nominal oscillation values binned using 410 bins from 0.8 to 9 MeV. It is rescaled to 6 years statistic. The black line represent the 335 bin cut}
   \label{fig:joint_fit:delta:theo}
 \end{figure}
 
-All the IBD spectra presented and used in this study are produced assuming Normal Ordering using the PDG nominal value \cite{particle_data_group_review_2020} for oscillation parameters. Those values are reported in table \ref{tab:joint_fit:pdg_value}.
+All the IBD spectra presented and used in this study are produced assuming Normal Ordering using the PDG nominal value \cite{particle_data_group_review_2020} for the oscillation parameters. Those values are reported in table \ref{tab:joint_fit:pdg_value}.
 
 %
 %   (d) Les suppositions
@@ -328,16 +329,16 @@ All the IBD spectra presented and used in this study are produced assuming Norma
 
 In this work we are only working considering the statistical errors. We can ignore systematic effects, such as effects that would affect the neutrino spectrum or the background spectrum, as they are entirely correlated between the two systems. The details of those systematic effects can be found in \cite{juno_collaboration_sub-percent_2022}.
 
-Most of our results assume decorrelated detection effects between the SPMT and LPMT system. Their respective reconstruction effect are simulated using simple gaussian drawing on the resolution, independent from their position. This approach was used in previous sensibility and precision studies \cite{juno_collaboration_sub-percent_2022, abusleme_potential_2024}. The potential effect of those reconstruction effects and a first attempt to take them into account are explored in section \ref{sec:joint_fit:cov_mat}.
+Most of our results assume decorrelated detection effects between the SPMT and LPMT systems. Their respective reconstruction effects are simulated using simple gaussian drawing on the resolution, independently from the event position. This approach was used in previous sensitivity and precision studies \cite{juno_collaboration_sub-percent_2022, abusleme_potential_2024}. The potential effect of those reconstruction effects and a first attempt to take them into account are explored in section \ref{sec:joint_fit:cov_mat}.
 
 Even if the goal of this work is to propose deformation agnostic tools, the QNL we use in this study is simplistic as we consider event-wise, position uniform deformation. We show in figure \ref{fig:joint_fit:ratio_distrib} and \ref{fig:joint_fit:gamma_v_alpha} that event-wise QNl is equivalent to the mean behaviour of channel-wise QNL but a more complete study would simulate channel-wise deformation for each event.
 
 \section{Fit software}
 \label{sec:joint_fit:framework}
 
-In this section, I describe the ft framework that was used in this study. The software is composed of two part as illustrated in figure \ref{fig:joint_fit:framework}: A standalone part composed of ROOT \cite{brun_root-projectroot_2022} macros, and the Avenue framework.
+In this section, I describe the ft framework that was used in this study. The software is composed of two parts as illustrated in figure \ref{fig:joint_fit:framework}: A standalone part composed of ROOT \cite{brun_root-projectroot_2022} macros, and the Avenue framework.
 
-The Avenue framework is responsible for the spectrum and configuration reading, transforming the raw collection of event into spectra, managing the physics effect such as the oscillation, computing and minimizing the $\chi^2$ with the help of the RooFit library. The macros are invoking, if necessary, the Avenue framework and are the entry point for fitting, generating the necessary inputs quantity such as the spectra and correlation matrix, analysing the fit results and managing jobs for distributed computing.
+The Avenue framework is responsible for the spectrum and configuration reading, transforming the raw collection of events into spectra, managing the physics effect such as the oscillation and computing and minimizing the $\chi^2$ with the help of the RooFit library. The macros are invoking, if necessary, the Avenue framework and are the entry point for fitting, generating the necessary inputs quantity such as the spectra and correlation matrix, analysing the fit results and managing jobs for distributed computing.
 
 \begin{figure}[ht]
   \centering
@@ -359,34 +360,34 @@ In this section we will focus on the IBD generator in section \ref{sec:joint_fit
 \subsection{IBD generator}
 \label{sec:joint_fit:framework:ibd-gen}
 
-The IBD generator is a standalone generator used to produce oscillated and non oscillated spectrum as seen in the JUNO experiment. It takes as inputs physics parameters and a collection of histograms, values and function provided by JUNO to its analysis groups referred as the JUNO common inputs.
+The IBD generator is a standalone generator used to produce oscillated and non oscillated spectra as the one seen by the JUNO experiment. It takes as inputs physics parameters and a collection of histograms, values and function provided by JUNO to its analysis groups, referred as the JUNO common inputs.
 
-The arguments allow to enable or disable effect such as non-uniformity and non-linearity. It finally take as an argument the number of event to generate $N_{evt}$. Optionally, we generate an effective number of event $N$ by drawing in a Poisson distribution of mean $N_{evt}$.
+Options allow to enable or disable effects such as non-uniformity and non-linearity. It finally take as an argument the number of events to generate $N_{evt}$. Optionally, we generate an effective number of events $N$ by drawing in a Poisson distribution of mean $N_{evt}$.
 
 Then for each event we
 \begin{enumerate}
-  \item Choose randomly following the reactor power fraction the reactor from which the neutrino come.
-  \item Generate a random position in the detector following a uniform distribution in the detector.
-  \item Draw a random neutrino energy $E_{\nu}$ from the expected neutrino emission spectrum of every reactor. This spectrum is calculated by:
+  \item Choose randomly, following the reactor power fraction, the source reactor of the neutrino.
+  \item Generate a random interaction position in the detector following a uniform distribution over the detector volume.
+  \item Draw a random neutrino energy $E_{\nu}$ from the expected neutrino emission spectrum of every reactor. This spectrum is computed by:
     \begin{enumerate}
       \item Computing the power spectrum of each isotopes $^{235}$U, $^{238}$U, $^{239}$Pu, $^{241}$Pu using the Huber-Mueller model \cite{huber_determination_2011, mueller_improved_2011}.
       \item Summing the contribution of each isotopes following the respective fission fraction [0.58, 0.07, 0.30, 0.05] as reported in \cite{ma_improved_2013}.
-      \item The power of each reactor is then adjusted by their distance from the detector, the detector efficiency and their mean duty cycle (11 of 12 month).
+      \item The power of each reactor is then adjusted by their distances from the detector, the detector efficiency and their mean duty cycle (11 of 12 month).
       \item The total spectrum is then finally adjusted by taking into account the correction of the Day Bay bump \cite{daya_bay_collaboration_measurement_2016}, adjustment due to spent nuclear fuel and due to the non-equilibrium.
     \end{enumerate}
-  \item \textit{(Optional)} Compute the survival probability due to oscillation at nominal oscillation parameters value. If the neutrino does not survive, the event is rejected and start from step (1).
+  \item \textit{(Optional)} Compute the survival probability due to oscillation at nominal oscillation parameters value. If the neutrino does not survive, the event is rejected and the algorithm restart from step (1).
   \item Compute the emitted positron energy $E_{pos}$ from the mass difference. If the neutrino does not have enough energy reject the event and start from step (1).
-  \item Compute the deposited energy $E_{dep}$ by incrementing $E_{pos}$ by 511 keV to account for the positron annihilation. We do not consider cases where some of the energy leak outside of the detector.
+  \item Compute the deposited energy $E_{dep}$ by incrementing $E_{pos}$ by 511 keV to account for the positron annihilation. We do not consider cases where some of the energy leak outside of the detector (positron or annihilation gammas escaping the CD).
   \item Correct the deposited energy with the expected event-wise non-linearity from \cite{juno_collaboration_calibration_2021} to obtain the visible energy $E_{vis}$.
   \item \textit{(Optional)} Add a custom non-linearity as described in section \ref{sec:joint_fit:qnl}. This non linearity is characterized by $\alpha_{qnl}$ to obtain $E_{\alpha}$.
-  \item Finally, using the expected resolution of the LPMT and SPMT system provided in the JUNO common inputs, we draw from a gaussian characterized by those resolution the reconstructed energy $E_{rec}$ or $E_{lpmt}$ and $E_{spmt}$ for each system. The resolutions are provided as ABC parameters using
+  \item Finally, using the expected resolution of the LPMT and SPMT systems,  provided in the JUNO common inputs, we draw from a gaussian characterized by those resolution the reconstructed energy $E_{rec}$ or $E_{lpmt}$ and $E_{spmt}$ for each systems. The resolutions are provided as ABC parameters using
     \begin{equation}
-      \frac{E_{vis}}{\sigma E_{vis}} = \sqrt{\bigg(\frac{A}{\sqrt{E_{vis}}}\bigg)^2 + b^2 + \bigg(\frac{c}{E_{vis}}\bigg)^2}
+      \frac{\sigma E_{vis}}{E_{vis}} = \sqrt{\bigg(\frac{A}{\sqrt{E_{vis}}}\bigg)^2 + b^2 + \bigg(\frac{c}{E_{vis}}\bigg)^2}
     \end{equation}
     The relative and absolute resolutions of the LPMT and SPMT systems are illustrated in figure \ref{fig:joint_fit:system_resolution}.
 \end{enumerate}
 
-The events are stored as n-tuples and are not yet bin at the end of this step.
+The events are stored as n-tuples and are not yet binned at the end of the generator.
 
 \begin{figure}[ht]
   \centering
@@ -397,7 +398,7 @@ The events are stored as n-tuples and are not yet bin at the end of this step.
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{scripts/plots/absolute_resolution.png}
   \end{subfigure}
-  \caption{Relative (\textbf{On the left}) and absolute (\textbf{On the right}) resolution of the LPMT and SPMT systems used in this study. The number in parenthesis are the parameter $A$, $B$ and $C$ respectively for each systems.}
+  \caption{Relative (\textbf{On the left}) and absolute (\textbf{On the right}) resolutions of the LPMT and SPMT systems used in this study. The number in parenthesis are the parameter $A$, $B$ and $C$ respectively for each systems.}
   \label{fig:joint_fit:system_resolution}
 \end{figure}
 
@@ -417,10 +418,10 @@ The fit macro is the core of this fitting procedure. This macro is responsible f
       \mathbf{R} &\sim \mathcal{N}(0, 1) \\
       \tilde{\mathbf{h}} &= \lceil \mathbf{h} + L\mathbf{R} \rfloor \\
     \end{align}
-    where $V$ is covariance matrix used to produce the fluctuations, $\mathbf{R}$ is a draw in a multinomal distribution of mean 0 and variance 1, $\mathbf{h}$ the bin content of the theoretical spectrum and $\tilde{\mathbf{h}}$ the bin content of the generated toy.
+    where $V$ is covariance matrix used to produce the fluctuations, $\mathbf{R}$ is drawn in a multinomal distribution of mean 0 and variance 1, $\mathbf{h}$ the bin content of the theoretical spectrum and $\tilde{\mathbf{h}}$ the bin content of the generated toy.
 \end{enumerate}
 
-The first two methods allow for the fast production of statistics toys while the third allow for the production of statistical and systematical dependent toys. Unfortunately, none of those methods are fitted to produce toy with a QNL different from the theoretical spectrum. The uncertainty on the reconstructed energy $\sigma E_{rec}$ being dependent on $E_{vis}/E_{\alpha}$ makes that we would need to deconvolute the reconstruction effect from the theoretical spectrum. It is much easier to just produce those toys from the IBD generator.
+The first two methods allow for the fast production of independent toys while the third allow for the production of statistical and systematical dependent toys. Unfortunately, none of those methods are fitted to produce toy with a QNL different from the theoretical spectrum. The uncertainty on the reconstructed energy $\sigma E_{rec}$ being dependent on $E_{vis}/E_{\alpha}$ makes that we would need to deconvolute the reconstruction effect from the theoretical spectrum. It is much easier to just produce those toys from the IBD generator.
 
 % V) Tes développements techniques.
 % -----------------------------------------------------------
@@ -434,11 +435,11 @@ The first two methods allow for the fast production of statistics toys while the
 \section{Technical challenges and development}
 \label{sec:joint_fit:tech}
 
-The fit framework Avenue was already partially developed with multispectrum fitting in mind but a lot technical development was necessary to allow for a joint fit. The first step was to migrate the framework from ROOT5 (last release in March 2018) to ROOT6 (v6.26.06 released in July 2022) to ensure compatibility with the data coming from the JUNO collaboration and benefit of the improvement and corrections that came with ROOT6. This allow us to upgrade the C++ standard from C++11 to C++17. A substantial effort has been done to modernize the code, generalizing the function via templating to help readability and using smart pointer to prevent possible memory leaks.
+The fit framework Avenue was already partially developed with multispectra fitting in mind but a lot technical development was necessary to allow for a joint fit. The first step was to migrate the framework from ROOT5 (last release in March 2018) to ROOT6 (v6.26.06 released in July 2022) to ensure compatibility with the data coming from the JUNO collaboration, and benefiting of the improvement and corrections that came with ROOT6. This allow us to upgrade the C++ standard from C++11 to C++17. A substantial effort has been done to modernize the code, generalizing the functions and methods via templating to help readability and using smart pointer to prevent possible memory leaks.
 
-The Avenue framework had to be adapted, notably on the chi-square calculation and spectrum generation to correctly take into account the correlation between the SPMT and LPMT spectrum. The delta joint fit requiring two more parameters over a spectrum twice as large as before with LPMT takes much more time, around 15h for 6 years exposure, than the single LPMT fit. Thus the framework and the fit macro had to be updated with ditributed calculation in mind. Notably the aggregation of fit results could be done in a single file instead of managing a file per fit. In case of numerous toy, the hard drive access time could lead to long analysis time.
+The Avenue framework had to be adapted, notably on the chi-square calculation and spectrum generation to correctly take into account the correlation between the SPMT and LPMT spectra. The delta joint fit requiring two more parameters over a spectrum twice as large as before with LPMT takes much more time, around 15h for 6 years exposure, than the single LPMT fit. Thus the framework and the fit macro had to be updated for distributed computing. Notably the aggregation of fit results can now be done in a single file instead of managing a file per fit. In case of numerous toy, the hard drive access time could lead to long analysis time.
 
-While the IBD generator was already able to generate LPMT and SPMT spectrum, it was not designed for generating correlated spectrum. As detailed in section \ref{sec:joint_fit:framework:ibd-gen}, up to the reconstruction effect, the two spectrum need to share the same generation else the two spectrum would be decorelated and it would be like we would run two different experiment.
+While the IBD generator was already able to generate LPMT and SPMT spectrum, it was not designed for generating correlated spectrum. As detailed in section \ref{sec:joint_fit:framework:ibd-gen}, up to the reconstruction effect, the two spectrum need to share the same generation else the two spectrum would be decorrelated and it would be like we would run two different experiment.
 
 \section{Results}
 \label{sec:joint_fit:results}
@@ -456,13 +457,13 @@ While the IBD generator was already able to generate LPMT and SPMT spectrum, it 
 
 The first step is to confirm that the updated fit framework is able to reproduce existing results and that the joint fit behave as expected, meaning
 \begin{itemize}
-  \item Without QNL, the individual (\textit{LPMT} and \textit{SPMT}) fit converge to the parameter nominal value and that their errors in the ones reported in existing analysis such as \cite{juno_collaboration_sub-percent_2022}.
-  \item The standard joint fit with an independent covariance matrix (\textit{Indep Standard joint}), meaning that the covariance between the LPMT and SPMT spectra is 0, believe to have twice as much information and thus believe to have a grater precision than the the individual fits.
-  \item The standard joint (\textit{Standard joint}) fit but with a correlated covariance matrix has errors similiar to the LPMT individual fit as the LPMT drive the precision on $\theta_{13}$ and $\Delta m^2_{31}$ and that the LPMT as SPMT are expected to have the same precision on $\theta_{12}$ and $\Delta m^2_{21}$.
-  \item The delta joint (\textit{Delta joint}) fit with covariance matrix have the same resolution as the standard joint fit. The supplementary parameter $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ should not bring supplementaty precision.
+  \item Without QNL, the individual (\textit{LPMT} and \textit{SPMT}) fit converge to the parameters nominal values and their errors are similar to the ones reported in existing analysis such as \cite{juno_collaboration_sub-percent_2022}.
+  \item The standard joint fit with an independent covariance matrix (\textit{Indep Standard joint}), meaning that the covariance between the LPMT and SPMT spectra is 0, believe to have twice as much informations, and thus believe to have a grater precision than the individual fits.
+  \item The standard joint (\textit{Standard joint}) fit with a correlated covariance matrix has errors similar to the LPMT individual fit as the LPMT drive the precision on $\theta_{13}$ and $\Delta m^2_{31}$ and that the LPMT as SPMT are expected to have close precision on $\theta_{12}$ and $\Delta m^2_{21}$.
+  \item The delta joint (\textit{Delta joint}) fit with covariance matrix have the same resolution as the standard joint fit. The supplementary parameter $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ should not bring supplementary precision.
 \end{itemize}
 
-The italicized name are the name used in the results reports to identify each fit. We also look into the \textit{Indep Delta joint} which is the fit with the supplementary delta parameters but the covariance between the LPMT and SPMT spectra is 0 and the \textit{Weighted} results where
+The italicized name are the name used in the results reports to identify each fit. We also look into the \textit{Indep Delta joint}, which is the Delta Joint fit but the covariance between the LPMT and SPMT spectra is 0, and the \textit{Weighted} results where
 \begin{equation}
   \frac{1}{\sigma^2_{Weighted}} = \frac{1}{\sigma^2_{LPMT}} + \frac{1}{\sigma^2_{SPMT}}
 \end{equation}
@@ -470,7 +471,7 @@ We expect the weighted resolution to be similar to the \textit{Indep Standard jo
 
 \subsubsection{Asimov studies}
 
-We ran the tests presented above on the updated framework, the results are reported in table \ref{tab:joint_fit:asimov_results}. All those test are ran considering statistics error only, 6 years exposure with all backgrounds, Pearson $\chi^2$ (covariance is estimated using data spectrum) and $\theta_{13}$ fixed to nominal value. For the \textit{SPMT} fit $\Delta m^2_{31}$ is fixed at nominal value as the SPMT system is net expected to be sensitive to this parameter.
+We ran Asimov studies on the tests presented above on the updated framework, the results are reported in table \ref{tab:joint_fit:asimov_results}. All those test are ran considering statistics error only, 6 years exposure with all backgrounds, Pearson $\chi^2$ (covariance is estimated using data spectrum) and $\theta_{13}$ fixed to nominal value. For the \textit{SPMT} fit $\Delta m^2_{31}$ is fixed at nominal value as the SPMT system is net expected to be sensitive to this parameter.
 
 \begin{table}[ht]
   \begin{footnotesize}
@@ -496,7 +497,7 @@ We ran the tests presented above on the updated framework, the results are repor
   Weighted             &               &               & 9.12193e-04   &               &               & \\
   \hline
   \hline
-  \multicolumn{7}{c}{Fixed $\Delta m^2_{31}$ and$\theta_{12}$} \\
+  \multicolumn{7}{c}{Fixed $\Delta m^2_{31}$ and $\theta_{12}$} \\
   \hline
   Indep Standard joint          & 8.97117e-08   &               &               &               &               & 6.10617e-18 \\
   SPMT                          & 1.30734e-07   &               &               &               &               & 2.87522e-18 \\
@@ -504,24 +505,24 @@ We ran the tests presented above on the updated framework, the results are repor
   Weighted                      & 8.97066e-08   &               &               &               &               & \\
   \end{tabular}
   \end{footnotesize}
-  \caption{Results of the asimov studies of the updated framework. All results are asimov fit, considering 6 years exposure, $\theta_{13}$ is fixed to nominal value, $\chi^2$ is pearson meaning that he error is esitmated using the data spectrum}
+  \caption{Results of the Asimov studies on the updated framework. All results are Asimov fit, considering 6 years exposure, $\theta_{13}$ is fixed to nominal value, $\chi^2$ is pearson meaning that he error is estimated using the data spectrum}
   \label{tab:joint_fit:asimov_results}
 
 \end{table}
 
 In every cases presented above, the fit converges to the parameters nominal value thus only the errors are presented.
 
-We observe, as expected, that $\sigma_{Weighted} \approx \sigma_{Indep~Standard~joint}$ with the exception of $\sigma \theta_{12}$. This could from the slight difference in statistic between the SPMT and LPMT spectra. Indeed, due to a larger smearing in energy resolution, event that would be in the spectra range [0.8, 7.5] MeV are smeared outside the spectrum. This deficit is partially compensated by event outside the spectrum coming back in this range but we expect very few event outside the spectrum in comparison to event at the edges of it. Thus the event deficit is not totally compensated. $\theta_{12}$ being mainly driven by the amplitude of the spectrum (see illustration \ref{fig:juno:juno-spectrum-oscillation}), that's why we think this the origin of the difference.
+We observe, as expected, that $\sigma_{Weighted} \approx \sigma_{Indep~Standard~joint}$ with the exception of $\sigma \theta_{12}$. This could from the slight difference in statistic between the SPMT and LPMT spectra. Indeed, due to a larger smearing in energy resolution, events that would be inside the spectrum range [0.8, 7.5] MeV are smeared outside it. This deficit is partially compensated by event outside the spectrum coming back in it but we expect very few event outside the spectrum in comparison to event at the edges of it. Thus the event deficit is not totally compensated. $\theta_{12}$ being mainly driven by the amplitude of the spectrum (see illustration \ref{fig:juno:juno-spectrum-oscillation}), that's why we think this the origin of the difference.
 
 The second observation is that $\sigma_{Standard~joint} \approx \sigma_{LPMT}$. Once the covariance matrix between the LPMT and SPMT is correctly introduced, the fit ``understand'' that it does not have supplementary information and the LPMT system, which have the best precision, dominate the resolution.
 
-Finally for the \textit{Delta} fit, the error on $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ are of the same order of magnitude than the errors on $\theta_{12}$ and $\Delta m^2_{21}$ in the absence of the covariance matrix. As the LPMT and SPMT spectra are not connected through the covariance matrix, the delta parameters are unconstrained thus the similar errors. Once the covariance matrix is introduced, the delta are much more constrained and present errors an order of magnitude smaller than the error om their respective parameters.
+Finally for the \textit{Delta} fit, the error on $\delta \theta_{12}$ and $\delta \Delta m^2_{21}$ are of the same order of magnitude than the errors on $\theta_{12}$ and $\Delta m^2_{21}$ in the absence of the covariance matrix. As the LPMT and SPMT spectra are not connected through the covariance matrix, the delta parameters are unconstrained thus the similar errors. Once the covariance matrix is introduced, the delta are much more constrained and show errors of an order of magnitude smaller than the error on their respective parameters.
 
-Overall, the asimov studies are satisfactory. The joint fit behave as expected and the errors on the delta parameters are significantly smaller than the error on their respective parameters, indicating great potential if the converge to value different from 0.
+Overall, the asimov studies are satisfactory. The joint fit behave as expected and the errors on the delta parameters are significantly smaller than the error on their respective parameters, indicating great potential if they converge to value too far from 0.
 
 \subsubsection{Toy studies}
 
-Once we validated that the asimov study is yielding coherent results, we study the behaviour of toy studies. The above asimov study is using the Pearson $\chi^2$ (Eq. \ref{eq:joint_fit:pearson}) without pull parameter, we show in figure \ref{fig:joint_fit:abs_standard_pearson} the effect of using a simple Pearson $\chi^2$. We see that $\sin^2(2\theta_{12})$ (reported as $\theta_{12}$ for simplicity) is biased of about $0.5\sigma$ and $\Delta m^2_{21}$ biased of about $0.1\sigma$. When introducing the PearsonV $\chi^2$ (Eq. \ref{eq:joint_fit:pearsonV}) the bias disappear as reported in figure \ref{fig:joint_fit:abs_standard_pearsonV}.
+Once we validated that the asimov study is yielding coherent results, we study the behaviour of toy studies. The above asimov study was using the Pearson $\chi^2$ (Eq. \ref{eq:joint_fit:pearson}) without pull parameter. We show in figure \ref{fig:joint_fit:abs_standard_pearson} the effect of using a simple Pearson $\chi^2$. We see that $\sin^2(2\theta_{12})$ (reported as $\theta_{12}$ for simplicity) is biased of about $0.5\sigma$ and $\Delta m^2_{21}$ biased of about $0.1\sigma$. When introducing the PearsonV $\chi^2$ (Eq. \ref{eq:joint_fit:pearsonV}) the bias disappear as reported in figure \ref{fig:joint_fit:abs_standard_pearsonV}.
 
 \begin{figure}[ht]
   \centering
@@ -583,17 +584,17 @@ We use a covariance matrix assuming no QNL. The effect of this QNL on the spectr
     Delta           & -0.163 & (1.183) & -1.532 & (1.036) & -8.193 & (3.934)       & -1.441 & (0.193)     & 0.654  & (0.303) \\
   \end{tabular}
   \end{footnotesize}
-  \caption{Results of the different fit scenarios on QNL distorted data $\alpha_{qnl} = 1\%$. The mean value are reported subtracted from their nominal value. For SPMT $\Delta m^2_{31}$ is fixed at nominal value. The $\chi^2$ is PearsonV. The correlation matrix used to fit suppose no QNL in the spectrum.}
+  \caption{Results of the different fit scenarios on QNL distorted data $\alpha_{qnl} = 1\%$. The mean value are reported subtracted from their nominal value. For SPMT $\Delta m^2_{31}$ is fixed at nominal value. The $\chi^2$ is PearsonV. The correlation matrix used to fit assume no QNL in the spectrum.}
   \label{tab:joint_fit:qnl_results}
 \end{table}
 
-The results in table \ref{tab:joint_fit:qnl_results} are subtracted from their nominal value, themselves reported in table \ref{tab:joint_fit:pdg_value}. We clearly see the bias induced by $\alpha_{qnl} = 1\%$ when comparing the SPMT and LPMT results. The Indep Standard is, as expected, the mean value between the SPMT and LPMT: the fit having no informations about the correlation between the spectrum think it have two uncorrelated experiment thus report an in between value. When introducing the relationship between the LPMT and SPMT spectra in the Standard fit, the joint fit cannot find a clean minima, it thus converge to a completely incorrect value.
+The results in table \ref{tab:joint_fit:qnl_results} are subtracted from their nominal value, themselves reported in table \ref{tab:joint_fit:pdg_value}. We clearly see the bias induced by $\alpha_{qnl} = 1\%$ when comparing the SPMT and LPMT results. The Indep Standard is, as expected, the mean value between the SPMT and LPMT: the fit having no informations about the correlation between the spectrum think it have two uncorrelated experiments thus report an in between value. When introducing the relationship between the LPMT and SPMT spectra in the Standard fit, the joint fit cannot find a clean minima, it thus converge to a completely incorrect value.
 
 Introducing the $\delta$ without the correlation in Delta Indep remove the bias and converge to the SPMT minima, the $\delta$ absorbing the deformation of the LPMT spectra.
 
 Finally, with the $\delta$ and the covariance matrix, $\theta_{12}$ is unbiased, $\delta \theta_{12}$ absorbing the deformation. $\delta \Delta m^2_{21}$ is still heavily biased, even more than LPMT only, for the same reason than the Standard fit: the correlation make it difficult to converge to the nominal value.
 
-Overall $\Delta m^2_{31}$ bias is unchanged as the SPMT spectrum bring no information about the parameter and the $\delta$ are significant, naively up to 7.46$\sigma$ for $\delta \theta_{12}$ in the Delta fit.
+Overall $\Delta m^2_{31}$ bias is unchanged as the SPMT spectrum bring no information about the parameter. The $\delta$ are significant, naively up to 7.46$\sigma$ for $\delta \theta_{12}$ in the Delta fit.
 
 
 
@@ -616,7 +617,7 @@ Overall $\Delta m^2_{31}$ bias is unchanged as the SPMT spectrum bring no inform
 \subsection{Covariance matrix}
 \label{sec:joint_fit:cov_mat}
 
-The covariance matrix between the LPMT and SPMT spectra is at the hearth of this study as it was already mentioned in section \ref{sec:joint_fit:approach} and demonstrated in section \ref{sec:joint_fit:validation}. In this section we discuss the different approaches taken to estimate it. In this work we will mainly discuss the statistical covariance matrix between the two spectra, how the number of event in a LPMT bin influence the number of bin in the SPMT spectra due to the resolution, but we will still discuss the reconstruction effect, mostly due to non-uniformity in the reconstruction resolution.
+The covariance matrix between the LPMT and SPMT spectra is at the hearth of this study as it was already mentioned in section \ref{sec:joint_fit:approach} and demonstrated in section \ref{sec:joint_fit:validation}. In this section we discuss the different approaches taken to estimate it. In this work we will mainly discuss the statistical covariance matrix between the two spectra, how the number of event in a LPMT bin influence the number of bin in the SPMT spectrim due to the resolution. We will still discuss the reconstruction effects, mostly due to non-uniformity, in on reconstruction correlation.
 
 \subsubsection{Analytical method}
 
@@ -625,7 +626,7 @@ The first method discussed is the analytical method where we propagate the resol
 The first step is to compute the statistical uncertainty of the input spectrum while taking into account the smearing, considering no uncertainty on the smearing. For this, using the notation of section \textit{39.2.5 Propagation of errors} of PDG2020 \cite{particle_data_group_review_2020} and considering an extended spectrum of 820 bins following the binning scheme introduced in \ref{sec:joint_fit:data_gen}, the first 410 for the LPMT and the last 410, we consider
 \begin{itemize}
   \item $\bm{\theta} = (\theta_0, ..., \theta_n);~ n = 820$ the content of the spectrum bins.
-  \item $\bm{\eta}(\bm{\theta}) = (\eta_0(\bm{\theta}), ..., \eta_m(\bm{\theta})); ~ m  = 820$ the set of smearing functions representing the PMT resolution.
+  \item $\bm{\eta}(\bm{\theta}) = (\eta_0(\bm{\theta}), ..., \eta_m(\bm{\theta})); ~ m  = 820$ the set of smearing functions representing the PMT resolutions.
 \end{itemize}
 
 $\eta_m$ can thus be defined as
@@ -647,7 +648,7 @@ and then compute the first part of our covariance matrix
 \begin{equation}
   U = AVA^T
 \end{equation}
-where $V$ is the uncorrelated covariance matrix simply defined, under the assumption of poissonian statistic for the bin content
+where $V$ is the uncorrelated covariance matrix simply defined, under the assumption of poissonian statistic for the bin content,
 \begin{equation}
   V_{ij} = \sqrt{\theta_i \theta_j}
 \end{equation}
@@ -664,7 +665,7 @@ Using $\sigma\theta_j = \sqrt{\theta_j}$ we derive
                                 &= \frac{(1 - G(i, j))G(i, j)}{\theta_j}
 \end{align}
 
-By summing the two obtained covariance matrix, we can extract a correlation matrix presented in figure \ref{fig:joint_fit:th_cor_mat}. The correlation between the SPMT and LPMT spectra is greater at the start of the spectrum, where the absolute smearing is the smallest up to 5\% and diffuse as the bins are further from each other and the absolute resolution grow.
+By summing the two covariance matrix, we can extract a correlation matrix presented in figure \ref{fig:joint_fit:th_cor_mat}. The correlation between the SPMT and LPMT spectra is greater at the start of the spectrum, where the absolute smearing is the smallest, up to 5\% correlation, and diffuse as the bins are further from each other and the absolute resolution grow.
 
 \begin{figure}[ht]
   \centering
@@ -680,9 +681,9 @@ The second method is the empric way where we generate toys and just compute the 
   \mathrm{Corr}(\theta_i, \theta_j) = \frac{\mathbb{E}[\theta_i \theta_j] - \mathbb{E}[\theta_i] \mathbb{E}[\theta_j]}{\sigma \theta_i \sigma \theta_j}
 \end{equation}
 
-We thus generate $10^7$ event using the IBD generator presented in section \ref{sec:joint_fit:framework:ibd-gen}, then produce spectra from this finite set of events, meaning we must choose a number $N$ of toy each composed of $M$ event in a manner to not have the best estimate.
+We thus generate $10^7$ event using the IBD generator presented in section \ref{sec:joint_fit:framework:ibd-gen}, then produce spectra from this finite set of events, meaning we must choose a number $N$ of toy each composed of $M$ event in order to have the best estimate.
 
-Due to the nature of our estimator, the estimated correlation coefficient is subject to statistical fluctuation as any estimator. There is no definite formula to compute the standard deviation of the correlation coefficient as suggested in this study \cite{gnambs_brief_2023} but all cited formula depend solely on the number of samples, in our case the number of toy $N$, and the correlation coefficient. This is indicate that maximizing the number of toy is the right decision, even if each toy posses only one sole event.
+Due to the nature of our estimator, the estimated correlation coefficient is subject to statistical fluctuation as any estimator. There is no definite formula to compute the standard deviation of the correlation coefficient as suggested in this study \cite{gnambs_brief_2023} but all cited formula depend solely on the number of samples, in our case the number of toy $N$, and the correlation coefficient. This indicate that maximizing the number of toy is the right decision, even if each toy posses only one sole event.
 
 To study this rather counter intuitive observation (How can a spectrum with only one event can be representative of the experiment ?), I present in figure \ref{fig:joint_fit:empirical_cor} the upper left corner of the estimated correlation matrix for different configurations of N and M in the limit of $10^7$ total event. Wee see in figure \ref{fig:joint_fit:empirical_cor:small} that if the toy number $N$ is too low, the statistical noise make the correlation pattern almost completely disappear, in figure \ref{fig:joint_fit:empirical_cor:medium} we see clearly the same correlation patter as in the theoretical matrix in figure \ref{fig:joint_fit:th_cor_mat}.
 On the final matrix in figure \ref{fig:joint_fit:empirical_cor:cheff_kiss} the pattern is clearly visible, but we see a shade of anti-correlation around the spectrum that was not present in the theoretical correlation matrix.
@@ -708,11 +709,11 @@ On the final matrix in figure \ref{fig:joint_fit:empirical_cor:cheff_kiss} the p
 \end{figure}
 
 
-The difference between the element of the theoretical and the empiric correlation matrix are presented in figure \ref{fig:joint_fit:th_em_diff}. We that the difference between the two is very small with a bias of $1.8 \cdot 10^{-3}$ and a standard deviation of $1.9 \cdot 10^{-3}$ while the interesting correlation are of the order $10^{-2}$. Also as presented in figure \ref{fig:joint_fit:th_em_diff_mat}, the most extreme differences comes from the low end of the spectrum.
+The difference between the element of the theoretical and the empiric correlation matrices are presented in figure \ref{fig:joint_fit:th_em_diff}. We that the difference between the two is very small with a bias of $1.8 \cdot 10^{-3}$ and a standard deviation of $1.9 \cdot 10^{-3}$ while the interesting correlation are of the order $10^{-2}$. As presented in figure \ref{fig:joint_fit:th_em_diff_mat}, the most extreme differences comes from the low end of the spectrum.
 
 This low energy difference could be explained as the theoretical does not take into account event that would be smeared from outside the spectrum. $E < 0.8$, MeV back inside the spectrum thus missing on the potential correlations.
 
-The second big difference between the empirical and theoretical correlation matrix is the anti-correlation of magnitude $\approx -5\cdot 10^{-3}$ around the spectrum. In the theoretical correlation matrix, we are under the assumption that $G(i, j)$ is uncorrelated from $G(i, k)$ but this is not true in the case of a finite dataset. $G(i, j)$ represent the number of event that migrate from the bin $i$ to $j$, in the case of a finite number of event to distribute between the bins, the number of event that can be distributed in the bin $k$ is constrained by the number of event distributed in the bin $j$ thus the anti-correlation between this two bins.
+The second major difference between the empirical and theoretical correlation matrices is the anti-correlation of magnitude $\approx -5\cdot 10^{-3}$ around the spectrum. In the theoretical correlation matrix, we assume that $G(i, j)$ is uncorrelated from $G(i, k)$ but this is not true in the case of a finite dataset. $G(i, j)$ represent the number of events that migrate from the bin $i$ to $j$, in the case of a finite number of event to distribute between the bins, the number of event that can be distributed in the bin $k$ is constrained by the number of event distributed in the bin $j$ leading to the anti-correlation between this two bins.
 
 \begin{figure}[ht]
   \centering
@@ -729,18 +730,18 @@ The second big difference between the empirical and theoretical correlation matr
   \caption{Difference between the element of the theoretical and empiric correlation matrix}
 \end{figure}
 
-These empirical correlation matrix still pose an issue: These matrix needs to be inverted for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrix to be positive definite, which is not guarantee using this empirical methods. Due to this issue, the theoretical matrix is used in the studies presented in this thesis.
+These empirical correlation matrices still pose an issue: These matrices needs to be invertible for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrices to be positive definite, which is not guarantee using this empirical methods. Due to this issue, the theoretical matrix is used in the studies presented in this thesis.
 
-\subsubsection{Empirical matrix from fully simulated event}
-
-The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and constructing an empirical matrix from those events.
-
+\subsubsection{Empirical correlation matrix from fully simulated event}
+%
+%The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and constructing an empirical matrix from those events.
+%
 \textbf{TODO}
 
 
 \subsection{Statistical tests}
 
-In this part, I present the results of the statistical presented in section \ref{sec:joint_fit:approach}.
+In this part, I present the results of the statistical tests presented in section \ref{sec:joint_fit:approach}.
 
 \subsubsection{Test $\chi^2_{spe}$}
 
@@ -748,9 +749,9 @@ The $\chi^2_{spe}$ is a chi-square representing the compatibility between the LP
 \begin{equation}
   \chi^2_{spe} = \bm{\Delta h} V_{spe} \bm{\Delta h}^T; ~ \bm{\Delta h} = \{ (h_0^L - h_0^S), ..., (h_n^L - h_n^S) \}
 \end{equation}
-where $h_i^L$ and $h_i^S$ is the content of the $i$th bin the LPMT and SPMT spectra. For details about the calculation of $V_{spe}$, see section \ref{sec:joint_fit:approach}.
+where $h_i^L$ and $h_i^S$ are the contents of the $i$th bins of the LPMT and SPMT spectra. For details about the calculation of $V_{spe}$, see section \ref{sec:joint_fit:approach}.
 
-The results for different exposure can be found in figure \ref{fig:joint_fit:chi2_spec}. To give an idea of the significance of this test, we provide the median p-value for each test $\alpha_{qnl} \neq 0$. As expected, the power of this test rises as the exposure does. We see significant discrimination at 6 years for $\alpha_{qnl} \geq 0.3 \%$ where the p-value for $\alpha_{qnl} = 3\%$ is 0.5\%.
+The results for different exposures can be found in figure \ref{fig:joint_fit:chi2_spec}. To give an idea of the significance of this test, we provide the median p-value for each test $\alpha_{qnl} \neq 0$. As expected, the power of this test rises as the exposure does. We see significant discrimination at 6 years for $\alpha_{qnl} \geq 0.3 \%$ where the p-value for $\alpha_{qnl} = 3\%$ is 0.5\%.
 
 
 \begin{figure}[th]
@@ -773,12 +774,11 @@ The results for different exposure can be found in figure \ref{fig:joint_fit:chi
   \label{fig:joint_fit:chi2_spec}
 \end{figure}
 
-This test rely only on the estimated covariance matrix between the two spectra, requiring no fit at all making it a very lightweight test that can still provide good indication of potential unknown deformation between the two spectrum.
-
+This test relies solely on the estimated covariance matrix between the two spectra, requiring no fitting. As a result, it is a very lightweight test that can still provide valuable indications of potential unknown distortions between the two spectra.
 
 \subsubsection{Test $\chi^2_{ind}$}
 
-The $\chi^2_{ind}$ is the chi-square that represent the agreement between the measured oscillation parameters $\theta_{12}$ a $\Delta m^2_{21}$. This test is defined as
+The $\chi^2_{ind}$ is the chi-square that represent the agreement between the measured oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$. This test is defined as
 \begin{equation}
   \chi^2_{ind} = \bm{\Delta \lambda} V_{ind} \bm{\Delta \lambda}^T; ~ \bm{\Delta \lambda} = \{\theta_{12}^L - \theta_{12}^S, (\Delta m^2_{21})^L - (\Delta m^2_{21})^S\}
 \end{equation}
@@ -802,7 +802,7 @@ The results are presented in figure \ref{fig:joint_fit:chi2_ind}. This test does
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_ind_6y.png}
   \end{subfigure}
-  \caption{Distribution of the $\chi^2_{ind}$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \caption{Distribution of the $\chi^2_{ind}$ for 1000 toys for different exposures. The dashed lines represent the median of the distributions and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
   \label{fig:joint_fit:chi2_ind}
 \end{figure}
 
@@ -810,7 +810,7 @@ This test is the most straightforward as it require only the fit of the two spec
 
 \subsubsection{$\delta$ parameters significance}
 
-This test consist in observing the value of the $\delta$ parameters in the Delta Joint fit and compare them with their dispersion in the case $\alpha_{qnl} = 0$. The results are presented in figures \ref{fig:joint_fit:chi2_delta} and \ref{fig:joint_fit:chi2_delta_m}.
+This test involves observing the values of the $\delta$ parameters in the Delta Joint fit and comparing them tho their dispersion in the case where $\alpha_{qnl} = 0$. The results are shown in figures \ref{fig:joint_fit:chi2_delta} and \ref{fig:joint_fit:chi2_delta_m}.
 
 \begin{figure}[th]
   \centering
@@ -861,7 +861,41 @@ This test consist in observing the value of the $\delta$ parameters in the Delta
   \label{fig:joint_fit:chi2_delta_m}
 \end{figure}
 
-We can see that the $\delta \Delta m^2_{21}$ has a very small discrimination power even at 6 years exposure with a p-value of 33\% for $\alpha_{qnl} = 0.3\%$.
+We can see that the $\delta \Delta m^2_{21}$ has a very small discriminative power (figure \ref{fig:joint_fit:chi2_delta_m}) even at 6 years exposure with a p-value of 33\% for $\alpha_{qnl} = 0.3\%$. On the other hand $\delta \theta_{12}$ (figure \ref{fig:joint_fit:chi2_delta}) has much more discriminative power with a p-value for $\alpha_{qnl} = 0.3\%$ of 2.5\%. This test with a single joint fit seems to be still less powerful than the $\chi^2_{spe}$. This can be explained as this method only get information through the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ missing potential informations contained in $\Delta m^2_{31}$.
+
+\subsubsection{Hypothesis test}
+
+In this last test we consider the two fit Standard Joint and Delta Joint as two hypothesis. The first one, Standard Joint, is the $H_0$ hypothesis: we do not need supplementary parameters to describe the energy spectrum. The second one, Delta Joint, is the $H_1$ hypothesis: we do need those supplementary $\delta$ parameters to, if not correctly, approach the energy spectrum. If the $\delta$ parameter are unnecessary the $\chi^2_{H_0}$ should be close to $\chi^2_{H_1}$. On the other hand, if one spectrum is distorted, then those parameters are relevant and $\chi^2_{H_1} < \chi^2_{H_0}$. For this test we thus observe the $\chi^2_{H_0} - \chi^2_{H_1}$ distributions for different exposures and $\alpha_{qnl}$. The results are presented in figure \ref{fig:joint_fit:chi2_H}.
+
+\begin{figure}[th]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_H_100d.png}
+    \caption{100 days exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_H_1y.png}
+    \caption{1 year exposure}
+  \end{subfigure}
+
+
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_H_2y.png}
+    \caption{2 years exposure}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/stat_tests/chi2_H_6y.png}
+    \caption{6 years exposure}
+  \end{subfigure}
+  \caption{Distribution of $\chi^2_{H_0} - \chi^2_{H_1}$ for 1000 toys for different exposure. The dashed line represent the median of the distribution and the p-value are the percentage of the $\alpha_{qnl} = 0$ distribution that are greater than those medians.}
+  \label{fig:joint_fit:chi2_H}
+\end{figure}
+
+This test is the most complex, requiring two fit and the covariance matrix between the LPMT and SPMT spectra. The results are good, close to the $\chi^2_{spe}$, one with a p-value at 6 years for $\alpha_{qnl} = 0.3\%$ of 0.01.
+
+As explained in section \label{sec:joint_fit:data_gen}, the spectra used for the fit are cut at 335 bins / 7.5 MeV to prevent instability, while in $\chi^2_{spe}$ we use full 410 bins spectra. The $\chi^2_{spe}$ thus has more informations that the hypothesis test leading to this difference in power.
+
+% Montre chi^2_{spe} 335 ?
 
 %
 %   (c) Résultats fit séparés
@@ -875,5 +909,9 @@ We can see that the $\delta \Delta m^2_{21}$ has a very small discrimination pow
 \section{Conclusion and perspectives}
 \label{sec:joint_fit:conclusion}
 % Vll) Discussions, perspectives
+
+In this chapter, we present the development of a fit framework that allows us to fit multiple spectra simultaneously. We also introduce a set of tools that enable us to detect potential distortions in one of the two spectra. As an illustration of the capability of these tools, we use supplementary event-wise non-linearity and compare it to the potential residual event-wise non-linearity after calibration. Our results show that after 6 years of data collection, we can reject the median residual distortion with a p-value of 0.5\% under the conditions outlined in this chapter.
+
+Additionally, this study is preliminary, as the background was neglected in the distortion test, and no systematic uncertainties were considered. The supplementary non-linearity was introduced event-wise but should be applied channel-wise to account for the detector's non-uniformity. The correlation matrix between the LPMT and SPMT spectra should also be further analyzed, as indicated by the discrepancies between the theoretical and empirical correlation matrices. We should also further investigate the effect of non-uniformity on the correlation matrix.
 
 \end{document}
