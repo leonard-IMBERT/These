@@ -37,7 +37,7 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
 \usepackage{lineno}
-\linenumbers % Uncomment to add line number to document
+%\linenumbers % Uncomment to add line number to document
 
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
@@ -130,7 +130,7 @@ headsepline, % Uncomment to get a line under the header
 
 \subfile{chapters/jgnn}
 
-\input{chapters/janne}
+\subfile{chapters/janne}
 % \chapter{Discrimination of e+/e- events in JUNO}
 
 \subfile{chapters/joint_fit}
@@ -203,5 +203,7 @@ headsepline, % Uncomment to get a line under the header
 \cleardoublepage
 
 \printbibliography[heading=bibintoc]
+
+\input{./Couverture-these/resume}
 
 \end{document}

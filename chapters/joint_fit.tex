@@ -382,9 +382,9 @@ Then for each event we
   \item \textit{(Optional)} Add a custom non-linearity as described in section \ref{sec:joint_fit:qnl}. This non linearity is characterized by $\alpha_{qnl}$ to obtain $E_{\alpha}$.
   \item Finally, using the expected resolution of the LPMT and SPMT systems,  provided in the JUNO common inputs, we draw from a gaussian characterized by those resolution the reconstructed energy $E_{rec}$ or $E_{lpmt}$ and $E_{spmt}$ for each systems. The resolutions are provided as ABC parameters using
     \begin{equation}
-      \frac{\sigma E_{vis}}{E_{vis}} = \sqrt{\bigg(\frac{A}{\sqrt{E_{vis}}}\bigg)^2 + b^2 + \bigg(\frac{c}{E_{vis}}\bigg)^2}
+      \frac{\sigma E_{vis}}{E_{vis}} = \sqrt{\bigg(\frac{A}{\sqrt{E_{vis}}}\bigg)^2 + B^2 + \bigg(\frac{C}{E_{vis}}\bigg)^2}
     \end{equation}
-    The relative and absolute resolutions of the LPMT and SPMT systems are illustrated in figure \ref{fig:joint_fit:system_resolution}.
+    where A is the term driven by the Poisson statistics of the total number of detected photoelectrons, C is dominated by the PMT dark noise, and B is dominated by the detector’s spatial non-uniformity. The relative and absolute resolutions of the LPMT and SPMT systems are illustrated in figure \ref{fig:joint_fit:system_resolution}.
 \end{enumerate}
 
 The events are stored as n-tuples and are not yet binned at the end of the generator.
@@ -733,11 +733,44 @@ The second major difference between the empirical and theoretical correlation ma
 These empirical correlation matrices still pose an issue: These matrices needs to be invertible for $\chi^2$ calculation. The framework use the Cholesky decomposition \cite{noauthor_note_1924} for this, requiring the correlation matrices to be positive definite, which is not guarantee using this empirical methods. Due to this issue, the theoretical matrix is used in the studies presented in this thesis.
 
 \subsubsection{Empirical correlation matrix from fully simulated event}
-%
-%The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and constructing an empirical matrix from those events.
-%
-\textbf{TODO}
 
+The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and computing an empirical matrix from those events.
+
+The core of the idea is that the LPMT and SPMT error on the reconstruction is bound to be correlated due to systematic. The first and most obvious effect for example the escape of energy from the CD. If the positron, or one of the two annihilation gamma escape from the detector, less energy is deposited thus both of the system will reconstruct smaller energy than the deposited energy. On a more subtle scale, the production randomnes of scintillation photons production is common for the two system meaning that if the LS produce less photon for an event, both system will most probably underestimate the energy of the event.
+
+We study those effect in this study by computing from and dataset of IBD event uniformly distributed in the CD, the correlation between the errors on the reconstructed energy $Corr(E_{lpmt} - E_{dep}, E_{spmt} - E_{dep})$.
+
+With this observable, the bias difference between the two reconstruction at a fixed $R$ and $E$ is almost irrelevant but we compute the correlation in $E$ and $R^3$ bins, meaning that we must be aware of the spurious relation between the two errors and there respective bias. If the bias is small in front of the resolution it can be ignored but if it bias evolution is of order of magnitude than the error, we could see non-existent correlation. That's why, based on the CNN results presented in figure \ref{fig:jcnn:vic_cnn:gen42}, we limit ourselves to the $ 1 < E_{dep} < 9$ MeV range.
+
+The results of those correlation are presented in figure \ref{fig:joint_fit:empirical_corr:E_a_R} for the single energy and radius dependency and figure \ref{fig:joint_fit:empirical_corr:E_R} for the dual energy and radius dependency.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/E_corr.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[width=\linewidth]{images/joint_fit/R_corr.png}
+  \end{subfigure}
+  \caption{Correlation on the reconstruction error between the LPMT and SPMT system as a function of \textbf{(On the left)} the energy, \textbf{(On the right)} the radius. The SPMT reconstruction comes from the NN presented in chapter \ref{sec:jcnn} and the LPMT reconstruction comes from OMILREC presented in section \ref{sec:juno:reco}. To prevent effect due to the CNN bad reconstruction, we select the event with $1 < E_{dep} < 9$ MeV.}
+  \label{fig:joint_fit:empirical_corr:E_a_R}
+\end{figure}
+
+We see a growing correlation with respect to the energy due the signal over dark noise ratio. As more PMTs hit comes from the signal, the more the reconstruction is dependent on the signal. We also see almost no dependency in $R^3$ until the total reflection area. After this point the correlation rises as the event are exposed to the optical effect of the total reflection area.
+
+By looking at figure \ref{fig:joint_fit:empirical_corr:E_R}, we can see that the rising in correlation with respect to the energy is probably mostly due to the radius dependency.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/joint_fit/E_R_corr.png}
+  \caption{Correlation on the reconstruction error between the LPMT and SPMT system as a function of  the energy and the radius. The SPMT reconstruction comes from the NN presented in chapter \ref{sec:jcnn} and the LPMT reconstruction comes from OMILREC presented in section \ref{sec:juno:reco}. To prevent effect due to the CNN bad reconstruction, we select the event with $1 < E_{dep} < 9$ MeV.}
+  \label{fig:joint_fit:empirical_corr:E_R}
+\end{figure}
+
+The exploitation of those correlations in the fit and the data production, without generating and reconstructing full spectra from SNIPER, is a bit more complicated. As seen in section \ref{sec:joint_fit:framework:ibd-gen}, we characterize the resolution of both systems by the ABC parameters. The correlation shown here take into account all of the ABC terms, as they are the complete correlation between the two systems, but the generation and the modeling this correlation needs to be very well understood as, as seen before, the mass ordering and parameters measurements are very sensitive to even small correlations.
+§
+We consider the binned approach we use here, knowing that the CNN reconstruction was deemed efficient but flawed, to be insufficient for the complete study of those effects on the fit.
 
 \subsection{Statistical tests}
 
@@ -893,7 +926,7 @@ In this last test we consider the two fit Standard Joint and Delta Joint as two 
 
 This test is the most complex, requiring two fit and the covariance matrix between the LPMT and SPMT spectra. The results are good, close to the $\chi^2_{spe}$, one with a p-value at 6 years for $\alpha_{qnl} = 0.3\%$ of $0.01 \pm 0.003$.
 
-As explained in section \label{sec:joint_fit:data_gen}, the spectra used for the fit are cut at 335 bins / 7.5 MeV to prevent instability, while in $\chi^2_{spe}$ we use full 410 bins spectra. The $\chi^2_{spe}$ thus has more informations that the hypothesis test leading to this difference in power.
+As explained in section \ref{sec:joint_fit:data_gen}, the spectra used for the fit are cut at 335 bins / 7.5 MeV to prevent instability, while in $\chi^2_{spe}$ we use full 410 bins spectra. The $\chi^2_{spe}$ thus has more informations that the hypothesis test leading to this difference in power.
 
 % Montre chi^2_{spe} 335 ?
 

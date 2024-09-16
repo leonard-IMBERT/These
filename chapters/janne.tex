@@ -1,4 +1,92 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+
+\begin{document}
 \chapter{Reliability of machine learning methods}
 \label{sec:janne}
 
 \epigraph{``Psychohistory was the quintessence of sociology; it was the science of human behavior reduced to mathematical equations. The individual human being is unpredictable, but the reactions of human mobs, Seldon found, could be treated statistically''}{Isaac Asimov, Second Foundation }
+
+\section{Motivation}
+\label{sec:janne:motivation}
+\begin{itemize}
+  \item JUNO needs very good understanding of reconstruction
+  \item Estimator combination shows that there can be improvement due to simplfication and that NN/reco methods can have hard time grasping all the detector effect.
+  \item If there is potential failure point, we need to search for them
+  \item La mesure de la NMO est tres sensible (see $alpha_{qnl}$ joint fit chapter)
+\end{itemize}
+
+\section{Method}
+\label{sec:janne:method}
+\begin{itemize}
+  \item Slide benoit
+    \begin{itemize}
+      \item En gros: Chercher de potentiels erreurs dans la reconstruction qui serait invsible à la calibration et control samples
+      \item Possible car pas de sources positron pour la calibration
+      \item Certaines techniques de calibrations sur base sure des variables de haut niveau (moyenne, fit de spectre, etc...) de par l'impossibilité d'acceder à la vérité vrai de ces evenements de calibration
+    \end{itemize}
+\end{itemize}
+
+\section{Architecture}
+\label{sec:janne:arch}
+\begin{itemize}
+  \item Expliquer la problematique dans l'architecture
+  \item Ambition de pouvoir etre appliqué a toutes les methodes, pas que NN
+  \item Pb techique: descente de gradient
+  \item Présenter la loss
+\end{itemize}
+
+\subsection{Adversarial Neural Network}
+\label{sec:janne:arch:ann}
+\begin{itemize}
+  \item Decrire l'architecture de l'ANN
+\end{itemize}
+
+\subsection{Reconstruction Network}
+\label{sec:janne:arch:reco}
+\begin{itemize}
+  \item Reseau de Neurone Simple. Deux avantages:
+  \item Besoin pour la descente de gradient
+  \item Un reseau "simpliste" a plus de chance de présenter des "défauts" que l'ANN pourrait exploiter
+\end{itemize}
+
+\subsection{Training}
+\label{sec:janne:arch:training}
+\begin{itemize}
+  \item Presentation du dataset
+  \item 2 etapes d'entrainement
+  \item Retour à l'identitié -> que l'ANN ne fasse pas n'importe quoi
+  \item Cassage de la reconstruction
+\end{itemize}
+
+\subsubsection{Hyperparameter optimization}
+\label{sec:janne:arch:hyper}
+\begin{itemize}
+  \item Pour les meme raison que l'ANN:
+    \begin{itemize}
+      \item Phase exploratoire, architecture tres changeante, random search n'est pas viable
+      \item Architecture consomme beaucoup, besoin d'entrainer sur l'A100
+      \item Possiblement que de l'optimization permetterais de faire passer sur V100, mais developement techniques necessaires.
+    \end{itemize}
+\end{itemize}
+
+\section{Results}
+\label{sec:janne:results}
+
+\begin{itemize}
+  \item Voir slide Gilles
+\end{itemize}
+
+\subsection{Back to identity}
+\label{sec:janne:results:identity}
+
+\subsection{Breaking of the reconstruction}
+\label{sec:janne:results:break}
+
+\section{Conclusion and prospect}
+\label{sec:janne:conclusion}
+\begin{itemize}
+  \item Not enough
+  \item Probably guide the ANN
+\end{itemize}
+\end{document}
