@@ -2,8 +2,12 @@
 \graphicspath{{\subfix{..}}}
 \begin{document}
 \chapter{Joint fit between the SPMT and LPMT spectra}
-\epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
 \label{sec:joint_fit}
+
+\epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
+
+\minitoc
+
 % I)  Introduction globale.
 % -------------------------------------
 % ... Aborder les points suivants de manière succinte, pour donner une vision d'ensemble...
@@ -734,15 +738,19 @@ These empirical correlation matrices still pose an issue: These matrices needs t
 
 \subsubsection{Empirical correlation matrix from fully simulated event}
 
-The last study on the correlation matrix between the LPMT and SPMT spectrum consist in simulating and reconstructing full event in the official JUNO simulation framework and computing an empirical matrix from those events.
+The last study on the correlation matrix between the LPMT and SPMT spectrum consists in simulating and reconstructing full events in the official JUNO simulation framework and computing an empirical matrix based on those events.
 
-The core of the idea is that the LPMT and SPMT error on the reconstruction is bound to be correlated due to systematic. The first and most obvious effect for example the escape of energy from the CD. If the positron, or one of the two annihilation gamma escape from the detector, less energy is deposited thus both of the system will reconstruct smaller energy than the deposited energy. On a more subtle scale, the production randomnes of scintillation photons production is common for the two system meaning that if the LS produce less photon for an event, both system will most probably underestimate the energy of the event.
+The core of the idea is that the LPMT and SPMT reconstruction errors is bound to be correlated due to systematic effects. The first and most obvious one, for example, is energy escaping from the central detector. If the positron, or one of the two annihilation gamma, escape from the detector, less energy is deposited thus both of the systems will reconstruct a lower energy that was actually deposited. On a more subtle scale, the randomness in the production of scintillation photons is common for the two systems, if the liquid scintillator produces fewer scintillation photons for an event, both systems are likely to underestimate the energy.
 
-We study those effect in this study by computing from and dataset of IBD event uniformly distributed in the CD, the correlation between the errors on the reconstructed energy $Corr(E_{lpmt} - E_{dep}, E_{spmt} - E_{dep})$.
+We study those effects by computing from a dataset of IBD events, uniformly distributed in the CD, the correlation between the reconstruction errors on the energy
+\begin{equation}
+  Corr(E_{lpmt} - E_{dep}, E_{spmt} - E_{dep})
+\end{equation}
+where $E_{lpmt}$ and $E_{spmt}$ are the reconstructed energies from both systems and $E_{dep}$ is the deposited energy in the detector.
 
-With this observable, the bias difference between the two reconstruction at a fixed $R$ and $E$ is almost irrelevant but we compute the correlation in $E$ and $R^3$ bins, meaning that we must be aware of the spurious relation between the two errors and there respective bias. If the bias is small in front of the resolution it can be ignored but if it bias evolution is of order of magnitude than the error, we could see non-existent correlation. That's why, based on the CNN results presented in figure \ref{fig:jcnn:vic_cnn:gen42}, we limit ourselves to the $ 1 < E_{dep} < 9$ MeV range.
+With this observable, the bias difference between the two reconstructions at fixed $R$ and $E$ is irrelevant. However, since we compute the correlation in $E$ and $R^3$ bins, we need to account for the potential spurious relationship between the errors and their respective biases. If the bias is small relative to the resolution, it can be ignored; but if the bias variation is on the same order of magnitude as the error, it may introduce false correlations. For this reason, based on the CNN results shown in figure \ref{fig:jcnn:vic_cnn}, we restrict our analysis to the $1 < E_{dep} < 9$ MeV range.
 
-The results of those correlation are presented in figure \ref{fig:joint_fit:empirical_corr:E_a_R} for the single energy and radius dependency and figure \ref{fig:joint_fit:empirical_corr:E_R} for the dual energy and radius dependency.
+The results of those correlations are presented in figure \ref{fig:joint_fit:empirical_corr:E_a_R} for the single energy and radius dependency and figure \ref{fig:joint_fit:empirical_corr:E_R} for the dual energy and radius dependency.
 
 \begin{figure}[ht]
   \centering
@@ -757,9 +765,9 @@ The results of those correlation are presented in figure \ref{fig:joint_fit:empi
   \label{fig:joint_fit:empirical_corr:E_a_R}
 \end{figure}
 
-We see a growing correlation with respect to the energy due the signal over dark noise ratio. As more PMTs hit comes from the signal, the more the reconstruction is dependent on the signal. We also see almost no dependency in $R^3$ until the total reflection area. After this point the correlation rises as the event are exposed to the optical effect of the total reflection area.
+We see correlation increase with respect to the energy which can be attributed to the signal over dark noise ratio. As more PMTs hits come from the signal, the reconstruction becomes more signal related. Regarding the $R^3$ distribution, we see almost no dependency until the total reflection area. After this point the correlation rises as the event are exposed to the optical effect of the total reflection area.
 
-By looking at figure \ref{fig:joint_fit:empirical_corr:E_R}, we can see that the rising in correlation with respect to the energy is probably mostly due to the radius dependency.
+By looking at figure \ref{fig:joint_fit:empirical_corr:E_R}, we can see that the rising in correlation with respect to the energy is mostly due to the radius dependency.
 
 \begin{figure}[ht]
   \centering
@@ -769,8 +777,8 @@ By looking at figure \ref{fig:joint_fit:empirical_corr:E_R}, we can see that the
 \end{figure}
 
 The exploitation of those correlations in the fit and the data production, without generating and reconstructing full spectra from SNIPER, is a bit more complicated. As seen in section \ref{sec:joint_fit:framework:ibd-gen}, we characterize the resolution of both systems by the ABC parameters. The correlation shown here take into account all of the ABC terms, as they are the complete correlation between the two systems, but the generation and the modeling this correlation needs to be very well understood as, as seen before, the mass ordering and parameters measurements are very sensitive to even small correlations.
-§
-We consider the binned approach we use here, knowing that the CNN reconstruction was deemed efficient but flawed, to be insufficient for the complete study of those effects on the fit.
+
+We consider the binned approach that we used here, knowing that the CNN reconstruction was deemed efficient but flawed, to be insufficient for the complete study of those effects on the fit.
 
 \subsection{Statistical tests}
 

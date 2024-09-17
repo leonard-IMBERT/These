@@ -87,6 +87,8 @@ headsepline, % Uncomment to get a line under the header
 \date{2 December 2024}
 
 
+\usepackage{minitoc}
+
 \begin{document}
 
 
@@ -109,7 +111,7 @@ headsepline, % Uncomment to get a line under the header
 \mainmatter
 
 % ============== THESIS ========
-
+\dominitoc
 \tableofcontents
 
 \pagestyle{thesis}
@@ -118,6 +120,8 @@ headsepline, % Uncomment to get a line under the header
 \subfile{chapters/remerciements}
 
 \input{chapters/introduction}
+
+\adjustmtc[3]
 
 \input{chapters/neutrino_physics}
 
@@ -205,5 +209,4 @@ headsepline, % Uncomment to get a line under the header
 \printbibliography[heading=bibintoc]
 
 \input{./Couverture-these/resume}
-
 \end{document}
