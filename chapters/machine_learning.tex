@@ -2,20 +2,29 @@
 \graphicspath{{\subfix{..}}}
 
 \begin{document}
-\chapter{Machine learning and Artificial Neural Network}
+\chapter{Machine learning: Introduction to the methods and algorithms used in this thesis}
 \label{sec:ml}
 
 \epigraph{``I have the shape of a human being and organs equivalent to those of a human being. My organs, in fact, are identical to some of those in a prosthetized human being. I have contributed artistically, literally, and scientifically to human culture as much as any human being now alive. What more can one ask?''}{Isaac Asimov, The Complete Robot }
 
 \minitoc
 
-Machine Learning (ML) and more specifically Neural Network (NN) are families of data-driven algorithms. They are used to model complex distributions from a finite dataset to extract a generalist behavior. They learn, adapt their intrinsic parameters, interactively by computing their performances or \textit{loss} on those datasets. They take advantage of simple microscopic operations such as \textit{if condition} or non-continuous but differentiable function like \textit{ReLU} in heavy numbers to model macroscopic complex and precise behaviours.
+Machine Learning (ML) and more specifically Neural Network (NN) are families of data-driven algorithms. They are used in a wide variety of domains including natural language processing, computer vision, speech recognition and, the subject of this thesis, scientific studies.
 
-They are now widely used in a wide variety of domain including natural language processing, computer vision, speech recognition and, the subject of this thesis, scientific studies.
+They are used to model complex distributions from a finite dataset to extract a generalist behavior. For example, in our case, it could be an algorithm that would differentiate the nature of a particle interacting in the liquid scintillator, between a positron and an electron, based on the readout charge and time $(Q, t)$ of the 17612 LPMT of the JUNO experiment. During a first training phase, it would learn the discriminative features between the two in the 35224-dimensional charge and time distribution, built from samples of $e^+$ and $e^-$ events.
 
-We found them in particle physics, either as the main algorithm or as secondary algorithm, for event reconstruction, event classification, waveform reconstruction, etc..., domains where the underlying physic and detector processes are complex and highly dimensional. Physicists have traditionally been forced to use simplifications or assumptions to ease the developmment of algorithms or equations (a good example is the algorithm presented in section \ref{sec:juno:reco}) where machine learning could refine and take into account those effects, provided that they have enough data and computing power.
+It would learn to derive from a complex, highly dimensional set of data the essential few informations characterizing the interactions: a three body energy deposition (the positron and two annihilation gammas) and the single deposit from an electron.
+
+Ideally, the algorithm would learn to recognize those informations on its own, regardless of the input size and complexity. In practice, however, these algorithms are guided by human design through their architectures and training conditions. We can still hope that they an use more thoroughly the detector informations while traditional methods are often subject to assumptions or simplifications to make the task easier (see for instance the algorithm in section \ref{sec:juno:reco}).
+
+The role of machine learning algorithms has expanded rapidly in the past decade, either as the main or secondary algorithm for a wide variety of tasks: event reconstruction, event classification, waveform reconstruction and so on. In particular in domains where the underlying physic and detector processes are complex and highly dimensional, and when large amount of data must be processed quickly.
 
 This chapter present an overview of the different kind of machine learning methods and neural networks that will be discussed in this thesis.
+
+\section{Core concepts in machine learning and neural networks}
+
+In this section, we discuss the core concepts in machine learning that will be used thorough this thesis. We place particular emphasis on Neural Networks, as it's the family of the algorithms described in chapters \ref{sec:jcnn}, \ref{sec:jgnn} and \ref{sec:janne}.
+
 \section{Boosted Decision Tree (BDT)}
 \label{sec:ml:bdt}
 
@@ -30,42 +39,234 @@ One of the most classic machine learning algorithm used in particle physics is B
 
 The training procedure follow a simple score reward procedure. During the training phase the prediction of the BDT is compared to a known truth about the data. The score is then used to backpropagate corrections to the parameters of the tree. Modern BDT use gradient boosting where the gradient of the loss is calculated for each of the BDT parameters. Following the gradient descent, we can reach the, hopefully, global minima of the loss for our set of parameters.
 
-\section{Artificial Neural Network (NN)}
+\subsection{Artificial Neural Network (NN)}
 \label{sec:ml:nn}
 
-One other big family of machine learning algorithm is the artificial Neural Networks (NN). The idea of developing automates which component mimic, in a simplistic way, the behavior of biological neurons emerge in 1959 with the paper ``\textit{What the Frog's Eye Tells the Frog's Brain}'' \cite{lettvin_what_1959}. They develop an automate where each component possess an \textit{activation function}. Each one of those components then transmit its information to the other following a certain efficiency or \textit{weight}.
-Those works influenced scientist and notably Frank Rosenblatt who published in 1958 what is considered the first neural network model the Perceptron \cite{rosenblatt_perceptron_1958}.
+One of the modern ML family is the Neural Network, historical name as their design was inspired by the behaviour of biological neurons in the brain.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/nn_explications.png}
+  \caption{Schema of a simple neural network}
+  \label{fig:ml:schema_nn}
+\end{figure}
+As schematized in figure \ref{fig:ml:schema_nn}, the input, output and steps inside the NN is described as neuron \textit{layers}. The neurons of the layers take as input a set of values from the preceding layer, here the $a_i$ takes every informations of the $x_i$ input layer, and aggregate those values following learnable \textit{parameters} $w_{ij}$. The aggregation procedure is core of defining the architecture of the NN. The different architectures used in this thesis will be discussed in section \ref{sec:ml:architecture}. The process is repeated until reaching the output layer.
 
+For example, let's take the network in figure \ref{fig:ml:schema_nn} and say that $a_1$, $a_2$ and $a_3$ are the neurons of the output layer. We try to produce a vertex reconstruction algorithm that will approach the charge barycentre. Let's limit the input $x_i$ to the charge of the $i$th PMT, one of the solution is to aggregate on $a_1$ the $x$ coordinate of the barycenter. The network would thus adapt the $w_{i1}$ parameters so they correspond to the $x$ coordinates of the $i$th PMT. Same for the $y$ and $z$ coordinate on $a_2$ and $a_3$ respectively.
 
-Modern neural network still nowadays use the neuron metaphor to represent neural network, but approach them as a graph where the nodes are neurons possessing an activation function and edges holding the weights, or \textit{parameters} in modern literature, between those nodes. Most of the modern neural network work with the principle of neurons layers. Each neurons belong to a layer and takes input from the preceding layer and forward it result to next layer. For example the most basic couple of layers is the fully connected layers where each neurons of the input layer is connected to every other neurons of ouput layer. All the neurons posses the same activation function $F$. The connection between the two layers is expressed as a tensor $T^{i}_{j}$ where $i$ is the index of the precedent layer and $j$ the index of the next layer. The propagation from the layer $I$ to $J$ is then described as
+The layers used in the example above are designated as \textit{Fully connected} layers, where every neurons of the layer is connected to the every neurons of the preceding layer. The layer can be expressed using the Einstein summation and in bold the learnable parameters
+\begin{equation}
+  \label{eq:ml:fully-connected-simple}
+  O_{j} = I_{i} + \bm{W}_{j}^{i}
+\end{equation}
+where $O_{j}$ is the output neurons vector (the $a_i$), $I_{i}$ is the preceding layer neurons vector (the $x_i$) and $\bm{W}$ is the parameters, or weights, matrix (composed of the $w_{ij}$).
+In practice, this fully connected layer is often adjoined a bias $\bm{B}$ and an \textit{activation function} $F$.
 \begin{equation}
   \label{eq:ml:fully-connected}
-  J_{j} = F_J(T_{j}^{i} I_{i} + B_j)
+  I_{j} = F(I_{i} \bm{W}_{j}^{i} + \bm{B}_j)
 \end{equation}
-where the learning parameters are the tensor $T_j^i$ and the bias tensor $B_j$. This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}. Most of the modern neural networks use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\theta$ in respect of the loss function $\mathcal{L}$ is subtracted each optimisation step
-\begin{equation}
-  \theta_{i+1} = \theta_i - \frac{\partial \mathcal{L}}{\partial \theta}
-\end{equation}
-$i$ being the training step index. This induce $\mathcal{L}$  needs to be differentiable with respect to $\theta$, thus the layers and their activation functions also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be extended with first and second order momentums like in the Adam optimizer \cite{kingma_adam_2017} (more details in section \ref{sec:ml:train}).
 
-This description of neural networks as layers introduced the principles of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describes the NN or its training are designated as \textit{hyperparameters}.
+This is the fundamental component of the Fully Connected Deep NN (FCDNN) family presented in section \ref{sec:ml:fcdnn}.
 
-The loss $\mathcal{L}$ described above is a score representing how well the NN is doing. As seen above, it needs to be differentiable with respect to the parameter of the NN. Depending if we try to minimize or maximize it, it need to posses a minima or a maxima. For example when doing \textit{regression}, i.e. produce a scalar result, a common loss is the Mean Square Error (MSE). Let $i$ be our dataset, $y_i$ be the target scalar, $x_i$ the input data and $f(x_i, \mathbb{\theta})$ the result of the network. The network here is modelled by $f$, and its parameter by the set $\mathbb{\theta}$
+This description of neural networks as layers introduce the principles of \textit{depth} and \textit{width}, the number of layers in the NN and the number of neurons in each layer respectively. Those quantities that not directly used for the computation of the results but describes the NN or its training are designated as \textit{hyperparameters}.
+
+Now we just need to adapt the parameters so that this network learn that $w_{ij}$ are the PMT coordinate. We describe the space produced by the parameters of the network as the \textit{parameter phase space} or \textit{latent space}. The optimization of the network and exploration of this phase space is done through training as described in next section.
+
+\subsection{Training procedure}
+\label{sec:ml:train}
+
+To adapt the parameters we need an object that describe how well the network perform. This is the \textit{loss} of our neural networks $\mathcal{L}$. In our barycenter example, it could be the distance between the reconstructed and real barycenter. Using this metric we can adjust the parameters of our network.
+
+Depending if we try to minimize or maximize it, it need to posses a minima or a maxima. For example when doing \textit{regression}, i.e. produce a scalar result like the coordinates of a barycenter, a common loss is the Mean Square Error (MSE). Let $i$ be our dataset, the $N$ events considered for training, $y_i$ be the target scalar, the barycenter positions of each events, $x_i$ the input data, the charge vector, and $f(x_i, \bm{\theta})$ the result of the network. The network here is modelled by $f$, and its parameter $\bm{\theta}$
 \begin{equation}
-  \mathcal{L} \coloneq MSE = \frac{1}{N} \sum_i^N (y_i - f(x_i))^2
+  \mathcal{L} \equiv MSE = \frac{1}{N} \sum_i^N (y_i - f(x_i, \bm{\theta}))^2
 \end{equation}
 Another common loss function is the Mean Absolute Error (MAE)
 \begin{equation}
-  \mathcal{L} \coloneq MAE = \frac{1}{N} \sum_i^N |y_i - f(x_i)|
+  \mathcal{L} \equiv MAE = \frac{1}{N} \sum_i^N |y_i - f(x_i, \bm{\theta})|
 \end{equation}
 
+We see that those loss function possess a minima when $f(x_i, \bm{\theta}) = y_i$.
+
+
+Most of the modern neural networks use gradient descent to optimize their parameters, i.e. the gradient of the parameter $\bm{w}$, designated in literature as $\bm{\theta}$, with respect of the loss function $\mathcal{L}$ is subtracted each optimisation step $t$
+\begin{equation}
+  \bm{\theta}_{t+1} = \bm{\theta}_t - \frac{\partial \mathcal{L}}{\partial \bm{\theta}}
+\end{equation}
+This induce $\mathcal{L}$  needs to be differentiable with respect to $\bm{\theta}$, thus the layers and their activation functions also need to be differentiable. This simple gradient descent, designated as Stochastic Gradient Descent (SGD), can be extended with first and second order momentums like in the Adam optimizer \cite{kingma_adam_2017}. More details about the optimizers can be found in section \ref{sec:ml:optim}.
+
+\subsubsection{Training lifecycle}
+
+The training of NN does not follow strict rules, you could imagine totally different lifecycle but I will describe here the one used in this thesis, the most common one.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/lifecycle.jpg}
+  \caption{Illustration of the training lifecycle}
+  \label{fig:ml:lifecycle}
+\end{figure}
+
+As illustrated in figure \ref{fig:ml:lifecycle}, the training is split into \textit{epochs}. Each epochs is split into \textit{step} where the NN will optimize its parameters over a \textit{batch}, a sub-sample of the training datasets. The ideal batch size, number of event in a batch, would be the entire dataset, as the NN optimization would not be biased by the specificity of a sub-sample, but due to memory limitations the batch size is driven by technical limitations.
+
+At the end of each epochs, the neural network is evaluated over a validation dataset, a dataset from which no optimisation is done. It is used as reference for the network performance as and monitor overtraining (see section \ref{sec:ml:pitfall}).
+
+Hyperparameters that can be optimized during the training can be optimized at each epoch, for example the learning rate, or each step, the optimizer momentum for example.
+
+There is not really a typical number of epochs or steps for the training. The number steps can be defined such as in one epoch, the NN see the entirety of the dataset but the number of steps and epochs are hyperparameters that are optimized over the each subsequent training. We adjust them by looking at the loss evolution profile over time.
+
+Most training are started with a fixed number of epochs, i.e. from what we've seen from precedent training, the network stop learning, the loss is constant, after $N$ epoch so we run the training for $N+\delta$ epochs to see if the modification brings improvements to the loss profile. We can setup what's called \textit{early stopping policies} that'll stop the training early in specific cases like loss explosion or loss stability but this require fine tuning and don't bring much in our case are we are not really limited in training time.
+
+\subsubsection{The optimizer}
+\label{sec:ml:optim}
+
+As briefly introduced at the beginning of this section, the parameters of the neural network are optimized using the gradient descent method. We compute the gradient of the mean loss over the batch with respect of each parameters and we update the parameters in accord to minimize the loss. The  gradient is computed backward from the loss up to the first layer parameters using the chain rule:
+\begin{equation}
+  \label{eq:ml:backward}
+  \frac{\partial \mathcal{L}}{\partial \theta_1} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \mathcal{L}}{\partial \theta_2} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \theta_3}{\partial \theta_2} \frac{\partial \mathcal{L}}{\partial \theta_3} = \frac{\partial \theta_2}{\partial \theta_1} \prod_{i=2}^{N-1} \frac{\partial \theta_{i+1}}{\partial \theta_i} \frac{\partial \mathcal{L}}{\partial \theta_N}
+\end{equation}
+where $\theta$ is a parameter, $i$ is the layer index. We see here that the gradient of the first layer is dependent of the gradient of all the following layers. Because the only value known at the start of the optimization procedure is $\mathcal{L}$ we compute $\frac{\partial \mathcal{L}}{\partial \theta_N}$ then, $\frac{\partial \theta_{N}}{\partial \theta_{N-1}}$, etc... This is called the \textit{backward propagation}.
+
+This update of the parameters is done following an optimizer policy. Those optimizers depends on hyperparameters. The ones used in this thesis are:
+
+\begin{enumerate}
+  \item SGD (Stochastic Gradient Descent). This is the simplest optimizer, it depend on only one hyperparameter, the learning rate $\lambda$ (LR) and update the parameters $\theta$ following \begin{equation}
+      \theta_{t+1} = \theta_t - \lambda \frac{\partial \mathcal{L}}{\partial \theta}\bigg|_{\theta_t}
+    \end{equation}
+    where $t$ is the step index. It is a powerful optimizer but is very sensible to local minima of the loss in the parameters phase space as illustrated in figure \ref{fig:ml:sgd}.
+
+  \item Adam \cite{kingma_adam_2017}. The concept is, in short, to have and SGD but with momentum. Adam possess two momentum $m(\beta_1)$ and $v(\beta_2)$ which are respectively proportional to $\frac{\partial \mathcal{L}}{\partial \theta}$ and $(\frac{\partial \mathcal{L}}{\partial \theta})^2$. $\beta_1$ and $\beta_2$ are hyperparameters that dictate the moment update at each optimization step. The parameters are then upgraded following \begin{align}
+      m_{t+1} &= \beta_1 m_t + (1 - \beta_1) \frac{\partial \mathcal{L}}{\partial \theta} \\
+      v_{t+1} &= \beta_2 v_t + (1 - \beta_2) \bigg(\frac{\partial \mathcal{L}}{\partial \theta}\bigg)^2 \\
+      \theta_{t+1} &= \theta_{t} - \lambda \frac{m_{t+1}}{\sqrt{v_{t+1}} + \epsilon}
+    \end{align}
+    where $\epsilon$ is a small number to prevent divergence when $v$ is close to 0. These momentums allow to overcome small local minima in the parameters phase. Imagine ball going down a slope as illustrated in \ref{fig:ml:sgd}, if you ignore the stored momentum you get SGD and get stuck as on the left plot. Now if you consider the momentum you get over the hill and end up in the global minima.
+\end{enumerate}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{images/ml/sgd.jpg}
+    \caption{Illustration of SGD falling into a local minima}
+    \label{fig:ml:sgd}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{images/ml/Adam.jpg}
+    \caption{Illustration of the Adam momentum allowing it to overcome local minima}
+    \label{fig:ml:adam}
+  \end{subfigure}
+  \caption{}
+\end{figure}
+
+The LR is a crucial parameter in the training of NN. You see that in case of MAE in figure \ref{fig:ml:optims:mae} that if the LR is too high, you can end up missing the minima. Is the LR is too low, even with MSE as in figure \ref{fig:ml:optims:mse}, you never reach the minima in the allocated number of epochs. To prevent possible issues, we setup scheduler policies.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{scripts/plots/MAE_illustration.png}
+    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MAE Loss. We see here that it has trouble reaching the minima due to the gradient being constant.}
+    \label{fig:ml:optims:mae}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \includegraphics[height=6cm]{scripts/plots/MSE_illustration.png}
+    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MSE Loss. We see two different behavior: A smooth one (orange and red) when the LR is small enough and a more chaotic one when the LR is too high.}
+    \label{fig:ml:optims:mse}
+  \end{subfigure}
+  \caption{Illustration of the SGD optimizer. In blue is the value of the loss function, orange, green and red are the path taken by the optimized parameter during the training for different LR.}
+  \label{fig:ml:optims}
+\end{figure}
+
+\subsubsection{Scheduler policies}
+
+Sometimes we want to update our hyperparameters or take a set of action during the training procedure. We use for this scheduler policies, for example a common policy is a decrease of the learning rate after each epochs. We want to get the closest possible in early epochs before refining the training with a smaller learning rat, finer step. By reducing the learning rate, we allow it to make more fine steps in the parameters phase space, hopefully converging to the true minima.
+
+Another policy that is often use is the save of the best model. In some situation, the loss value after each epoch will strongly oscillate or can even worsen. This policy allow us to keep the best version of the model attained during the training phase.
+
+\subsection{Potential pitfalls}
+\label{sec:ml:pitfall}
+
+Apart from being stuck in local minima, there is also other behaviors and effects we want to prevent during training.
+
+\subsubsection{Overtraining}
+This happen when the network learn the specificities of the training dataset instead of a more general representation of the underlying data distribution. This can happen if there is not enough data in comparison to the number of learning parameters, if the training data posses specific features that are not representative of the application dataset or if the NN trains for too long on the same dataset. This behavior is illustrated in figure \ref{fig:ml:overtraining}. Overtraining can be fought in multiple ways, for example:
+\begin{itemize}
+  \item \textbf{More data}. By having more data in the training dataset, the network will not be able the specificities of every data.
+  \item \textbf{Less parameters}. By reducing the number of parameters, we reduce the computing and learning capacities of the network. This will force it to fallback to generalist behaviours.
+  \item \textbf{Dropout}. This technique implies to randomly set some neurons to 0, i.e. cutting the relation between two neurons in a layer. By doing this, we force the network to allocate more of its parameter to the features learning, preventing those parameters to be used for overtraining.
+  \item \textbf{Early stopping}. During the training we monitor the network performance over a validation dataset. The network does not train on this dataset and thus cannot learn its specificities. If the loss on the training dataset diverge too much from the loss on the validation dataset, we can stop the training earlier to prevent it from overtraining.
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/ml/overtraining.jpg}
+    \caption{Illustration of overtraining. The task at hand is to determine depending on two input variable $x$ and $y$ if the data belong to the dataset $A$ or the dataset $B$. The expected boundary between the two dataset is represented in grey. A possible boundary learnt by overtraining is represented in brown.}
+    \label{fig:ml:overtraining}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[height=6cm]{images/ml/vanishing_illus.jpg}
+    \caption{Illustration of a very simple NN}
+    \label{fig:ml:vanishing}
+  \end{subfigure}
+  \caption{}
+\end{figure}
+
+\subsubsection{Gradient vanishing}
+Gradient vanishing is the effect of the gradient being so small for the early layers that the parameters are barely updated after each step. This cause the network to be unable to converge to the minima.
+
+This comes from the way the gradient descent is calculated. Imagine a simple network composed of three fully connected layers: the input layer, a intermediate layer and the output layer. Let $L$ be the loss, $\theta_1$ the parameter between the input and the intermediate layer and $\theta_2$ the parameter between the intermediate and output layer. This network is schematized in figure \ref{fig:ml:vanishing}.
+
+The gradient for $\theta_1$ will be computed using the chain rule presented in equation \ref{eq:ml:backward}. Because $\theta_1$ depends on $\theta_2$, if the gradient of $\theta_2$ is small, so will be the gradient of $\theta_1$. Now if we would have much more layer, we can see how the subsequent multiplication of small gradients would lead to very small update of the parameters thus ``\textit{vanishing gradient}''.
+
+Multiple actions can be taken to prevent this effect such as:
+\begin{itemize}
+  \item \textbf{Batch normalization}: In this case we apply a normalization layer that will normalize the data. It means that we transform the input variable $X$ into a variable $D$ which distribution follow $\langle D \rangle = 0$ and $\sigma D = 1$. This helps the parameters of the network to maintain an appropriate scale.
+  \item \textbf{Residual Network (ResNet)} \cite{he_deep_2016}: Residual network is a technique for neural network in which, instead of just sequentially feeding the results of each layer to the next one, you compute a residual over the input data. This technique is illustrated in figure \ref{fig:ml:resnet}. The reference \cite{he_deep_2016} show empirical evidence of its relevance.
+\end{itemize}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/resnet.png}
+  \caption{Illustration of the ResNet framework}
+  \label{fig:ml:resnet}
+\end{figure}
+
+\subsubsection{Gradient explosion}
+Gradient explosion happens when the consecutive multiplication of gradient cause exponential grow in the parameter value or if the training lead the network in part of the parameter space where the gradient is significantly higher than usual. For illustration, consider that the loss dependency in $\theta$ follow
+\begin{align*}
+  \mathcal{L}(\theta) &= \frac{\theta^2}{2} + e^{4\theta} \\
+  \frac{\partial \mathcal{L}}{\partial \theta} &= \theta + 4e^{4\theta}
+\end{align*}
+The explosion is illustrated in figure \ref{fig:ml:explosion} where we can see that the loss degrade with each step of optimization. In this illustration it is clear that reducing the learning rate suffice but this behaviour can happens in the middle of the training where the learning rate schedule does not permit reactivity.
+
+There exist solutions to prevent this explosions:
+\begin{itemize}
+  \item \textbf{Gradient clipping}: Is this case we work on the gradient so that the norm of gradient vector does not exceed a certain threshold. In our illustration in figure \ref{fig:ml:explosion} the gradient for $\theta > 0$ could be clipped at 3 for example.
+  \item \textbf{Batch normalization}: For the same reasons as for gradient vanishing, normalizing the input data help reduce erratic behaviour.
+\end{itemize}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{scripts/plots/MSE_explosion_illustration.png}
+  \caption{Illustration of the gradient explosion. Here it can be solved with a lower learning rate but its not always the case.}
+  \label{fig:ml:explosion}
+\end{figure}
+
+
+\section{Neural networks architectures}
+\label{sec:ml:architecture}
 
 \subsection{Fully Connected Deep Neural Network (FCDNN)}
 \label{sec:ml:fcdnn}
 
-The Fully Connected Deep Neural Network (FCDNN) architecture is the natural evolution of the Perceptron. The input data is represented as a first order tensor $I_j$ and then fed forward to multiple fully connected layers (Eq \ref{eq:ml:fully-connected}) as presented in the figure \ref{fig:ml:fcdnn}. Most of the time, the classic ReLU function
+The Fully Connected Deep Neural Network (FCDNN) architecture is the stack of multiple fully connected layers as presented in the figure \ref{fig:ml:fcdnn}. Most of the time, the classic ReLU function
 \begin{equation}
-  \label{sec:ml:relu}
+  \label{eq:ml:relu}
   \mathrm{ReLU}(x) = \begin{cases}
     x & \mathrm{if} ~ x \geq 0 \\
     0 & \mathrm{otherwise}
@@ -115,9 +316,17 @@ Due to its simplicity, FCDNN are also used as basic pieces for more complex arch
 \subsection{Convolutional Neural Network (CNN)}
 \label{sec:ml:cnn}
 
-Convolutional Neural Networks are a family of neural networks that use discrete convolution filters, as illustrated in an example in figure \ref{fig:ml:conv_filter}, to process the input data, often images. They have the advantage to be translation invariant by construction, this mean that they are capable of detecting oriented features independently of their location on the image. The learning parameters are located in the filters, the network thus learn the optimal filters to extract the desired features. 2D CNN, where the filters are second order tensors that span over third order tensors, are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics.
+It's not trivial to describe in text the principles of Convolutional Neural Network (CNN) and how they works. We try a general description below followed by a step by step description of a concrete example.
 
-The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations. To try to preserve the amount of information, we tend to grow the numbers of filters for each division of the input data.
+Convolutional Neural Networks are a family of neural networks that use discrete convolution filters, as illustrated in an example in figure \ref{fig:ml:conv_filter}, to process the input data, often images. They are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics. Concretely, you multiply element-wise a portion of the input data, in the case of an image, a small part of the image, with a kernel of same dimension. In figure \ref{fig:ml:conv_filter}, we multiply the $3\times3$ pixels sub-image with the $3\times3$ kernel.
+
+Their filters scan the input data, highlighting patterns of interest, this scanning procedure making them translation-invariant. In the concrete case of figure \ref{fig:ml:conv_filter}, for each pixel of the input image, we group it with the 8 neighbours pixel and produce a new pixel that correspond to the output image. For the pixel on the edges that do not have neighbours, we either create ``imaginary'' pixel with the value 0 or we just ignore them. If we ignore them, the output image will posses fewer pixels than the input image. We see that the operation do not care where is the pattern of interest in the images, the filter output will be \textit{invariant} whatever \textit{translation} is applied to the image.
+
+This invariance mean that they are capable of detecting oriented features independently of their location on the image. Again taking \ref{fig:ml:conv_filter} as an example, with only the 9 parameters composing the kernel, we can highlight the contour of the duck by looking at the ``yellowness'' of the pixels.
+
+The learning parameters of CNNs are the kernels components, the network thus learn the optimal filters to extract the desired features.
+
+The convolution layers are commonly chained \cite{simonyan_very_2015}, reducing the input dimension while increasing the number of filters. The idea behind is that the first layers will process local informations and the latest layers will process more global informations, as the latest convolution filters will process the results of the preceding that themself have processed local information. To try to preserve the amount of information, we tend to grow the numbers of filters for each division of the input data.
 The results of the convolution filters is commonly then flattened and feed to a smaller FCDNN which will process the filters results to yield the desired output.
 
 \begin{figure}[ht]
@@ -164,13 +373,34 @@ The final network needs 1'182'144 parameters or, if we consider each parameters 
 \subsection{Graph Neural Network (GNN)}
 \label{sec:ml:gnn}
 
-Graph neural network is a family of neural network where the data is represented as a graph $G(\mathcal{N},\mathcal{E})$ composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$ with $k_n$ and $k_e$ the number of features on the nodes and edges respectively. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensors that hold the features $\epsilon \in [0, k_e]$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu \in [0, k_n]$ of a node $i$.
+As seen in the previous section, the CNNs are powerful for image processing, and more generally any data that can be expressed as a regular, discrete space and from which the information reside in the dispersion in this space. For an image, the edges of an object and how they assemble. A red square, straight edges with a sharp angle between them, is much less representative of a duck than an yellow sphere, round edges without sharp angles.
 
-To efficiently manipulate such object we need to structurally encode their property in the neural network computing architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
+This ``image'' projection is not fitted for every problematics. The signals produced by a detector does not always have the properties of images. In the case of JUNO for example, we can create an image of two channels, one for the charge $Q$ and one for the timing $t$ but this image should be spheric. Furthermore JUNO is by nature inhomogeneous, using two different systems : The LPMT and the SPMT. Those two systems have different regime, and thus should be processed differently. We could imagine images with four channels, two for the LPMT and two for the SPMT, or even a branched CNN with one convolution branch for the LPMT and another one for the SPMT. Anyway, the CNN will need to combine the two systems.
+
+To get around the restrictions of data representation imposed by CNNs, we can use the more flexible \textit{graph} representation.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/graph_illustration.png}
+  \caption{Illustration of a graph and its tensor representation.}
+  \label{fig:ml:gnn:graph}
+\end{figure}
+A graph $G(\mathcal{N},\mathcal{E})$ is composed of vertex or node $n \in \mathcal{N}$ and edges $e \in \mathcal{E}$. The edges are associated to two nodes $(u, v) \in \mathcal{N}^2$, ``connecting'' them. The node and the edges can hold features, commonly represented as vector $n \in \mathbb{R}^{k_{n}}$, $e \in \mathbb{R}^{k_{e}}$ with $k_n$ and $k_e$ the number of features on the nodes and edges respectively. We can thus define a graph using two tensors $A^{ij}_{\epsilon}$ the adjacency tensor that hold the features $\epsilon \in [0, k_e]$ of the edge connecting the node $i$ and $j$ and the tensor $N^{i}_{\nu}$ that hold the features $\nu \in [0, k_n]$ of a node $i$.
+
+More figuratively, using the example in figure \ref{fig:ml:gnn:graph}, we have a graph of 5 nodes with a color as feature. The edges have no features, we thus encode their existences as 0 or 1. In a realistic examples as JUNO we could represent each PMTs as nodes and the edges between them as their relation such as distance, timing difference, etc... There no strict rules about what is a node or how they should be linked together. This abstraction allow us to represent virtually any type of detector of any geometry.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/ml/message_passing.png}
+  \caption{Illustration of the message passing algorithm. The detailed explanation can be found in section \ref{sec:ml:gnn}}
+  \label{fig:ml:gnn:message_passing}
+\end{figure}
+
+To process such object we need specific machine learning algorithms we call Graph neural network.
+To efficiently manipulate graph we need to structurally encode their property in the neural network computing architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, ... One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
 \begin{equation}
   n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
 \end{equation}
-where $\phi_u$ is a differentiable update function, $\Box_j$ is a differentiable aggregation function and $\phi_m$ is a differentiable message function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. $\Box$ need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
+where $\phi_u$ is a differentiable \textit{update} function, $\Box_j$ is a differentiable \textit{aggregation} function and $\phi_m$ is a differentiable \textit{message} function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbours of $n_i$, i.e. the nodes $n_j$ from which it exist an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. The update function need also a few other property if we want to keep the graph property, most notably the permutational invariance of its parameters (example: mean, std, sum, ...).
 
 The edges features can also be updated, either by directly taking the results of $\phi_m$ or by using another message function $\phi_e$.
 
@@ -179,13 +409,6 @@ To explain this process, let's take the situation presented in figure \ref{fig:m
 Let's look at what's happening in the node 4. It has 3 neighbours and is a neighbour of itself. The four resulting $\phi_m$ extract the color of each nodes and then feed them to the $\Box$ function. The $\Box$ function just equally distribute the color in the node. Finally the $\phi_u$ function just update the node with the output of $\Box$.
 
 Interestingly we see that the new node 4 does not have any yellow, the color of node 1. But if we were to run the message passing algorithm again, it would get some as node 2 is now partially yellow. If color here represent information, we see that multiple step are needed so that each node is ``aware'' of the informations the other nodes possess.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[height=6cm]{images/ml/message_passing.png}
-  \caption{Illustration of the message passing algorithm. The detailed explanation can be found in section \ref{sec:ml:gnn}}
-  \label{fig:ml:gnn:message_passing}
-\end{figure}
 
 
 Message passing is a very generic way of describing the process of GNN and it can be specialized for convolutional filtering \cite{defferrard_convolutional_2017}, diffusion \cite{li_diffusion_2018} and many other specific operation. GNN are used in a wide variety of application such as regression problematics, node classification, edge classification, node and edge prediction, ...
@@ -197,156 +420,5 @@ It is a very versatile but complex tool.
 
 The adversarial machine learning, Adversarial Neural Networks (ANN) in the case of neural network, is a family of unsupervised machine learning algorithms where the learning algorithm (generator) is competing against another algorithm (discriminator). Taking the example of Generative Adversarial Networks, concept initially developed by Goodfellow et al. \cite{goodfellow_generative_2014}, the discriminator goal is to discriminate between data coming from a reference dataset and data produced by the generator.
 The generator goal, on the other hand, is to produce data that the discriminator would not be able to differentiate from data from the reference dataset. The expression of duality between the two models is represented in the loss where, at least a part of it, is driven by the results of the discriminator.
-
-\subsection{Training procedure}
-\label{sec:ml:train}
-
-A neural network without the adequate training is like an empty shell. If the parameters are not optimized they are, most of the time, initialized to random number and so the output will just be random. The training is a key step in the production of a solid and reliable NN. This section aim to give an overview of the different concept and tools used in the training of our neural networks.
-
-\subsubsection{Training lifecycle}
-
-The training of NN does not follow strict rules, you could imagine totally different lifecycle but I will describe here the one used in this thesis, the most common one.
-
-The training is split into \textit{epochs} during which the NN will train on a set of subsamples called \textit{batch}. The size of those batch is called \textit{batch size}, a.k.a. the number of data it contains (how many images, how many events,...). Each process of a batch is called a \textit{step}. At the end of each epochs, the neural network is evaluated over a validation dataset. This validation dataset is not used for training (no gradient of the loss is computed) and is used as reference for the network performance and monitor overtraining (see section \ref{sec:ml:pitfall}). Most of the time, the parameters are updated at each step using the mean loss over the batch and the optimizer hyperparameters are updated at each epochs.
-
-\subsubsection{The optimizer}
-
-As briefly introduced section \ref{sec:ml:nn}, the parameters of the neural network are optimized using the gradient descent method. We calculate the gradient of the mean loss over the batch with respect of each parameters and we update the parameters in accord to minimize the loss. The  gradient is computed backward from the loss up to the first layer parameters using the chain rule:
-\begin{equation}
-  \label{eq:ml:backward}
-  \frac{\partial \mathcal{L}}{\partial \theta_1} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \mathcal{L}}{\partial \theta_2} = \frac{\partial \theta_2}{\partial \theta_1} \frac{\partial \theta_3}{\partial \theta_2} \frac{\partial \mathcal{L}}{\partial \theta_3} = \frac{\partial \theta_2}{\partial \theta_1} \prod_{i=2}^{N-1} \frac{\partial \theta_{i+1}}{\partial \theta_i} \frac{\partial \mathcal{L}}{\partial \theta_N}
-\end{equation}
-where $\theta$ is a parameter, $i$ is the layer index. We see here that the gradient of the first layer is dependent of the gradient of all the following layers. We thus need to compute the gradient closest to loss first before computing the gradient of the earlier layers. This is called the \textit{backward propagation}.
-
-This update of the parameters is done following an optimizer policy. Those optimizers depends on hyperparameters. The ones used in this thesis are:
-
-\begin{enumerate}
-  \item SGD (Stochastic Gradient Descent). This is the simplest optimizer, it depend on only one hyperparameter, the learning rate $\lambda$ (LR) and update the parameters $\theta$ following \begin{equation}
-      \theta_{t+1} = \theta_t - \lambda \frac{\partial \mathcal{L}}{\partial \theta}\bigg|_{\theta_t}
-    \end{equation}
-    where $t$ is the step index. It is a powerful optimizer but is very sensible to local minima of the loss in the parameters phase space as illustrated in figure \ref{fig:ml:sgd}.
-
-  \item Adam \cite{kingma_adam_2017}. The concept is, in short, to have and SGD but with momentum. Adam possess two momentum $m(\beta_1)$ and $v(\beta_2)$ which are respectively proportional to $\frac{\partial \mathcal{L}}{\partial \theta}$ and $(\frac{\partial \mathcal{L}}{\partial \theta})^2$. $\beta_1$ and $\beta_2$ are hyperparameters that dictate the moment update at each optimization step. The parameters are then upgraded following \begin{align}
-      m_{t+1} &= \beta_1 m_t + (1 - \beta_1) \frac{\partial \mathcal{L}}{\partial \theta} \\
-      v_{t+1} &= \beta_2 v_t + (1 - \beta_2) \bigg(\frac{\partial \mathcal{L}}{\partial \theta}\bigg)^2 \\
-      \theta_{t+1} &= \theta{i} - \lambda \frac{m_{t+1}}{\sqrt{v_{t+1}} + \epsilon}
-    \end{align}
-    where $\epsilon$ is a small number to prevent divergence when $v$ is close to 0. These momentums allow to overcome small local minima in the parameters phase space as illustrated in figure \ref{fig:ml:sgd}.
-\end{enumerate}
-
-\begin{figure}
-  \centering
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[height=6cm]{images/ml/sgd.jpg}
-    \caption{Illustration of SGD falling into a local minima}
-    \label{fig:ml:sgd}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[height=6cm]{images/ml/Adam.jpg}
-    \caption{Illustration of the Adam momentum allowing it to overcome local minima}
-    \label{fig:ml:adam}
-  \end{subfigure}
-  \caption{}
-\end{figure}
-
-The LR is a crucial parameter in the training of NN, as illustrated in figure \ref{fig:ml:optims}. To prevent possible issues, we setup scheduler policies.
-
-\begin{figure}
-  \centering
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[height=6cm]{scripts/plots/MAE_illustration.png}
-    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MAE Loss. We see here that it has trouble reaching the minima due to the gradient being constant.}
-    \label{fig:ml:optims:mae}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[height=6cm]{scripts/plots/MSE_illustration.png}
-    \caption{Illustration of the SGD optimizer on one parameter $\theta$ on the MAE Loss. We see two different behavior: A smooth one (orange and red) when the LR is small enough and a more chaotic one when the LR is too high.}
-  \end{subfigure}
-  \caption{Illustration of the SGD optimizer. In blue is the value of the loss function, orange, green and red are the path taken by the optimized parameter during the training for different LR.}
-  \label{fig:ml:optims}
-\end{figure}
-
-\subsubsection{Scheduler policies}
-
-Sometimes we want to update our hyperparameters or take a set of action during the training procedure. We use for this scheduler policies, for example a common policy is a decrease of the learning rate after each epochs. The reasoning is that if the learning rate is too high, the optimizer will continuously miss the minimum and oscillate around it (figure \ref{fig:ml:optims:mae}). By reducing the learning rate, we allow it to make more fine steps in the parameters phase space, hopefully converging to the true minima.
-
-Another policy that is often use is the save of the best model. In some situation, the loss value after each epoch will strongly oscillate or can even worsen. This policy allow us to keep the best version of the model attained during the training phase.
-
-\subsection{Potential pitfalls}
-\label{sec:ml:pitfall}
-
-Apart from being stuck in local minima, there is also other behaviors and effects we want to prevent during training.
-
-\subsubsection{Overtraining}
-This happen when the network learn the specificities of the training dataset instead of a more general representation of the underlying data distribution. This can happen if there is not enough data in comparison to the number of learning parameters, if the data contains some specific signatures specific to the training dataset or if trains for too long on the same dataset. This behavior is illustrated in figure \ref{fig:ml:overtraining}. Overtraining can be fought in multiple ways, for example:
-\begin{itemize}
-  \item \textbf{More data}. By having more data in the training dataset, the network will not be able the specificities of every data.
-  \item \textbf{Less parameters}. By reducing the number of parameters, we reduce the computing and learning capacities of the network. This will force it to fallback to generalist behaviours.
-  \item \textbf{Dropout}. This technique implies to randomly set part of the neural network to 0. By doing this, we force the redundancy in its computing capability and, in a way, modify the data decreasing the possibility for specific learning.
-  \item \textbf{Early stopping}. During the training we monitor the network performance over a validation dataset. The network does not train on this dataset and thus cannot learn its specificities. If the loss on the training dataset diverge too much from the loss on the validation dataset, we can stop the training earlier to prevent it from overtraining.
-\end{itemize}
-
-\begin{figure}
-  \centering
-  \begin{subfigure}[t]{0.48\linewidth}
-    \centering
-    \includegraphics[height=6cm]{images/ml/overtraining.jpg}
-    \caption{Illustration of overtraining. The task at hand is to determine depending on two input variable $x$ and $y$ if the data belong to the dataset $A$ or the dataset $B$. The expected boundary between the two dataset is represented in grey. A possible boundary learnt by overtraining is represented in brown.}
-    \label{fig:ml:overtraining}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\linewidth}
-    \centering
-    \includegraphics[height=6cm]{images/ml/vanishing_illus.jpg}
-    \caption{Illustration of a very simple NN}
-    \label{fig:ml:vanishing}
-  \end{subfigure}
-  \caption{}
-\end{figure}
-
-\subsubsection{Gradient vanishing}
-Gradient vanishing is the effect of the gradient being so small for the upper layer that the parameters are barely updated after each step. This cause the network to be unable to converge to the minima.
-
-This comes from the way the gradient descent is calculated. Imagine a simple network composed of three fully connected layers: the input layer, a intermediate layer and the output layer. Let $L$ be the loss, $\theta_1$ the parameter between the input and the intermediate layer and $\theta_2$ the parameter between the intermediate and output layer. This network is schematized in figure \ref{fig:ml:vanishing}.
-
-The gradient for $\theta_1$ will be computed using the chain rule presented in equation \ref{eq:ml:backward}. Because $\theta_1$ depends on $\theta_2$, if the gradient of $\theta_2$ is small, so will be the gradient of $\theta_1$. Now if we would have much more layer, we can see how the subsequent multiplication of small gradients would lead to very small update of the parameters thus ``\textit{vanishing gradient}''.
-
-Multiple actions can be taken to prevent this effect such as:
-\begin{itemize}
-  \item \textbf{Batch normalization}: In this case we apply a normalization layer that will normalize the data so that, let $D$ be the data, $\langle D \rangle = 0$ and $\sigma D = 1$. This help the weight of the network to maintain an appropriate scale.
-  \item \textbf{Residual Network (ResNet)} \cite{he_deep_2016}: Residual network is a technique for neural network in which, instead of just sequentially feeding the results of each layer to the next one, you ask each layer to calculate the residual of the input data. This technique is illustrated in figure \ref{fig:ml:resnet}.
-\end{itemize}
-
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[height=6cm]{images/ml/resnet.jpg}
-  \caption{Illustration of the ResNet framework}
-  \label{fig:ml:resnet}
-\end{figure}
-
-\subsubsection{Gradient explosion}
-Gradient explosion happens when the consecutive multiplication of gradient cause exponential grow in the parameter value or if the training lead the network in part of the parameter space where the gradient is significantly higher than usual. For illustration, consider that the loss dependency in $\theta$ follow
-\begin{align*}
-  \mathcal{L}(\theta) &= \frac{\theta^2}{2} + e^{4\theta} \\
-  \frac{\partial \mathcal{L}}{\partial \theta} &= \theta + 4e^{4\theta}
-\end{align*}
-The explosion is illustrated in figure \ref{fig:ml:explosion} where we can see that the loss degrade with each step of optimization. In this illustration it is clear that reducing the learning rate suffice but this behaviour can happens in the middle of the training where the learning rate schedule does not permit reactivity.
-
-There exist solutions to prevent this explosions:
-\begin{itemize}
-  \item \textbf{Gradient clipping}: Is this case we work on the gradient so that the norm of gradient vector does not exceed a certain threshold. In our illustration in figure \ref{fig:ml:explosion} the gradient for $\theta > 0$ could be clipped at 3 for example.
-  \item \textbf{Batch normalization}: For the same reasons as for gradient vanishing, normalizing the input data help reduce erratic behaviour.
-\end{itemize}
-
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[height=6cm]{scripts/plots/MSE_explosion_illustration.png}
-  \caption{Illustration of the gradient explosion. Here it can be solved with a lower learning rate but its not always the case.}
-  \label{fig:ml:explosion}
-\end{figure}
 
 \end{document}
