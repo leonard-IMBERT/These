@@ -11,7 +11,7 @@
 %  \item Re state the context
 %\end{itemize}
 
-We previously showed, in chapter \ref{sec:jcnn}, that neural networks are relevant as reconstruction tools in JUNO. Even if they show worse performances, the combination with classical estimators could still bring improvements. We discussed the use of Convolutional Neural Network (CNN) in the previous chapter and their limitations, more specifically the limitation of the image as data representation for the experiment.
+We previously showed, in Chapter \ref{sec:jcnn}, that neural networks are relevant as reconstruction tools in JUNO. Even if they show worse performances, the combination with classical estimators could still bring improvements. We discussed the use of Convolutional Neural Network (CNN) in the previous chapter and their limitations, more specifically the limitation of the image as data representation for the experiment.
 
 In this chapter we propose to use a Graph Neural Network (GNN), a Neural Network specialized to process graph as presented in section \ref{sec:ml:gnn}, to overcome those limitations.
 
@@ -22,7 +22,7 @@ In this chapter we propose to use a Graph Neural Network (GNN), a Neural Network
 %  \item Explain that graph can be a solution
 %\end{itemize}
 
-As explained in chapter \ref{sec:juno} the JUNO sensors, the Large Photomultipliers (LPMT) and Small Photomultipliers (SPMT), are arranged on a spherical plane. When trying to represent this plane as a 2D image, due to the inherent problem of the projection, some part of the image are distorted and part of the image do not have any physical meaning (see section  \ref{sec:jcnn:data}). A way to represent the data without inducing deformation is the graph, an object composed of a collection of nodes and edges representing the relation between the nodes.
+As explained in Chapter \ref{sec:juno} the JUNO sensors, the Large Photomultipliers (LPMT) and Small Photomultipliers (SPMT), are arranged on a spherical plane. When trying to represent this plane as a 2D image, due to the inherent problem of the projection, some part of the image are distorted and part of the image do not have any physical meaning (see section  \ref{sec:jcnn:data}). A way to represent the data without inducing deformation is the graph, an object composed of a collection of nodes and edges representing the relation between the nodes.
 
 From this graph representation, we can construct a neural network that will process the data while keeping some interesting properties. For example the rotational invariance, i.e. the energy and radius of the event do change by rotation our referential. For more details see section \ref{sec:ml:gnn}. Graph representation also has the advantage to be able to encode global and higher order informations.
 
@@ -161,7 +161,7 @@ we need to define
 \end{align}
 to update the nodes after each layers as illustrated in figure \ref{fig:jgnn:mp_ill}. We would also need update function for the edges but for the sake of technical simplicity in this work, we will limit ourself to the nodes update. A wide variety of message passing algorithm exists, with different use cases and goal behind them. To stay generalist and to match to the best the specificity of our architecture, we implement the following algorithm:
 \begin{equation}
-  \phi_u \coloneq I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + I^n_i S^{n'}_{n} + B^{n'}
+  \phi_u \equiv I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + I^n_i S^{n'}_{n} + B^{n'}
 \end{equation}
 using the Einstein summation notation. $I^{n}_i$ is the tensor holding the nodes informations with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer. $A_{n,e}^{n'}$ is the adjacency tensor, discussed in the previous section, representing the connection between the node $i'$ and the node $i$, each connections holding the features indexed by $e$ . The learnable weights are composed of:
 \begin{itemize}

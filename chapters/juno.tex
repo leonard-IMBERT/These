@@ -835,6 +835,12 @@ The radial and energy resolutions of the different likelihood are presented in f
   \label{fig:juno:rec:qtmle}
 \end{figure}
 
+\subsection{SPMT reconstruction}
+\label{sec:juno:reco:spmt}
+
+\textbf{TODO}
+
+
 Data driven methods prove to be performant in the energy and vertex reconstruction given that we have enough calibrations sources to produce the PDF. In the next section, we'll see another type of data-driven method based on machine learning.
 
 \subsection{Machine learning for reconstruction}
@@ -852,7 +858,7 @@ For machine learning to converge to performant algorithm, a large dataset explor
 
 \subsubsection{Boosted Decision Tree (BDT)}
 
-On of the most classic ML method used in physics in last years is the Boosted Decision Tree (see chapter \ref{sec:ml:bdt}). They have been explored for vertex reconstruction \cite{qian_vertex_2021} et for energy reconstruction \cite{qian_vertex_2021, gavrikov_energy_2022}.
+On of the most classic ML method used in physics in last years is the Boosted Decision Tree (see Chapter \ref{sec:ml:bdt}). They have been explored for vertex reconstruction \cite{qian_vertex_2021} et for energy reconstruction \cite{qian_vertex_2021, gavrikov_energy_2022}.
 
 For vertex and energy reconstruction a BDT was developed using the aggregated informations presented in \ref{tab:juno:rec:bdt_vertex}.
 
@@ -892,7 +898,7 @@ A second and more advanced BDT, subsequently named BDTE, that only reconstruct e
 \end{table}
 
 \subsubsection{Neural Network (NN)}
-The physics have shown a rising for Neural Network (NN) in the past years for event reconstruction, notably in the neutrino community \cite{abbasi_graph_2022, reck_graph_2021, collaboration_convolutional_2021, dune_collaboration_neutrino_2020}. Three type of neural networks have explored for event reconstruction in JUNO Deep Neural Network (DNN), Convolutional Neural Network (CNN) and Graph Network (GNN). More explanation about those neural network can be found in chapter \ref{sec:ml}.
+The physics have shown a rising for Neural Network (NN) in the past years for event reconstruction, notably in the neutrino community \cite{abbasi_graph_2022, reck_graph_2021, collaboration_convolutional_2021, dune_collaboration_neutrino_2020}. Three type of neural networks have explored for event reconstruction in JUNO Deep Neural Network (DNN), Convolutional Neural Network (CNN) and Graph Network (GNN). More explanation about those neural network can be found in Chapter \ref{sec:ml}.
 
 The CNN are using 2D projection of the detector representing it as an image with two channel, one for the charge $Q$ and one for the time $t$. The position of the PMTs is structurally encoded in the pixel containing the information of this PMT. In \cite{qian_vertex_2021}, the pixel is chosen based on a transformation of $\theta$ and $\phi$ coordinates to the 2D plane and rounded to the nearest pixel. A sufficiently large image has been chosen to prevent two PMT to be located in the same pixel. An example of this projection can be found in figure \ref{fig:juno:rec:cnn_proj}. The performances of the CNN can be found in figure \ref{fig:juno:rec:ml_res}.
 
@@ -932,9 +938,9 @@ Overall ML algorithms show similar performances as classical algorithms in term 
 \section{JUNO sensitivity to NMO and precise measurements}
 \label{sec:juno:Fit}
 
-Now that the event have been reconstructed, selected and that the non-IBD background have been rejected, we have access to the measured energy flux from JUNO. We consider two spectra, the one measured by the LPMT system and the one measured by the SPMT system. This give rise to three possible analysis: A LPMT only analysis, a SPMT only analysis and a joint analysis. This joint analysis is the subject of the chapter \ref{sec:joint_fit} of this thesis.
+Now that the event have been reconstructed, selected and that the non-IBD background have been rejected, we have access to the measured energy flux from JUNO. We consider two spectra, the one measured by the LPMT system and the one measured by the SPMT system. This give rise to three possible analysis: A LPMT only analysis, a SPMT only analysis and a joint analysis. This joint analysis is the subject of the Chapter \ref{sec:joint_fit} of this thesis.
 
-The following details about JUNO measurement is common to the three analysis. The details and specific of the joint analysis are detailed in chapter \ref{sec:joint_fit}.
+The following details about JUNO measurement is common to the three analysis. The details and specific of the joint analysis are detailed in Chapter \ref{sec:joint_fit}.
 
 \subsection{Theoretical spectrum}
 
