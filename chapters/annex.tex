@@ -243,4 +243,55 @@ We see that $F^{-1}[F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)]]$ is solvable if
 \begin{equation}
   G^{-1}(E, \sigma_1) \star G(E, \sigma_2) = \frac{1}{\sqrt{|\Delta \sigma^2|}\sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}
 \end{equation}
+
+
+\chapter{Correction of $E_{vis}$ bias}
+\label{sec:annex:evis}
+
+The reconstruction algorithms that are presented in this thesis in Chapters \ref{sec:jcnn} and \ref{sec:jgnn} do not reconstruct the same energy as the classical algorithms presented in section \ref{sec:juno:reco}. Our algorithms reconstruct the \textit{deposited} energy $E_{dep}$ while the classical algorithms reconstruct a \textit{visible} energy $E_{vis}$.
+
+To understand this phenomena, let's look at the equation \ref{eq:juno:reco:charge_est}:
+\begin{equation*}
+  \hat{\mu}(r, \theta, \theta_{pmt}, E_{vis}) = \frac{1}{E_{vis}} \frac{1}{M} \sum_i^M\frac{\frac{\bar{q}_i}{\hat{Q}_i} - \mu_i^D}{\mathrm{DE}_i}, ~ \mu_i^D = \mathrm{DNR}_i \cdot L
+\end{equation*}
+which define the expected $N_{pe}/E$. This define a linear relation between the number of photoelectrons and the energy. However we discussed in sections \ref{sec:juno:CD} and \ref{sec:juno:calib} that the number of photoelectrons collected by the LPMT system do not follow a linear relationship. Thus this visible energy is not linear with the deposited energy. This effect is corrected in physics analysis and in Chapter \ref{sec:joint_fit} by applying the calibrated non-linearity profile the energy spectrum.
+
+When we need to compare our algorithm that reconstruct the deposited energy to the classical algorithms we need to correct this non-linearity. For this we fit the systematic bias of the classical algorithm using a 5th degree polynomial
+\begin{equation}
+  \frac{E_{dep}}{E_{evis}} = \sum_{i=0}^5 P_i E_{dep}^i
+\end{equation}
+The fitted distribution and the corresponding fit is presented in figure \ref{fig:annex:evis:e_rec_correction}. The value fitted for this correction are presented in table \ref{tab:annex:evis:omil_params}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l|r|}
+    $P_0$                        &      1.24541   +/-   0.00585121  \\
+    $P_1$                        &    -0.168079   +/-   0.00716387  \\
+    $P_2$                        &    0.0489947   +/-   0.00312875  \\
+    $P_3$                        &  -0.00747111   +/-   0.000622003 \\
+    $P_4$                        &  0.000570998   +/-   5.7296e-05  \\
+    $P_5$                        & -1.72588e-05   +/-   1.98355e-06 \\
+  \end{tabular}
+  \caption{Parameters of the 5th degree polynomial used to correct Omilrec reconstructed energy.}
+  \label{tab:annex:evis:omil_params}
+\end{table}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jgnn/e_rec_e_true_comp.png}
+  \caption{Comparison between Omilrec reconstructed $E_{vis}$ and the deposited energy $E_{dep}$. The profile of the distribution $E_{vis}/E_{dep}$ vs $E_{dep}$ is fitted with a 5th degree polynomial.}
+  \label{fig:annex:evis:e_rec_correction}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
