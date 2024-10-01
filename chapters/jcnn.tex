@@ -226,7 +226,8 @@ In this study we will discuss two datasets of one millions prompt signal of IBD 
 
 \subsubsection{J21}
 
-The first one comes from the JUNO official MC simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the classical SPMT reconstruction algorithm, presented in section \ref{sec:juno:reco:spmt} \cite{lebrin_towards_2022}, was developed. This dataset is used as a reference for comparison to classical algorithm performances.
+The first one comes from the JUNO official MC simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the classical SPMT reconstruction algorithm was developed. This classical methods is based on the time likelihood presented section \ref{sec:juno:reco} for the vertex reconstruction, and compute the energy by correcting the detector effect on the ration $N_{pe}/E_{dep}$. It is detailed in Chapter 4 of \cite{lebrin_towards_2022}.
+This dataset is used as a reference for comparison to classical algorithm performances.
 The data in this dataset is \textit{detsim} level (see section \ref{sec:juno:software})  which includes no digitization, no DAQ  and therefore no reconstruction of PMT signals. Only the number of PEs that hit a PMT and the hit times are provided. A fast simulation based on gaussian drawings produces charges, with bias and variability, and the equivalent for times. The drawings parameters were adjusted based on  \cite{cao_mass_2021, abusleme_mass_2022}.
 Because there is no charge reconstruction, the timing on the event is based on the Geant4 simulation, and so $t=0$ is the moment the positron is created in the CD. To prevent correlation between the numerical value of the time of the first hit $t_0$ and the radius of the event, we offset all time by this first hit time. Without simulation of the charge reconstruction, we cannot simulate the event trigger, we thus add an arbitrary time cut at a $t_0 + 1000$ ns.
 

@@ -30,31 +30,45 @@ JUNO is a neutrino detection experiment under construction located in China, in 
 For this JUNO will measure the electronic anti-neutrinos ($\bar{\nu}_e$) flux coming from the nuclear reactors of Taishan, Yangjiang, for a total power of 26.6 GW$_{th}$, and the Daya Bay power plant to a lesser extent. All of those cores are the second-generation pressurized water reactors CPR1000, which is a derivative of Framatome M310. Details about the power plants characteristics and their expected flux of $\bar{\nu}_e$ can be found in the table \ref{tab:juno:power_plants}.
 The distance of 53 km has been specifically chosen to maximize the disappearance probability of the $\bar{\nu}_e$. The data taking is scheduled to start early 2025.
 
-\section{Neutrinos physics in JUNO}
+\section{Reactor Neutrinos physics in JUNO}
 
-Even if the JUNO design detailed in section \ref{sec:juno:juno_detector} was optimized for the measurement of the NMO, its large detection volume, excellent energy resolution and background level and understanding make it also an excellent detector to measure the flux coming from other neutrino sources. Thus the scientific program of JUNO extends way over reactor antineutrinos. The following section is an overview of the different physics topic JUNO will contribute in the coming years.
+JUNO will try to determine the NMO and to bring at the few per mille level our knowledge of $\Delta m^2_{31}$,  $\Delta m^2_{21}$ and $\sin^2(2\theta_{12})$  via the precision analysis of the spectrum of the visible energy left by reactor antineutrinos in its detector.
 
-\subsection{Reactor neutrino oscillation for NMO and precise measurements}
-\label{sec:juno:nom_precise_measurement}
-Previous works \cite{zhan_determination_2008,  zhan_experimental_2009} shows that oscillation parameters and the NMO can be observed by looking at the $\bnue$ disappearance energy spectrum coming from medium baseline nuclear reactor. This disappearance probability can be expressed as \cite{an_neutrino_2016} :
-\begin{equation*}
-  P(\bnue \rightarrow \bnue) = 1 - \sin^2 2\theta_{12} c^4_{13} \sin^2 \frac{\Delta m^2_{21}L}{4E} - \sin^2 2\theta_{13} \bigg[ c_{12}^2 \sin^2 \frac{\Delta m_{31}^2 L}{4E} + s^2_{12} \sin^2 \frac{\Delta m_{32}^2 L}{4E} \bigg]
-\end{equation*}
-Where $s_{ij} = \sin \theta_{ij}$, $c_{ij} = \cos \theta_{ij}$, $E$ is the $\bnue$ energy and $L$ is the baseline.
-We can see the sensitivity to the NMO in the dependency to $\Delta m_{32}^2$ and $\Delta m^2_{31}$ causing a phase shift of the spectrum as we can see in the figure \ref{fig:juno:juno-spectrum-oscillation}.
-By carefully adjusting a theoretical spectrum to the data, one can extract the NMO and the oscillation parameters. The statistic procedure used to adjust the theoretical spectrum is reviewed in more details in the section \ref{sec:juno:Fit}.
 \begin{figure}
   \centering
   \includegraphics[height=8cm]{images/juno/Spectrum-OscillationsOnly_dm2_31.png}
   \caption{Expected number of neutrinos event per MeV in JUNO after 6 years of data taking. The black curve shows the flux if there was no oscillation. The light gray curve shows the oscillation if only the solar terms are taken in account ($\theta_{12}$, $\Delta m_{21}^2$). The blue and red curve shows the spectrum in the case of, respectively, NO and IO. The dependency of the oscillation to the different parameters are schematized by the double sided arrows. We can see the NMO sensitivity by looking at the fine phase shift between the red and the blue curve.}
   \label{fig:juno:juno-spectrum-oscillation}
 \end{figure}
-To reach the desired sensitivity, JUNO must meet multiple requirements but most notably:
+
+\subsection{Antineutrino spectrum measured in JUNO}
+\label{sec:juno:nom_precise_measurement}
+To some extent, this analysis is equivalent to to extracting from this spectrum the oscillation probability \cite{an_neutrino_2016} :
+\begin{equation*}
+  \label{eq:juno:oscillation_prob}
+  P(\bnue \rightarrow \bnue) = 1 - \sin^2 2\theta_{12} c^4_{13} \sin^2 \frac{\Delta m^2_{21}L}{4E} - \sin^2 2\theta_{13} \bigg[ c_{12}^2 \sin^2 \frac{\Delta m_{31}^2 L}{4E} + s^2_{12} \sin^2 \frac{\Delta m_{32}^2 L}{4E} \bigg]
+\end{equation*}
+Where $s_{ij} = \sin \theta_{ij}$, $c_{ij} = \cos \theta_{ij}$, $E$ is the $\bnue$ energy and $L$ is the baseline.
+We can see the sensitivity to the NMO in the dependency to $\Delta m_{32}^2$ and $\Delta m^2_{31}$ causing a phase shift of the spectrum as we can see in the figure \ref{fig:juno:juno-spectrum-oscillation}.
+
+In practice, a fit to the grey distribution of figure \ref{fig:juno:spectrum_with_background} will be performed. It is the sum of two components :signal (black) and bacgrounds (colored). Reactor antineutrinos are detected by JUNO via Inverse Beta Decays (IBD) : $\bar{nu}_e + p -> e^{+} + n$.
+The energy spectrum under investigation is therefore that of the reconstructed $e^+$ visible energy. The black signal spectrum is therefore the sum of the antineutrino differential fluxes from all reactors and reaching the detecteur, weighted by the oscillation probability of Eq \ref{eq:juno:oscillation_prob} and the IBD differential cross section and convoluted with detection effects.
+These various ingredients are theoretically modelled in order to provide the probability density function (PDF) to be used in the fit.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/juno/spectrum_with_background.png}
+  \caption{Expected visible energy spectrum measured with the LPMT system with (grey) and without (black) backgrounds. The background amount for about 7\% of the IBD candidate and are mostly localized below 3 MeV \cite{juno_collaboration_sub-percent_2022}}
+  \label{fig:juno:spectrum_with_background}
+\end{figure}
+
+To reach JUNO's goals, it takes that this experimental spectrum still bears sizeable traces of the very small phase shift mentioned above. Most notably, the
+following requirements must be fulfilled :
 \begin{enumerate}
   \item An energy resolution of $3\%/\sqrt{E\mathrm{(MeV)}}$ to be able to distinguish the fine structure of the fast oscillation.
-  \item An energy precision of 1\% in order to not err on the location of the oscillation pattern.
+  \item An energy scale known at the better than the 1\% level.
   \item A baseline between 40 and 65 km to maximise the $\bar{\nu}_e$ oscillation probability. The optimal baseline would be 58 km and JUNO baseline is 53 km.
-  \item At least $\approx$ 100,000 events to limit the spectrum distortion due to statistical uncertainties.
+  \item At least $\approx$ 100,000 events.This is the necessary statistics to reach JUNO's canonical sensitivity after 6 years of data taking.
 \end{enumerate}
 
 \subsubsection{$\bar{\nu}_e$ flux coming from nuclear power plants}
@@ -92,14 +106,14 @@ The neutrino flux coming from a reactor at a time $t$ can be predicted using
 \begin{equation}
   \phi(E_\nu, t)_r = \frac{W_{th}(t)}{\sum_i f_i(t) e_i} \sum_i f_i(t) S_i(E_\nu)
 \end{equation}
-where $W_{th}(t)$ is the thermal power of the reactor, $f_i(t)$ is the fraction fission of the $i$th isotope, $e_i$ its thermal energy released in each fission and $S_i(e_\nu)$ the neutrino flux per fission for this isotope. Using this method, the flux uncertainty is expected to be of an order of 2-3 \% \cite{juno_collaboration_sub-percent_2022}.
+where $W_{th}(t)$ is the thermal power of the reactor, $f_i(t)$ is the fraction fission of the $i$th isotope, $e_i$ its thermal energy released in each fission and $S_i(e_\nu)$ the neutrino flux per fission for this isotope.
+
+The latter flux is difficult to predict. To evaluate JUNO's sensitivity and to serve as a starting point in the spectrum PDF, the Huber-Mueller model is used \cite{mueller_improved_2011}, corrected
+using Daya Bays data \cite{daya_bay_collaboration_measurement_2016} to account for a $\sim$5\% deficit with respect to models, referred to as the reactor antineutrino anomaly \cite{mention_reactor_2011}, and for a discrepancy between models and data in the spectral shape (the so  call 5 MeV bump).
 
 In addition to those prediction, a satellite experiment named TAO\cite{juno_collaboration_tao_2020} will be setup near the reactor core Taishan-1 to measure with an energy resolution of 2\% at 1 MeV the neutrino flux coming from the core, more details can be found in section \ref{sec:juno:tao}. It will help identifying unknown fine structure and give more insight on the $\bar{\nu}_e$ flux coming from this reactor.
 
-One  the open issue about reactor anti-neutrinos flux is the so-called neutrino anomaly \cite{mention_reactor_2011}, an unexpected surplus of neutrino emission in the spectra around 5 MeV.
-Multiples scientists are trying to explain this surplus by advanced recalculation of the nuclei model during beta decay \cite{kopeikin_reevaluating_2021, letourneau_origin_2023} but no consensus on this issue has been reached yet.
-
-\subsubsection{Background in the neutrinos reactor spectrum}
+\subsection{Background spectra}
 
 Considering the close reactor neutrinos flux as the main signal, the signals that are considered as background are:
 \begin{itemize}
@@ -113,22 +127,9 @@ In addition to all those physics signal, non-neutrinos signal that would mimic a
 \end{itemize}
 All those events represent a non-negligeable part of the spectrum as shown in figure \ref{fig:juno:spectrum_with_background}.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[height=6cm]{images/juno/spectrum_with_background.png}
-  \caption{Expected visible energy spectrum measured with the LPMT system with (grey) and without (black) backgrounds. The background amount for about 7\% of the IBD candidate and are mostly localized below 3 MeV \cite{juno_collaboration_sub-percent_2022}}
-  \label{fig:juno:spectrum_with_background}
-\end{figure}
 
-
-\subsubsection{Identification of the mass ordering}
-
-To identify the mass ordering, we adjust the theoretical neutrino energy spectrum under the two hypothesis of NO and IO. Those give us two $\chi^2$, respectively $\chi^2_{NO}$ and $\chi^2_{IO}$. By computing the difference $\Delta \chi ^2 = \chi^2_{NO} - \chi^2_{IO}$ we can determine the most probable mass ordering and the confidence interval: NO if $\Delta \chi^2 > 0$ and IO if $\Delta \chi^2 < 0$. Current studies shows that the expected sensitivity the mass ordering would be of $3.4 \sigma$ after 6 years of data taking in nominal setup\cite{an_neutrino_2016}. More detailed explanations about the procedure can be found in the section \ref{sec:juno:Fit}.
-
-\subsubsection{Precise measurement of the oscillations parameters}
-
-The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$ are free parameters in the fit of the oscillation spectrum. The precision on those parameters have been estimated and are shown in table \ref{tab:juno:juno-param-precision}. Wee see that for $\theta_{12}$, $\Delta m^2_{21}$, $\Delta m^2_{31}$, precision at 6 years is better than the reference precision by an order of magnitude \cite{juno_collaboration_sub-percent_2022}
-
+\subsection{Statistical analysis and sensitivities}
+\label{sec:juno:Fit}
 
 \begin{table}[ht]
   \centering
@@ -148,7 +149,46 @@ The oscillations parameters $\theta_{12}$, $\theta_{13}$, $\Delta m^2_{21}$, $\D
   \label{tab:juno:juno-param-precision}
 \end{table}
 
-\subsection{Other physics}
+
+The measurement of the reactor antineutrino oscillation at JUNO will be based on a spectrum reconstructed with the LPMT system. We describe briefly the fit procedure here.
+
+In Chapter \ref{sec:joint_fit}, we will perform fits to the spectrum reconstructed with the SPMT system, as well as joint fits of the two kind of spectra. What's decribed below remains valid.
+
+\subsubsection{Theoretical spectrum}
+
+To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements produced by the calibration, the input from TAO and adjusted Monte Carlo simulations:
+\begin{itemize}
+  \item The absolute flux and the fission product fraction yield calibrated by TAO.
+  \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
+  \item The computed cross-section of $\bar{\nu}_e$ and the LS.
+  \item The estimation of mislabelled event, such as fast neutron events from cosmic muons, using Monte Carlo simulation.
+  \item The measured bias and resolution of the LPMT and SPMT system by the calibration.
+  \item The time dependent reactor parameters (age of fuel, instantaneous power of the reactors, etc...)
+\end{itemize}
+
+These systematics parameters come with their uncertainties that need to be taken into account by the fitting framework. This theoretical spectrum will, in the end, depend of the oscillation parameters of interest $\theta_{13}, \theta_{12}, \Delta m^2_{21}, \Delta m^2_{31}$. Noise parameters can be included in the parameters spectrum such as the earth density $\rho$ between the power plants and JUNO.
+
+\subsubsection{Fitting procedure}
+
+The theoretical and measured spectra are represented as two histograms depending on the energy. The theoretical spectrum is adjusted with the data using a $\chi^2$ minimization where $\chi^2$ is naively defined as
+\begin{equation}
+  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2}
+\end{equation}
+where $N^i_{th}$ is the number event in the $i$th bin of the theoretical spectrum, $N^i_{data}$ is the number of event in the $i$th bin of the measured spectrum and $\sigma_i$ is the uncertainty of this bin. Two classic statistic test exist Pearson and Neyman where the difference is the estimation of $\sigma_i$ parameters.
+
+This $\sigma_i$ is composed of the systematics uncertainties discussed above but also from the statistic uncertainty of the spectrum. Considering a Poisson process, the statistic uncertainty is estimated as $\sigma_{stat}^i = \sqrt{N^i}$. In a Pearson test, $N^i \equiv N^i_{th}$ whereas in a Neyman test $N^i \equiv N^i_{data}$. Under the assumption that the content of each bin follow a Gaussian distribution (a Poisson with high enough statistic), the two test are equivalent. But studies on Monte Carlo spectrum showed that the Pearson and Neyman statistic are biased in opposite direction. It is easily visible where, for the same data, Pearson will prefer a higher $N^i_{th}$ to reduce the ration $\frac{1}{N^i_{th}}$ whereas Neyman will prefer a lower $N^i_{th}$ to reduce the $(N^i_{th} - N^i_{data})$ term.
+
+This problematic can be circumvented by summing the two test, yielding the CNP statistic test and/or by adding a term
+\begin{equation}
+  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2} \mathbf{- \ln |V|}
+\end{equation}
+where $V$ is the covariance matrix of the theoretical spectrum yielding the PearsonV and CNPV statistic test.
+
+
+The $\chi^2$ is minimized by exploring the parameter phase space via gradient descent.
+
+
+\section{Other physics}
 
 While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclear reactor, JUNO will be able to detect neutrinos coming from other sources thus allowing for a wide range of physics studies as detailed in the table \ref{tab:juno:signal} and in the following sub-sections.
 
@@ -394,7 +434,7 @@ With its coverage, about 1/3 of the of all atmospheric muons that passing throug
 The calibration is a crucial part of the JUNO experiment. The detector will continuously bath in neutrinos coming from the close nuclear power plant, from other sources such as geo neutrinos, the sun and will be exposed to background noise coming from atmospheric muons and natural radioactivity.
 Because of this continuous rate, low frequency signal event, we need high frequency, recognisable sources in the energy range of interest : [0-12] MeV for the positron signal and 2.2 MeV for the neutron capture.
 It is expected that the CD response will be different depending on the type of particle, due to the interaction with LS, the position on the event and the optical response of the acrylic sphere (see section \ref{sec:juno:reco}).
-We also expect a non-linear energy response of the CD due to the LS properties \cite{bay_optimization_2020} but also due to the saturation of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
+We also expect a non-linear energy response of the CD due to the LS properties \cite{bay_optimization_2020} but also due to the reponse of the LPMTs system when collecting a large amount of PE \cite{han_dual_2021}.
 
 \subsection{Energy scale calibration}
 
@@ -498,17 +538,18 @@ The preliminary calibration program is depicted in table \ref{tab:juno:calib_pro
 \end{table}
 
 \subsection{Instrumental non-linearity calibration}
+\label{sec:juno:instr_nl}
 
-As mentioned in the introduction of this section, we expect an instrumental non-linearity due to the LPMT system saturating. This results in the LPMT underestimating the number of collected photo-electrons. This non-linearity is illustrated in figure \ref{fig:juno:instr_nl}. This non-linearity would consequently convolve with the LS non-linearity. To correct this effect, the LPMT are first calibrated to the channel level using the dual calorimetry calibration technique which consist of comparing the LPMT and SPMT calorimetry calibration using a tunable light source covering the range of 0 to 100 PE per LPMT channel.
+One of the main interests of Dual Calorimetry is to calibrate away an instrumental effect called charge non linearity (QNL), which will be described in more detail in Chapter \ref{sec:joint_fit}.
+
+In short, during a typical IBD event, between 0 and 100 PEs can be produced in a given LPMT (depending on the position of the interaction and the positron energy). This is a large dynamic range. When the number of PEs is high, the reconstruction of the LPMT charge can become inaccurate, underestimating the actual number of PEs as illustrated in figure \ref{fig:juno:instr_nl}. This QNL is difficult to separate from other non linearities (like the non linearity in the LS photon yield as a function of the deposit energy). In chapter 5 and 6 of this thesis \cite{han_dual_2021}, a calibration method that constitutes the core of dual calorimetry are described.  They are based on the comparisons between signals seen in LPMTs and signals seen in SPMTs. In the latter system, due to its small angular  coverage, individual SPMT rarely see more than 1 PE per event, and therefore are essentially immune  against QNL. The method described in \cite{han_dual_2021} uses a tunable light source covering the range of 0 to 100 PE perLPMT channel
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[height=5cm]{images/juno/instr_non_linearity.png}
-  \caption{Event-level instrumental non-linearity, defined as the ratio of the total measured LPMT charge to the true charge for events uniformly distributed in the detector.The solid red line represents event-level non-linearity without the channel-level correction, with position non-uniformity obtained at 1 MeV applied, in an extreme hypothetical scenario of 50\% non-linearity over 100 PEs for the LPMTs. The dashed blue line represents that after the channel-level correction. The gray band shows the residual uncertainty of 0.3\%, after the channel-level correction. Figure taken from \cite{juno_collaboration_calibration_2021}.}
+  \includegraphics[height=6cm]{images/juno/instr_non_linearity.png}
+  \caption{Event-level instrumental non-linearity, defined as the ratio of the total measured LPMT charge to the true charge for events at the center of the detector. The solid red line represents event-level non-linearity without the channel-level correction in an extreme hypothetical scenario of 50\% non-linearity over 100 PEs for the LPMTs. The dashed blue line represents that after the channel-level correction. The gray band shows the residual uncertainty of 0.3\%, after the channel-level correction. Figure taken from \cite{juno_collaboration_calibration_2021}.}
   \label{fig:juno:instr_nl}
 \end{figure}
-
-Within such range, the SPMT serve as an approximate linear reference since SPMT operate primarily operate in photo-counting mode in this range. Using this technique, the residual non-linearity in the LPMT response due to the saturation effect is under 0.3 \%.
 
 
 \section{Satellite detectors}
@@ -836,12 +877,6 @@ The radial and energy resolutions of the different likelihood are presented in f
   \label{fig:juno:rec:qtmle}
 \end{figure}
 
-\subsection{SPMT reconstruction}
-\label{sec:juno:reco:spmt}
-
-\textbf{TODO}
-
-
 Data driven methods prove to be performant in the energy and vertex reconstruction given that we have enough calibrations sources to produce the PDF. In the next section, we'll see another type of data-driven method based on machine learning.
 
 \subsection{Machine learning for reconstruction}
@@ -935,46 +970,6 @@ The neural network then process the graph using Chebyshev Convolutions \cite{def
 \end{figure}
 
 Overall ML algorithms show similar performances as classical algorithms in term of energy reconstructions with the more complex structure CNN and GNN showing better performances than BDT and DNN. For vertex reconstruction, the BDT and DNN show poor performance while CNN are on the level of the classical algorithms.
-
-\section{JUNO sensitivity to NMO and precise measurements}
-\label{sec:juno:Fit}
-
-Now that the event have been reconstructed, selected and that the non-IBD background have been rejected, we have access to the measured energy flux from JUNO. We consider two spectra, the one measured by the LPMT system and the one measured by the SPMT system. This give rise to three possible analysis: A LPMT only analysis, a SPMT only analysis and a joint analysis. This joint analysis is the subject of the Chapter \ref{sec:joint_fit} of this thesis.
-
-The following details about JUNO measurement is common to the three analysis. The details and specific of the joint analysis are detailed in Chapter \ref{sec:joint_fit}.
-
-\subsection{Theoretical spectrum}
-
-To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements produced by the calibration, the input from TAO and adjusted Monte Carlo simulations:
-\begin{itemize}
-  \item The absolute flux and the fission product fraction yield calibrated by TAO.
-  \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
-  \item The computed cross-section of $\bar{\nu}_e$ and the LS.
-  \item The estimation of mislabelled event, such as fast neutron events from cosmic muons, using Monte Carlo simulation.
-  \item The measured bias and resolution of the LPMT and SPMT system by the calibration.
-  \item The time dependent reactor parameters (age of fuel, instantaneous power of the reactors, etc...)
-\end{itemize}
-
-These systematics parameters come with their uncertainties that need to be taken into account by the fitting framework. This theoretical spectrum will, in the end, depend of the oscillation parameters of interest $\theta_{13}, \theta_{12}, \Delta m^2_{21}, \Delta m^2_{31}$. Noise parameters can be included in the parameters spectrum such as the earth density $\rho$ between the power plants and JUNO.
-
-\subsection{Fitting procedure}
-
-The theoretical and measured spectra are represented as two histograms depending on the energy. The theoretical spectrum is adjusted with the data using a $\chi^2$ minimization where $\chi^2$ is naively defined as
-\begin{equation}
-  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2}
-\end{equation}
-where $N^i_{th}$ is the number event in the $i$th bin of the theoretical spectrum, $N^i_{data}$ is the number of event in the $i$th bin of the measured spectrum and $\sigma_i$ is the uncertainty of this bin. Two classic statistic test exist Pearson and Neyman where the difference is the estimation of $\sigma_i$ parameters.
-
-This $\sigma_i$ is composed of the systematics uncertainties discussed above but also from the statistic uncertainty of the spectrum. Considering a Poisson process, the statistic uncertainty is estimated as $\sigma_{stat}^i = \sqrt{N^i}$. In a Pearson test, $N^i \equiv N^i_{th}$ whereas in a Neyman test $N^i \equiv N^i_{data}$. Under the assumption that the content of each bin follow a Gaussian distribution (a Poisson with high enough statistic), the two test are equivalent. But studies on Monte Carlo spectrum showed that the Pearson and Neyman statistic are biased in opposite direction. It is easily visible where, for the same data, Pearson will prefer a higher $N^i_{th}$ to reduce the ration $\frac{1}{N^i_{th}}$ whereas Neyman will prefer a lower $N^i_{th}$ to reduce the $(N^i_{th} - N^i_{data})$ term.
-
-This problematic can be circumvented by summing the two test, yielding the CNP statistic test and/or by adding a term
-\begin{equation}
-  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2} \mathbf{- \ln |V|}
-\end{equation}
-where $V$ is the covariance matrix of the theoretical spectrum yielding the PearsonV and CNPV statistic test.
-
-
-The $\chi^2$ is minimized by exploring the parameter phase space via gradient descent.
 
 \subsection{Physics results}
 

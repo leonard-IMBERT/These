@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \graphicspath{{\subfix{..}}}
 \begin{document}
-\chapter{Joint fit between the SPMT and LPMT spectra}
+\chapter{Dualcalorimetric analysis for Precision Measurement}
 \label{sec:joint_fit}
 
 \epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
@@ -27,19 +27,41 @@
 %
 %   + Plan du chapitre.
 
-JUNO is an experiment of precise measurements, where we try to observe small fluctuation in the energy spectrum and with the goal to achieve sub-percent precision on the oscillation parameters measurement.
-A precise and complete understanding of the reconstruction and detector effects is thus crucial.
-The challenge reside in the technology used in the detector, which, while based on well known technology: scintillator observed by PMT, is being deployed on a scale never seen before, in term of scintillator volume and  PMT size. Understanding every effects that goes in the detector can become extremely complicated. The ability to compare the results of the same experiment with two systems is thus extremely precious, this is the origin the dual calorimetry with the LPMT and SPMT system.
+JUNO is precision measurement experiment.
+To determine the NMO with the aimed significance, JUNO must be sensitive to the tiny spectral phase shift shown on figure \ref{fig:joint_fit:juno-spectrum-oscillation}.
+Once detection effects are accounted for, the difference between IO and NO spectra is further reduced, as can be seen on figure \ref{fig:joint_fit:juno-ordering}.
 
-The resolution and bias of the reconstruction needs to be extremely well characterized: the target resolution of 3\% \cite{juno_collaboration_juno_2022} is unprecedented and is necessary to be able to distinguished between Normal Ordering (NO) and Inverse Ordering (IO). The non-linearity uncertainty needs to be constrained under 1\% as exceeding this value, the risk appear to measure the wrong ordering \cite{han_dual_2021}.
+Among other condition, a precise and complete understanding of the reconstruction and detector effects is crucial.
+The challenge reside in the technology used in the detector, which, while based on well known technology: scintillator observed by PMT, is being deployed on a scale never seen before, in term of scintillator volume and  PMT size. Understanding every effects that goes in the detector can become extremely complicated. Any method to help detecting problems is therefore welcome.
+Comparing the data and results obtained by two systems measuring the same events, but subject to different sources of error, is therefore precious. This is the purpose of the dual calorimetry techniques used in JUNO thanks to the existence of 2 PMT systems: the LPMT and SPMT systems.
 
-One of the possible source of non-linearity, which will be used as a reference in this chapter, is the charge non-linearity (QNL) that will be discussed in next section. The dual calorimetry can address this issue, using calibrations methods and measurements that will be employed to correct it \cite{han_dual_2021}.
+The reconstruction of the IBD positron energy must be very performant: an unprecedented resolution of 3\% at 1 MeV \cite{juno_collaboration_juno_2022} is necessary to determine the NMO with the aimed significance.
+Moreover, it is necessary to know the energy scale with an uncertainty below 1\% to correctly evaluate in our data the likelihood of the NO and IO  hypotheses. Beyond that value, the risk progressively appears to exclude the NI(IO) hypothesis with the significance with which  one should actually have excluded the IO(NO) if the energy scale was precisely known, as can be seen in the introduction of Chapter 4 of \cite{han_dual_2021}.
 
-More generally, comparing the results of the two systems will allow for the detection of potential issues on the calibration or reconstruction. This is done in this thesis by comparing directly the spectra and oscillation parameters measurements of the two systems.
+\begin{figure}[ht]
+\centering
+  \centering
+  \includegraphics[height=6cm]{images/juno/Spectrum-OscillationsOnly_dm2_31.png}
+  \caption{Expected number of neutrinos event per MeV in JUNO after 6 years of data taking. The black curve shows the flux if there was no oscillation. The light gray curve shows the oscillation if only the solar terms are taken in account ($\theta_{12}$, $\Delta m_{21}^2$). The blue and red curve shows the spectrum in the case of, respectively, NO and IO. The dependency of the oscillation to the different parameters are schematized by the double sided arrows. We can see the NMO sensitivity by looking at the fine phase shift between the red and the blue curve.}
+  \label{fig:joint_fit:juno-spectrum-oscillation}
+\end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=8cm]{images/joint_fit/mass_ordering.png}
+  \caption{Oscillated reactor $\bar{\nu}_e$ spectra for the Normal Ordering (Black) and Inverted Ordering (Red) for 6,5 years data taking and a resolution of 3\% without any statistical or systematic fluctuation. Figure from \cite{abusleme_potential_2024}.}
+  \label{fig:joint_fit:juno-ordering}
+\end{figure}
 
-The study of the independent results of the two system can provide some informations \cite{cabrera_multi-calorimetry_2023} but this is missing the important correlation that should be present between the two systems: they see the same events, in the same scintillator, they're bound to be correlated. We explore in this chapter a preliminary study of the impact of those correlations via multiple methods and the impact of QNL at various degrees.
 
-In the next section we will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach}, I present the approaches and assumptions in this study. In section \ref{sec:joint_fit:framework}, I present the fit framework used, and then, in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusions and perspectives in \ref{sec:joint_fit:conclusion}.
+One of the possible source of non-linearity, which will be used as a reference in this chapter, is the charge non-linearity (QNL) that will be discussed in next section.
+Several dual calorimetry techniques can address this issue. Some are calibration techniques, that are also described in section 4.3 of \cite{han_dual_2021} .
+More generally, comparing the results of the two systems will allow for the detection of potential issues on the calibration or reconstruction. This is done in this thesis by comparing directly the spectra and oscillation parameters measurements of the two PMT systems. We call this kind of dual calorimetry "Dual calorimetry with neutrino oscillation", since it is based on the visible energy spectra used by the oscillation analysis of reactor antineutrinos.
+
+In this chapter, we explore several ways to perform this comparison. One of them relies on the difference between the values of $\Delta m^2_{21}$, $\sin^2(2\theta_{12})$ measured with the LPMT and the SPMT systems.
+Both systems measure them with similar uncertainties. For reasonable values of the QNL, we expect these differences to be smaller than the individual uncertainties. However, the significance of these differences might still be high. Indeed, both systems reconstruct the same events, therefore the same distribution of the true positron energy, as well as the same scintillation photon emission. Therefore,the energy spectra reconstructed by the two systems share a part of their fluctuations. This translates into correlated reconstructed spectra and consequently lead to correlations between the measurements of $\Delta m^2_{21}$ and $\sin^2(2\theta_{12})$. The uncertainty on the SPMT-LPMT difference is largely decreased by this correlation.  Other ways to perform the comparison
+(see next sections) all rely the reconstructed spectra, therefore on the evaluation of the correlation between the LPMT and SPMT spectra.
+
+In the next section we will discuss the motivations behind this study. In section \ref{sec:joint_fit:approach},  I present the methods we propose to implement Dual calorimetry with neutrino oscillation, and of the way we estimate their sensitivity. In section \ref{sec:joint_fit:framework}, I present the fit framework used, and then, in section \ref{sec:joint_fit:tech} the technical improvement brought and the difficulties faced during the development. To end this chapter I present the results in \ref{sec:joint_fit:results} and discuss the conclusions and perspectives in \ref{sec:joint_fit:conclusion}.
 
 \section{Motivations}
 % II)  Motivations
@@ -62,9 +84,10 @@ The two systems are expected to have the same sensitivity to the oscillation par
 
 We could just look at the value and compare them to the estimated independent error of the two system, but we believe and will demonstrate in this chapter that the independent study of the two system is missing a lot of informations, and that, by taking into account the statistic and systematic correlations between the two systems, we can produce much more powerful statistical tests.
 
-Our work in this chapter is to develop such tools. The first step is, of course, to verify that in the case of no discrepancies, the results are coherent with the independent analysis. This will give us the distribution of those statistical test in absence of discrepancies. When we will have real data, we will be able to compare it to those distributions to compute a p-value characterizing the absence of those potential discrepancies.
+Our work in this chapter is to develop such tools, which in practice implies to define test statistics. A first step will be to determine the distribution of these test statistics in the case  when no unexpected problem affects the LPMT nor the SPMT problem. This will give us the distribution of those statistical test in absence of discrepancies. Later, the value of the test statistics that we will measure in real data can be compared to these distributions to produce p-values, to judge of the potential present of an unexpected effect.
 
-To evaluate the power of our methods, we need to simulate a concrete difference between the two spectra. We have decided to study a plausible effect, the Charge Non-Linearity (QNL) that is detailed next section. But the goal of those tools is to be discrepancy agnostic, as those discrepancies could come from a variety of source (calibration issue, insufficient simulation tuning, etc...)
+To evaluate the power of our methods, we need to simulate a concrete difference between the two spectra. We have decided to study a plausible effect, the Charge Non-Linearity (QNL) that is detailed next section.
+Note that these tests should in principle be able to detect unexpected effects whatever their source (calibration issues, insufficient simulation tuning, etc.), provided that the distortion caused to the energy spectrum is important enough.
 
 %
 %   (b) Explications sur la QNL. (  ~ 1 p)
@@ -88,25 +111,41 @@ To evaluate the power of our methods, we need to simulate a concrete difference 
 \subsection{Charge Non-Linearity (QNL)}
 \label{sec:joint_fit:qnl}
 
-The CD energy response is subject to two kinds of non-linearity, the first one is the LS response non-linearity, where the LS photo-production is not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The second one is the LPMT response non-linearity where the charge read from the LPMT is not linear with respect to the number of collected Photo-Electrons (PE) (see section \ref{sec:juno:calib}).
+The CD energy response is subject to two kinds of non-linearity, the first one is the LS response non-linearity, where the LS photo-production is not linear with the deposited energy as illustrated in figure \ref{fig:juno:nl:gamma}. The LS response is composed of physical non-linearity. Particle interactions in the LS will produce mainly scintillation light, as discussed in section \ref{sec:juno:LS}, but will also produce some Cherenkov light (< 10\% of the collected light). Both mechanisms possess intrinsic non-linearity, for the Cherenkov emission it depends on the velocity of charged particle velocity while the scintillation photon-yield follows a so-called Birk's law with a "quenching" effect depending on the energy and type of particle \cite{particle_data_group_review_2020}. This result in a event-wise non-linearity.
 
-The LS non-linearity comes from physic sources. Particle interactions in the LS will produce mainly scintillation light, as discussed in section \ref{sec:juno:LS}, but will also produce some Cherenkov light (< 10\% of the collected light). Both mechanisms possess intrinsic non-linearity, for the Cherenkov emission it depends on the velocity of charged particle velocity while the scintillation photon-yield follows a so-called Birk's law with a "quenching" effect depending on the energy and type of particle \cite{particle_data_group_review_2020}. This results in am event-wise QNL.
 
-The LPMT response non-linearity can come from sheer saturation when subject to a high photon rate inducing a gain non-linearity or come from readout effects such as electronic noise, overshoot, the integration time window and even the waveform algorithm. All of these effects result in a channel-wise QNL.
+The second type of non-linearity comes from the LPMT charge measurements. When photons hit a PMT and give rise to PEs, a current pulse is formed. In the photon counting regime, simply exceeding a certain threshold allows to conclude that a single photon hit the PMT. When several photons hit the PMT simultaneously, one enters the photon integration regime : the pulse is sampled and integrated over a certain time window to produce a reconstructed charge Q. Calibration methods are applied to determine the relationship between the charge Q and the number of PEs (which is the quantity proportional to the energy deposit one wants to measure). Several effects impact this procedure: the signal pulse can fluctuate and be distorted between two events where the same number PEs occured; the PMT gain might not be linear as a function of the number of photons that hit the PMT; the charge reconstruction algorithm is not supposed to be perfect, and its results are further affected by electronic noise and inter-channel cross-talk. The impact of these effects grows with the number of PEs.
 
-Precedent studies \cite{han_dual_2021} suggest a model to emulate the non-linearity response that will be used in this work. We define the channel wise non-linearity that would be applied to each LPMT readout
+Precedent studies \cite{han_dual_2021} suggest a model for the channel-wise QNL:
 \begin{equation}
   \label{eq:joint_fit:gamma_yang}
   \frac{Q_{rec}}{Q_{true}} = \frac{-\gamma_{qnl}}{9} Q_{true} + \frac{\gamma_{qnl} + 9}{9}
 \end{equation}
 where $Q_{rec}$ is the reconstructed number of PE by the PMT, $Q_{true}$ is true number of PE that hit the PMT, and $\gamma_{qnl}$ is a factor representing the amplitude of the non-linearity.
 
-We also define an event-wise non-linearity characterized by
+Studies at previous experiments, like Daya Bay, concluded that the best reachable control of QNL in the 1-10 PEs range was $\gamma_{qnl}=0.01$ \cite{collaboration_high_2019}.
+As already mentionned in section \ref{sec:juno:LPMT}, JUNO LPMTs operate in a larger range : 1-100 PEs (See also table \ref{tab:joint_fit:charge_frac}). In such a case, a realistic value of $\gamma_{qnl}$ is not known.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{c|c|c|c|c|c|c|c}
+        &1PE &2$\sim$5PE& 5$\sim$10PE & 10$\sim$20PE & 20$\sim$50PE & 50$\sim$100PE & >100PE \\
+      \hline
+    LPMT &42.56\% & 40.54\% & 8.74\% & 5.12\% & 2.80\% & 0.24\% & 0.003\% \\
+    SPMT &95.19\% & 4.80\%  & 0.01\% & 0\%    & 0\%    & 0\%    & 0\% \\
+    \hline
+  \end{tabular}
+  \caption{The charge fraction in terms of the number of PE collected at the single PMT for the reactor $\bar{\nu}_e$ IBD events. Table taken from \cite{han_dual_2021}}
+  \label{tab:joint_fit:charge_frac}
+\end{table}
+
+The event-wise impact resulting from the channel-wise QNL can be parameterised this way :
 \begin{equation}
   \label{eq:joint_fit:alpha_yang}
-  \frac{E_{vis}}{E_{true}} = \frac{-\alpha_{qnl}}{9} E_{true} + \frac{\alpha_{qnl} + 9}{9}
+  \frac{E^{rec}_{vis}}{E^{true}_{vis}} = \frac{-\alpha_{qnl}}{9} E^{true}_{vis} + \frac{\alpha_{qnl} + 9}{9}
 \end{equation}
-where $E_{vis}$ is the visible energy that is collected by the detector and $E_{true}$ is the true deposited energy. An example of the effect of such event-wise QNL is presented in figure \ref{fig:joint_fit:spectrums_comp}.
+In JUNO, the visible energy is proportional to the number of emitted photons per unit energy deposit. It includes the physical non linearities.
+In the equation above $E_{vis}^{true}$ is this visible energy, while $E_{vis}^{rec}$ is what it becomes when the reconstructed charges found in an event are modified according to Eq. \ref{eq:joint_fit:gamma_yang}.
 
 \begin{figure}[ht]
   \centering
@@ -116,7 +155,17 @@ where $E_{vis}$ is the visible energy that is collected by the detector and $E_{
 \end{figure}
 
 
-Using 1M events from the JUNO official simulation J23.0.1-rc8.dc1 (released on 7th January 2024), we simulated events up to the photon collection in LPMTs and introduced an additional channel-wise QNL by using the equation \ref{eq:joint_fit:gamma_yang} to modify the number of collected photons.
+An example is shown on Fig. \ref{fig:juno:instr_nl}, where we show the $E^{rec}_{vis}/E_{true}^{vis}$ ratio for several samples of uniformly distributed electron events, generated with various values of $E_{vis}^{true}$.
+Here, an extreme value $\gamma_{qnl}=0.05$ was assumed. On can see on Fig. \ref{fig:juno:instr_nl} that it corresponds to a 2\% effect at 8 MeV, equivalent to $\alpha_{qnl} = 0.025$.
+
+This example is from  from references \cite{han_dual_2021}, which aimed at demonstrating the potential of the dual calorimetry calibration method mentioned in section
+\ref{sec:juno:instr_nl}. If it works as hoped, the residual event-wise QNL effect will be below 0.3\%. In this chapter, we propose methods todetect residuals higher than this.
+
+Fig. \ref{fig:joint_fit:gamma_v_alpha} show several other examples with varying $\gamma_{qnl}$ values, and
+the corresponding values of $\alpha_{qnl}$.
+Using 1M events from the JUNO official simulation J23.0.1-rc8.dc1 (released on 7th January 2024), we
+simulated events up to the photon collection in LPMTs and introduced an additional channel-wise
+QNL by using the equation 7.1 to modify the number of collected photons.
 
 \begin{figure}
   \centering
