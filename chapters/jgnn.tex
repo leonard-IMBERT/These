@@ -610,7 +610,7 @@ To explore further in this direction, we would ideally try 3072 pixels (the next
 
 
 %[comment ? JE te laisse l'écrire]
-To produce its input image, this algorithms split the Sphere into 3072 pixels. Each channel of this image is an aggregation of the $(Q, t)$ values found in all the PMTs. The charge are summed and the lowest time is kept. The performance of this algorithm can be seen on Figures \ref{fog:jgnn:results_hcnn_1} and \ref{fog:jgnn:results_hcnn_2}, compared to OMILREC. With 3072 pixels, the performance of HCNN does not match that of OMILREC, but is closer to it than our GNN. The granularity of the pixels, and the way to summarize the individual PMTs information when going from 17000 LPMTs to only 3072 pixels indeed seems to play a role.
+To produce its input image, this algorithms split the Sphere into 3072 pixels. Each channel of this image is an aggregation of the $(Q, t)$ values found in all the PMTs. The charge are summed and the lowest time is kept. The performance of this algorithm can be seen on Figures \ref{fig:jgnn:results_hcnn_1} and \ref{fig:jgnn:results_hcnn_2}, compared to OMILREC. With 3072 pixels, the performance of HCNN does not match that of OMILREC, but is closer to it than our GNN. The granularity of the pixels, and the way to summarize the individual PMTs information when going from 17000 LPMTs to only 3072 pixels indeed seems to play a role.
 
 This is consistent with the results obtained by the first GNN tried at JUNO on reactor neutrinos (already described in section \ref{sec:juno:ml}).
 It used 3072 pixels, and also obtained an uncompetitive R reconstruction.
