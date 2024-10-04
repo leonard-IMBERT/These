@@ -11,7 +11,7 @@
 
 As explained in previous chapters, JUNO is a precision experiment where the complete understanding of the effects at hand is crucial. As it will be illustrated in Chapter \ref{sec:joint_fit}, even small invisible biases or uncertainties could lead to the imposibility to run the measurements, or even worse, wrong our mass ordering measurements. While the liquid scintillator technology is well none and straightforward, this is the first time it is deployed to such scale, and for such precision. This novelty bring its fair share of elements, effects or assumption, that, if they were to be overlooked, could cause issue.
 
-We already shown a large variety of reconstruction algorithms, OMILREC for LPMT reconstruction in section \ref{sec:juno:reco}, numerous machine learning algorithms in section \ref{sec:juno:ml} and our own work in chapters \ref{sec:jcnn} and \ref{sec:jgnn}. Those algorithms were compared to each others based on their performance as in \cite{qian_vertex_2021} but we are the first that looked into the correlation between the reconstruction. The combinations of algorithms shown in Chapter \ref{sec:jcnn} and Chapter \ref{sec:jgnn} show that some information elude the algorithms. We used this fact to try to improve our performance but this could also lead the algorithm to being vulnerable to some effect that could affect the detector and wrong the measurements.
+We already shown a large variety of reconstruction algorithms, OMILREC for LPMT reconstruction in section \ref{sec:juno:reco}, numerous machine learning algorithms in section \ref{sec:juno:ml} and our own work in chapters \ref{sec:jcnn} and \ref{sec:jgnn}. Those algorithms were compared to each others based on their performance as in \cite{qian_vertex_2021} but we are the first that looked into the correlation between the reconstruction. The combinations of algorithms shown in Chapter \ref{sec:jcnn} show that some information elude the algorithms. We used this fact to try to improve our performance but this could also lead the algorithm to being vulnerable to some effect that could affect the detector and wrong the measurements.
 
 The search for such effect could be done by hand, but the process would be tedious. We propose in this thesis a machine learning method to probe for those effects.  In section \ref{sec:janne:method}, I describe the method behind the algorithm. In section \ref{sec:janne:arch} I detail the architecture of our algorithm and in section \ref{sec:janne:results} the results of it. Finally, in section \ref{sec:janne:conclusion}, I conclude and discuss about the prospect and possible improvements to bring to this work.
 
@@ -26,13 +26,13 @@ The search for such effect could be done by hand, but the process would be tedio
 
 As introduced above, JUNO needs a very good understanding of the biases and effects affecting its reconstruction as a small bias could wrong the mass ordering measurement. To calibrate those biases and effect, JUNO rely on multiples sources that can be located at various point in the detector. The calibration strategy was already discussed in section \ref{sec:juno:calib} and show calibrations sources of gammas, neutrons and positrons, with the catch that the positrons will annihilate inside the encapsulation and only the two 511 keV gammas will be seen.
 
-None of the calibrations sources considered are positron event. While electrons and positrons events should be pretty similar in their interaction with the electronic cloud of the LS atoms, electron events are missing the two annihilations $\gamma$ and the potential of forming a positronium \cite{schwarz_measurements_2018}. The topology of the event thus differ of the order of magnitude of our reconstruction performance: a few nanoseconds for the energy deposit and positronium annihilation against a time transit spread between 3 and 6 ns depending on the PMT type \cite{rodphai_20-inch_2021, liao_study_2017, li_characterization_2018} and the $\gamma$ will travel distances of the order of magnitude of the typical LPMT resolution of 8 cm (see section \ref{sec:juno:reco}).
+None of the calibrations sources considered are positron event. While electrons and positrons events should be pretty similar in their interaction with the electronic cloud of the LS atoms, electron events are missing the two annihilations $\gamma$ and the potential of forming a positronium \cite{schwarz_measurements_2018}. The topology of the event thus differ of the order of magnitude of our reconstruction performance. A few nanoseconds between the energy deposit and  the positronium annihilation against a time transit spread between 3 and 6 ns depending on the PMT type \cite{rodphai_20-inch_2021, liao_study_2017, li_characterization_2018}. The $\gamma$ from the positron annihilation will travel distances of the order of magnitude of the typical LPMT resolution of 8 cm (see section \ref{sec:juno:reco}).
 
 Another natural calibration source is the $^{12}B$ spectrum. The $^{12}B$ is a cosmogenically produced isotope through the passage of muons inside the LS. The $^{12}B$ decays via $\beta^-$ emissions with a Q value of 13.5 MeV with more than 98\% of the decay resulting in ground state $^{12}C$. The $^{12}B$ event will be cleanly identified by looking for delayed high energy $\beta$ events after an energetic muon. Due to its natural causes, the $^{12}B$ events will be uniformly distributed in the detector. The calibration strategy consist in fitting the energy spectrum of $^{12}B$ with the results of the simulation to adjust the simulation parameters. Both sources will be used to \textit{control} the response of the detector.
 
 Unlike lasers and radioactive, from which the localization and energy will be well known, the individual truth of $^{12}B$ will be unknown with only the localisation loosely constrained by the muon track. Only higher order observables such as the energy distribution will be accessible.
 
-All of those considerations could hide potential unknown or undetected effect that could lead to issue in the mass ordering analysis. But, while we have idea from where the issue could come, the production by hand of event perturbations that go unseen in the calibration would be tedious. That's why we propose to use a Neural Network to produce those perturbations if they exists. A schematic of the concept is presented in figure \ref{fig:janne:method:schema}.
+All of those considerations could hide potential unknown or undetected effect that could lead to issue in the mass ordering analysis. But, while we have idea from where the issue could come, the production by hand of event perturbations that go unseen in the calibration would be tedious. That's why we propose to use an Adversarial Neural Network (ANN) to produce those perturbations if they exists. A schematic of the concept is presented in figure \ref{fig:janne:method:schema}.
 
 \begin{figure}[ht]
   \centering
@@ -60,7 +60,7 @@ We can describe the goal of the ANN by the following loss function:
   \label{eq:janne:loss}
   \mathcal{L} = \mathcal{L}_{adv} + \mathcal{L}_{reg}
 \end{equation}
-where $\mathcal{L}_{adv}$ is the adversarial loss, which is minimum when the reconstruction is completely broken. We thus need to define what is a \textit{wrong} reconstruction. We choose to define it via the correlation between the reconstructed and deposited energy
+where $\mathcal{L}_{adv}$ is the adversarial loss, which is minimal when the reconstruction is ``broken''. We thus need to define what is a \textit{wrong} reconstruction. We choose to define it via the correlation between the reconstructed and deposited energy
 \begin{equation}
   \mathcal{L}_{adv} = |\mathrm{Corr}(E_{rec}, E_{dep})|
 \end{equation}
@@ -71,6 +71,11 @@ The term $\mathcal{L}_{reg}$ is the regularisation term, which is minimal when t
   \mathcal{L}_{reg} = \sum_\lambda (O^{rec}_\lambda - O^{th}_\lambda)^2
 \end{equation}
 where $\lambda$ index the different control observables that will be considered in this study. It's minimal when the control observables after perturbation $O^{rec}_\lambda$ are coherent with their expected values $O^{th}_\lambda$.
+In this exploratory work, we choose as the control observable the difference between the reconstructed position and energy and the ground truth from the Monte Carlo simulation complemented with a penalty term $P$
+\begin{equation}
+  \mathcal{L}_{reg} = \sum_{\lambda \in \{x, y, z, E\}} (\lambda_{rec} - \lambda_{true})^2 + P
+\end{equation}
+This penalty $P$ is here to prevent the ANN from producing event too different from the initial event. It will be further detailed in section \ref{sec:janne:arch:training}.
 
 We see that the final loss is the equilibrium between the adversarial and regularisation loss.
 
@@ -96,6 +101,8 @@ which, when using the chain rule, become
 
 The terms $\frac{\partial \mathcal{G}}{\partial \bm{\theta}}$ and $\frac{\partial \mathcal{L}}{\partial \mathcal{F}}$ are easily computable but $\frac{\partial \mathcal{F}}{\partial \mathcal{G}}$ depends on the nature of the reconstruction algorithm. While it comes naturally when using NN algorithms, it's not so trivial for other kind of algorithms like likelihood. Solutions exists to optimize networks that work in complex, non differentiable environments, such as \textit{Deep Reinforcement Learning} \cite{kiran_deep_2021, vinyals_grandmaster_2019} but as a first prototype we will restrict ourselves to neural networks for the reconstruction algorithm.
 
+The choice to use gradient descent, and therefore neural network, also allowed us to keep all technical software development wrapped in the same language and framework, PyTorch \cite{ansel_pytorch_2024}.
+
 The backward-propagation introduce a second issue. At the beginning of the subsection we introduce $X' = \mathcal{G}(X)$, the event after perturbation. It's an input of the reconstruction $\mathcal{F}$, thus, let's say that the event, in its form $X$, is a list of tuples $(id, Q, t)$ which are the hit on the PMT $id$. If $\mathcal{F}$ require the information to be formatted in a specific way (graph, images, ...) via an algorithm $\tau(X)$, it means that
 \begin{equation}
   \frac{\partial \mathcal{L}(\mathcal{F}(\tau(\mathcal{G}(X))))}{\partial \bm{\theta}} = \frac{\partial \mathcal{G}}{\partial \bm{\theta}} \cdot \frac{\partial \tau}{\partial \mathcal{G}} \cdot \frac{\partial \mathcal{F}}{\partial \tau} \cdot \frac{\partial \mathcal{L}}{\partial \mathcal{F}}
@@ -114,7 +121,11 @@ A more elegant solution would that $\mathcal{G}$ would also compute the transfor
 %  \item Un reseau "simpliste" a plus de chance de présenter des "défauts" que l'ANN pourrait exploiter
 %\end{itemize}
 
-As introduced just before, w need a NN algorithm for IBD reconstruction. We could have used the GNN exposed in Chapter \ref{sec:jgnn}
+As introduced just before, we need a NN algorithm for IBD reconstruction. We could have used the GNN presented in Chapter \ref{sec:jgnn} but we preferred a more simplistic approach to not be constrained by the memory consumption of the reconstruction neural network.
+
+This network takes as input a vector containing the results of the aggregation of charge and time on pixels. We consider JUNO composed of 3072 pixels defined by the Healpix \cite{gorski_healpix_2005} pixelisation. On each of those pixel, we sum the charges and keep the minimal time of hit, resulting in 3072 $(Q, t)$ tuples. To those tuples, we adjoin the position of the center of those pixels, resulting in 3072 $(Q, t, x, y, z)$ tuples. The data is finally represented as a $3072 \times 5 = 15360$ vector. In the case the charge in a pixel is 0, the time is set to 2048 ns, way after the closing of the trigger window.
+
+The simplistic neural network is simply and Fully Connected Neural Network (FCDNN) composed of the following layer: the input layer, providing the 15360 items vector, followed by fully connected linear layers
 
 \subsection{Adversarial Neural Network}
 \label{sec:janne:arch:ann}

@@ -128,66 +128,6 @@ In addition to all those physics signal, non-neutrinos signal that would mimic a
 All those events represent a non-negligeable part of the spectrum as shown in figure \ref{fig:juno:spectrum_with_background}.
 
 
-\subsection{Statistical analysis and sensitivities}
-\label{sec:juno:Fit}
-
-\begin{table}[ht]
-  \centering
-  \begin{small}
-  \begin{tabular}{l | c c c c c}
-    \hline
-    & Central Value & PDG 2020 & 100 days & 6 years & 20 years \\
-    \hline
-    $\Delta m^2_{31} (\times 10^{-3} \mathrm{eV}^2)$ & 2.5283  & $\pm 0.034 ~ (1.3\%)$  & $\pm 0.021 ~ (0.8\%)$  & $\pm 0.0047 (0.2\%)$  & $\pm 0.0029 (0.1\%)$ \\
-    $\Delta m^2_{21} (\times 10^{-3} \mathrm{eV}^2)$ & 7.53    & $\pm 0.18 ~ (2.4\%)$   & $\pm 0.074 ~ (1.0\%)$  & $\pm 0.024 (0.3\%)$   & $\pm 0.017  (0.2\%)$ \\
-    $\sin ^2 \theta_{12}$                            & 0.307   & $\pm 0.013 ~ (4.2\%)$  & $\pm 0.0058 ~ (1.9\%)$ & $\pm 0.0016 (0.5\%)$  & $\pm 0.0010 (0.3\%)$ \\
-    $\sin ^2 \theta_{13}$                            & 0.0218  & $\pm 0.0007 ~ (3.2\%)$ & $\pm 0.010 ~ (47.9\%)$ & $\pm 0.0026 (12.1\%)$ & $\pm 0.0016 (7.3\%)$ \\
-    \hline
-  \end{tabular}
-\end{small}
-  \caption{A summary of precision levels fir the oscillation parameters. The reference value (PDG 2020 \cite{particle_data_group_review_2020}) is compared with 100 days, 6 years and 20 years of JUNO data taking.}
-  \label{tab:juno:juno-param-precision}
-\end{table}
-
-
-The measurement of the reactor antineutrino oscillation at JUNO will be based on a spectrum reconstructed with the LPMT system. We describe briefly the fit procedure here.
-
-In Chapter \ref{sec:joint_fit}, we will perform fits to the spectrum reconstructed with the SPMT system, as well as joint fits of the two kind of spectra. What's decribed below remains valid.
-
-\subsubsection{Theoretical spectrum}
-
-To extract the oscillation parameters and the NMO from the measured spectrum, it is compared to a theoretical spectrum. This theoretical spectrum is produced based on the theory of the three flavour oscillation (see section \ref{sec:th:osc}), the measurements produced by the calibration, the input from TAO and adjusted Monte Carlo simulations:
-\begin{itemize}
-  \item The absolute flux and the fission product fraction yield calibrated by TAO.
-  \item The estimation of the neutrinos flux from other sources, such as the geoneutrinos, by theoretical model.
-  \item The computed cross-section of $\bar{\nu}_e$ and the LS.
-  \item The estimation of mislabelled event, such as fast neutron events from cosmic muons, using Monte Carlo simulation.
-  \item The measured bias and resolution of the LPMT and SPMT system by the calibration.
-  \item The time dependent reactor parameters (age of fuel, instantaneous power of the reactors, etc...)
-\end{itemize}
-
-These systematics parameters come with their uncertainties that need to be taken into account by the fitting framework. This theoretical spectrum will, in the end, depend of the oscillation parameters of interest $\theta_{13}, \theta_{12}, \Delta m^2_{21}, \Delta m^2_{31}$. Noise parameters can be included in the parameters spectrum such as the earth density $\rho$ between the power plants and JUNO.
-
-\subsubsection{Fitting procedure}
-
-The theoretical and measured spectra are represented as two histograms depending on the energy. The theoretical spectrum is adjusted with the data using a $\chi^2$ minimization where $\chi^2$ is naively defined as
-\begin{equation}
-  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2}
-\end{equation}
-where $N^i_{th}$ is the number event in the $i$th bin of the theoretical spectrum, $N^i_{data}$ is the number of event in the $i$th bin of the measured spectrum and $\sigma_i$ is the uncertainty of this bin. Two classic statistic test exist Pearson and Neyman where the difference is the estimation of $\sigma_i$ parameters.
-
-This $\sigma_i$ is composed of the systematics uncertainties discussed above but also from the statistic uncertainty of the spectrum. Considering a Poisson process, the statistic uncertainty is estimated as $\sigma_{stat}^i = \sqrt{N^i}$. In a Pearson test, $N^i \equiv N^i_{th}$ whereas in a Neyman test $N^i \equiv N^i_{data}$. Under the assumption that the content of each bin follow a Gaussian distribution (a Poisson with high enough statistic), the two test are equivalent. But studies on Monte Carlo spectrum showed that the Pearson and Neyman statistic are biased in opposite direction. It is easily visible where, for the same data, Pearson will prefer a higher $N^i_{th}$ to reduce the ration $\frac{1}{N^i_{th}}$ whereas Neyman will prefer a lower $N^i_{th}$ to reduce the $(N^i_{th} - N^i_{data})$ term.
-
-This problematic can be circumvented by summing the two test, yielding the CNP statistic test and/or by adding a term
-\begin{equation}
-  \chi^2 = \sum_i \frac{(N^i_{th} - N^i_{data})^2}{\sigma_i^2} \mathbf{- \ln |V|}
-\end{equation}
-where $V$ is the covariance matrix of the theoretical spectrum yielding the PearsonV and CNPV statistic test.
-
-
-The $\chi^2$ is minimized by exploring the parameter phase space via gradient descent.
-
-
 \section{Other physics}
 
 While the design of JUNO is tailored to measure $\bar{\nu}_e$ coming from nuclear reactor, JUNO will be able to detect neutrinos coming from other sources thus allowing for a wide range of physics studies as detailed in the table \ref{tab:juno:signal} and in the following sub-sections.
@@ -277,6 +217,7 @@ The CD has been dimensioned to meet the requirements presented in section \ref{s
 This section cover in details the different components of the detector and the detection systems.
 
 \subsection{Detection principle}
+\label{sec:juno:detct}
 
 The CD will detect the neutrino and measure their energy mainly via an Inverse Beta Decay (IBD) interaction with proton mainly from the $^{12}$C and H nucleus in the LS:
 \begin{equation*}
@@ -601,10 +542,233 @@ It is composed of multiple components integrated in the SNiPER \cite{lin_applica
   \item A waveform reconstruction where the digitized waveform are filtered to remove high-frequency white noise and then deconvoluted to yield time and charge informations of the photons hits on the PMTs. This step is commonly referenced as \textit{Calib}.
   \item The charge and time informations are used by reconstruction algorithms to reconstruct the interaction vertex and the deposited energy. This step is commonly reported as \textit{Reco}. See section \ref{sec:juno:reco} for more details on the reconstruction.
   \item Once the singular events are reconstructed, they go through event pairing and classification to select IBD events. This step is named Event Classification.
-  \item The purified signal is then analysed by the analysis framework which depend of the physics topic of interest.
+  \item The purified signal is then analysed by the analysis framework which depend of the physics topic of interest. An introduction to the reactor $\bar{nu}_e$ is presented in section \ref{sec:juno:Fit}.
 \end{itemize}
 
 The steps Reco and Event Classification are divided into two category of algorithm. Fast but less accurate algorithms that are running during the data taking designated as the \textit{Online} algorithms. Those algorithm are used to take the decision to save the event on tape or to throw it away. More accurate algorithms that run on batch of events designated \textit{Offline} algorithms. They are used for the physics analysis. The Offline Reco will be one of the main topic of interest for this thesis.
+
+
+\section{Reactor anti-neutrino oscillation analysis}
+\label{sec:juno:Fit}
+
+
+\subsection{IBD samples selection}
+
+The $\bar{\nu}_e$ coming from nuclear reactor will, for the most part, interact with proton, hydrogen nucleus, via Inverse Beta Decay (IBD).
+The first step of the oscillation analysis is to constitute a sample of IBD candidates, dominated by actual IBDs. The IBD interaction, schematised in figure \ref{fig:juno:IBD}, will produce two particle, with differentiable signals.
+
+The first signal comes from the positron slowdown and its annihilation with an electron of the LS. This is the \textit{prompt} signal, happening a few ns after the IBD. The positron takes most of the $\bar{\nu}_e$ kinetic energy, as detailed in section \ref{sec:juno:detct}.
+
+The leftover kinetic energy is taken by the neutron that, after thermalisation in the LS, will be captured by an hydrogen and produce a 2.2 MeV gamma, or by a carbon emitting a 4.9 MeV gamma. This is the \textit{delayed} signal, happening $\sim$236 $\mu$s after the IBD. This second mono-energetic event serve as a marker for the IBD.
+
+The IBD selection is thus based on the selection of a prompt event, with an energy between 0.8 and 12 MeV, and a delayed event with an energy in the ranges $[1.9, 2.5]$ MeV or $[4.4, 5.5]$ MeV. Those two signal needs to be in a 1 ms time window and within 1.5 m from each other. Additionally the two signal needs to be in a radius of 17.2m from the detector center (0.5 m from the edge) to protect from accidental background formed by two uncorrelated signals \cite{abusleme_potential_2024}. Those values will be further refined after once JUNO data-taking starts.
+
+In addition, specials veto are setup to protect from cosmic muons and their aftermath. The details of those veto and selection can be found in \cite{abusleme_potential_2024}.
+
+The expected rate and selection efficiency on IBD can be found in table \ref{tab:juno:ibd_selection}. After these selection, the residual background, including $\bar{\nu}_e$ coming from other sources than the reactor can be found in table \ref{tab:juno:res_bg}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{l|c|c}
+    \hline
+    Selection Criterion & Efficiency [\%] & IBD Rate [day$^{-1}$] \\
+    \hline
+    All IBDs            & 100.0           & 57.4 \\
+    Fiducial Volume     & 91.5            & 52.5 \\
+    IBD Selection       & 98.1            & 51.5 \\
+    ~~Energy Range      & 99.8            & - \\
+    ~~Time Correlation $(\Delta T_{p - d})$    & 99.0    & - \\
+    ~~Spatial Correlation $(\Delta R_{p - d})$ & 99.2    & - \\
+    Muon Veto (Temporal + Spatial)        & 91.6    & 47.1 \\
+    \hline
+    Combined Selection & 82.2             &47.1 \\
+    \hline
+  \end{tabular}
+  \caption{Summary of cumulative reactor antineutrino selection efficiencies. The reported IBD rates (with baselines <300 km) refer to the expected events per day after the selection criteria are progressively applied. Table taken from \cite{abusleme_potential_2024}}
+  \label{tab:juno:ibd_selection}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{l|c|c}
+    \hline
+    Backgrounds           & Rate [day$^{-1}$] & B/S [\%] \\
+    \hline
+    Geoneutrinos          & 1.2               & 2.5 \\
+    World reactors        & 1.0               & 2.1 \\
+    Accidentals           & 0.8               & 1.7 \\
+    $^9$Li/$^8$He         & 0.8               & 1.7 \\
+    Atmospheric neutrinos & 0.16              & 0.34 \\
+    Fast neutrons         & 0.1               & 0.21 \\
+    $^{13}$C($\alpha$,n)$^{16}$O & 0.05       & 0.01 \\
+    \hline
+    Total backgrounds     & 4.11              & 8.7 \\
+    \hline
+  \end{tabular}
+  \caption{Expected background rates, background to signal ratio (B/S), and rate and shape uncertainties. The B/S ratio is calculated by using the IBD signal rate of 47.1/day. Table taken from \cite{abusleme_potential_2024}}
+  \label{tab:juno:res_bg}
+\end{table}
+
+Once a sample is obtained, the oscillation analysis will consist essentially on the fit of a spectrum model to the spectrum observed in the selected sample. More specifically, the spectrum under analysis is the spectrum of the reconstructed visible energy of the positron : $E^{vis}$.
+The reconstruction is presented in detail in section \ref{sec:juno:reco}. For 6 years of data taking, it will resemble that on figure \ref{fig:juno:spectrum_with_background}. In the next sections, I describe the fit procedures developed in JUNO. This will be the occasion to introduce notions useful for Chapter \ref{sec:joint_fit}. Besides, I'll also describe the versions of the fit used in this Chapter \ref{sec:joint_fit}.
+
+%- Ce qu'est le signal (une IBD)
+%
+%- Les grandes lignes de la selection (peut-être simplement dire que
+%l'on s'appuie sur la coincidence en e+ et neutron)
+%
+%- Ce que sont les bruits de fond. J'imagine que tu n'as plus le temps
+%de les décrire réellement. À inclure dans la "liste retard".
+%
+%- Une table donnant les yields de chacun pour une période donnée,
+%à inclure en faisant écho à la figure 2.3
+
+\subsection{Synthetic overview of fit procedures developed at JUNO}
+
+Several fit procedures are being developed by JUNO collaborators (half a dozen of groups work in parallel within the collaboration). We do not have the ambition of a thorough description here. Instead, we try to introduce the main elements useful to the reader to understand JUNO's future results, and the fit procedures used Chapter \ref{sec:joint_fit}.
+
+In most cases, the fit is a binned fit to the histogrammed spectrum of $E_{vis}^{e^+}$, like the one in figure \ref{fig:juno:spectrum_with_background}. It is is based on the minimization of a $\chi^2$ test statistics. Generically, it can be written this way :
+\begin{equation}
+  \label{eq:juno:chi2}
+  \chi^2= \left(\bm{T}(\bm{\theta},\bm{\eta}) - \bm{D}  \right)^T V^{-1} \left(\bm{T}(\bm{\theta},\bm{\eta}) - \bm{D} \right) + \chi^2_{nuis}(\bm{\eta})
+\end{equation}
+where the components of data vector $\bm{D}$ are the number of events found in individual bins of the fitted histogram, $\bm{T}(\bm{\theta},\bm{\eta})$ is the vector of the predicted number of entries in each bins. This prediction is the integration over the width of the bins of the spectrum model for a given NMO (described latter in this section).
+
+This model depends on the oscillation parameters $\bm{\theta} = \left(\Delta m^2_{21}, \sin^2(2\theta_{12}), \Delta m^2_{31}, \sin^2(2\theta_{13} )\right)$, and on nuisance parameters $\bm{\eta}$ involved in the fit model and associated with systematic uncertainties.
+Uncertainties are treated in two ways : statistical and some of the systematic uncertainties are accounted for via the covariance matrix $V = V_{stat}+V_{syst}$; remaining systematic uncertainties are treated via the penalty term $\chi^2_{nuis}$, which is written this way :
+\begin{equation}
+  \label{eq:juno:nuis}
+  \chi^2_{nuis}\left(\bm{\eta}\right)= \left(\bm{\eta}-\bm{\bar{\eta}}\right)^T \cdot V^{-1}_{\bm{\eta}}(\bm{\eta})  \cdot \left(\bm{\eta}-\bm{\bar{\eta}}\right)
+\end{equation}
+where $\bm{\bar{\eta}}$ is the vector containing the most probable values of the nuisance parameters according to our knowledge prior to the fit, and where $V_{\bm{\eta}}$ is the covariance matrix accounting of the uncertainty on these values, and the potential correlations between them.
+In principles, a likelihood could be used instead of a $\chi^2$. However, some of the systematic uncertainties are not trivial to parameterize, therefore treating them as nuisance parameters in not trivial.
+
+An example of nuisance parameters are the $A$, $B$ and $C$ parameters of equation \ref{eq:joint_fit:abc}, which can be used to describe the resolution on the reconstructed energy. The fit model leading to $\bm{T}\left(\bm{\theta},\bm{\eta}\right)$ indeed incorporates this resolution.
+
+\subsubsection{Treatment of uncertainties}
+
+Differences between various fit procedures developed within JUNO often lies in the choice of the systematic uncertainties that are treated via $V$ or $\chi^2_{nuis}(\bm{\eta})$. Among the reasons behind these differences is the necessity to compare several approaches to ensure the robustness JUNO's oscillation analysis results. This approach was already adopted in the recent evaluations of JUNO's potential \cite{abusleme_potential_2024, juno_collaboration_sub-percent_2022}. Studies carried out so far at Subatech assumes a treatment entirely via $V$.
+
+Other differences lies in the choice of the way to evaluate $V_{stat}$. Two common approaches used in $\chi^2$ fit are the Neyman and the Pearson approaches. If the size of the fitted sample is high enough, the variation of $D_i$, the number of entries in bin $i$, around its true expectation value $\bar{D}_i$ is $\sqrt{\bar{D_i}}$. To evaluate this number, the Neyman approach uses simply the number of entries observed in the sample under analysis : $\sqrt{D_i}$. The Pearson approach uses the prediction by the fit model : $\sqrt{T(\bm{\theta},\bm{\eta})_i}$.
+
+Both cases are approximations which lead to biases that are not tolerable given the precision JUNO must aim at for a successful oscillation analysis. To reduce this bias, most of JUNO groups employ the "Combined Neyman Pearson" approach introduced in \cite{ji_combined_2019}. Schematically, it consists on combining both approaches :
+$\left(V_{stat}\right)_{ii} = 3/\left(\frac{1}{T(\bm{\theta},\bm{\eta})_i}+\frac{2}{D_i}\right)$.
+Weights in this relation are chosen in order to cancel typical biases. The validity of this method is not guaranteed universally. In particular, limitations appear when a complex systematic matrix $V_{syst}$ is added to $V_{stat}$.
+
+This is the case in the approach followed at Subatech, were all sources of systematic uncertainties are treated via this matrix. Dedicated studies run at Subatech observed biases in the fitted oscillation parameters using CNP in this case. Subatech's group therefore adopted another approach (verified to be unbiased).
+
+Originally, fitting the $E^{e^+}_{vis}$ spectrum should mean maximising a likelihood, equal to the product over all bins of the probabilities to find $D_i$ in bin $i$. With a large enough samples, this product tends to a multidimensional gaussian (one dimension per bin) :
+\begin{equation}
+  \mathcal{L} = 2\pi^{-\frac{N}{2}} |V|^{-\frac{1}{2}}  e^{-\frac{1}{2}\left(\bm{D}-\bm{T}(\bm{\theta},\bm{\eta})\right)^T V^{-1} \left( \bm{D}-\bm{T}(\bm{\theta},\vec{\eta}) \right)}
+\end{equation}
+Replacing $\mathcal{L}$ by $-2 \ln \mathcal{L}$ one obtains :
+\begin{equation}
+\chi^2_{PV} = \left(\bm{T}(\bm{\theta},\bm{\eta}) - \bm{D} \right)^T V^{-1} \left(\bm{T}(\bm{\theta},\bm{\eta}) - \bm{D}  \right) + \ln(|V|)
+\end{equation}
+where $V$ is the total covariance matrix with its statistical component evaluated according to the Pearson approach. The $\ln|V|$ term, often neglected in $\chi^2$ fits, ensures that biases, essentially related to the normalisation of the fitted distribution, are avoided. This "PearsonV" $\chi^2$ is the one that we minimize in the fits used in Chapter \ref{sec:joint_fit}.
+
+Another difference between the various procedures developed at JUNO is the choice of the spectrum range and binning. So far, at Subatech, we use an histogram defined between 0.8 and 9 MeV, and a regular binning involving 20 keV wide bins.
+
+\subsubsection{Joint fit of JUNO and TAO spectra}
+
+Another difference between the various fit procedures developed in the collaboration is the inclusion of the data collected by TAO (see section \ref{sec:juno:tao}). The spectrum prediction $\bm{T}(\bm{\theta},\bm{\eta})$ involves predictions on the differential flux of $\bar{\nu}_e$ as a function of $E_{\bar{\nu}_e}$ produced in reactors. This is one of the main systematic uncertainties affecting the oscillation analysis. This can be constrained using the data of TAO. An efficient way to use them is via a simultaneous fit, which will constrain the part of the $\bm{\eta}$ parameters related to the reactor predictions. In this case, equation \ref{eq:juno:chi2} becomes :
+\begin{equation}
+  \chi^2 = \sum_{d}\left(\bm{T}^d(\bm{\theta}^d,\bm{\eta}) - \bm{D}^d  \right)^T V^{-1} \left(\bm{T}^d(\bm{\theta}^d,\bm{\eta}) - \bm{D}^d  \right) +  \chi^2_{nuis}(\bm{\eta})
+\end{equation}
+where the $d$ superscript stands for the spectrum measured in JUNO or TAO.
+
+Finally, it must be noted that JUNO's sensitivity to $\sin^2(2\theta_{13})$ is too weak for a competitive measurement. In most versions of the oscillation analyses carried out within JUNO, it will be considered as a nuisance parameter. In practice, the various $\chi^2$'s presented earlier will receive an additional term :
+\begin{equation}
+  \chi^2_{\sin^2(2\theta_{13})} = \frac{(\sin^2(2\theta_{13})-\overline{\sin^2(2\theta_{13})})^2}{\sigma^2_{\overline{\sin^2(2\theta_{13})}}}
+\end{equation}
+where $\overline{\sin^2(2\theta_{13})}$ and the denominators can be provided, for instance, by the world average on this parameter.
+
+\subsection{The spectrum model and sources of systematic uncertainties}
+
+The $E^{e^+}_{vis}$ spectrum observed in data (Fig \ref{fig:juno:spectrum_with_background}) is the sum of the IBD spectrum and of the various backgrounds spectra (see table \ref{tab:juno:res_bg}).
+The spectrum prediction $\bm{T}\left(\bm{\theta},\bm{\eta}\right)$ is therefore the sum of IBD and backgrounds predictions. The latter are provided by MC simulations. The former results from the theoretical description of the series of phenomena that lead to the observed IBD spectrum. In a given bin $i$, it can be expressed this way :
+\begin{equation}
+  \label{eq:juno:bin_content}
+  T^i(\bm{\theta},\bm{\eta}) =\sum_{j} C_{ij}^{E_{rec}} \int_{E^{vis}_{j}}^{E^{vis}_{j+1}} \dd E^{vis} \int_{-1}^{1} \mathrm{dcos}\theta ~ \Phi(E^{\nu}) \frac{\dd\sigma}{\mathrm{dcos}\theta}(E^{\nu}, \cos\theta) \frac{\dd E^{\nu}}{\dd E^{dep}} \frac{\dd E^{dep}}{\dd E^{vis}}
+\end{equation}
+In the above equation, 4 kinds of energies appears: following the IBD, the antineutrino energy $E^{\nu}$ is quasi entirely transferred to the positron, of energy $E_{e}$. It eventually annihilates, so the actual energy released in the LS is $E_{dep}$, which includes the mass of the annihilated electron. The production optical photons is not linear in $E_{dep}$ (see section \ref{sec:juno:calib}), so that the visible energy (that will be reconstructed) is $E_{vis}$. This reconstruction comes with resolution effects, leading to $E_{rec}$.
+
+Equation \ref{eq:juno:bin_content} describe the passage from the original differential flux (as a function of $E^{\nu}$ ) of antineutrinos reaching the detector to the reconstructed spectrum:
+\begin{itemize}
+  \item $\Phi(E^{\nu})$ is the differential antineutrino flux reaching JUNO.
+  \item $\frac{\dd\sigma}{\mathrm{dcos}\theta}(E^{\nu}, \cos\theta)$ account for the IBD cross section, which depends on the antineutrino energy and on the incidence angle.
+  \item The last two terms of the integrand are the differential relations linking $E^{\nu}$, $E^{dep}$ and $E^{vis}$.
+  \item Reconstruction effects are described via $C^{rec}_{ij}$'s, that make the link between the true and reconstructed visible energy. It a simple case, it is equivalent to a convolution product. The matrix formalism here prepares the fact that a realistic analysis might employ a more empirical way, based on MC.
+\end{itemize}
+\hfill
+
+The differential flux is expressed this way:
+\begin{equation}
+\Phi(E^{\nu}) = \sum_{r} \left( \frac{{\cal P}_{\bar{\nu}_e\rightarrow \bar{\nu}_e}(E^{\nu},L_r)}{4\pi L^2_r} \frac{W_r}{\sum_{i} f_{i,r} e_i} \sum_{i} f_{i,r} s_i(E^{\nu}) \right)
+\end{equation}
+where:
+\begin{itemize}
+  \item ${\cal P}_{\bar{\nu}_e\rightarrow \bar{\nu}_e}(E^{\nu},L_r)$ is the antineutrino survival probability at distance $L_r$ from the production point in reactor $r$, dictated by the oscillation probability.
+  \item $e_i$ stands for the mean energy released per fission for isotope $i$.
+  \item $W_r$ is the thermal power of reactor $r$.
+  \item $f_{i,r}$ is the fission fraction in reactor $r$ of isotope $i$ among the four.
+  \item $s_i(E^{\nu})$ is the $\bar{\nu}_e$ energy spectrum - at emission point -  per fission for each isotope, as emitted by the reactor.
+\end{itemize}
+\hfill
+
+\subsubsection{Sources of systematic uncertainties}
+
+The numerous quantities appearing in the spectrum model embody a good part of the systematic uncertainties. Among the leading contributions are those related to the knowledge of the reactor related quantities. Of importance are also the uncertainties related to the modelling of the non linearity of the photon emission (passage from $E^{dep}$ to $E^{vis}$) and of the reconstruction resolution. The shape and rate of the backgrounds are also a leading source of systematic uncertainties. The uncertainty on IBD selection efficiency also has a notable role.
+
+\subsubsection{Sensitivities to NMO and oscillation parameters}
+
+JUNO will start taking data in 2025. During the months and years to come, oscillation analyses will naturally be optimized regularly. What we described here represent the state of the art mid 2024, and was used for the sensitivity studies published in \cite{abusleme_potential_2024, juno_collaboration_sub-percent_2022} and are presented in table \ref{tab:juno:juno-param-precision}
+
+\begin{table}[ht]
+  \centering
+  \begin{small}
+  \begin{tabular}{l | c c c c c}
+    \hline
+    & Central Value & PDG 2020 & 100 days & 6 years & 20 years \\
+    \hline
+    $\Delta m^2_{31} (\times 10^{-3} \mathrm{eV}^2)$ & 2.5283  & $\pm 0.034 ~ (1.3\%)$  & $\pm 0.021 ~ (0.8\%)$  & $\pm 0.0047 (0.2\%)$  & $\pm 0.0029 (0.1\%)$ \\
+    $\Delta m^2_{21} (\times 10^{-3} \mathrm{eV}^2)$ & 7.53    & $\pm 0.18 ~ (2.4\%)$   & $\pm 0.074 ~ (1.0\%)$  & $\pm 0.024 (0.3\%)$   & $\pm 0.017  (0.2\%)$ \\
+    $\sin ^2 \theta_{12}$                            & 0.307   & $\pm 0.013 ~ (4.2\%)$  & $\pm 0.0058 ~ (1.9\%)$ & $\pm 0.0016 (0.5\%)$  & $\pm 0.0010 (0.3\%)$ \\
+    $\sin ^2 \theta_{13}$                            & 0.0218  & $\pm 0.0007 ~ (3.2\%)$ & $\pm 0.010 ~ (47.9\%)$ & $\pm 0.0026 (12.1\%)$ & $\pm 0.0016 (7.3\%)$ \\
+    \hline
+  \end{tabular}
+\end{small}
+  \caption{A summary of precision levels for the oscillation parameters. The reference value (PDG 2020 \cite{particle_data_group_review_2020}) is compared with 100 days, 6 years and 20 years of JUNO data taking.}
+  \label{tab:juno:juno-param-precision}
+\end{table}
+
+\subsubsection{Asimov studies}
+
+To study the behavior and performance of fit procedures with enough realism, one should perform fits to a large number of toy spectra, generated with a number events equal to what one expects in real data, for the given exposure under consideration. This allows to study the impact of realistic statistical fluctuations. This is, however, time consuming, since thousands of spectra have to be generated and fitted.
+
+When subtle details are not crucial, another approach is possible to estimate sensitivities to the NMO and oscillation parameters, as well as (for instance) to verify the technical implementation of fitter (as we will do in Chapter \ref{sec:joint_fit} for the implementation of the joint fit). It consists on generating only 1 pseudo-data sample, where the content of each bin $D^i$ is set to the predicted value $T^i$, computed with a reasonable choice for the values of the model parameters (for instance, with the recent PDG values for the oscillation parameters). This is equivalent to a spectrum with fluctuations. It provides valid sensitivities if the expected statistics in the real data sample is high enough in each bin to assume a gaussian behavior.
+
+\subsection{Versions of the fit used in this thesis}
+
+In Chapter \ref{sec:joint_fit}, we'll study the potential of a particular application of Dual Calorimetry, call "Dual Calorimetry with neutrino oscillation." This approach require to perform fits to the $E^{vis}$ spectrum reconstructed with the LPMT system, with the SPMT system, and a joint fit to both spectra.
+
+In the two former cases, the PearsonV $\chi^2$ introduced above will be used. In the latter case, it will be extended in the following way : The $\bm{D}$ data vector now possess 820 elements. Indeed, the fit is performed to a joint spectrum, where the LPMT spectrum is juxtaposed with the SPMT spectrum (see figure \ref{fig:juno:joint_fit_spec}).
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=5cm]{images/juno/joint_fit.png}
+  \caption{Illustration of the spectrum considered when joint fitting}
+  \label{fig:juno:joint_fit_spec}
+\end{figure}
+
+The prediction vector $\bm{T}\left(\bm{\theta}^d,\bm{\eta}\right)$ is naturally extended in the same way. Its components 1 to 410 predict the number of entries in the LPMT part of the LPMT+SPMT joint spectrum, while its components from 411 to 820 predict the contents of the SPMT part. Note that the list of oscillation parameters in $T_{411}(\bm{\theta}^d,\bm{\eta})$ to $T_{820}(\bm{\theta}^d,\bm{\eta})$ is the same as usual. However, $T_1(\bm{\theta}^d,\bm{\eta})$ to $T_{410}(\bm{\theta}^d,\bm{\eta})$ 2 additional parameters, $\delta(\sin^2(2\theta_{12}))$ and $\delta(\Delta m^2_{21})$, are added to the corresponding oscillation parameters to account for a potential unexpected problem in the LPMT reconstruction or calibration.
+
+In the case of this joint fit, the covariance matrix $V$ is extended to a $(820 \times 820)$ matrix. It is a central element of this study, as will be explained in Chapter \ref{sec:joint_fit}, since the LPMT and SPMT data spectrum are correlated, even at the statistical level. The determination of this matrix will be an important and original point.
+
+Fits will be performed to an histogram spectrum defined over the 0.8-9 MeV range, with a flat binning (20 keV wide bins), often restricted to the 335 lowest $E^{vis}$ bins.
+
+In this section \ref{sec:juno:Fit}, we have provided a theoretical description of the fit procedures developed at JUNO. Software frameworks are necessary to use them in practice. The framework developed at Subatech will be described in Chapter \ref{sec:joint_fit}.
+
 
 \section{State of the art of the Offline IBD reconstruction in JUNO}
 \label{sec:juno:reco}
