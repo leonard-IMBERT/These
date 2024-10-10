@@ -1,2 +1,55 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
+
+The Standard Model of particle physics (SM) has been remarkably successful at accounting for, or predicting experimental observations in the laboratory.
+However, it is the subject of several limitations. For instance, it provides a mechanism to explain the existence of mass but can't predict the peculiar pattern followed by fermion masses.
+The same applies to CP violation. The SM predicts its existence but not the amplitude necessary to explain the baryonic asymmetry of the Universe. For such reasons, one can assume the SM is the manifestation of a more fundamental physics, Beyond the Standard Model (BSM).
+
+Neutrino physics is a window on BSM. Indeed, the mass of known neutrinos is at least 5 order of magnitudes below that of the lightest fermion, which further deepens
+the issue of fermion mass generation.
+Some solutions have implication on the nature of neutrinos -- dirac or majorana fermions ?  --  which one of the big unknowns in this domain. Additional neutrinos beyond the three presently known shall also be considered. The way neutrinos mix flavor to make neutrino oscillation possible is also unexplained.
+This is one of the tasks of BSM models to answer such questions. Before that, a good part of the World experimental program in the 10 coming years is to complete the exploration of 3-neutrino physics by answering mainly two questions :
+does CP violation exist the lepton system ? What is the Neutrino Mass ordering (NMO) ?
+An introduction to neutrino physics will be given in Chapter \ref{sec:neutrino}.
+
+\hfill
+
+The latter question is the main goal of the JUNO experiment, presently built in China and which will start taking data in 2025.
+This experiment is described in Chapter \ref{sec:juno}.
+To determine the NMO, JUNO relies on very subtle structures in the energy spectrum of reactor antineutrinos. This makes JUNO a precision physics experiment which will have, to reach the desired significance, to reconstruct this spectrum with an unprecedented precision and, also, to understand its energy scale very precisely.
+
+\hfill
+
+The place of Machine Learning (ML) in subatomic physics is greater every day.
+In the last decade, challenging event classification, reconstruction and event generation in very complex environments, like the High luminosity LHC Upgraded experiments, have been addressed by ML, sometimes Deep Learning (DL) approaches.
+Performant online reconstruction, critical for the trigger systems of such experiments, is another example.
+Such methods have also been used by neutrino experiments. Given the necessary high reconstruction performances mentioned earlier, there is interest at JUNO in developing ML algorithms.
+However, for important physics results obtained using ML methods to be credible within the community, the reliability of these methods must be proven. This applies even more to precision physics, thus the reliability has become recently an important subject in the community.
+An introduction to ML, and in particular Neural Network (NN) is given in Chapter \ref{sec:ml}.
+
+\hfill
+
+This thesis was performed in the framework of the Neutrino group at Subatech, since October 2021. The exploratory works reported in this manuscript addresses the subjects mentioned above, in the particular context of the measurement by JUNO of the reactor antineutrino
+oscillation to determine the NMO.
+Before the start of this thesis, several ML energy reconstruction algorithms -- Boosted Decision Trees (BDT), Fully Connected Neural Networks (FCNN), Convolutional Neural Networks (CNNs) and Graph Neural Networks (GNNs) --  had already been developed within
+the collaboration. Their performance seems to match that of the classical algorithm but not to do convincingly better. We have explored a possibility
+to do better by developing a GNN with an innovative architecture tailored to the JUNO experiment. Before that, we developed a CNN for the reconstruction of the anti-neutrino
+energy using only JUNO's small PMTs system.
+This CNN is useful in particular in Chapter \ref{sec:joint_fit} as there is official SPMT only reconstruction in the collaboration yet. These algorithms are described in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}.
+
+We have been the first in JUNO to address the issue of ML reliability.
+% We have followed two paths for that.
+% First, a simple approach is to compare event per event the results obtained by various algorithms, to find discrepancies, and more generally differences or common points in the way detector's information is used.
+% This requires to implement in JUNO's official software algorithms traditionally developed standalone, as well as the necessary software tools. This was our contribution there.
+We explore in this thesis the feasibility of an Adversarial Neural Network (ANN) to generate (and therefore identify) scenarios of discrepancies
+between raw data in the real detector and in the detector's simulation.
+The focus here is on discrepancies that could alter JUNO's results on NMO, but are too subtle to be detected via usual data/MC comparisons in control samples.
+This is presented in Chapter 6.
+
+
+\hfill
+
+We have already mentioned earlier it is crucial for JUNO to understand its energy scale with a good precision. This is the raison d'être of the existence of 2 calorimetric readout systems : the large (LPMT) and small (SPMT) photomultipliers systems.
+It allows Dual Calorimetry techniques to constrain our understanding of the reconstruction. The last subject of this thesis explores for the first time one of them : the Dual Calorimetry with neutrino oscillation, which exploits potential discrepancies between the oscillation analyses carried out with either systems.
+Our work on this is described in Chapter \ref{sec:joint_fit}.
+It was also the occasion of technical developments on the analysis framework used at Subatech. These improvements will be very useful for future analyses of the group, beyond Dual calorimetry.

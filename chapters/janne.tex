@@ -130,6 +130,8 @@ As introduced just before, we need a NN algorithm for IBD reconstruction. We cou
 
 This network takes as input a vector containing the results of the aggregation of charge and time on pixels. We consider JUNO composed of 3072 pixels defined by the Healpix \cite{gorski_healpix_2005} pixelisation. On each of those pixel, we sum the charges and keep the minimal time of hit, resulting in 3072 $(Q, t)$ tuples. To those tuples, we adjoin the position of the center of those pixels, resulting in 3072 $(Q, t, x, y, z)$ tuples. The data is finally represented as a $3072 \times 5 = 15360$ vector. In the case the charge in a pixel is 0, the time is set to 2048 ns, way after the closing of the trigger window.
 
+The charge is expressed in $N_{pe}$ and the time of hit in ns. The time is negative, meaning that 0 ns the first hit time and -2048 ns is the latest hit time.
+
 The simplistic neural network is simply and Fully Connected Neural Network (FCDNN) composed of the following layer: the input layer, providing the 15360 items vector, followed by fully connected linear layers with respectively $[8192, 4096, 2048, 1024, 512, 256, 128, 64, 32]$ neurons. These layers possess a LeakyReLU activation function defined as
 \begin{equation}
   \mathrm{LeakyReLU} = \begin{cases}
@@ -141,9 +143,9 @@ The last layer is a linear layer of 4 neurons, for $(x, y, z, E)$ without an act
 
 The loss used is the Mean Square Error (MSE)
 \begin{equation}
-  \text{MSE}(\bm{\lambda}, \bm{\lambda}^{true}) = \sum_i (\lambda_i - \lambda_i^{true})^2
+  \text{MSE}(\bm{\eta}, \bm{\eta}^{true}) = \sum_i (\eta_i - \eta_i^{true})^2
 \end{equation}
-where $\lambda$ takes the values of $(x, y, z, E)$.
+where $\eta$ takes the values of $(x, y, z, E)$.
 
 The optimizer used for its training is the Stochastic Gradient Descent with momentum
 \begin{equation}
@@ -170,7 +172,7 @@ Each epochs goes trough the entire training datasets, with a batch size of 64. T
 %  \item Decrire l'architecture de l'ANN
 %\end{itemize}
 
-The ANN aims to introduce perturbations in the event data in such a way that these perturbations are not detectable in the control dataset, while still degrading the energy reconstruction of the IBD dataset. For this, and for the reasons detailed in Section \ref{sec:janne:back_prop}, the ANN operates on the inputs of the reconstruction network presented above, the FFNN. During the trainng, the parameters of the FFNN are \textit{frozen}, meaning they will not be updated during the ANN training. If they were free to be optimized, they would adapt to the perturbation of the ANN, that would gao against the objective of this work.
+The ANN aims to introduce perturbations in the event data in such a way that these perturbations are not detectable in the control dataset, while still degrading the energy reconstruction of the IBD dataset. For this, and for the reasons detailed in Section \ref{sec:janne:back_prop}, the ANN operates on the inputs of the reconstruction network presented above, the FFNN. During the training, the parameters of the FFNN are \textit{frozen}, meaning they will not be updated during the ANN training. If they were free to be optimized, they would adapt to the perturbation of the ANN, that would gao against the objective of this work.
 
 The FFNN takes as input a vector of $5 \times 3200$ values, representing the $(x, y, z, Q, t)$ of 3072 Healpix pixels. Those values comes from the aggregation of the PMTs belonging to those pixels.
 
@@ -259,14 +261,52 @@ Each epochs goes through the entirety of the training dataset.
 
 When the ANN is created, before any training has been done, its parameters are initialized with random value. Multiple initialization methods exist. In this work, we go with a common He initialization \cite{he_delving_2015}, which is the default initialization in the PyTorch \cite{ansel_pytorch_2024} library. If we were to ask for an event from the ANN without training first, the results would be random noise. We thus first have it to learn to produce physically sound events.
 
-For this we go for a training of 200 epochs where the loss consist only of the penalty loss.
+For this we go for a training of 200 epochs where the loss consist only of the penalty loss. For scaling purpose , the penalty $P$ is scaled by 0.25.
 \begin{equation}
-  {\cal L}_1 = P(\epsilon = 0.01)
+  {\cal L}_1 = 0.25 \cdot P(\epsilon = 0.01)
 \end{equation}
 During this phase, the only objective of the network is to yield events that are the same as the original event.
 
-\subsection{Breaking of the reconstruction}
+The evolution of this loss ${\cal L}_1$ during the training for the training dataset and the validation dataset is presented in Figure \ref{fig:jann:train:phase_1}.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/janne/training/phase_1_penal.png}
+  \caption{Evolution of the loss ${\cal L}_1 = 0.25 \cdot P(0.01)$ during the first phase of the training}
+  \label{fig:jann:train:phase_1}
+\end{figure}
+We see that the ANN converge to some stability in the loss.
+
+The time and charge channels of two events after this training phase are presented in Figures \ref{fig:janne:hr_he_200} and \ref{fig:janne:lr_le_200}. We remind that the ANN only act on  the charge channel of the event.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=7cm]{images/janne/events/hr_he_200.png}
+  \caption{Time channel (on the left) and charge channel (on the right) of a \textbf{radial, high energy event} ($R$ = 17.2 m, $E_{dep}$ = 7.1 MeV), \textbf{Top:} before the ANN perturbation, \textbf{Bottom:} after the ANN perturbation. The ANN have been trained for 200 epochs, just after Phase 1. Time channel in ns and charge channel in $N_{pe}$.}
+  \label{fig:janne:hr_he_200}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=7cm]{images/janne/events/lr_le_200.png}
+  \caption{Time channel (on the left) and charge channel (on the right) of a \textbf{central, low energy event} ($R$ = 9.1 m, $E_{dep}$ = 1.9 MeV), \textbf{Top:} before the ANN perturbation, \textbf{Bottom:} after the ANN perturbation. The ANN have been trained for 200 epochs, just after Phase 1. Time channel in ns and charge channel in $N_{pe}$.}
+  \label{fig:janne:lr_le_200}
+\end{figure}
+
+We observe that for a localized event, Figure \ref{fig:janne:hr_he_200}, the ANN reproduce correctly the event while for more a diffuse event, Figure \ref{fig:janne:lr_le_200}, it produce more ``uniform'' charge distribution. By looking at the color scale in Figure \ref{fig:janne:lr_le_200}, we observe that the ANN do not reproduce singular high number of $N_{pe}$. The highest pixel in the original was 12 $N_{pe}$ whereas, after the ANN, the highest pixel is 5 $N_{pe}$. Furthermore, where in the original event the charge repartition, while diffuse, was still concentrated in specific pixel, the ANN spread the charges in every the pixels.
+
+\subsection{Second training phase: Breaking of the reconstruction}
 \label{sec:janne:results:break}
+
+Once the ANN is able to reproduce physical events, we change the loss so it start to search for potential perturbations. For this we introduce the term ${\cal L}_{adv}$ and ${\cal L}_{red}$ producing a second loss ${\cal L}_2$. Adding those terms will significantly change the loss. The previous minima in the parameters phase space the ANN found minimizing ${\cal L}_1$ will not be the minima ${\cal L}_2$. To prevent a gradient explosion, we introduce a growing factor $\lambda$ in front of the term ${\cal L}_{adv}$ and ${\cal L}_{red}$. This factor start at $\lambda  = 0.01$ at epoch 201 and grow $\lambda_{i+1} = \lambda_{i} + 0.01$ where $i$ index the epoch. It cap at $\lambda_{max} = 1$ at epoch 300 after what it stop growing.
+
+Also to ease the task of the ANN, we relax the constraint in the penalty term $P$ from $P(0.01)$ to $P(0.15)$.
+
+The expression of the phase 2 loss ${\cal L}_2$ become:
+\begin{equation}
+  {\cal L}_2 = \lambda \left( {\cal L}_{adv} + 60 \cdot {\cal L}_{reg} \right) + 0.25 \cdot P(0.15)
+\end{equation}
+
+This second phase of the training last for 200 more epochs, up to epoch 400.
+
 
 \section{Results}
 \label{sec:janne:results}
