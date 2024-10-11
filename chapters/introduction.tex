@@ -36,10 +36,10 @@ energy using only JUNO's small PMTs system.
 This CNN is useful in particular in Chapter \ref{sec:joint_fit} as there is official SPMT only reconstruction in the collaboration yet. These algorithms are described in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}.
 
 We have been the first in JUNO to address the issue of ML reliability.
-% We have followed two paths for that.
-% First, a simple approach is to compare event per event the results obtained by various algorithms, to find discrepancies, and more generally differences or common points in the way detector's information is used.
-% This requires to implement in JUNO's official software algorithms traditionally developed standalone, as well as the necessary software tools. This was our contribution there.
-We explore in this thesis the feasibility of an Adversarial Neural Network (ANN) to generate (and therefore identify) scenarios of discrepancies
+We have followed two paths for that.
+First, a simple approach is to compare event per event the results obtained by various algorithms, to find discrepancies, and more generally differences or common points in the way detector's information is used.
+This requires to implement in JUNO's official software algorithms traditionally developed standalone, as well as the necessary software tools. This was our contribution there.
+The second path was to explore the feasibility of an Adversarial Neural Network (ANN) to generate (and therefore identify) scenarios of discrepancies
 between raw data in the real detector and in the detector's simulation.
 The focus here is on discrepancies that could alter JUNO's results on NMO, but are too subtle to be detected via usual data/MC comparisons in control samples.
 This is presented in Chapter \ref{sec:janne}.
