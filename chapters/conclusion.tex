@@ -1,0 +1,68 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+
+\begin{document}
+
+\chapter*{Summary and conclusion}
+\markboth{Summary and conclusion}{Summary and conclusion}
+\addcontentsline{toc}{chapter}{Summary and conclusion}
+
+The field of neutrino physics still has a lot of unanswered questions, namely the mass of the mass states, the Neutrino Mass Ordering (NMO), the possible existence of CP violation in the lepton sector, the unitarity of the PMNS oscillation matrix, and even the nature of the neutrino—Dirac or Majorana—is still unknown. To answer all of these questions, neutrino physics must advance into an era of precision measurements, of which JUNO will be a part.
+
+JUNO is a 20 kton spherical liquid scintillator neutrino detector under construction that aims to measure the NMO with a confidence level of 3$\sigma$ after 6.5 years of data taking. It will additionally measure the oscillation parameters $\theta_{12}$, $\Delta m^2_{21}$, and $\Delta m^2_{31}$ at the permille level. Additionally, it will run numerous other neutrino-related physics programs.
+
+To measure the NMO and the oscillation parameters, JUNO will observe the electronic anti-neutrino spectrum from multiple nuclear power plants located 52 km away, a distance optimized to maximize the anti-neutrino disappearance. The reactor anti-neutrinos will interact with the liquid scintillator via Inverse Beta Decay. JUNO will extract the NMO and the oscillation parameters by observing the subtle interference patterns in the energy spectrum caused by the neutrino oscillation.
+In order to detect these interference patterns, JUNO needs an unprecedented energy resolution of $3\%/\sqrt{E \text{ MeV}}$ and a robust knowledge of the detector energy response, with the uncertainty kept under 1\%.
+
+To meet these stringent requirements, JUNO has developed sophisticated reconstruction and calibration techniques. A key element allowing for such techniques is the Dual Calorimetry, consisting of two photo-multiplier systems—large (LPMT) and small (SPMT)—each with its own characteristics. These two systems provide, almost, independent energy measurements of the same event. The presence of both systems not only enhances energy reconstruction but also provides valuable cross-checks, ensuring a thorough understanding of the systematic effects influencing JUNO.
+
+\hfill
+
+To fully harness JUNO's capabilities and achieve the highest precision allowed by its experimental setup, we explore in this thesis the capabilities of Machine Learning (ML).
+
+Machine learning algorithms, particularly Neural Networks (NN), have become increasingly popular among the physics community for a wide range of tasks, from event reconstruction and classification to event generation and waveform analysis. They indeed excel at extracting essential features from highly complex and multi-dimensional problems, such as the response of a physics detector.
+
+We dedicated considerable time at the start of this thesis, through the development of a Convolutional Neural Network (CNN) presented in Chapter \ref{sec:jcnn}, to understanding the underlying governing mechanisms of NN. I present, in the introductory Chapter \ref{sec:ml}, a synthesis of the knowledge I gained.
+
+Convolutional Neural Networks are a category of NN particularly efficient in processing images. This CNN was designed to reconstruct the interaction vertex and deposited energy of IBD events using solely the SPMT system. Its performance is compared with a previous reconstruction algorithm for SPMT that was developed at Subatech. This CNN shows similar performance in energy to the previously developed algorithm but worse performance in vertex reconstruction. Using an estimator combination method developed during this thesis, we have identified that there exists an algorithm that could achieve better performance than both algorithms individually.
+
+We believe the limitations of this CNN stem from the planar representation of the spherical detector that is JUNO and the aggregation of PMT information in pixels. This representation induces deformation and information loss in the event. These problems could be circumvented either by a two-stage CNN that would first center the event in the middle of the image, reconstructing the orientation of the event, before reconstructing the radial component of the interaction vertex and the energy.
+
+The problem of aggregation could be solved by transforming the time information, a scalar, into a supplementary dimension in the image, resulting in the stacking of successive planar projections, each representing a time slice of the event.
+
+
+\hfill
+
+The limitations of CNN in JUNO prompted us to consider alternative architectures that could handle more elegantly JUNO's sphericity and keep the details of the raw information. Leveraging the knowledge gained from the development of our CNN, we decided to explore a novel and innovative Graph Neural Network architecture for IBD reconstruction.
+
+Graph Neural Networks are networks processing graphs -- a data structure composed of nodes holding features and edges representing the relations between these nodes. They work by propagating information across the graph, a.k.a message passing,
+which computes updated features on nodes and edges from neighboring nodes. Previous work in JUNO developed GNN where the nodes represent geometric regions of the detector. Those regions are only connected to their neighbouring regions.
+
+In this thesis, I introduce in Chapter \ref{sec:jgnn} a GNN that processes heterogeneous graphs, where the nodes are of different families. We use three families for JUNO, representing the fired PMT, geometric regions of the detector and global informations about events.
+This family classification allows us to fully connect the geometric regions of the detector while preserving the raw information. The ability to handle heterogeneous graphs is not provided by public frameworks, thus substantial technical development was necessary to implement our methods.
+
+Among the global event information present in the graph are the results of a spherical harmonic analysis I developed that shows a correlation between the relative power of the harmonics and the radius of the IBD interaction.
+
+This performance of this exploratory GNN are compared with the state of art likelihood reconstruction methods in JUNO. The results of the GNN are not on par with the performance of the likelihood methods. We explored the behavior of the GNN and identified potential problems in the propagation of information between the fired and geometric nodes. While the combination with the likelihood algorithm shows no substantial improvements, we believe that further work on the message passing algorithm and the incorporation of even more raw information such as the PMT waveform could still bring improvements to the IBD reconstruction in JUNO.
+
+\hfill
+
+As already mentioned, JUNO's needs a robust understanding of its reconstruction, as small undetected biases could prevent us from measuring the NMO, or even worse prefer the wrong ordering. For this, wee need to trust our algorithm, and prove their reliability. This is even more important for ML algorithms, where, while we understand the global behavior is lead by their architecture, the interpretation of the detail of their optimisation is still subject to debate and research in the ML community.
+
+We believe that the first step to ensure the reliability of the reconstruction is the comparison of a variety of algorithm. The combination method developed during this thesis allow to not only compare performance and behavior but also to probe in the difference in information used. For this, the necessity to make the reconstruction algorithm public to everyone in the collaboration is crucial. In the context of this work, in implemented ML algorithms developed in the collaboration inside JUNO official software.
+
+A second step to ensure reliability is to probe for potential weakness in the reconstruction algorithm. In this thesis, in Chapter \ref{sec:janne}, I explore the potential of an Adversarial Neural Network (ANN) to produce physically plausible perturbation that would be undetected by the calibration system while still distort the reconstructed energy spectrum. We start in this thesis with simple neural network and while it is able to produce events, the task is too complicated to reach the desired results. More refinement of the architecture and potentially guiding the ANN in its perturbation strategy could help it.
+
+\hfill
+
+JUNO relies on the Dual Calorimetry method to monitor and constrain our understanding of the reconstruction through calibration. In this thesis, I present in Chapter \ref{sec:joint_fit} the Dual Calorimetric analysis with neutrino oscillation that leverages the discrepancies between the oscillation analyses performed with each system. With this analysis, we try to detect discrepancies between the measured anti-neutrino energy spectra from the LPMT and SPMT system.
+
+We choose to study the power of this analysis; we choose as a potential detector the Charge Non-Linearity (QNL). We show that at high exposures, if the QNL effects are not calibrated out as well as expected ( greater than $0.3\%$), our best test statistics will be likely to detect them (median p-values below 10\% after 2 years of data taking, and about 1\% after 6 years). In the case of a major effect (QNL or another unexpected instrumental effect) being worse, the detection will be even more likely. Below two years' of data taking, only large unexpected instrumental effects can be detected.
+
+\hfill
+
+During this thesis, several Neural Networks for IBD reconstruction, and the tools necessary for their understanding, have been developed. While they are not competitive with classical algorithms, they hint at potential improvements for future reconstruction algorithms. Due to the nature of the JUNO physics program and its stringent requirements, the reliability of those tools is crucial. To address this, we have explored a method based on Adversarial Neural Networks to probe for potential issues, and have pushed for the implementation of reconstruction methods in the collaboration software. To go even further in the detection of potential issues, we have developed the first Dual Calorimetric analysis with neutrino oscillation that will allow us to detect discrepancies between the LPMT and SPMT system.
+
+
+
+\end{document}

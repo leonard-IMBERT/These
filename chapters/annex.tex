@@ -205,44 +205,44 @@ We have clearly shown in this analysis the relevance the of relative harmonic po
   \label{fig:annex:jgnn:harmonic:fit2}
 \end{figure}
 
-\chapter{Additional spectrum smearing}
-\label{sec:annex:oversmearing}
-
-In this section we demonstrate that a spectrum $S$ smeared by a gaussian $G$ parametrized by its varianse $\sigma_1^2$ can be smeared by a gaussian parametrized by the variance $\sigma_2^2$ from the the smeared spectrum $K(E, \sigma_1) = S(E) \star G(E, \sigma_1)$ under the condition that $\sigma_2^2 > \sigma_1^2$.
-
-Let $K'(E,\sigma_2) = S(E) \star G(E, \sigma_2)$ the target spectrum we can expand
-\begin{align}
-  K'(E, \sigma_2) &= S(E) \star G(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2) \\
-                  &= K(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2)
-\end{align}
-where $G^{-1}(E, \sigma_1)$ is defined as $G(E, \sigma_1) \star G^{-1}(E, \sigma_1) = \delta(E)$.
-
-By moving into Fourier space we can express
-\begin{align}
-  G(E, \sigma_1) \star G^{-1}(E, \sigma_1) &= \delta(E) \\
-  F[G(E, \sigma_1)](\nu) \times F[G^{-1}(E, \sigma_1)](\nu) &= 1
-\end{align}
-with $F[G(E, \sigma_1)](\nu)$ the fourier transform of $G$
-\begin{equation}
-  F[G(E, \sigma_1)](\nu) = e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}
-\end{equation}
-we have
-\begin{align}
-  F[G^{-1}(E, \sigma_1)(\nu) = \big( F[G(E, \sigma_1)](\nu) \big)^{-1} &= \big( e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \big)^{-1} \\
-                                                                       &= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}
-\end{align}
-
-Thus we express
-\begin{align}
-  F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)] &= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \times e^{-\frac{\sigma_2^2(2\pi)^2}{2}\nu^2} \\
-                                              &= e^{\frac{(2\pi)^2}{2}(\sigma_1^2 - \sigma^2_2)\nu^2} \\
-                                              &= e^{\frac{(2\pi)^2}{2}\Delta\sigma^2\nu^2}; ~ \Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2)
-\end{align}
-
-We see that $F^{-1}[F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)]]$ is solvable if $\Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2) < 0 \Rightarrow \sigma_2 > \sigma_1$. In that case
-\begin{equation}
-  G^{-1}(E, \sigma_1) \star G(E, \sigma_2) = \frac{1}{\sqrt{|\Delta \sigma^2|}\sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}
-\end{equation}
+%\chapter{Additional spectrum smearing}
+%\label{sec:annex:oversmearing}
+%
+%In this section we demonstrate that a spectrum $S$ smeared by a gaussian $G$ parametrized by its varianse $\sigma_1^2$ can be smeared by a gaussian parametrized by the variance $\sigma_2^2$ from the the smeared spectrum $K(E, \sigma_1) = S(E) \star G(E, \sigma_1)$ under the condition that $\sigma_2^2 > \sigma_1^2$.
+%
+%Let $K'(E,\sigma_2) = S(E) \star G(E, \sigma_2)$ the target spectrum we can expand
+%\begin{align}
+%  K'(E, \sigma_2) &= S(E) \star G(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2) \\
+%                  &= K(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2)
+%\end{align}
+%where $G^{-1}(E, \sigma_1)$ is defined as $G(E, \sigma_1) \star G^{-1}(E, \sigma_1) = \delta(E)$.
+%
+%By moving into Fourier space we can express
+%\begin{align}
+%  G(E, \sigma_1) \star G^{-1}(E, \sigma_1) &= \delta(E) \\
+%  F[G(E, \sigma_1)](\nu) \times F[G^{-1}(E, \sigma_1)](\nu) &= 1
+%\end{align}
+%with $F[G(E, \sigma_1)](\nu)$ the fourier transform of $G$
+%\begin{equation}
+%  F[G(E, \sigma_1)](\nu) = e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}
+%\end{equation}
+%we have
+%\begin{align}
+%  F[G^{-1}(E, \sigma_1)(\nu) = \big( F[G(E, \sigma_1)](\nu) \big)^{-1} &= \big( e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \big)^{-1} \\
+%                                                                       &= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}
+%\end{align}
+%
+%Thus we express
+%\begin{align}
+%  F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)] &= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \times e^{-\frac{\sigma_2^2(2\pi)^2}{2}\nu^2} \\
+%                                              &= e^{\frac{(2\pi)^2}{2}(\sigma_1^2 - \sigma^2_2)\nu^2} \\
+%                                              &= e^{\frac{(2\pi)^2}{2}\Delta\sigma^2\nu^2}; ~ \Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2)
+%\end{align}
+%
+%We see that $F^{-1}[F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)]]$ is solvable if $\Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2) < 0 \Rightarrow \sigma_2 > \sigma_1$. In that case
+%\begin{equation}
+%  G^{-1}(E, \sigma_1) \star G(E, \sigma_2) = \frac{1}{\sqrt{|\Delta \sigma^2|}\sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}
+%\end{equation}
 
 
 \chapter{Correction of $E_{vis}$ bias}

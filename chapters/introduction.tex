@@ -1,5 +1,6 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
+\markboth{Introduction}{Introduction}
 
 The Standard Model of particle physics (SM) has been remarkably successful at accounting for, or predicting experimental observations in the laboratory.
 However, it is the subject of several limitations. For instance, it provides a mechanism to explain the existence of mass but can't predict the peculiar pattern followed by fermion masses.
@@ -14,17 +15,14 @@ An introduction to neutrino physics will be given in Chapter \ref{sec:neutrino}.
 
 \hfill
 
-The latter question is the main goal of the JUNO experiment, presently built in China and which will start taking data in 2025.
-This experiment is described in Chapter \ref{sec:juno}.
-To determine the NMO, JUNO relies on very subtle structures in the energy spectrum of reactor antineutrinos. This makes JUNO a precision physics experiment which will have, to reach the desired significance, to reconstruct this spectrum with an unprecedented precision and, also, to understand its energy scale very precisely.
+The Jiangmen Underground Neutrino Observatory (JUNO), currently under construction in China, aims to address these questions, particularly the determination of the NMO. JUNO's approach is to study reactor antineutrinos emitted from nearby nuclear power plants. By precisely measuring the energy spectrum of these antineutrinos after oscillation, JUNO seeks to detect the subtle interference patterns in the spectrum that are sensitive to the NMO. The ability to achieve this requires unprecedented precision in both the energy resolution and the calibration of the detector’s response to neutrino events. JUNO is expected to start data collection in 2025, with the goal of determining the NMO at a significance level of 3-4$\sigma$ after six years of data taking.
+At the heart of JUNO’s experimental design is its dual calorimetry system, comprising two separate sets of photomultipliers—large (LPMT) and small (SPMT) PMTs—that allow for independent energy measurements of the same events. This dual system is not only essential for improving energy resolution but also for providing cross-checks that ensure systematic uncertainties are well-understood and minimized. Achieving JUNO’s goals depends on this dual calorimetry system, as it will enable precise reconstruction of the energy spectrum and the identification of potential discrepancies between the two systems.
+
 
 \hfill
 
-The place of Machine Learning (ML) in subatomic physics is greater every day.
-In the last decade, challenging event classification, reconstruction and event generation in very complex environments, like the High luminosity LHC Upgraded experiments, have been addressed by ML, sometimes Deep Learning (DL) approaches.
-Performant online reconstruction, critical for the trigger systems of such experiments, is another example.
-Such methods have also been used by neutrino experiments. Given the necessary high reconstruction performances mentioned earlier, there is interest at JUNO in developing ML algorithms.
-However, for important physics results obtained using ML methods to be credible within the community, the reliability of these methods must be proven. This applies even more to precision physics, thus the reliability has become recently an important subject in the community.
+Another emerging area of importance in particle physics experiments is the application of machine learning (ML) techniques. Over the past decade, ML methods, particularly deep learning, have been increasingly used to tackle complex problems in event classification, reconstruction, and even data generation like the High luminosity LHC Upgraded experiments. Performant online reconstruction, critical for the trigger systems of such
+ experiments, is another example. The complexity of the data and the required precision in experiments such as JUNO make ML an attractive tool. In particular, Neural Networks (NNs) and other advanced ML models have shown potential for improving the accuracy of energy reconstruction and other key analysis tasks. However, for the results obtained using ML methods to be trusted by the scientific community, the reliability of these methods must be rigorously demonstrated.
 An introduction to ML, and in particular Neural Network (NN) is given in Chapter \ref{sec:ml}.
 
 \hfill
@@ -44,12 +42,13 @@ We have been the first in JUNO to address the issue of ML reliability.
 We explore in this thesis the feasibility of an Adversarial Neural Network (ANN) to generate (and therefore identify) scenarios of discrepancies
 between raw data in the real detector and in the detector's simulation.
 The focus here is on discrepancies that could alter JUNO's results on NMO, but are too subtle to be detected via usual data/MC comparisons in control samples.
-This is presented in Chapter 6.
+This is presented in Chapter \ref{sec:janne}.
 
 
 \hfill
 
-We have already mentioned earlier it is crucial for JUNO to understand its energy scale with a good precision. This is the raison d'être of the existence of 2 calorimetric readout systems : the large (LPMT) and small (SPMT) photomultipliers systems.
-It allows Dual Calorimetry techniques to constrain our understanding of the reconstruction. The last subject of this thesis explores for the first time one of them : the Dual Calorimetry with neutrino oscillation, which exploits potential discrepancies between the oscillation analyses carried out with either systems.
+We have already mentioned earlier it is crucial for JUNO to understand its energy scale with a good precision. This is the raison d'être of the existence of two calorimetric readout systems : the large (LPMT) and small (SPMT) photomultipliers systems.
+It allows Dual Calorimetry techniques to constrain our understanding of the reconstruction. The last subject of this thesis explores for the first time one of them : the Dual Calorimetry with neutrino oscillation,
+which leverages potential discrepancies between the oscillation analyses performed with each system.
 Our work on this is described in Chapter \ref{sec:joint_fit}.
 It was also the occasion of technical developments on the analysis framework used at Subatech. These improvements will be very useful for future analyses of the group, beyond Dual calorimetry.
