@@ -22,8 +22,7 @@ For the fist stage of its development, the purpose of this part of my thesis, we
 While achieving equivalent performance with simpler input might suggest that the architecture is not immediately advantageous, it remains crucial to explore the performance with more complex, rawer inputs such as full waveforms. This is where the true potential of the architecture could emerge, as it could better capture the intricacies that simpler inputs fail to represent. If performance does not improve with these richer inputs, it would then be appropriate to question the relevance of this approach.
 
 The algorithm we propose is a GNN. It also has the advantage of addressing sphericity issues described in Chapter \ref{sec:jcnn}.
-From this graph representation, we can construct a neural network that will process the data while keeping some interesting properties. For example the rotational invariance, i.e. the energy and
-radius of the event do change by rotation our referential. For more details see Section \ref{sec:ml:gnn}. Graph representation also has the advantage to be able to encode global and higher order informations.
+From this graph representation, we can construct a neural network that will process the data while keeping some interesting properties. For example the rotational invariance, i.e. the energy and radius of the event do change by rotation our referential. For more details see Section \ref{sec:ml:gnn}. Graph representation also has the advantage to be able to encode global and higher order informations.
 
 %An approach was already proposed in JUNO by Qian et al. \cite{qian_vertex_2021} where each nodes of the graph are like pixels, they represent geometric region of the detector and are connected with their neighbours. The LPMT informations are then aggregated on those nodes. The network then process the data using the equivalent of convolution but on graph \cite{defferrard_convolutional_2017}.
 %
