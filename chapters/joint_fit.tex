@@ -4,7 +4,7 @@
 \chapter{Dualcalorimetric analysis with neutrino oscillation for Precision Measurement}
 \label{sec:joint_fit}
 
-\epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
+\epigraph{``We demand rigidly defined areas of doubt and uncertainty!''}{Douglas Adams, The Hitchhiker's Guide to the Galaxy}
 
 \minitoc
 
@@ -85,12 +85,12 @@ In the next section we will discuss the motivations behind this study. In Sectio
 
 As mentioned earlier, the SPMT and LPMT systems are expected to detect the same events. Therefore, after proper calibration, any significant discrepancies between the two systems' results could indicate a calibration error, a systematic effect, or an unaccounted detector issue. Detecting such differences is critical, as even small deviations from the expected response could compromise the determination of the Neutrino Mass Ordering (MO) or introduce systematic biases in the oscillation parameter measurements, leading to incorrect conclusions about the true mass ordering.
 
-Both systems are anticipated to show similar sensitivity to the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ \cite{juno_collaboration_sub-percent_2022}. Therefore, any detected discrepancies will be based on these parameter measurements. A simple comparison of the values and independent uncertainties from the two systems could highlight discrepancies. However, we believe—and will demonstrate in this chapter—that an independent analysis of each system lacks critical information. By considering both statistical and systematic correlations between the two systems, we can design more robust and powerful statistical tests.
+Both systems are anticipated to show similar sensitivity to the oscillation parameters $\theta_{12}$ and $\Delta m^2_{21}$ \cite{juno_collaboration_sub-percent_2022}. Therefore, any detected discrepancies will be based on these parameter measurements. A simple comparison of the values and independent uncertainties from the two systems could highlight discrepancies. However, we believe -- and will demonstrate in this chapter -- that an independent analysis of each system lacks critical information. By considering both statistical and systematic correlations between the two systems, we can design more robust and powerful statistical tests.
 
 Our work in this chapter is to develop such tools, which in practice implies to define test statistics. A first step will be to determine the distribution of these test statistics in the case  when no unexpected problem affects the LPMT nor the SPMT problem. This will give us the distribution of those statistical test in absence of discrepancies. Later, the value of the test statistics that we will measure in real data can be compared to these distributions to produce p-values, to judge of the potential present of an unexpected effect.
 
 To evaluate the power of our methods, we need to simulate a concrete difference between the two spectra.
-We have chosen to study a specific potential effect, Charge Non-Linearity (QNL), which will be detailed in the following section. QNL affects the reconstructed energy spectrum by introducing a non-linear relationship between the true and measured charge in the PMTs. Our statistical tests are designed to detect such distortions, and they should be sensitive to unexpected effects—such as calibration errors or insufficient simulation precision—as long as the induced distortion exceeds a threshold of approximately 1-2\% in the reconstructed energy spectrum.
+We have chosen to study a specific potential effect, Charge Non-Linearity (QNL), which will be detailed in the following section. QNL affects the reconstructed energy spectrum by introducing a non-linear relationship between the true and measured charge in the PMTs. Our statistical tests are designed to detect such distortions, and they should be sensitive to unexpected effects --such as calibration errors or insufficient simulation precision -- as long as the induced distortion exceeds a threshold of approximately 1-2\% in the reconstructed energy spectrum.
 
 %
 %   (b) Explications sur la QNL. (  ~ 1 p)
@@ -114,7 +114,7 @@ We have chosen to study a specific potential effect, Charge Non-Linearity (QNL),
 \subsection{Charge Non-Linearity (QNL)}
 \label{sec:joint_fit:qnl}
 
-The energy response of the Central Detector (CD) is influenced by two types of non-linearity. The first arises from the intrinsic properties of the Liquid Scintillator (LS), where the photon production is not linearly proportional to the deposited energy, as shown in Figure \ref{fig:juno:nl:gamma}. This non-linearity results from a combination of scintillation and Cherenkov light production. The scintillation yield is governed by Birk’s law, which introduces a "quenching" effect that depends on the particle type and energy. Additionally, Cherenkov radiation, which constitutes less than 10\% of the collected light, introduces a velocity-dependent non-linearity. These physical non-linearities in the LS contribute to the overall non-linearity of the energy response before any further distortions from the photomultiplier tubes (PMTs)
+The energy response of the Central Detector (CD) is influenced by two types of non-linearity. The first arises from the intrinsic properties of the Liquid Scintillator (LS), where the photon production is not linearly proportional to the deposited energy, as shown in Figure \ref{fig:juno:nl:gamma}. This non-linearity results from a combination of scintillation and Cherenkov light production. The scintillation yield is governed by Birk's law, which introduces a "quenching" effect that depends on the particle type and energy. Additionally, Cherenkov radiation, which constitutes less than 10\% of the collected light, introduces a velocity-dependent non-linearity. These physical non-linearities in the LS contribute to the overall non-linearity of the energy response before any further distortions from the photomultiplier tubes (PMTs)
 
 The second type of non-linearity comes from the LPMT charge measurements. When photons hit a PMT and give rise to PEs, a current pulse is formed. In the photon counting regime, simply exceeding a certain threshold allows to conclude that a single photon hit the PMT. When several photons hit the PMT simultaneously, one enters the photon integration regime : the pulse is sampled and integrated over a certain time window to produce a reconstructed charge Q. Calibration methods are applied to determine the relationship between the charge Q and the number of PEs (which is the quantity proportional to the energy deposit one wants to measure). Several effects impact this procedure: the signal pulse can fluctuate and be distorted between two events where the same number PEs occured; the PMT gain might not be linear as a function of the number of photons that hit the PMT; the charge reconstruction algorithm is not supposed to be perfect, and its results are further affected by electronic noise and inter-channel cross-talk. The impact of these effects grows with the number of PEs.
 
@@ -629,7 +629,7 @@ Then for each event we:
       \label{eq:joint_fit:abc}
       \frac{\sigma E_{vis}}{E_{vis}} = \sqrt{\bigg(\frac{A}{\sqrt{E_{vis}}}\bigg)^2 + B^2 + \bigg(\frac{C}{E_{vis}}\bigg)^2}
     \end{equation}
-    where A is the term driven by the Poisson statistics of the total number of detected photoelectrons, C is dominated by the PMT dark noise, and B is dominated by the detector’s spatial non-uniformity. The relative and absolute resolutions of the LPMT and SPMT systems are illustrated in Figure \ref{fig:joint_fit:system_resolution}.
+    where A is the term driven by the Poisson statistics of the total number of detected photoelectrons, C is dominated by the PMT dark noise, and B is dominated by the detector's spatial non-uniformity. The relative and absolute resolutions of the LPMT and SPMT systems are illustrated in Figure \ref{fig:joint_fit:system_resolution}.
 \end{enumerate}
 
 The events are stored as n-tuples and are not yet binned at the end of the generator.

@@ -3,7 +3,7 @@
 \begin{document}
 \chapter{Graph representation of JUNO for IBD reconstruction}
 \label{sec:jgnn}
-\epigraph{``The Answer to the Great Question of Life, the Universe and Everything is Forty-two''}{Douglas Adams, The Hitchhiker’s Guide to the Galaxy}
+\epigraph{``The Answer to the Great Question of Life, the Universe and Everything is Forty-two''}{Douglas Adams, The Hitchhiker's Guide to the Galaxy}
 
 \minitoc
 %\begin{itemize}
@@ -636,7 +636,7 @@ which seems to confirm a problem in the way the full information, from all the i
 \subsubsection{Possible improvements}
 
 
-It appears that the network is unable to aggregate the timing information correctly. While this could be addressed by using a finer segmentation, with more mesh nodes, improvements might also arise from refining the message-passing algorithm. The algorithm presented in this thesis is still quite basic, relying on a simple linear combination of features. We have seen through examples in CNNs, GNNs, and other architectures, both in research and industry, that specializing the network — for instance, by incorporating convolutional filters — can lead to improvements that were previously unattainable with simpler FCDNNs. Applying this approach to the message-passing algorithm, by utilizing a GNN with a more advanced message-passing, could yield better results.
+It appears that the network is unable to aggregate the timing information correctly. While this could be addressed by using a finer segmentation, with more mesh nodes, improvements might also arise from refining the message-passing algorithm. The algorithm presented in this thesis is still quite basic, relying on a simple linear combination of features. We have seen through examples in CNNs, GNNs, and other architectures, both in research and industry, that specializing the network -- for instance, by incorporating convolutional filters -- can lead to improvements that were previously unattainable with simpler FCDNNs. Applying this approach to the message-passing algorithm, by utilizing a GNN with a more advanced message-passing, could yield better results.
 
 We could investigate alternative aggregation strategies, for example, by weighting the timing information more significantly during the message-passing phase. Additionally, testing a non-linear combination of features from fired to mesh nodes could help preserve more granular information. Another potential improvement would be to introduce attention mechanisms that dynamically assign more importance to relevant features in the fired nodes
 
@@ -662,7 +662,7 @@ Finally, by providing directly the PMT waveform to the GNN, in the fired nodes, 
 %
 %A final possible improvement would be to go further in the proximity of raw information. The charge and time used in the PMTs are extracted from a waveform, we could imagine a world where the full PMT waveform in the trigger window would be set of channels on the PMT node.
 
-To achieve its scientific goals, JUNO requires a precise and well-understood reconstruction, as it needs an energy resolution of $3\%$ at 1 MeV. Even small, unaccounted biases could make it impossible to determine the mass ordering, as explored in Chapter \ref{sec:joint_fit}. A likelihood-based algorithm, designed to meet JUNO’s requirements and referred to as the classical algorithm, was developed and is detailed in Section \ref{sec:juno:reco}.
+To achieve its scientific goals, JUNO requires a precise and well-understood reconstruction, as it needs an energy resolution of $3\%$ at 1 MeV. Even small, unaccounted biases could make it impossible to determine the mass ordering, as explored in Chapter \ref{sec:joint_fit}. A likelihood-based algorithm, designed to meet JUNO's requirements and referred to as the classical algorithm, was developed and is detailed in Section \ref{sec:juno:reco}.
 
 Machine learning algorithms were developed to challenge this classical approach, and they are presented in Section \ref{sec:juno:ml}. Although they achieve the precision of the classical algorithm, they do not offer significant improvements. The GNN previously developed is a convolutional GNN where nodes correspond to pixels, connected to their neighbors based on the Healpix \cite{gorski_healpix_2005} segmentation, with the $(Q, t)$ information aggregated onto these pixels.
 
