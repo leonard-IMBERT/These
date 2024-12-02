@@ -382,7 +382,7 @@ as it was the best resulting loss in Chapter \ref{sec:jcnn}.
 
 \section{Training}
 
-The optimizer used for training is the Adam optimizer (see Section \ref{sec:ml:optim}) and default hyperparameters ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e-8$) with a learning rate $\lambda = $ 1e-8. The training last 200 epochs of 800 steps. We use a batch size of 32, the largest we can have with 40GB of GPU ram. The learning rate is constant during the first 20 epochs then exponentially decrease with a rate of 0.99. We save two set of parameters, the set of parameters the set that yield the lowest validation loss and the set of parameters at the end of the training. The validation is computed over a single batch.
+The optimizer used for training is the Adam optimizer (see Section \ref{sec:ml:optim}) and default hyperparameters ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e-8$) with a learning rate $\lambda = $ 1e-8. The training last 200 meta-iterations of 800 steps. We use a batch size of 32, the largest we can have with 40GB of GPU ram. The learning rate is constant during the first 20 meta-iterations then exponentially decrease with a rate of 0.99. We save two set of parameters, the set of parameters the set that yield the lowest validation loss and the set of parameters at the end of the training. The validation is computed over a single batch.
 
 \section{Optimization}
 
@@ -572,7 +572,7 @@ We tested this idea in several manners, described below.
 
 \subsubsection{Finer granularity}
 
-We tried to recover some redundancy by increasing the number of mesh nodes from 198 to 768. The improvement we observed was small, and did not allow to get close to OMILREC's performance.
+We tried to recover some redundancy by increasing the number of mesh nodes from 192 to 768. The improvement we observed was small, and did not allow to get close to OMILREC's performance.
 
 To explore further in this direction, we would ideally try 3072 pixels (the next HEALPIX rank). However, this is not possible for our GNN due to hardware limitations, mainly the available GPU memory. Instead, we discussed the problem with Gilles Grasseau, calculus research engineer with whom we collaborate on the subject of ML reliability (see Chapter \ref{sec:janne}). In the framework of this activity, Gilles needs to develop reconstruction algorithms to be "attacked" by a prototype Adversarial NN. One of them is a pseudo-spherical CNN using oriented filters, called HCNN.
 

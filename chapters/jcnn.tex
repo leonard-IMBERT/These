@@ -104,6 +104,20 @@ On top those generated models, we define 4 hand tailored models:
   \item $\mathrm{Gen}_3$: $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\equiv E_r+V_r$
 \end{itemize}
 
+For examplem let’s define the index of the different configurations $I_{blocks}$, $I_{channels}$, $I_{FCDNN}$ and $I_{loss}$ such as, for example, $I_{blocks} = 0$ is $N_{blocks} = 2$, $I_{blocks} = 1$ is $N_{blocks} = 3$, … using the order in table \ref{tab:jcnn:hyper}. The architecture $Gen_{\alpha}$ is the architecture where:
+\begin{equation*}
+\alpha = 36 * I_{loss} + 9 * I_{FCDNN} + 3 * I_{channels} + I_{blocks} + 4
+\end{equation*}
+The ``$+4$'' term at the end is to take into account the 4 handcrafted models.
+
+For example, the index of the configuration with $N_{blocks} = 2$, $N_{channels} = 128$, the FCDNN configuration is $(3 * 2048 + 3 * 512)$ and the loss is $E + V$ has:
+\begin{align*}
+\alpha &= 36 * I_{loss} + 9 * I_{FCDNN} + 3 * I_{channels} + I_{blocks} + 4 \\
+	     &= 36 * 0           + 9 * 2                 + 3 * 2                   + 0              + 4 \\
+       &= 28
+\end{align*}
+It is thus $Gen_{28}$.
+
 \hfill
 
 The resulting models possess between 2'041'034, for $\mathrm{Gen}_{52}$ and $\mathrm{Gen}_{53}$, and  5'759'839'242 parameters, for $\mathrm{Gen}_{26}$ and $\mathrm{Gen}_{27}$. The models of interest in this thesis, from which the results are discussed in Section \ref{sec:jcnn:results}, possess 86'197'196 parameters for $\mathrm{Gen}_{30}$ and 332'187'530 parameters for $\mathrm{Gen}_{42}$. For comparison the model of CNN developed in JUNO before posses 38'352'403 parameters \cite{qian_vertex_2021}.
@@ -179,8 +193,8 @@ The training of one model takes between 4h and 15h depending of its size, overal
 This data is represented as $240 \times 240$ images with a charge $Q$ channel and a time $t$ channel. The SPMTs are then projected on the plane as illustrated in Figure \ref{fig:jcnn:pmt_rep} using the coordinate system presented in \ref{fig:jcnn:corrdinate_system}. The $P_y$ coordinate, the row corresponding to the SPMT in the projection, is proportional to $\theta$. The $P_x$ coordinate, the column corresponding to the SPMT in the projection, is defined by $\phi \sin{\theta}$ in spherical coordinates. $\theta = 0$ is defined as being the top of the detector and $\phi = 0$ is defined as an arbitrary direction in the detector. In practice, $\phi = 0$ is given by the MC simulation.
 
 \begin{align}
-  P_y &= \bigg\lfloor \frac{\theta \cdot H}{\pi} \bigg\rfloor, ~ \theta \in [0, \pi] \\
-  P_x &= \bigg\lfloor \frac{(\phi + \pi) \sin{\theta} \cdot W}{2\pi}\bigg\rfloor, ~ \phi \in [-\pi, \pi], ~ \theta \in [0, \pi]
+  P_y &= \bigg\lfloor \frac{\theta \cdot H}{\pi} \bigg\rfloor, ~ \theta \in [0, \pi[ \\
+  P_x &= \bigg\lfloor \frac{(\phi + \pi) \sin{\theta} \cdot W}{2\pi}\bigg\rfloor, ~ \phi \in [-\pi, \pi[, ~ \theta \in [0, \pi[
 \end{align}
 where $H$ is the height of the image, $W$ the width of the image and $(0,0)$ the top left corner of the image.
 
@@ -345,11 +359,11 @@ The fit shows a light yield of 40.78 PE/MeV and a dark noise contribution of 4.2
 
 \section{Training}
 
-The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e^{-8}$). The learning rate was reduce exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the epoch.
+The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e^{-8}$). The learning rate was reduce exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the meta-iteration.
 
-Following the lifecycle presented in Section \ref{sec:ml:train}, the training used a batch size of 64 events meaning that, each step, the loss is computed on 64 events before updating the NN parameters. An epoch is composed of 10k steps, thus each epoch, the NN see 640k events. The training last for 30 epochs, so overall the NN go through 19.2 millions events or 19.2 times the dataset.
+Following the lifecycle presented in Section \ref{sec:ml:train}, the training used a batch size of 64 events meaning that, each step, the loss is computed on 64 events before updating the NN parameters. A meta-iteration is composed of 10k steps, thus each meta-iteration, the NN see 640k events. The training last for 30 meta-iterations, so overall the NN go through 19.2 millions events or 19.2 times the dataset.
 
-The number of epoch, batch size, learning rate and its decay where fine-tuned during the development of the CNN.
+The number of meta-iterations, batch size, learning rate and its decay where fine-tuned during the development of the CNN.
 
 \section{Results}
 \label{sec:jcnn:results}
@@ -555,7 +569,7 @@ We see immediately that if the two estimators are of opposite bias, the bias of 
 
 By generalising the equation \ref{eq:jcnn:combi} to
 \begin{equation}
-  \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C; ~ \alpha \in [0, 1]
+  \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C
 \end{equation}
 we can determine an optimal $\alpha$ for two combined estimators. The estimators with the smallest variance
 \begin{equation}

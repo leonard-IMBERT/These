@@ -4,6 +4,7 @@ BS="\\\\"
 
 cat biblio.bib \
   | sed -r -e "s|$BS([{}_$])|\\1|g" \
+  | grep -v "urldate" \
   | sed -r -e "s|{${BS}textbackslash}|$BS|g" \
   | sed -r -e "s|{${BS}textasciicircum}|^|g" \
   | sed -r -e "s|{${BS}textasciitilde}|$$${BS}sim$|g" \
