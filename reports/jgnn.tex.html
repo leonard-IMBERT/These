@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TeXtidote analysis</title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.highlight, .highlight-sh, .highlight-spelling {
+  padding: 2pt;
+  border-radius: 4pt;
+  cursor: help;
+  opacity: 0.7;
+  border: dashed 1px;
+}
+.highlight {
+  background-color: orange;
+  color: black;
+}
+.highlight-sh {
+  background-color: yellow;
+  color: black;
+}
+.highlight-spelling {
+  background-color: red;
+  color: white;
+}
+div.original-file {
+  font-family: monospace;
+  font-size: 11pt;
+  background-color: #f8f8ff;
+  padding: 20pt;
+  border-radius: 6pt;
+}
+.textidote {
+  	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiICAgd2lkdGg9IjEwMC4wOTEwNW1tIiAgIGhlaWdodD0iMTguMjA5MDk5bW0iICAgdmlld0JveD0iMCAwIDEwMC4wOTEwNSAxOC4yMDkwOTkiICAgdmVyc2lvbj0iMS4xIiAgIGlkPSJzdmc4IiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTEgcjEzNzI1IiAgIHNvZGlwb2RpOmRvY25hbWU9InRleHRpZG90ZS5zdmciPiAgPGRlZnMgICAgIGlkPSJkZWZzMiIgLz4gIDxzb2RpcG9kaTpuYW1lZHZpZXcgICAgIGlkPSJiYXNlIiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiICAgICBib3JkZXJvcGFjaXR5PSIxLjAiICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIgICAgIGlua3NjYXBlOnpvb209IjEiICAgICBpbmtzY2FwZTpjeD0iLTI1NC4yNTMwOSIgICAgIGlua3NjYXBlOmN5PSItMjc4LjM3NTkxIiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIiAgICAgc2hvd2dyaWQ9ImZhbHNlIiAgICAgZml0LW1hcmdpbi10b3A9IjAiICAgICBmaXQtbWFyZ2luLWxlZnQ9IjAiICAgICBmaXQtbWFyZ2luLXJpZ2h0PSIwIiAgICAgZml0LW1hcmdpbi1ib3R0b209IjAiICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMDIxIiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMjY1IiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4gIDxtZXRhZGF0YSAgICAgaWQ9Im1ldGFkYXRhNSI+ICAgIDxyZGY6UkRGPiAgICAgIDxjYzpXb3JrICAgICAgICAgcmRmOmFib3V0PSIiPiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+ICAgICAgICA8ZGM6dHlwZSAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4gICAgICAgIDxkYzp0aXRsZSAvPiAgICAgIDwvY2M6V29yaz4gICAgPC9yZGY6UkRGPiAgPC9tZXRhZGF0YT4gIDxnICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIgICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiICAgICBpZD0ibGF5ZXIxIiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI5LjczODA5NSwtNzAuNTc3NzUxKSI+ICAgIDxnICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjIwLjkyODk0NTU0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgaWQ9InRleHQ4MzYiPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSAzMC43MjY4NjQsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzODYiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDQyLjMzNTg4OCw3NS43NzU1NjQgMTEuMDQ1ODMyLDAgMCw3LjgxMzQ3MyAtNS44MTM1OTYsMCAwLDAuNjA0NjE0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw0LjIwOTA0MyAwLjU4MTM2LDAgMCwtMC42MDQ2MTQgLTAuNTgxMzYsMCAwLDAuNjA0NjE0IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzg4IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA1My45NDQ5MTIsNzUuNzc1NTY0IDUuMjMyMjM2LDAgMCwzLjYwNDQyOSAtNS4yMzIyMzYsMCAwLC0zLjYwNDQyOSB6IG0gNS44MTM1OTYsMCA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIC01LjgxMzU5Niw4LjQxODA4NyA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIDUuODEzNTk2LDAgNS4yMzIyMzYsMCAwLDMuNjA0NDI5IC01LjIzMjIzNiwwIDAsLTMuNjA0NDI5IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzkwIiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA2NS41NTM5MzYsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzOTIiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDc3LjE2Mjk2LDc1Ljc3NTU2NCA1LjIzMjIzNiwwIDAsMTIuMDIyNTE2IC01LjIzMjIzNiwwIDAsLTEyLjAyMjUxNiB6IG0gMCwtNC4yMDkwNDQgNS4yMzIyMzYsMCAwLDMuNjA0NDMgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MyB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5NCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gODIuOTY3NDcyLDc1Ljc3NTU2NCA1LjgxMzU5NiwwIDAsLTQuMjA5MDQ0IDUuMjMyMjM2LDAgMCwxNi4yMzE1NiAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw4LjQxODA4NyAwLjU4MTM2LDAgMCwtNC44MTM2NTggLTAuNTgxMzYsMCAwLDQuODEzNjU4IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzk2IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA5NC41NzY0OTYsNzUuNzc1NTY0IDExLjA0NTgzNCwwIDAsMTIuMDIyNTE2IC0xMS4wNDU4MzQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjM3LDguNDE4MDg3IDAuNTgxMzU3LDAgMCwtNC44MTM2NTggLTAuNTgxMzU3LDAgMCw0LjgxMzY1OCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5OCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTA2LjE4NTUyLDcxLjU2NjUyIDUuMjMyMjQsMCAwLDQuMjA5MDQ0IDUuODEzNTksMCAwLDMuNjA0NDI5IC01LjgxMzU5LDAgMCw0LjgxMzY1OCA1LjgxMzU5LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMsMCAwLC0xNi4yMzE1NiB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTE3Ljc5NDU0LDc1Ljc3NTU2NCAxMS4wNDU4NCwwIDAsNy44MTM0NzMgLTUuODEzNiwwIDAsMC42MDQ2MTQgNS44MTM2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjQsNC4yMDkwNDMgMC41ODEzNiwwIDAsLTAuNjA0NjE0IC0wLjU4MTM2LDAgMCwwLjYwNDYxNCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMiIgLz4gICAgPC9nPiAgPC9nPjwvc3ZnPg==);
+}
+h2.filename {
+  font-family: monospace;
+}
+h1.textidote {
+  width: 378px;
+  height: 68px;
+  display: block;
+}
+.keyword1 {
+  font-weight: bold;
+  color: green;
+}
+.keyword2 {
+  font-weight: bold;
+  color: darkblue;
+}
+.comment, .comment * {
+  color: darkred;
+  font-weight: normal;
+}
+.linenb {
+  font-style: italic;
+  color: lightgrey;
+  width: 30pt;
+  float: left;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.codeline {
+  margin-left: -30pt;
+  padding-left: 60pt;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+}
+.no-text {
+  display: none;
+}
+.clear {
+  clear: both;
+}
+</style>
+</head>
+<body>
+<a href="https://sylvainhalle.github.io/textidote"><h1 class="textidote"><span class="no-text">Results of TeXtidote analysis</span></h1></a>
+<p>Here is the result of analyzing your file(s) with TeXtidote. Hover the mouse over highlighted portions of the document to read a tooltip that gives you some writing advice.</p>
+<p>Found 32 warning(s)</p>
+<div class="original-file">
+<div class="linenb">&nbsp;&nbsp;1</div><div class="codeline"><span class="keyword1">\documentclass</span>[../main.tex]{subfiles}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;2</div><div class="codeline">\graphicspath{{\subfix{..}}}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;3</div><div class="codeline"><span class="keyword2">\begin{document}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;4</div><div class="codeline">\chapter{Graph representation of JUNO for IBD reconstruction}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;5</div><div class="codeline"><span class="keyword1">\label</span>{sec:jgnn}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;6</div><div class="codeline">\epigraph{``The Answer to the Great Question of Life, the Universe and Everything is Forty-two''}{Douglas Adams, The Hitchhiker's Guide to the Galaxy}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;7</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;8</div><div class="codeline">\minitoc</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;9</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;10</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Introduce the concpet of reconstruction using Small + Large</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;11</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Re state the context</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;12</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;13</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;14</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;15</div><div class="codeline">In Section \ref{sec:juno:ml}, we showed that all ML methods developed before this thesis to reconstruct IBDs have similar results, and that their performance is very similar to that of the classical, likelihood-based algorithm.</div><div class="clear"></div>
+<div class="linenb">&nbsp;16</div><div class="codeline">We think these similarities can reasonably be explained by this: the input data used by all these methods to compute $E$ or $\vec{X}$  is the same full list of PMT integrated signals $ \{ (Q_i,t_i) ; ~ i \in  1, ..., N_{PMTs} \}$, and by the high level of sophistication of the detector's description in the likelihood. It's probable that the likelihood method looses very little information.</div><div class="clear"></div>
+<div class="linenb">&nbsp;17</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;18</div><div class="codeline">Maybe some was, but that the ML algorithms were not designed well enough to recover it. It's also reasonable to think that ML algorithms will make a difference when, instead of the list of $(Q_i, t_i)$, a rawer information will be used in input, like the full waveform.</div><div class="clear"></div>
+<div class="linenb">&nbsp;19</div><div class="codeline">To actually be able to learn from such a complex and high dimensional input, well-designed architectures (that would guide the learning toward the solution) are necessary. In any case, it seemed welcome to us to propose an additional algorithm, with an original architecture.</div><div class="clear"></div>
+<div class="linenb">&nbsp;20</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;21</div><div class="codeline">For the fist stage of its development, the purpose of this part of my thesis, we considered it was enough to also take the $(Q_i, t_i)$ list as the input.</div><div class="clear"></div>
+<div class="linenb">&nbsp;22</div><div class="codeline">While achieving equivalent performance with simpler input might suggest that the architecture is not immediately advantageous, it remains crucial to explore the performance with more complex, rawer inputs such as full waveforms. This is where the true potential of the architecture could emerge, as it could better capture the intricacies that simpler inputs fail to represent. If performance does not improve with these richer inputs, it would then be appropriate to question the relevance of this approach.</div><div class="clear"></div>
+<div class="linenb">&nbsp;23</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;24</div><div class="codeline">The algorithm we <span class="highlight" title="This word has been used in one of the immediately preceding sentences. Using a synonym could make your text more interesting to read, unless the repetition is intentional.. Suggestions: [propose, recommend, submit] (1961) [lt:en:EN_REPEATEDWORDS]">suggest</span> is a GNN. It also has the advantage of addressing sphericity issues described in Chapter \ref{sec:jcnn}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;25</div><div class="codeline">From this graph representation, we can construct a neural network that will process the data while keeping some interesting properties. For example the rotational invariance, i.e.\ the energy and radius of the event do change by rotation our referential. For more details see Section \ref{sec:ml:gnn}. Graph representation also has the advantage to be able to encode global and higher order information.</div><div class="clear"></div>
+<div class="linenb">&nbsp;26</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;27</div><div class="codeline"><span class="comment"><span class="comment">%An approach was already proposed in JUNO by Qian et al. \cite{qian_vertex_2021} where each nodes of the graph are like pixels, they represent geometric region of the detector and are connected with their neighbours. The LPMT informations are then aggregated on those nodes. The network then process the data using the equivalent of convolution but on graph \cite{defferrard_convolutional_2017}.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;28</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;29</div><div class="codeline"><span class="comment"><span class="comment">%In this work we want to take a step further in the graph representation by including the SPMT and representing PMTs directly as nodes.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;30</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;31</div><div class="codeline"><span class="keyword1">\section</span>{Data representation}</div><div class="clear"></div>
+<div class="linenb">&nbsp;32</div><div class="codeline"><span class="keyword1">\label</span>{sec:jgnn:data}</div><div class="clear"></div>
+<div class="linenb">&nbsp;33</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;34</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> First though</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;35</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;36</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> All pmt are nodes</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;37</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> How to connect ? Fully connected ?</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;38</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Fully connected not possible with our computng capacities: 40k * 40k -&gt; $1.6\cdot10^8$ link -&gt; around a Gb of adjacency matrix times edges features</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;39</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Connected to neighbours -&gt; Already done for graph convolution, cit yury paper</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;40</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;41</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Second though</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;42</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;43</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Be smarter</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;44</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> All PMTs as nodes -&gt; Fired</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;45</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Have intermediate layer of node representing geometric section -&gt; Mesh</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;46</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Fired connected to mesh</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;47</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Mesh fully connected</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;48</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Aggregation while keeping raw informations</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;49</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Add a "global node"</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;50</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;51</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Present healpix for the segementation</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;52</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Features for node/edges</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;53</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;54</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Classic infos: Q,t,X,Y,Z (add plots to show features)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;55</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Add high order informations</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;56</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Harmonic analysis (present here ? Or in annex ?)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;57</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Other high order $\mathcal{A}$ and $\mathcal{B}$</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;58</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;59</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Difficulty: nodes do not live in the same space (not same infos on fired, mesh, and io)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;60</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Need a custom message passing options</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;61</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;62</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;63</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;64</div><div class="codeline">In Section \ref{sec:juno:ml}, we mentioned a GNN developed before the beginning of this thesis to reconstruct IBD energies in JUNO \cite{qian_vertex_2021}. In their approach:</div><div class="clear"></div>
+<div class="linenb">&nbsp;65</div><div class="codeline">nodes of the graph correspond to 3072 pixels representing geometric regions of the detector and the information of the $\sim6$ LPMTs found in a pixel are then aggregated on those nodes. This aggregation serves to simplify the data input, though at the potential cost of losing finer-grained details.</div><div class="clear"></div>
+<div class="linenb">&nbsp;66</div><div class="codeline">The network then process the data using the equivalent of convolution but on graph \cite{defferrard_convolutional_2017}. In the first layer, each node is connected only with its direct neighbors.</div><div class="clear"></div>
+<div class="linenb">&nbsp;67</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;68</div><div class="codeline">To determine the energy released by an IBD in the LS, it is helpful to determine the position of the main energy deposit. Therefore, relative Q and t's of PMTs all around the sphere is useful information. If in the first layer only neighbor nodes are linked, several layers are necessary to access this detector-wide information. In an ideal world, we would develop a Graph NN where each PMT is a node</div><div class="clear"></div>
+<div class="linenb">&nbsp;69</div><div class="codeline">(even if it has not been hit in the event under consideration, since this is in itself an information) and where each node is connected to all the other ones. This makes the detector-wide information available as early as the first layer. This architecture</div><div class="clear"></div>
+<div class="linenb">&nbsp;70</div><div class="codeline">might help the network to better learn. Such an architecture can also be motivated this way: one of the strength of GNN's is their capacity to encompass the characteristics of a detector.</div><div class="clear"></div>
+<div class="linenb">&nbsp;71</div><div class="codeline">A node can be the representation of a detector element, and the edge can represent its relationship with other elements. In the case of JUNO, any measurement is collective: an interaction is seen by all the PMTs, with no a priori hierarchy in the role of each.</div><div class="clear"></div>
+<div class="linenb">&nbsp;72</div><div class="codeline">A fully connected GNN is particularly advantageous in JUNO's case, as the lack of a priori hierarchy among the PMTs makes it important to ensure that information is shared globally from the outset. This architecture allows the network to access detector-wide information as early as the first layer, potentially improving learning efficiency. However, this comes at a significant computational cost, which necessitates careful balancing between memory usage and model performance</div><div class="clear"></div>
+<div class="linenb">&nbsp;73</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;74</div><div class="codeline">Another advantage of a GNN is also that it is well adapted to inhomogeneous detectors.</div><div class="clear"></div>
+<div class="linenb">&nbsp;75</div><div class="codeline">We therefore tried to build GNNs including both LPMTs ans SPMTs.</div><div class="clear"></div>
+<div class="linenb">&nbsp;76</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;77</div><div class="codeline">With 17612 LPMTs and 25600 SPMTs, the ideal fully connected Graph mentioned above is impossible: even excluding self relation and considering the relation to be undirected (the edge from a node A to a node B being the same from</div><div class="clear"></div>
+<div class="linenb">&nbsp;78</div><div class="codeline">as the one from B to A) the amount of necessary edges would be $n(n-1)/2$ with $n = 43212$</div><div class="clear"></div>
+<div class="linenb">&nbsp;79</div><div class="codeline">nodes. This amounts to 933'616'866 edges. If we encode an information with double precision (64 bits) in what we call an adjacency matrix, illustrated in Figure \ref{fig:ml:gnn:graph}, each information we want to encode in the relation would consume 4 GB of data. When adding the overhead due to gradient computation during training, this would put us over the memory capacity of a single V100 GPU card (20 GB of memory).</div><div class="clear"></div>
+<div class="linenb">&nbsp;80</div><div class="codeline">We could use parallel training to distribute the training over multiple GPU, but we considered that the technical challenge to deploy this solution was too high.</div><div class="clear"></div>
+<div class="linenb">&nbsp;81</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;82</div><div class="codeline"><span class="comment"><span class="comment">%In an ideal world we would like to have every PMTs represented as node in the graph, each PMT being hit is an informations but the fact that PMTs were not hit is also an important information. It's by being aware of the whole of the system that we are able to give meaning to a subpart. As a reminder, in the Central Detector (CD), JUNO will posses 17612 LPMTs and 25600 SPMTs for a total of 43212 PMTs. This amount of information in itself is still manageable by modern computer if it were to be used in a neural network but when defining the relations between the nodes, it become a bit more tricky.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;83</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;84</div><div class="codeline"><span class="comment"><span class="comment">%Excluding self relation and considering the relation to be undirected, the edge from $A$ to $B$ is the same from $B$ to $A$, the amount of necessary edges is given by $\frac{n(n-1)}{2}$ which for 43212 PMTs amount for $933'616'866$ edges. If we encode an information with double precision (64 bits) in what we call an adjacency matrix, each information we want to encode in the relation would consume 4 GB of data. When adding the overhead due to gradient computation during training, this would put us over the memory capacity of a single V100 gpu card (20 GB of memory). We could use parallel training to distribute the training over multiple GPU but we considered that the technical challenge to deploy this solution was not worth the trouble.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;85</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;86</div><div class="codeline"><span class="comment"><span class="comment">%The option of connecting PMTs node only to their neighbours could be tempting to reduce the number of edge, but this solution does not translate well in term of internal representation in memory. Edges of sparsely connected nodes can be stored in efficient manner in a sparse matrix but the calculation in itself would often results in the concretization of the full matrix in memory, resulting in no memory gain during training.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;87</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;88</div><div class="codeline">We finally decided of a middle ground where we define three <span class="keyword1">\textit</span>{families} of nodes:</div><div class="clear"></div>
+<div class="linenb">&nbsp;89</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;90</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The core of the graph is composed of nodes representing geometric regions of the detector. We call those nodes {\color{Dandelion} mesh} nodes. Those mesh nodes are all connected to each other. We keep their number low to gain in memory consumption.</div><div class="clear"></div>
+<div class="linenb">&nbsp;91</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> PMTs in which Photo-Electrons (PE) are found are represented by {\color{red} fired} nodes. Fired nodes are connected to the mesh node they geometrically belong to.</div><div class="clear"></div>
+<div class="linenb">&nbsp;92</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> A final node is called the input/output node ({\color{blue} I/O}). It is connected to every mesh node.  Its features are combinations of signals found in the whole detector.</div><div class="clear"></div>
+<div class="linenb">&nbsp;93</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;94</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;95</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">&nbsp;96</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;97</div><div class="codeline">Those nodes and their relations are illustrated in Figure \ref{fig:jgnn:node_schema}. From this representation, we end up with three distinct adjacency matrices.</div><div class="clear"></div>
+<div class="linenb">&nbsp;98</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;99</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="highlight" title="Use 'An' instead of 'A' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [An] (6474) [lt:en:EN_A_VS_AN]">A</span> $N_{fired} \times N_{mesh}$ adjacency matrix, representing the relations between fired and mesh. Those relations are undirected.</div><div class="clear"></div>
+<div class="linenb">100</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="highlight" title="Use 'An' instead of 'A' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [An] (6581) [lt:en:EN_A_VS_AN]">A</span> $N_{mesh} \times N_{mesh}$ adjacency matrix, representing the relation between meshes. Those relations are directed.</div><div class="clear"></div>
+<div class="linenb">101</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="highlight" title="Use 'An' instead of 'A' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [An] (6677) [lt:en:EN_A_VS_AN]">A</span> $N_{mesh} \times 1$ adjacency between the mesh and I/O nodes. Those relations are undirected.</div><div class="clear"></div>
+<div class="linenb">102</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">103</div><div class="codeline">The adjacency matrix representing those relations is illustrated in Figure \ref{fig:jgnn:adj}.</div><div class="clear"></div>
+<div class="linenb">104</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">105</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">106</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">107</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.6\linewidth}</div><div class="clear"></div>
+<div class="linenb">108</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/nodes_schema.png}</div><div class="clear"></div>
+<div class="linenb">109</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Illustration of the different nodes in our graphs and their relations.}</div><div class="clear"></div>
+<div class="linenb">110</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:node_schema}</div><div class="clear"></div>
+<div class="linenb">111</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">112</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">113</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.39\linewidth}</div><div class="clear"></div>
+<div class="linenb">114</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/adjacency_mat.png}</div><div class="clear"></div>
+<div class="linenb">115</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Illustration of what a dense adjacency matrix would looks like and the part we are really interested in. Because Fired $\rightarrow$ Mesh and Mesh $\rightarrow$ I/O relations are undirected, we only consider in practice the top right part of the matrix for those relations.}</div><div class="clear"></div>
+<div class="linenb">116</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:adj}</div><div class="clear"></div>
+<div class="linenb">117</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">118</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">119</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">120</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">121</div><div class="codeline">The mesh segmentation is following the <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [Heal pix] (6875) [lt:en:MORFOLOGIK_RULE_EN_US]">Healpix</span> segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbors, and it guarantees that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follows the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in Figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 2, $N_{pix} = 12 \cdot 4^2 = 192$.</div><div class="clear"></div>
+<div class="linenb">122</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">123</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">124</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">125</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">126</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">127</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=0.5\linewidth]{images/jgnn/healpix_0.jpg}</div><div class="clear"></div>
+<div class="linenb">128</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">129</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">130</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">131</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">132</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=0.5\linewidth]{images/jgnn/healpix_1.jpg}</div><div class="clear"></div>
+<div class="linenb">133</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">134</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Illustration of the HealPix segmentation. <span class="keyword1">\textbf</span>{On the left:} A segmentation of order 0. <span class="keyword1">\textbf</span>{On the right:} A segmentation of order 1.}</div><div class="clear"></div>
+<div class="linenb">135</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:healpix}</div><div class="clear"></div>
+<div class="linenb">136</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">137</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">138</div><div class="codeline">We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {\color{red} fired (F)} and {\color{blue} I/O} have different set of features. The features used in the graph are presented in tables \ref{tab:jgnn:node_feat} and \ref{tab:jgnn:edge_feat}. Most of the features are low level information such as the charge or time information, but we include some high order features such as</div><div class="clear"></div>
+<div class="linenb">139</div><div class="codeline"><span class="keyword2">\begin{enumerate}</span></div><div class="clear"></div>
+<div class="linenb">140</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $P^h_l$: Is the normalized power of the $l$-th spherical harmonic. For more details about spherical harmonics in JUNO, see annex \ref{sec:annex:jgnn:harms}.</div><div class="clear"></div>
+<div class="linenb">141</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathbb{A}$ and $\mathbb{B}$ are information that are related the likeliness of the interaction vertex to be on the segment between the center of two meshes.</div><div class="clear"></div>
+<div class="linenb">142</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">143</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\mathbb{A}_{ij} &amp;= (\vec{j} - \vec{i})\cdot\frac{l_1}{D_{ij}} + \vec{i} \\</div><div class="clear"></div>
+<div class="linenb">144</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\mathbb{B}_{ij} &amp;= \frac{Q_i}{Q_j} \bigg(\frac{l_2}{l_1}\bigg)^2 \\</div><div class="clear"></div>
+<div class="linenb">145</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_1 &amp;= \frac{1}{2}(D_{ij} - \Delta t \frac{c}{n}) \\</div><div class="clear"></div>
+<div class="linenb">146</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_2 &amp;= \frac{1}{2}(D_{ij} + \Delta t \frac{c}{n})</div><div class="clear"></div>
+<div class="linenb">147</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">148</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Where] (7938) [lt:en:UPPERCASE_SENTENCE_START]">where</span> $\vec{i}$ is the position vector of the mesh $i$, $D_{ij}$ is the distance between the center of the meshes $i$ and $j$, $Q_i$ the sum of charges on the mesh $i$, $\Delta t = t_i - t_j$ where $t_i$ the earliest time on the mesh $i$ and $n$ the optical index of the LS. $\mathbb{A}$ is the vertex between center of meshes distance ratio <span class="highlight" title="Incorrect form of the pronoun 'I'.. Suggestions: [between me] (8213) [lt:en:BETWEEN_PRP]">between $i$</span> and $j$ based on the time information. For $\mathbb{B}$, the charge ratio evolve with the square of the distance, so the mesh couple with the smallest $\mathbb{B}$ should be the one with the interaction vertex between its two center.</div><div class="clear"></div>
+<div class="linenb">149</div><div class="codeline"><span class="keyword2">\end{enumerate}</span></div><div class="clear"></div>
+<div class="linenb">150</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">151</div><div class="codeline"><span class="keyword2">\begin{table}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">152</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">153</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{tabular}</span>{|c|c|c|}</div><div class="clear"></div>
+<div class="linenb">154</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">155</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;Fired &amp; Mesh &amp; I/O \\</div><div class="clear"></div>
+<div class="linenb">156</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline \hline</div><div class="clear"></div>
+<div class="linenb">157</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$Q$ &amp; $\langle Q_m \rangle$ &amp; $\langle X \rangle$ \\</div><div class="clear"></div>
+<div class="linenb">158</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$t$ &amp; $\sigma Q_m$ &amp; $\langle Y \rangle$ \\</div><div class="clear"></div>
+<div class="linenb">159</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$x$ &amp; $\mathrm{min}(t_m)$ &amp; $\langle Z \rangle$ \\</div><div class="clear"></div>
+<div class="linenb">160</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$y$ &amp; $\mathrm{max}(t_m)$ &amp; $\sum Q$ \\</div><div class="clear"></div>
+<div class="linenb">161</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;LPMT/SPMT: 1/-1 &amp; $\sigma t_m$ &amp; $P^h_l; ~ l \in [0,8]$ \\</div><div class="clear"></div>
+<div class="linenb">162</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $X_m$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">163</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $Y_m$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">164</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $Z_m$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">165</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">166</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{tabular}</span></div><div class="clear"></div>
+<div class="linenb">167</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Features on the nodes of the graph. All charge are in [nPE], time in [ns] and position in [m]. \\</div><div class="clear"></div>
+<div class="linenb">168</div><div class="codeline">&nbsp;&nbsp;$Q$ and $t$ are the reconstructed charge and time of the hit PMTs. $(x,y,z)$ is the position of the PMTs and the last parameter represent the type of the PMT. It's 1 for LPMT and -1 for SPMT \\</div><div class="clear"></div>
+<div class="linenb">169</div><div class="codeline">&nbsp;&nbsp;$Q_m$ and $t_m$ is the set of charges and time of the PMT belonging the mesh $m$. $(X_m, Y_m, Z_m)$ i the position of the center of the geometric region represented by the mesh $m$ \\</div><div class="clear"></div>
+<div class="linenb">170</div><div class="codeline">&nbsp;&nbsp;$(\langle X \rangle, \langle Y \rangle, \langle Z \rangle)$ is the position of the charge barycenter, $\sum Q$ the sum of the collected charge in the detector and $P^h_l$ is the relative power of the $l$th harmonic. See annex \ref{sec:annex:jgnn:harms} for details.}</div><div class="clear"></div>
+<div class="linenb">171</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{tab:jgnn:node_feat}</div><div class="clear"></div>
+<div class="linenb">172</div><div class="codeline"><span class="keyword2">\end{table}</span></div><div class="clear"></div>
+<div class="linenb">173</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">174</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">175</div><div class="codeline"><span class="keyword2">\begin{table}</span></div><div class="clear"></div>
+<div class="linenb">176</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">177</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{tabular}</span>{|c|c|c|}</div><div class="clear"></div>
+<div class="linenb">178</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">179</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;Fired $\rightarrow$ Mesh &amp; Mesh ($m1$) $\rightarrow$ Mesh ($m2$) &amp; Mesh $\rightarrow$ I/O \\</div><div class="clear"></div>
+<div class="linenb">180</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline \hline</div><div class="clear"></div>
+<div class="linenb">181</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$x - X_m$ &amp; $X_{m1} - X_{m2}$ &amp; $\langle X \rangle - X_m$ \\</div><div class="clear"></div>
+<div class="linenb">182</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$y - Y_m$ &amp; $Y_{m1} - Y_{m2}$ &amp; $\langle Y \rangle - Y_m$ \\</div><div class="clear"></div>
+<div class="linenb">183</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$z - Z_m$ &amp; $Z_{m1} - Z_{m2}$ &amp; $\langle Z \rangle - Z_m$ \\</div><div class="clear"></div>
+<div class="linenb">184</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$t - \mathrm{min}(t_m)$ &amp; $\mathrm{min}(t_{m1}) - \mathrm{min}(t_{m2})$ &amp; $\sum Q_m / \sum Q$ \\</div><div class="clear"></div>
+<div class="linenb">185</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$Q / \sum Q_m$ &amp; $\frac{\langle Q_{m1} \rangle - \langle Q_{m2} \rangle}{\langle Q_{m1} \rangle + \langle Q_{m2} \rangle}$ &amp; $\langle t_m \rangle$ \\</div><div class="clear"></div>
+<div class="linenb">186</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $D^{-1}_{m1 \rightarrow m2}$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">187</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $\mathbb{A}$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">188</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; $\mathbb{B}$ &amp; \\</div><div class="clear"></div>
+<div class="linenb">189</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">190</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{tabular}</span></div><div class="clear"></div>
+<div class="linenb">191</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Features on the edges on the graph. It use the same notation as in <span class="highlight-sh" title="Use a capital letter when referring to a specific table: 'Table X' [sh:tabmag]">table \ref</span>{tab:jgnn:node_feat}. $D^{-1}_{m1 \rightarrow m2}$ is the inverse of the distance between the mesh $m1$ and the mesh $m2$. The features $\mathbb{A}$ and $\mathbb{B}$ are detailed in Section \ref{sec:jgnn:data}.}</div><div class="clear"></div>
+<div class="linenb">192</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{tab:jgnn:edge_feat}</div><div class="clear"></div>
+<div class="linenb">193</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">194</div><div class="codeline"><span class="keyword2">\end{table}</span></div><div class="clear"></div>
+<div class="linenb">195</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">196</div><div class="codeline">Since our different nodes do not have the same number of features, they exist in distinct spaces. Traditional graph neural networks only handle homogeneous graphs, where the nodes and edges have the same number of features at each layer. Therefore, the libraries and publicly available algorithms we found were not suited to our needs. As a result, we had to develop and implement a custom message-passing algorithm capable of handling our heterogeneous graph.</div><div class="clear"></div>
+<div class="linenb">197</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">198</div><div class="codeline"><span class="keyword1">\section</span>{Message passing algorithm}</div><div class="clear"></div>
+<div class="linenb">199</div><div class="codeline"><span class="keyword1">\label</span>{sec:jgnn:mpa}</div><div class="clear"></div>
+<div class="linenb">200</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">201</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Need one message passing algorithm per connection (f-&gt;m, m-&gt;f, m-&gt;m, n-&gt;io, io-&gt;m)</span></span></div><div class="clear"></div>
+<div class="linenb">202</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Allow to select part of the adjacency matrix (see notes)</span></span></div><div class="clear"></div>
+<div class="linenb">203</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Explain message passing layer that was developed</span></span></div><div class="clear"></div>
+<div class="linenb">204</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Reimplementation in C++ using torch framework</span></span></div><div class="clear"></div>
+<div class="linenb">205</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> C++ allow also for on the fly data transformation from raw file and minutieuse memory management</span></span></div><div class="clear"></div>
+<div class="linenb">206</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Not updating the edge for the sake of technical simplicity: Commplicated to identify an edge feature from the above algorithm</span></span></div><div class="clear"></div>
+<div class="linenb">207</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">208</div><div class="codeline">The message passing algorithm define the way the GNN will compute and update its graph. As it is detailed in Section \ref{sec:ml:gnn}, the message-passing algorithm allows each node in the graph to update its features based on information from its neighboring nodes. This update process enables the network to propagate information through the graph, allowing nodes to gradually integrate knowledge about the entire detector. This step is crucial for ensuring that each node can take into account not only its local neighborhood but also the broader context of the event.</div><div class="clear"></div>
+<div class="linenb">209</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">210</div><div class="codeline">As introduced in previous section and in the tables \ref{tab:jgnn:node_feat} and \ref{tab:jgnn:edge_feat}, our graphs nodes and edges will have a different number of features depending on their nature, meaning that we cannot have a single message passing function. We thus need to define a message passing function for each transition inside or outside a family. Using the notation presented in Section \ref{sec:ml:gnn}:</div><div class="clear"></div>
+<div class="linenb">211</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">212</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:jgnn:gen_mp}</div><div class="clear"></div>
+<div class="linenb">213</div><div class="codeline">&nbsp;&nbsp;n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i</div><div class="clear"></div>
+<div class="linenb">214</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">215</div><div class="codeline">and denoting the mesh nodes $M$, the fired nodes $F$ and the I/O node $IO$, we need to define</div><div class="clear"></div>
+<div class="linenb">216</div><div class="codeline"><span class="keyword2">\begin{align*}</span></div><div class="clear"></div>
+<div class="linenb">217</div><div class="codeline">&nbsp;&nbsp;\phi_{u; F\rightarrow M}  <span class="highlight-sh" title="N'utilisez pas d'espace insécable; c'est plutôt une espace fine qui doit être utilisée, et LaTeX se charge de l'insérer par lui-même. [sh:nbsp]">~;</span>~ &amp;\phi_{m; F\rightarrow M} \\</div><div class="clear"></div>
+<div class="linenb">218</div><div class="codeline">&nbsp;&nbsp;\phi_{u; M\rightarrow F}  <span class="highlight-sh" title="N'utilisez pas d'espace insécable; c'est plutôt une espace fine qui doit être utilisée, et LaTeX se charge de l'insérer par lui-même. [sh:nbsp]">~;</span>~ &amp;\phi_{m; M\rightarrow F} \\</div><div class="clear"></div>
+<div class="linenb">219</div><div class="codeline">&nbsp;&nbsp;\phi_{u; M\rightarrow M}  <span class="highlight-sh" title="N'utilisez pas d'espace insécable; c'est plutôt une espace fine qui doit être utilisée, et LaTeX se charge de l'insérer par lui-même. [sh:nbsp]">~;</span>~ &amp;\phi_{m; M\rightarrow M} \\</div><div class="clear"></div>
+<div class="linenb">220</div><div class="codeline">&nbsp;&nbsp;\phi_{u; M\rightarrow IO} <span class="highlight-sh" title="N'utilisez pas d'espace insécable; c'est plutôt une espace fine qui doit être utilisée, et LaTeX se charge de l'insérer par lui-même. [sh:nbsp]">~;</span>~ &amp;\phi_{m; M\rightarrow IO} \\</div><div class="clear"></div>
+<div class="linenb">221</div><div class="codeline">&nbsp;&nbsp;\phi_{u; IO\rightarrow M} <span class="highlight-sh" title="N'utilisez pas d'espace insécable; c'est plutôt une espace fine qui doit être utilisée, et LaTeX se charge de l'insérer par lui-même. [sh:nbsp]">~;</span>~ &amp;\phi_{m; IO\rightarrow M}</div><div class="clear"></div>
+<div class="linenb">222</div><div class="codeline"><span class="keyword2">\end{align*}</span></div><div class="clear"></div>
+<div class="linenb">223</div><div class="codeline">to update the nodes after each layer. Following the illustration in Figure \ref{fig:jgnn:mp_ill}, for each transition between families or inside a family we need an aggregation, a message and an update function. For the aggregation, we use the sum. We use the same, simple, formalism for every $\phi_u$:</div><div class="clear"></div>
+<div class="linenb">224</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">225</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:jgnn:custom_mp}</div><div class="clear"></div>
+<div class="linenb">226</div><div class="codeline">&nbsp;&nbsp;\phi_u \equiv I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + I^n_i S^{n'}_{n} + B^{n'}</div><div class="clear"></div>
+<div class="linenb">227</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">228</div><div class="codeline">using the Einstein summation notation. The second order tensor, or matrix, $I^{n}_i$ is holding the <span class="highlight" title="An apostrophe may be missing.. Suggestions: [nodes', node's] (10302) [lt:en:POSSESSIVE_APOSTROPHE]">nodes</span> information with $i$ the node index and $n$ the feature index.<span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [N] (10367) [lt:en:UPPERCASE_SENTENCE_START]"> $n$</span> represent the features of the previous layer and $n'$ the features of this layer.</div><div class="clear"></div>
+<div class="linenb">229</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">230</div><div class="codeline">$A_{i',e}^{i}$ is the adjacency tensor, discussed in the previous section, representing the edges between the node $i'$ and the node $i$, each edge holding the features indexed by $e$. If the edge does not exist, the features are set to 0. This choice is justified by the linearity of the operation in equation \ref{eq:jgnn:custom_mp}: whatever the weights, when multiplied by 0 the results is 0 and the sum result is unchanged.</div><div class="clear"></div>
+<div class="linenb">231</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">232</div><div class="codeline">The learnable parameters are composed of:</div><div class="clear"></div>
+<div class="linenb">233</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">234</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The third order tensor $W_n^{e,n'}$ which represent the passage from the previous combined feature space between the node and the edge features $n \otimes e$, the previous layer, to the current space $n'$, this layer.</div><div class="clear"></div>
+<div class="linenb">235</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The first order tensor $B^{n'}$ which is a learnable bias on the new features $n'$.</div><div class="clear"></div>
+<div class="linenb">236</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The second order tensor $S^{n'}_n$, which can be viewed as a self loop relation where the node update itself based on the previous layer information, going from the previous space $n$ to the current space $n'$.</div><div class="clear"></div>
+<div class="linenb">237</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">238</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">239</div><div class="codeline">If a node have neighbors in different families, the different $IAW$ coming from the different families are summed.</div><div class="clear"></div>
+<div class="linenb">240</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">241</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:jgnn:multi_fam}</div><div class="clear"></div>
+<div class="linenb">242</div><div class="codeline">&nbsp;&nbsp;I' = \sum_\mathcal{N} \bigg[ I_{\mathcal{N}}AW \bigg] + IS + B</div><div class="clear"></div>
+<div class="linenb">243</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">244</div><div class="codeline"><span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Where] (11464) [lt:en:UPPERCASE_SENTENCE_START]">where</span> $\mathcal{N}$ are the neighboring family.</div><div class="clear"></div>
+<div class="linenb">245</div><div class="codeline">In our case, dropping the tensor indices and indexing by family for readability, we get</div><div class="clear"></div>
+<div class="linenb">246</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">247</div><div class="codeline">&nbsp;&nbsp;I_F' &amp;= I_M A_{M \rightarrow F} W_{M \rightarrow F} + I_F S_F + B_F \\</div><div class="clear"></div>
+<div class="linenb">248</div><div class="codeline">&nbsp;&nbsp;I_M' &amp;= I_F A_{F \rightarrow M} W_{F \rightarrow M} + I_M A_{M \rightarrow M} W_{M \rightarrow M} + I_{IO} A_{IO \rightarrow M} W_{IO \rightarrow M} + I_M S_M + B_M \\</div><div class="clear"></div>
+<div class="linenb">249</div><div class="codeline">&nbsp;&nbsp;I_{IO}' &amp;= I_M A_{M \rightarrow IO} W_{IO \rightarrow M} + I_{IO} S_{IO} + B_{IO}</div><div class="clear"></div>
+<div class="linenb">250</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">251</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">252</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">253</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">254</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=5cm]{images/jgnn/mp_illus.png}</div><div class="clear"></div>
+<div class="linenb">255</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Illustration of the different update function needed by our GNN.}</div><div class="clear"></div>
+<div class="linenb">256</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:mp_ill}</div><div class="clear"></div>
+<div class="linenb">257</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">258</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">259</div><div class="codeline">We thus have an $S$, $W$ and $B$ for each of the $\phi_u$ function we defined above. The $IAW$ sum can be seen as the $\phi_m$ function and $IS+B$ as the second part of the $\phi_u$ function.</div><div class="clear"></div>
+<div class="linenb">260</div><div class="codeline">Eq.\ \ref{eq:jgnn:gen_mp} gave the generic form of message passing: to update a node i, one first combines information from the surrounding nodes and edges and then combine the result ($\Box_j \phi_m$) with the current features of node i.</div><div class="clear"></div>
+<div class="linenb">261</div><div class="codeline">Many practical ways to combine can be tried. In our implementation of message passing (Eq. \ref{eq:jgnn:custom_mp} and \ref{eq:jgnn:multi_fam}) the latter combination is the simple sum of the former ($IAW$, the equivalent of $\Box_j \phi_m$) with a linear combination of the current features of node i ($IS+B$).</div><div class="clear"></div>
+<div class="linenb">262</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">263</div><div class="codeline">Interestingly, the number on learnable weight in those layer is independent of the number of nodes in each family and depends solely on the number of features on the nodes and the edges.</div><div class="clear"></div>
+<div class="linenb">264</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">265</div><div class="codeline">The expression above only update the node features. We could update the edges, using the results of $\phi_m$ for example, but for technical simplicity we only update the nodes and keep the edges constant. Preserving the edges after each layer allow sharing the adjacency matrix between all layers, saving memory and computing time.</div><div class="clear"></div>
+<div class="linenb">266</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">267</div><div class="codeline">This operation of message passing is the constituent of our message passing layers, designed in this work as <span class="keyword1">\textit</span>{JWGLayer}, each of them owning their own set of parameter $W$, $S$ and $B$. To those layers, we can adjoin an activation function such as $PReLU$</div><div class="clear"></div>
+<div class="linenb">268</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">269</div><div class="codeline">&nbsp;&nbsp;I' = PReLU\bigg(\sum_\mathcal{N} \bigg[ I_{\mathcal{N}}AW \bigg] + IS + B \bigg)</div><div class="clear"></div>
+<div class="linenb">270</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">271</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">272</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">273</div><div class="codeline"><span class="keyword1">\section</span>{Data}</div><div class="clear"></div>
+<div class="linenb">274</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">275</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Present the data (dataset)</span></span></div><div class="clear"></div>
+<div class="linenb">276</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Maybe show an example</span></span></div><div class="clear"></div>
+<div class="linenb">277</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">278</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">279</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">280</div><div class="codeline">The dataset consists of 1M simulated positron events from the JUNO official simulation version<span class="highlight-sh" title="There should be a space after a period. If you are writing a URL or a filename, use the \url{} or \verb markup. [sh:d:002]"> J23.0.1-rc8.dc</span>1. This version of the simulation incorporates both the physics of the detector and its electronics, ensuring that the events closely reflect real detector conditions. Importantly, this version includes advanced digitization and trigger modeling, making it suitable for testing the reconstruction capabilities of our GNN model. Those events are uniformly distributed in energy with $E_k \in [0, 9]$ MeV and distributed in the detector.</div><div class="clear"></div>
+<div class="linenb">281</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">282</div><div class="codeline">All the event are <span class="keyword1">\textit</span>{Calib} level, with simulation of the physics, electronics, digitizations and triggers. 900k events will be used for the training, 50k for validation and loss monitoring and 50k for the results' analysis in Section \ref{sec:jgnn:results}. Each event is between 2k and 12k fired PMTS, resulting in fired nodes being the largest family in our graphs in all circumstances as illustrated in Figure \ref{fig:jgnn:tot_hit_e}.</div><div class="clear"></div>
+<div class="linenb">283</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">284</div><div class="codeline">As expected, by comparing the scale between the Figure \ref{fig:jgnn:lpmt_hit_e} and \ref{fig:jgnn:spmt_hit_e} we see that the LPMT system is predominant in terms of information in our data. The number of PMT hits grow with energy but do not reach 0 for low energy event due to the dark noise contribution which seems to be around 1000 hits per event for the LPMT system (left limit of Figure \ref{fig:jgnn:lpmt_hit_e}) and around 15 hits per event for the SPMT system (left limit of Figure \ref{fig:jgnn:spmt_hit_e}) which is consistent with the results show in Section \ref{sec:jcnn:data}.</div><div class="clear"></div>
+<div class="linenb">285</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">286</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">287</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">288</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">289</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">290</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/lpmt_hit_e.png}</div><div class="clear"></div>
+<div class="linenb">291</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">292</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:lpmt_hit_e}</div><div class="clear"></div>
+<div class="linenb">293</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">294</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">295</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">296</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/spmt_hit_e.png}</div><div class="clear"></div>
+<div class="linenb">297</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">298</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:spmt_hit_e}</div><div class="clear"></div>
+<div class="linenb">299</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">300</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">301</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">302</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/tot_hit_e.png}</div><div class="clear"></div>
+<div class="linenb">303</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">304</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:tot_hit_e}</div><div class="clear"></div>
+<div class="linenb">305</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">306</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the number of hits depending on the energy. <span class="keyword1">\textbf</span>{On the right:} for the LPMT system. <span class="keyword1">\textbf</span>{In the middle :} for the SPMT system. <span class="keyword1">\textbf</span>{On the left: } For both system.}</div><div class="clear"></div>
+<div class="linenb">307</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">308</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">309</div><div class="codeline">The structure seen in the distribution in Figure \ref{fig:jgnn:lpmt_hit_e} comes from the shape of the number of hits depending on the radius as shown in Figures \ref{fig:jgnn:lpmt_hit_r} and \ref{fig:jgnn:spmt_hit_r} where the number of hit decrease with radius. It is important to understand that this is not representative of the number of PE per event and the decrease in hits over the radius means that the PE are just more concentrated in a smaller number of PMTs.</div><div class="clear"></div>
+<div class="linenb">310</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">311</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">312</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">313</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">314</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">315</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/lpmt_hit_r.png}</div><div class="clear"></div>
+<div class="linenb">316</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">317</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:lpmt_hit_r}</div><div class="clear"></div>
+<div class="linenb">318</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">319</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">320</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">321</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">322</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/spmt_hit_r.png}</div><div class="clear"></div>
+<div class="linenb">323</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">324</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:spmt_hit_r}</div><div class="clear"></div>
+<div class="linenb">325</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">326</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the number of hits depending on the radius. <span class="keyword1">\textbf</span>{On the right:} for the LPMT system. <span class="keyword1">\textbf</span>{On the right :} for the SPMT system. To prevent the superposition of structure of different scales we limit ourselves to the energy range $E_{true} \in [0, 9]$.}</div><div class="clear"></div>
+<div class="linenb">327</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">328</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">329</div><div class="codeline">No quality cut is applied here, we rely only on the trigger system. It means that event that would not trigger are not present in the dataset but for events that triggered twice, it rarely happens, the two trigger are considered as two separate events.</div><div class="clear"></div>
+<div class="linenb">330</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">331</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">332</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">333</div><div class="codeline"><span class="keyword1">\section</span>{Model}</div><div class="clear"></div>
+<div class="linenb">334</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">335</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Present number of layers etc...</span></span></div><div class="clear"></div>
+<div class="linenb">336</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Discuss hyperparameters optimisation</span></span></div><div class="clear"></div>
+<div class="linenb">337</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Random search is not viable with the accessible hardware (too time consuming) -&gt; 90h per trainng</span></span></div><div class="clear"></div>
+<div class="linenb">338</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> By hand optimization -&gt; around 70 iterations and tests.</span></span></div><div class="clear"></div>
+<div class="linenb">339</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">340</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">341</div><div class="codeline">In this section, we discuss the different layers that compose the final version of the model. The number of layers, their dimensions, and their arrangement were fine-tuned through multiple iterations. As mentioned earlier, each JWGLayer is defined by the number of features on the nodes and edges of the output graph, assuming it takes as input the graph from the previous layer. For simplicity, when discussing a graph configuration, it will be presented as follows: \{ {\color{red} $N_{f}$},  {\color{Dandelion} $N_{m}$}, {\color{blue} $N_{IO}$}, $N_{f\rightarrow m}$, $N_{m \rightarrow m}$, $N_{m \rightarrow f}$ \} where</div><div class="clear"></div>
+<div class="linenb">342</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">343</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> {\color{<span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Red] (15555) [lt:en:UPPERCASE_SENTENCE_START]">red</span>} $N_{f}$} is the number of feature on the fired nodes.</div><div class="clear"></div>
+<div class="linenb">344</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> {\color{Dandelion} $N_{m}$} is the number of features on the mesh nodes.</div><div class="clear"></div>
+<div class="linenb">345</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> {\color{<span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Blue] (15667) [lt:en:UPPERCASE_SENTENCE_START]">blue</span>} $N_{IO}$} is the number of features on the I/O node.</div><div class="clear"></div>
+<div class="linenb">346</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $N_{f\rightarrow m}$ is the number of features on the edges between the fired and mesh nodes.</div><div class="clear"></div>
+<div class="linenb">347</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $N_{m \rightarrow m}$ is the number of features on the edges between two mesh nodes.</div><div class="clear"></div>
+<div class="linenb">348</div><div class="codeline">&nbsp;<span class="highlight" title="Three successive sentences begin with the same word. Consider rewording the sentence or use a thesaurus to find a synonym. (15863) [lt:en:ENGLISH_WORD_REPEAT_BEGINNING_RULE]"> <span class="keyword1">\item</span> $N_{m \rightarrow f}$</span> is the number of features on the edges between the mesh nodes and the I/O node.</div><div class="clear"></div>
+<div class="linenb">349</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">350</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">351</div><div class="codeline">Because we do not change the number of features on the edges, we can simplify the notation to \{{\color{red} $N_{f}$}, {\color{Dandelion} $N_{m}$}, {\color{blue} $N_{IO}$}\}. As an example, the input graph configuration, following the tables \ref{tab:jgnn:node_feat} and \ref{tab:jgnn:edge_feat} is \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13}, 5, 8, 5 \} or, without the edge features, \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13}\}.</div><div class="clear"></div>
+<div class="linenb">352</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">353</div><div class="codeline">The final version of the model, called JWGv8.4.0 is composed of</div><div class="clear"></div>
+<div class="linenb">354</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">355</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> An JWGLayer, converting the input graph \{{\color{red} 6}, {\color{Dandelion} 8}, {\color{blue} 13} \} to \{ 64, 512, 2048 \} with a PReLU activation function.</div><div class="clear"></div>
+<div class="linenb">356</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> 3 ResNet layers, each of them composed of</div><div class="clear"></div>
+<div class="linenb">357</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword2">\begin{enumerate}</span></div><div class="clear"></div>
+<div class="linenb">358</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\item</span> 2 JWG layers with a PReLU activation function. They do not change the dimension of the graph</div><div class="clear"></div>
+<div class="linenb">359</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\item</span> A sum layer that sums the features in the input graph with the one computed from the JWG layers</div><div class="clear"></div>
+<div class="linenb">360</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword2">\end{enumerate}</span></div><div class="clear"></div>
+<div class="linenb">361</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="highlight" title="After 'A', the verb 'flatten' doesn't fit. Is 'flatten' spelled correctly? If 'flatten' is the first word in a compound adjective, use a hyphen between the two words. Using the verb 'flatten' as a noun may be non-standard.. Suggestions: [A flatted, A flatter] (16692) [lt:en:A_INFINITIVE]">A flatten</span> layer that flatten the features of the I/O and mesh nodes in a vector.</div><div class="clear"></div>
+<div class="linenb">362</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> 2 fully connected layers of 2048 neurons with a PReLU activation function.</div><div class="clear"></div>
+<div class="linenb">363</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> 2 fully connected layers of 512 neurons with a PReLU activation function.</div><div class="clear"></div>
+<div class="linenb">364</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> A final, fully connected layer of 4 neurons acting as the output of the network.</div><div class="clear"></div>
+<div class="linenb">365</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">366</div><div class="codeline">A schematic of the model is presented in Figure \ref{fig:jgnn:model-schematic}.</div><div class="clear"></div>
+<div class="linenb">367</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">368</div><div class="codeline">We use the Mean Square Error (MSE) for the loss</div><div class="clear"></div>
+<div class="linenb">369</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">370</div><div class="codeline">&nbsp;&nbsp;\mathcal{L} = (E_{rec} - E_{dep})^2 + (X_{rec} - X_{true})^2 + (Y_{rec} - Y_{true})^2 + (Z_{rec} - Z_{true})^2</div><div class="clear"></div>
+<div class="linenb">371</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">372</div><div class="codeline">as it was the best resulting loss in Chapter \ref{sec:jcnn}.</div><div class="clear"></div>
+<div class="linenb">373</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">374</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">375</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">376</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">377</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=12cm]{images/jgnn/jwgv8_4.png}</div><div class="clear"></div>
+<div class="linenb">378</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Schema of the JWGv8.4.0 architecture, the colored triplet is the graph configuration after each JWG layers.}</div><div class="clear"></div>
+<div class="linenb">379</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:model-schematic}</div><div class="clear"></div>
+<div class="linenb">380</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">381</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">382</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">383</div><div class="codeline"><span class="keyword1">\section</span>{Training}</div><div class="clear"></div>
+<div class="linenb">384</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">385</div><div class="codeline">The optimizer used for training is the Adam optimizer (see Section \ref{sec:ml:optim}) and default hyperparameters ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e-8$) with a learning rate $\lambda = $ 1e-8. The training last 200 meta-iterations of 800 steps. We use a batch size of 32, the largest we can have with 40 GB of GPU ram. The learning rate is constant during the first 20 meta-iterations then exponentially decrease with a rate of 0.99. We save two set of parameters, the set of parameters the set that yield the lowest validation loss and the set of parameters at the end of the training. The validation is computed over a single batch.</div><div class="clear"></div>
+<div class="linenb">386</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">387</div><div class="codeline"><span class="keyword1">\section</span>{Optimization}</div><div class="clear"></div>
+<div class="linenb">388</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">389</div><div class="codeline">The GNN model presented in previous sections is the result of a long work of optimization. Indeed, the innovative architecture we propose left us with an infinity of possible configurations with no guidance from prior works in literature nor in JUNO.</div><div class="clear"></div>
+<div class="linenb">390</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">391</div><div class="codeline">In the end, more than 60 different configurations have been tested. This effort is illustrated on Figure \ref{fig:jgnn:histor}\footnote{Note that this figure was prepared on idealized data with no dark noise and perfect hit time determination.},</div><div class="clear"></div>
+<div class="linenb">392</div><div class="codeline">where the 40 configurations are compared in their ability to reconstruct the positron energy. Although all configurations share the fundamental principles we base our innovative architecture on (three different kinds of nodes and edges, usage of raw level features on some of them, usage of higher level data on others, division of JUNO's surface into regional pixels to form mesh nodes, the very large number of edges connected to each mesh node, etc.), performances can vary a lot between our first attempts (far beyond any acceptable energy resolution, and not even on this figure) and recent ones. Therefore: the precise way to choose hyperparameters mattered a lot, regardless of the relevance of the global architectural principles.</div><div class="clear"></div>
+<div class="linenb">393</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">394</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">395</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">396</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/jgnn/GNN_Optimization_hist.png}</div><div class="clear"></div>
+<div class="linenb">397</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Energy reconstruction depending on the true energy for samples of the different versions of the GNN.}</div><div class="clear"></div>
+<div class="linenb">398</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:histor}</div><div class="clear"></div>
+<div class="linenb">399</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">400</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">401</div><div class="codeline">The spectacular improvement between early and later configurations also explains the length of this process<span class="highlight-sh" title="There should not be a space before a punctuation mark. If in your language, typographic rules require a space here, LaTeX takes care of inserting it without your intervention. [sh:d:005]"> :</span> for long we hoped we would finally reach the classical performance, and it was tempting to test yet another configuration.</div><div class="clear"></div>
+<div class="linenb">402</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">403</div><div class="codeline"><span class="comment"><span class="comment">%Even the features on the graph went under investigation. With the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{red} fired} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  &gt; 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.</span></span></div><div class="clear"></div>
+<div class="linenb">404</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">405</div><div class="codeline"><span class="keyword1">\subsection</span>{Software optimization}</div><div class="clear"></div>
+<div class="linenb">406</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">407</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">408</div><div class="codeline">A substantial effort was devoted to the data processing workflow. Transforming JUNO simulation outputs into graphs is a computationally expensive task. Furthermore, due to the ever-changing nature of the graph dimensions and features during optimization, preprocessing JUNO's files by precalculating the graphs and then reading them from files was not viable, as it would require a large amount of disk space to store events for each version of the graph.</div><div class="clear"></div>
+<div class="linenb">409</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">410</div><div class="codeline">Therefore, the software does not rely on preprocessed data and instead computes the observables, adjacency matrix, etc., during training. This data processing is performed in parallel on the CPU. The raw data comes from ROOT files produced by the collaboration software, and the Event Data Model (EDM), used internally by the collaboration \cite{li_design_2017}, had to be interfaced with our software, an interface that had to be maintained as the collaboration's software evolved. For the harmonic power calculation, we migrated from the HealPix library to Ducc0 \cite{reinecke_ducc0_2024} for more precise control over multithreading.</div><div class="clear"></div>
+<div class="linenb">411</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">412</div><div class="codeline"><span class="keyword1">\subsection</span>{Hyperparameters optimization}</div><div class="clear"></div>
+<div class="linenb">413</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">414</div><div class="codeline">The first kind of hyperparameters that received a lot of effort concern the network's detailed architecture:</div><div class="clear"></div>
+<div class="linenb">415</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">416</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Message passing layers where originally not JWG layers, we started by using small FCDNN in place of $\phi_u$ and $\phi_m$. Due to low performances and memory consumption issues, we pivoted to the message passing algorithm presented in Section \ref{sec:jgnn:mpa}.</div><div class="clear"></div>
+<div class="linenb">417</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">418</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The ResNet architecture was brought after issue with the gradient vanishing.</div><div class="clear"></div>
+<div class="linenb">419</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">420</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The number of layers was varied between 5 and 12.</div><div class="clear"></div>
+<div class="linenb">421</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">422</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The number of node features after each given message passing layer (64, 512, 2048 in the final version) was varied.</div><div class="clear"></div>
+<div class="linenb">423</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">424</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The Final FCDNN after the message passing layers is not present in all versions.</div><div class="clear"></div>
+<div class="linenb">425</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">426</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> At some point, the PReLU activation function replaced the ReLU function.</div><div class="clear"></div>
+<div class="linenb">427</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">428</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">429</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">430</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">431</div><div class="codeline">For some of them, software work was necessary. In any case, each configuration required a training of about 90h. Adding the analysis time necessary to the verification of its performance and the comparison with other versions, one understands the number of tests had to be limited.</div><div class="clear"></div>
+<div class="linenb">432</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">433</div><div class="codeline">Other hyperparameters were also tested:</div><div class="clear"></div>
+<div class="linenb">434</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">435</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">436</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">437</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The higher level variables described in Section \ref{sec:jgnn:data} (powers of various spherical harmonics, $\mathbb{A}$, $\mathbb{A}$, $(Q_{m1}-Q_{m2})/(Q_{m1}+Q_{m2})$) were added progressively. Notice that our choice to focus our search on this kind of variables is also due to the fact that JWGLayer involves linear operations. It is therefore difficult for such a network to propose variables of this kind among the node features learned layers after layers (i.e.\ it's difficult for the network to understand these variables are important, or only after many layers).</div><div class="clear"></div>
+<div class="linenb">438</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">439</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">440</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Time allocated to training, the Learning Rate, the size of</div><div class="clear"></div>
+<div class="linenb">441</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;batches, etc.</div><div class="clear"></div>
+<div class="linenb">442</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">443</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The number of pixels (i.e.\ of mesh nodes) was varied between 192 and 768.</div><div class="clear"></div>
+<div class="linenb">444</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">445</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Several loss functions where tried. In particular, we tried some focussed only on the E resolution, only on the vertex resolution (R) or trying to optimize both.</div><div class="clear"></div>
+<div class="linenb">446</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">447</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">448</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">449</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">450</div><div class="codeline">To make a long story short, each new configuration was the result of our reflections after having analyzed the previous configurations, or  after having thought over again about JUNO's detailed response to energy deposits -- seeking for variables that could help the GNN.</div><div class="clear"></div>
+<div class="linenb">451</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">452</div><div class="codeline">Another, quite common, approach  was in principles possible: a random search. However, due to the extensive training time, up to 90h per training, the heavy memory consumption of the models that would often exceed the 20 GB limit of the V100, this approach was not realistic in our case, though we were able to extend the memory limit to 40 GB thanks to a local A100 GPU card available at Subatech.</div><div class="clear"></div>
+<div class="linenb">453</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">454</div><div class="codeline"><span class="keyword1">\section</span>{Performance of the final version}</div><div class="clear"></div>
+<div class="linenb">455</div><div class="codeline"><span class="keyword1">\label</span>{sec:jgnn:results}</div><div class="clear"></div>
+<div class="linenb">456</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">457</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">458</div><div class="codeline">The reconstruction performance of ``JWGv8.4'' are presented in Figures \ref{fig:jgnn:results_nox_1}, \ref{fig:jgnn:results_nox_2}, \ref{fig:jgnn:results_nox_3} and compared to the ``OMILREC'' algorithm, the official IBD reconstruction algorithm in JUNO. OMILREC is based on the QTMLE reconstruction method that was presented in Section \ref{sec:juno:reco}.</div><div class="clear"></div>
+<div class="linenb">459</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">460</div><div class="codeline">This comparison required to use a consistent definition of $E_{true}$. This is not trivial since at JUNO, ML method reconstruct the true energy deposited by the positron+annihilation gammas (that's the target implemented in the loss function), while OMILREC, which is based on probabilities to observe a given number of PE in a given PMT, reconstruct the ``visible energy''. It reflects the total number of radiated and detectable scintillation or Cherenkov photons (and is subject to non-linear effects like quenching).</div><div class="clear"></div>
+<div class="linenb">461</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">462</div><div class="codeline">The conversion we use to obtain comparable $E_{true}$ is explained in Appendix \ref{sec:annex:evis}.</div><div class="clear"></div>
+<div class="linenb">463</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">464</div><div class="codeline">On Figures \ref{fig:jgnn:results_nox_1} to \ref{fig:jgnn:results_nox_3}, we notice that the best GNN does not match the performance of the OMILREC algorithm. Generically, Energy resolution is 50\% worse, while the resolution on R is three times worse. Reconstruction biases are not better either with the GNN. We have tried to understand the origin of this limited performance.</div><div class="clear"></div>
+<div class="linenb">465</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">466</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">467</div><div class="codeline"><span class="comment"><span class="comment">%The reconstruction performance of ``JWGv8.4'' are presented in Figures \ref{fig:jgnn:results} and compared to the ``OMILREC'' algorithm, the official IBD reconstruction algorithm in JUNO. OMILREC is based on the QTMLE reconstruction method that was presented in Section \ref{sec:juno:reco}.</span></span></div><div class="clear"></div>
+<div class="linenb">468</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">469</div><div class="codeline"><span class="comment"><span class="comment">%We also present the results of the optimal variance combination of the two algorithm labelled as ``JWG 8.4 x OMILREC'' where the reconstructed target $\hat{theta}$ is the weighted sum of the result of the two estimator JWGv8.4 $\theta_J$ and OMILREC $\theta_O$.</span></span></div><div class="clear"></div>
+<div class="linenb">470</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">471</div><div class="codeline"><span class="comment"><span class="comment">%  \hat{\theta} = \alpha \theta_J + (1 - \alpha) \theta_O; ~ \alpha \in [0, 1]</span></span></div><div class="clear"></div>
+<div class="linenb">472</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">473</div><div class="codeline"><span class="comment"><span class="comment">%For more details about the combination and the computation of $\alpha$, refer to annex \ref{sec:annex:jcnn:variance}.</span></span></div><div class="clear"></div>
+<div class="linenb">474</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">475</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">476</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">477</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">478</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">479</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">480</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MESBvET_nox.png}</div><div class="clear"></div>
+<div class="linenb">481</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">482</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvETC_nox}</div><div class="clear"></div>
+<div class="linenb">483</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">484</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">485</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">486</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MESBvRT_nox.png}</div><div class="clear"></div>
+<div class="linenb">487</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">488</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvRTC_nox}</div><div class="clear"></div>
+<div class="linenb">489</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">490</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm based on QTMLE presented in Section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">491</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_nox_1}</div><div class="clear"></div>
+<div class="linenb">492</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">493</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">494</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">495</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">496</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvTE_nox.png}</div><div class="clear"></div>
+<div class="linenb">497</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">498</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvETC_nox}</div><div class="clear"></div>
+<div class="linenb">499</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">500</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">501</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">502</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvRT_nox.png}</div><div class="clear"></div>
+<div class="linenb">503</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">504</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvRTC_nox}</div><div class="clear"></div>
+<div class="linenb">505</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">506</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm based on QTMLE presented in Section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">507</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_nox_2}</div><div class="clear"></div>
+<div class="linenb">508</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">509</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">510</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">511</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">512</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvTT_nox.png}</div><div class="clear"></div>
+<div class="linenb">513</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\theta$.}</div><div class="clear"></div>
+<div class="linenb">514</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvTTC_nox}</div><div class="clear"></div>
+<div class="linenb">515</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">516</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">517</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">518</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvPT_nox.png}</div><div class="clear"></div>
+<div class="linenb">519</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\phi$.}</div><div class="clear"></div>
+<div class="linenb">520</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvPTC_nox}</div><div class="clear"></div>
+<div class="linenb">521</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">522</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm based on QTMLE presented in Section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">523</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_nox_3}</div><div class="clear"></div>
+<div class="linenb">524</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">525</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">526</div><div class="codeline">The first action that can be carried out in this direction was to determine if some information used by OMILREC was not used properly by JWGv8.4. For that purpose, we used again the approach presented in Chapter \ref{sec:jcnn} (Sec \ref{sec:jcnn:combination} and annex \ref{sec:annex:jcnn:alpha}) to combine JWGv8.4 and OMILREC. We observe on Figures \ref{fig:jgnn:results_1} and \ref{fig:jgnn:results_2} that this combination brings no sizeable improvement  of the best of the two combined methods. The combination remains very close to OMILREC alone. This is an indication that JWGv8.4 does not use information that would be overlooked by OMILREC, and that on the contrary, that's JWGv8.4 that fails to use properly important information.</div><div class="clear"></div>
+<div class="linenb">527</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">528</div><div class="codeline"><span class="comment"><span class="comment">%Overall, energy and radius resolutions are not on par with OMILREC. We see from the energy dependent energy resolution in fig \ref{fig:jgnn:MESBvETC} that our resolution is a bit more than twice the resolution of OMILREC and the combination brings no improvements. Same observation for the energy resolution depending on the radius.</span></span></div><div class="clear"></div>
+<div class="linenb">529</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">530</div><div class="codeline"><span class="comment"><span class="comment">%The radius resolution, presented in the Figures \ref{fig:jgnn:MSBvETC}, \ref{fig:jgnn:MSBvRTC}, \ref{fig:jgnn:MSBvTTC} and \ref{fig:jgnn:MSBvPTC} is much worse than the OMILREC one. This comes a bit as a surprise, as the energy reconstruction is dependent on the vertex reconstruction to correct for the non-uniformity and non-linearity effect. This mean that either the GNN could outperform the classical methods if the vertex was correctly reconstructed, or that somewhere the GNN reconstruct the vertex correctly but has trouble to formulate it in x,y,z coordinates on the latest layer.</span></span></div><div class="clear"></div>
+<div class="linenb">531</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">532</div><div class="codeline"><span class="comment"><span class="comment">%The GNN behaviours are close to OMILREC, indicating that the same information is used in the same way by both algorithms, just that the GNN seems to be less fine-tuned than OMILREC. If the precedent reasoning is true, it would mean that by adding more parameters, more layer or a higher pixelisation of the Healpix representation, the GNN could reach OMILREC performances.</span></span></div><div class="clear"></div>
+<div class="linenb">533</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">534</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">535</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">536</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">537</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">538</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">539</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvTE.png}</div><div class="clear"></div>
+<div class="linenb">540</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">541</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvETC}</div><div class="clear"></div>
+<div class="linenb">542</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">543</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">544</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">545</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MESBvRT.png}</div><div class="clear"></div>
+<div class="linenb">546</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">547</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvRTC}</div><div class="clear"></div>
+<div class="linenb">548</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">549</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in annex \ref{sec:annex:jcnn:variance}. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">550</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_1}</div><div class="clear"></div>
+<div class="linenb">551</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">552</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">553</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">554</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">555</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MESBvET.png}</div><div class="clear"></div>
+<div class="linenb">556</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">557</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvETC}</div><div class="clear"></div>
+<div class="linenb">558</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">559</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">560</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">561</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/MSBvRT.png}</div><div class="clear"></div>
+<div class="linenb">562</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">563</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvRTC}</div><div class="clear"></div>
+<div class="linenb">564</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">565</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in annex \ref{sec:annex:jcnn:variance}. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">566</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_2}</div><div class="clear"></div>
+<div class="linenb">567</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">568</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">569</div><div class="codeline">The problem described above could be inherent to our GNN's original architecture. Discussions with JUNO's colleagues when these results were presented at the collaboration pointed to the role of PMT time information ($t$, in the $(Q,t)$ pairs we use as our algorithm input features). The thousands of values found in the <span class="keyword1">\textit</span>{fired} nodes might not be aggregated well enough when transmitted to the mesh nodes, causing a loss in the redundancy of this <span class="highlight" title="This word has been used in one of the immediately preceding sentences. Using a synonym could make your text more interesting to read, unless the repetition is intentional.. Suggestions: [significant, essential, critical, influential, indispensable] (25102) [lt:en:EN_REPEATEDWORDS]">important</span> information.</div><div class="clear"></div>
+<div class="linenb">570</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">571</div><div class="codeline">We tested this idea in several manners, described below.</div><div class="clear"></div>
+<div class="linenb">572</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">573</div><div class="codeline">\<span class="highlight-sh" title="A heading of level n should not be followed by a heading of level n+2 or more. [sh:secskip]">subsubsection</span>{Finer granularity}</div><div class="clear"></div>
+<div class="linenb">574</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">575</div><div class="codeline">We tried to recover some redundancy by increasing the number of mesh nodes from 192 to 768. The improvement we observed was small, and did not allow getting close to OMILREC's performance.</div><div class="clear"></div>
+<div class="linenb">576</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">577</div><div class="codeline">To explore further in this direction, we would ideally try 3072 pixels (the next HealPix rank). However, this is not possible for our GNN due to hardware limitations, mainly the available GPU memory. Instead, we discussed the problem with Gilles Grasseau, calculus research engineer with whom we collaborate on the subject of ML reliability (see Chapter \ref{sec:janne}). In the framework of this activity, Gilles needs to develop reconstruction algorithms to be ``attacked'' by a prototype Adversarial NN. One of them is a pseudo-spherical CNN using oriented filters, called HCNN.</div><div class="clear"></div>
+<div class="linenb">578</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">579</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">580</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">581</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">582</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">583</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">584</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/hcnn/MESBvETC.png}</div><div class="clear"></div>
+<div class="linenb">585</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">586</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvETC_hcnn}</div><div class="clear"></div>
+<div class="linenb">587</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">588</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">589</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">590</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/hcnn/MESBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">591</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">592</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MESBvRTC_hcnn}</div><div class="clear"></div>
+<div class="linenb">593</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">594</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm based on QTMLE presented in Section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter and the HCNN algorithm. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">595</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_hcnn_1}</div><div class="clear"></div>
+<div class="linenb">596</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">597</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">598</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">599</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">600</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">601</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/hcnn/MSBvETC.png}</div><div class="clear"></div>
+<div class="linenb">602</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">603</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvETC_hcnn}</div><div class="clear"></div>
+<div class="linenb">604</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">605</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">606</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">607</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/hcnn/MSBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">608</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">609</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:MSBvRTC_hcnn}</div><div class="clear"></div>
+<div class="linenb">610</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">611</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the OMILREC algorithm based on QTMLE presented in Section \ref{sec:juno:reco}, JWGv8.4 presented in this chapter and the HCNN algorithm. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">612</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jgnn:results_hcnn_2}</div><div class="clear"></div>
+<div class="linenb">613</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">614</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">615</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">616</div><div class="codeline"><span class="comment"><span class="comment">%[comment ? JE te laisse l'écrire]</span></span></div><div class="clear"></div>
+<div class="linenb">617</div><div class="codeline">To produce its input image, this algorithms split the Sphere into 3072 pixels. Each channel of this image is an aggregation of the $(Q, t)$ values found in all the PMTs. The charge are summed<span class="highlight" title="Use a comma before 'and' if it connects two independent clauses (unless they are closely connected and short).. Suggestions: [, and] (26149) [lt:en:COMMA_COMPOUND_SENTENCE_2]"> and</span> the lowest time is kept. The performance of this algorithm can be seen on Figures \ref{fig:jgnn:results_hcnn_1} and \ref{fig:jgnn:results_hcnn_2}, compared to OMILREC. With 3072 pixels, the performance of HCNN does not match that of OMILREC, but is closer to it than our GNN. The granularity of the pixels, and the way to summarize the individual PMTs information when going from 17000 LPMTs to only 3072 pixels indeed seems to play a role.</div><div class="clear"></div>
+<div class="linenb">618</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">619</div><div class="codeline">This is consistent with the results obtained by the first GNN tried at JUNO on reactor neutrinos (already described in Section \ref{sec:juno:ml}).</div><div class="clear"></div>
+<div class="linenb">620</div><div class="codeline">It used 3072 pixels, and also obtained an uncompetitive R reconstruction.</div><div class="clear"></div>
+<div class="linenb">621</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">622</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Information reduction, from fired to Meshes}</div><div class="clear"></div>
+<div class="linenb">623</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">624</div><div class="codeline">The problem described above is somehow classical. ML algorithms, ideally, would start from the full information present in the detector, and learn to reduce it optimally.</div><div class="clear"></div>
+<div class="linenb">625</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">626</div><div class="codeline">In cases where only 3072 pixels can be used instead of the complete information from 17000 PMTs, one needs to understand how to combine the individual from the 5 or 6 PMT found in each pixel into pixel-level features, without loosing important information.</div><div class="clear"></div>
+<div class="linenb">627</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">628</div><div class="codeline">In the case of our GNN, we hoped that by connecting each mesh node to its corresponding 5 or 6 fired nodes, we could keep the full information. <span class="highlight" title="Three successive sentences begin with the same word. Consider rewording the sentence or use a thesaurus to find a synonym. (27365) [lt:en:ENGLISH_WORD_REPEAT_BEGINNING_RULE]">In</span> reality, it seems that the message passing between fired and mesh does not work efficiently. When nodes are updated by the first (maybe also by the subsequent) layer, the new mesh features might be dominated by the original features in the second column of tables \ref{tab:jgnn:node_feat}, themselves a simple version of aggregation.</div><div class="clear"></div>
+<div class="linenb">629</div><div class="codeline">Layer after layer, we might be limited to that level of time information, lacking time redundancy.</div><div class="clear"></div>
+<div class="linenb">630</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">631</div><div class="codeline">We have verified this by testing version of the GNN in which the link between fired and mesh was cut, or in which no time info was included among the fired nodes features. It had only a small effect</div><div class="clear"></div>
+<div class="linenb">632</div><div class="codeline">which seems to confirm a problem in the way the full information, from all the individual PMTs, is used by our GNN.</div><div class="clear"></div>
+<div class="linenb">633</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">634</div><div class="codeline"><span class="comment"><span class="comment">% (si cela peut-être quantifié, et on se fiche à ce niveau si c'est avec J21 plutôt que 23.,,),</span></span></div><div class="clear"></div>
+<div class="linenb">635</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">636</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Possible improvements}</div><div class="clear"></div>
+<div class="linenb">637</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">638</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">639</div><div class="codeline">It appears that the network is unable to aggregate the timing information correctly. While this could be addressed by using a finer segmentation, with more mesh nodes, improvements might also arise from refining the message-passing algorithm. The algorithm presented in this thesis is still quite basic, relying on a simple linear combination of features. We have seen through examples in CNNs, GNNs, and other architectures, both in research and industry, that specializing the network -- for instance, by incorporating convolutional filters -- can lead to improvements that were previously unattainable with simpler FCDNNs. Applying this approach to the message-passing algorithm, by utilizing a GNN with a more advanced message-passing, could yield better results.</div><div class="clear"></div>
+<div class="linenb">640</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">641</div><div class="codeline">We could investigate alternative aggregation strategies, for example, by weighting the timing information more significantly during the message-passing phase. Additionally, testing a non-linear combination of features from fired to mesh nodes could help preserve more granular information. Another potential improvement would be to introduce attention mechanisms that dynamically assign more importance to relevant features in the fired nodes</div><div class="clear"></div>
+<div class="linenb">642</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">643</div><div class="codeline">Regarding the timing information, we provided high-level features, assuming this would assist the neural network in converging to the solution. However, by offering such information upfront, the GNN might be taking the ``easy'' path, settling for a local and broader minimum, rather than extracting the features that could lead to better performance.</div><div class="clear"></div>
+<div class="linenb">644</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">645</div><div class="codeline">If there are difficulties in transferring information between the fired and mesh nodes, it may stem from the way we connected the fired nodes to the mesh nodes. By linking the fired nodes within the same mesh, or even connecting the fired nodes of neighboring mesh nodes, the GNN might be able to construct more meaningful information.</div><div class="clear"></div>
+<div class="linenb">646</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">647</div><div class="codeline">Finally, by providing directly the PMT waveform to the GNN, in the fired nodes, we could search for even finer precision and results. An idea would be to specialize the message function $\phi_{m;F \rightarrow M}$ to be a 1D convolutional layer over the waveform. The resulting channels would be fed to the mesh nodes for their updates.</div><div class="clear"></div>
+<div class="linenb">648</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">649</div><div class="codeline"><span class="keyword1">\section</span>{Conclusion}</div><div class="clear"></div>
+<div class="linenb">650</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">651</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">652</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> For now:</span></span></div><div class="clear"></div>
+<div class="linenb">653</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Not competitive</span></span></div><div class="clear"></div>
+<div class="linenb">654</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Aggregation on mesh nodes seems to loose informations</span></span></div><div class="clear"></div>
+<div class="linenb">655</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Maybe too complex ?</span></span></div><div class="clear"></div>
+<div class="linenb">656</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Next step would be to have the waveform dirrectly included</span></span></div><div class="clear"></div>
+<div class="linenb">657</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">658</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">659</div><div class="codeline"><span class="comment"><span class="comment">%In this chapter, I present a proposition for a GNN architecture to reconstruct the energy and position of the prompt signal of an IBD interaction. The GNN is not competitive in terms of resolution with the more classical method OMILREC, which is the state of the art reconstruction method for IBD in the JUNO collaboration, but show encouraging results that could be exploited by going further in the optimisation of the hyper parameters. The message passing algorithm is still pretty naive and could probably be refined for JUNO's need.</span></span></div><div class="clear"></div>
+<div class="linenb">660</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">661</div><div class="codeline"><span class="comment"><span class="comment">%Another possible improvement is to find a way to increase the Healpix pixelisation. Through our different work on reconstruction and by looking at the different classical methods, it seems that the time information is crucial for the vertex reconstruction, and thus for the energy reconstruction. While we are keeping every raw informations about the fired PMTs, it is possible that the aggregation on mesh nodes could cause the information loss and it has been noticed that allowing more channels to the hidden layer mesh nodes improve the resolution. This observation can be compared to the convolutional GNN presented Section \ref{sec:juno:ml} that has similar performance with the classical method with an order 5 Healpix segmentation resulting in 3072 pixels, comforting the need of a finer pixelisation, or more parameters dedicated to aggregation through an increase of channels on the mesh nodes. Both of those improvements require some heavy memory optimisations, distributed training or more powerful hardware to address the memory consumption issue.</span></span></div><div class="clear"></div>
+<div class="linenb">662</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">663</div><div class="codeline"><span class="comment"><span class="comment">%A final possible improvement would be to go further in the proximity of raw information. The charge and time used in the PMTs are extracted from a waveform, we could imagine a world where the full PMT waveform in the trigger window would be set of channels on the PMT node.</span></span></div><div class="clear"></div>
+<div class="linenb">664</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">665</div><div class="codeline">To achieve its scientific goals, JUNO requires a precise and well-understood reconstruction, as it needs an energy resolution of $3\%$ at 1 MeV. Even small, unaccounted biases could make it impossible to determine the mass ordering, as explored in Chapter \ref{sec:joint_fit}. A likelihood-based algorithm, designed to meet JUNO's requirements and referred to as the classical algorithm, was developed and is detailed in Section \ref{sec:juno:reco}.</div><div class="clear"></div>
+<div class="linenb">666</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">667</div><div class="codeline">Machine learning algorithms were developed to challenge this classical approach, and they are presented in Section \ref{sec:juno:ml}. Although they achieve the precision of the classical algorithm, they do not offer significant improvements. The GNN previously developed is a convolutional GNN where nodes correspond to pixels, connected to their neighbors based on the HealPix \cite{gorski_healpix_2005} segmentation, with the $(Q, t)$ information aggregated onto these pixels.</div><div class="clear"></div>
+<div class="linenb">668</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">669</div><div class="codeline">In this chapter, we introduce a novel and innovative architecture. In addition to the pixel segmentation represented by mesh nodes, we incorporate rawer information by directly representing the fired PMTs as nodes. We also fully connect the mesh nodes to each other, hoping to facilitate the transfer of information. Finally, we introduce a global node that holds global information about the detector.</div><div class="clear"></div>
+<div class="linenb">670</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">671</div><div class="codeline">These three types, or families, of nodes do not have the same number of features, resulting in a heterogeneous graph. Publicly available algorithms for graph processing are designed for homogeneous graphs, so we had to develop a custom algorithm adapted to heterogeneous graphs.</div><div class="clear"></div>
+<div class="linenb">672</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">673</div><div class="codeline">This GNN required significant technical development, but the results are not at the level of the classical algorithm. The tests we conducted suggest that the problem may lie in the aggregation of raw information from the fired nodes onto the mesh nodes, as removing the fired nodes does not degrade the results. Additionally, due to technical constraints, we had to reduce the number of pixels compared to the previous GNN. Other algorithms we developed, which use a higher pixel resolution, outperform this architecture, reinforcing our suspicion that the aggregation is the root of the issue.</div><div class="clear"></div>
+<div class="linenb">674</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">675</div><div class="codeline">The precision required for JUNO's scientific objectives, particularly in determining mass ordering, imposes stringent constraints on reconstruction algorithms. Small biases or errors in energy resolution could significantly affect the experiment's outcomes. Future improvements may involve refining the message-passing algorithm, incorporating additional detector-specific features, and experimenting with more advanced architectures such as attention-based GNNs to further reduce reconstruction errors.</div><div class="clear"></div>
+<div class="linenb">676</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">677</div><div class="codeline">Perhaps by incorporating rawer information, such as the waveform, refining the message-passing algorithm, or adjusting the features on the different nodes, we could match the precision of the classical algorithm. However, it is also possible that deeper, more radical changes are needed to become competitive.</div><div class="clear"></div>
+<div class="linenb">678</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">679</div><div class="codeline"><span class="keyword2">\end{document}</span></div><div class="clear"></div>
+</div>
+<hr/>
+Output produced by TeXtidote v0.8.4, &copy; 2018-2022 Sylvain Hall&eacute; - All rights reserved.<br/>
+See the <a href="https://sylvainhalle.github.io/textidote">TeXtidote website</a> for more information.
+</body>
+</html>

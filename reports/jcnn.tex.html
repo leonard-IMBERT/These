@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TeXtidote analysis</title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.highlight, .highlight-sh, .highlight-spelling {
+  padding: 2pt;
+  border-radius: 4pt;
+  cursor: help;
+  opacity: 0.7;
+  border: dashed 1px;
+}
+.highlight {
+  background-color: orange;
+  color: black;
+}
+.highlight-sh {
+  background-color: yellow;
+  color: black;
+}
+.highlight-spelling {
+  background-color: red;
+  color: white;
+}
+div.original-file {
+  font-family: monospace;
+  font-size: 11pt;
+  background-color: #f8f8ff;
+  padding: 20pt;
+  border-radius: 6pt;
+}
+.textidote {
+  	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiICAgd2lkdGg9IjEwMC4wOTEwNW1tIiAgIGhlaWdodD0iMTguMjA5MDk5bW0iICAgdmlld0JveD0iMCAwIDEwMC4wOTEwNSAxOC4yMDkwOTkiICAgdmVyc2lvbj0iMS4xIiAgIGlkPSJzdmc4IiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTEgcjEzNzI1IiAgIHNvZGlwb2RpOmRvY25hbWU9InRleHRpZG90ZS5zdmciPiAgPGRlZnMgICAgIGlkPSJkZWZzMiIgLz4gIDxzb2RpcG9kaTpuYW1lZHZpZXcgICAgIGlkPSJiYXNlIiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiICAgICBib3JkZXJvcGFjaXR5PSIxLjAiICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIgICAgIGlua3NjYXBlOnpvb209IjEiICAgICBpbmtzY2FwZTpjeD0iLTI1NC4yNTMwOSIgICAgIGlua3NjYXBlOmN5PSItMjc4LjM3NTkxIiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIiAgICAgc2hvd2dyaWQ9ImZhbHNlIiAgICAgZml0LW1hcmdpbi10b3A9IjAiICAgICBmaXQtbWFyZ2luLWxlZnQ9IjAiICAgICBmaXQtbWFyZ2luLXJpZ2h0PSIwIiAgICAgZml0LW1hcmdpbi1ib3R0b209IjAiICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMDIxIiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMjY1IiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4gIDxtZXRhZGF0YSAgICAgaWQ9Im1ldGFkYXRhNSI+ICAgIDxyZGY6UkRGPiAgICAgIDxjYzpXb3JrICAgICAgICAgcmRmOmFib3V0PSIiPiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+ICAgICAgICA8ZGM6dHlwZSAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4gICAgICAgIDxkYzp0aXRsZSAvPiAgICAgIDwvY2M6V29yaz4gICAgPC9yZGY6UkRGPiAgPC9tZXRhZGF0YT4gIDxnICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIgICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiICAgICBpZD0ibGF5ZXIxIiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI5LjczODA5NSwtNzAuNTc3NzUxKSI+ICAgIDxnICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjIwLjkyODk0NTU0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgaWQ9InRleHQ4MzYiPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSAzMC43MjY4NjQsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzODYiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDQyLjMzNTg4OCw3NS43NzU1NjQgMTEuMDQ1ODMyLDAgMCw3LjgxMzQ3MyAtNS44MTM1OTYsMCAwLDAuNjA0NjE0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw0LjIwOTA0MyAwLjU4MTM2LDAgMCwtMC42MDQ2MTQgLTAuNTgxMzYsMCAwLDAuNjA0NjE0IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzg4IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA1My45NDQ5MTIsNzUuNzc1NTY0IDUuMjMyMjM2LDAgMCwzLjYwNDQyOSAtNS4yMzIyMzYsMCAwLC0zLjYwNDQyOSB6IG0gNS44MTM1OTYsMCA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIC01LjgxMzU5Niw4LjQxODA4NyA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIDUuODEzNTk2LDAgNS4yMzIyMzYsMCAwLDMuNjA0NDI5IC01LjIzMjIzNiwwIDAsLTMuNjA0NDI5IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzkwIiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA2NS41NTM5MzYsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzOTIiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDc3LjE2Mjk2LDc1Ljc3NTU2NCA1LjIzMjIzNiwwIDAsMTIuMDIyNTE2IC01LjIzMjIzNiwwIDAsLTEyLjAyMjUxNiB6IG0gMCwtNC4yMDkwNDQgNS4yMzIyMzYsMCAwLDMuNjA0NDMgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MyB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5NCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gODIuOTY3NDcyLDc1Ljc3NTU2NCA1LjgxMzU5NiwwIDAsLTQuMjA5MDQ0IDUuMjMyMjM2LDAgMCwxNi4yMzE1NiAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw4LjQxODA4NyAwLjU4MTM2LDAgMCwtNC44MTM2NTggLTAuNTgxMzYsMCAwLDQuODEzNjU4IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzk2IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA5NC41NzY0OTYsNzUuNzc1NTY0IDExLjA0NTgzNCwwIDAsMTIuMDIyNTE2IC0xMS4wNDU4MzQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjM3LDguNDE4MDg3IDAuNTgxMzU3LDAgMCwtNC44MTM2NTggLTAuNTgxMzU3LDAgMCw0LjgxMzY1OCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5OCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTA2LjE4NTUyLDcxLjU2NjUyIDUuMjMyMjQsMCAwLDQuMjA5MDQ0IDUuODEzNTksMCAwLDMuNjA0NDI5IC01LjgxMzU5LDAgMCw0LjgxMzY1OCA1LjgxMzU5LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMsMCAwLC0xNi4yMzE1NiB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTE3Ljc5NDU0LDc1Ljc3NTU2NCAxMS4wNDU4NCwwIDAsNy44MTM0NzMgLTUuODEzNiwwIDAsMC42MDQ2MTQgNS44MTM2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjQsNC4yMDkwNDMgMC41ODEzNiwwIDAsLTAuNjA0NjE0IC0wLjU4MTM2LDAgMCwwLjYwNDYxNCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMiIgLz4gICAgPC9nPiAgPC9nPjwvc3ZnPg==);
+}
+h2.filename {
+  font-family: monospace;
+}
+h1.textidote {
+  width: 378px;
+  height: 68px;
+  display: block;
+}
+.keyword1 {
+  font-weight: bold;
+  color: green;
+}
+.keyword2 {
+  font-weight: bold;
+  color: darkblue;
+}
+.comment, .comment * {
+  color: darkred;
+  font-weight: normal;
+}
+.linenb {
+  font-style: italic;
+  color: lightgrey;
+  width: 30pt;
+  float: left;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.codeline {
+  margin-left: -30pt;
+  padding-left: 60pt;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+}
+.no-text {
+  display: none;
+}
+.clear {
+  clear: both;
+}
+</style>
+</head>
+<body>
+<a href="https://sylvainhalle.github.io/textidote"><h1 class="textidote"><span class="no-text">Results of TeXtidote analysis</span></h1></a>
+<p>Here is the result of analyzing your file(s) with TeXtidote. Hover the mouse over highlighted portions of the document to read a tooltip that gives you some writing advice.</p>
+<p>Found 28 warning(s)</p>
+<div class="original-file">
+<div class="linenb">&nbsp;&nbsp;1</div><div class="codeline"><span class="keyword1">\documentclass</span>[../main.tex]{subfiles}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;2</div><div class="codeline">\graphicspath{{\subfix{..}}}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;3</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;4</div><div class="codeline"><span class="keyword2">\begin{document}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;5</div><div class="codeline">\chapter{Image recognition for IBD reconstruction with the SPMT system}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;6</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;7</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;8</div><div class="codeline">\epigraph{<span class="keyword1">\textit</span>{Dave} - Give me the position and momentum, HAL. <span class="highlight-sh" title="You should not break lines manually in a paragraph. Either start a new paragraph or stay in the current one. [sh:nobreak]">\\</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;9</div><div class="codeline"><span class="keyword1">\textit</span>{HAL} - I'm afraid I can't do that Dave. <span class="highlight-sh" title="You should not break lines manually in a paragraph. Either start a new paragraph or stay in the current one. [sh:nobreak]">\\</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;10</div><div class="codeline"><span class="keyword1">\textit</span>{Dave} - What's the problem<span class="highlight-sh" title="There should not be a space before a punctuation mark. If in your language, typographic rules require a space here, LaTeX takes care of inserting it without your intervention. [sh:d:005]"> ?</span> <span class="highlight-sh" title="You should not break lines manually in a paragraph. Either start a new paragraph or stay in the current one. [sh:nobreak]">\\</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;11</div><div class="codeline"><span class="keyword1">\textit</span>{HAL} - I think you know what the problem is just as well as I do. <span class="highlight-sh" title="You should not break lines manually in a paragraph. Either start a new paragraph or stay in the current one. [sh:nobreak]">\\</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;12</div><div class="codeline"><span class="keyword1">\textit</span>{Dave} - What are you talking about, HAL? <span class="highlight-sh" title="You should not break lines manually in a paragraph. Either start a new paragraph or stay in the current one. [sh:nobreak]">\\</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;13</div><div class="codeline"><span class="keyword1">\textit</span>{HAL} - $\sigma_x \sigma_p \geq \frac{\hbar}{2}$}</div><div class="clear"></div>
+<div class="linenb">&nbsp;14</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;15</div><div class="codeline">\minitoc</div><div class="clear"></div>
+<div class="linenb">&nbsp;16</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;17</div><div class="codeline">As explained in Chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) system and the Small Photomultiplier (SPMT) system. Both of them observe the same physics events inside the same medium, but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see Section \ref{sec:juno:LPMT}), a thousand versus a few dozen, and their front-end electronics (see <span class="highlight-sh" title="Use a capital letter when referring to a specific section: 'Section X' [sh:secmag]">section \ref</span>{sec:juno:LPMT}).</div><div class="clear"></div>
+<div class="linenb">&nbsp;18</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;19</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;20</div><div class="codeline">The SPMT system is essential to the deployment of the Dual Calorimetry techniques, already mentioned in Section \ref{sec:juno:reco} and described in \cite{han_dual_2021, juno_collaboration_calibration_2021, cabrera_multi-calorimetry_2023}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;21</div><div class="codeline">It is indeed less subject than the LPMTs to charge non-linearity effects (QNL).  This topic will be studied in more detail in Chapter \ref{sec:joint_fit}, where the potential of one of the Dual Calorimetry techniques is explored. It consists on combined oscillation analyses based on two antineutrino energy spectra: one reconstructed with the LPMT system, the other one with the SPMT system.</div><div class="clear"></div>
+<div class="linenb">&nbsp;22</div><div class="codeline">For that purpose, it is therefore necessary to have reconstruction tools available. Well maintained tools using the LPMT are available in the collaboration's official software. This is not the case concerning the SPMT system, where algorithms were developed more sporadically. This is one of the reasons why we developed the CNN described in this chapter.</div><div class="clear"></div>
+<div class="linenb">&nbsp;23</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;24</div><div class="codeline">Our efforts on it were limited to the early months of this thesis: it was above all a way to learn about ML and about JUNO's  detector and software.</div><div class="clear"></div>
+<div class="linenb">&nbsp;25</div><div class="codeline">We benchmarked its performance against a classical algorithm developed in <span class="highlight-sh" title="Do not refer to chapters using hard-coded numbers. Use \ref instead. [sh:hccha]">Chapter 4</span> of \cite{lebrin_towards_2022} but not yet implemented in JUNO's software.</div><div class="clear"></div>
+<div class="linenb">&nbsp;26</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;27</div><div class="codeline"><span class="comment"><span class="comment">% -------------- Plan for motivation section ----------------</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;28</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;29</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Promise of machine learning -&gt; Exploit raw data</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;30</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Victor already done reco for SPMT</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;31</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Can CNN give similar results ? Better results ?</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;32</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Multiple reco methods good for reconstruction</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;33</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Comparison, difference in behavior</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;34</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;35</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;36</div><div class="codeline">As discussed in Chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling highly dimensional data from a given dataset. In our case, we have access to complete Monte Carlo simulation of our detector to produce large datasets that could represent multiple years of data taking.</div><div class="clear"></div>
+<div class="linenb">&nbsp;37</div><div class="codeline">Ideally ML algorithms would be able to consider the entirety of the information in the detector and converge on the best parameters to yield optimal results.</div><div class="clear"></div>
+<div class="linenb">&nbsp;38</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;39</div><div class="codeline">The difference between this ideal and what can be achieved in reality is an important subject. In particular, we wonder if an exhaustive usage of the information present in the detector could lead to use information that are mismodelled in our simulated training samples (or present only in these samples) and therefore lead to biases when the algorithm is applied to real data.</div><div class="clear"></div>
+<div class="linenb">&nbsp;40</div><div class="codeline">A simple way to start addressing this reliability issue is to try to evaluate to which extent various reconstruction methods use the same information. An attempt at this is presented at the end of this chapter. This is also the subject of Chapter \ref{sec:janne}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;41</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;42</div><div class="codeline"><span class="comment"><span class="comment">% We have access to a very detailed simulation of the detector (Section \ref{sec:juno:software}) that will allow us to simulate large datasets while giving access to the all the physics parameters of the event. Those parameters include the target of our reconstruction algorithms: the vertex and energy of our event. As introduced above, we hope that the ML algorithm will be able to used all the informations in the event, but that could lead that potential mismodelings in our simulation could be exploited by the algorithm. This specific subject will be studied in Chapter \ref{sec:janne}.</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;43</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;44</div><div class="codeline"><span class="keyword1">\section</span>{Method and model}</div><div class="clear"></div>
+<div class="linenb">&nbsp;45</div><div class="codeline"><span class="comment"><span class="comment">% --------------- Plan for method and model -----------------</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;46</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;47</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> JUNO is an array of sensor following a quasi uniform and istropic geometric repartition -&gt; Basically pixels -&gt; Image</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;48</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> CNN is gud for image processing (cite a lot of things)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;49</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Details the architecture (Inspired from VGG 16)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;50</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;51</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Convolutional layers</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;52</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Pooling layers -&gt; Twice the channels when pooling by 2 -&gt; Keep the same "amount" of information</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;53</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Dropout (introduce overtraining, maybe introduce overfitting in ML chapter ?)</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;54</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Vectorization fed to FCDNN</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;55</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;56</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;57</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;58</div><div class="codeline">One of the simplest <span class="highlight" title="Please check whether a plural form of 'way' should be used.. Suggestions: [ways] (2991) [lt:en:ONE_OF]">way</span> to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their distribution is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface. It is then tempting to represent the detector as a spherical image with the PMTs in place of pixels. Two events with two different energy or position would produce two different images.</div><div class="clear"></div>
+<div class="linenb">&nbsp;59</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;60</div><div class="codeline">The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see Section \ref{sec:ml:cnn}) and has proven its relevance in image processing.</div><div class="clear"></div>
+<div class="linenb">&nbsp;61</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;62</div><div class="codeline">Some CNNs are developed to process spherical images \cite{cohen_spherical_2018} but for the sake of simplicity and as a first approach we decided to go with a planar projection of the detector, approach that has proven its efficiency using the LPMT system (see Section \ref{sec:juno:ml}). The details about this planar projection will be discussed in Section \ref{sec:jcnn:data}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;63</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;64</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">&nbsp;65</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">&nbsp;66</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/jcnn/vgg16.png}</div><div class="clear"></div>
+<div class="linenb">&nbsp;67</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Graphic representation of the VGG-16 architecture, presenting the different kind of layer composing the architecture.}</div><div class="clear"></div>
+<div class="linenb">&nbsp;68</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vgg16}</div><div class="clear"></div>
+<div class="linenb">&nbsp;69</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;70</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;71</div><div class="codeline"><span class="keyword1">\subsection</span>{Model}</div><div class="clear"></div>
+<div class="linenb">&nbsp;72</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn:model}</div><div class="clear"></div>
+<div class="linenb">&nbsp;73</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;74</div><div class="codeline">The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in Figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters that will define the size, complexity and computational power of the NN. The chose hyperparameters are detailed below<span class="highlight" title="Use a comma before 'and' if it connects two independent clauses (unless they are closely connected and short).. Suggestions: [, and] (4267) [lt:en:COMMA_COMPOUND_SENTENCE_2]"> and</span> their values are presented in Table \ref{tab:jcnn:hyper}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;75</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;76</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathbf{N_{blocks}}$: the number of convolution blocks, a block being composed of two convolutional layers with $3\times3$ filters using ReLU activation function, <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (4449) [lt:en:EN_A_VS_AN]">a</span> $3\times3$ kernel max-pooling layer  (except for the last block).</div><div class="clear"></div>
+<div class="linenb">&nbsp;77</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathbf{N_{channels}}$: The number of channels in the first block. The number of channels in the subsequent blocks is computed using $N^i_{channels} = i * N_{channels}, i \in [1..N_{blocks}]$.</div><div class="clear"></div>
+<div class="linenb">&nbsp;78</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="keyword1">\textbf</span>{FCDNN configuration}: The result of the last convolution layer is flattened then fed to a FCDNN. Its configuration is expressed as the outputs of sequenced fully connected linear layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers which output is 1024 followed by 2 other layers with an output of 512. Finally, the last layer is a linear layer outputting 4 features without activation function. Each feature of the last layer represent a component of the interaction vertex: Energy, X, Y, Z.</div><div class="clear"></div>
+<div class="linenb">&nbsp;79</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> <span class="keyword1">\textbf</span>{Loss}: The loss function. In this work we study two different loss function $(E+V)$ and $(E_r + V_r)$ detailed below.</div><div class="clear"></div>
+<div class="linenb">&nbsp;80</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;81</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;82</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;83</div><div class="codeline">&nbsp;&nbsp;(E+V)(E, x, y, z) &amp;= (E - E_{dep})^2 + 0.85 \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2 \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;84</div><div class="codeline">&nbsp;&nbsp;(E_r + V_r)(E, x, y, z) &amp;=  \frac{(E - E_{dep}) ^ 2}{E_{dep}} + \frac{10}{R} \sum_{\lambda \in [x, y, z]} (\lambda - \lambda_{true})^2</div><div class="clear"></div>
+<div class="linenb">&nbsp;85</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;86</div><div class="codeline"><span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Where] (5254) [lt:en:UPPERCASE_SENTENCE_START]">where</span> $E_{dep}$ is the deposited energy and $R$ is the radius of JUNO's CD. With the energy in MeV and the distance in meters, we use the factor 0.85 and 10 to balance the two term of the loss function<span class="highlight" title="Use a comma before 'so' if it connects two independent clauses (unless they are closely connected and short).. Suggestions: [, so] (5445) [lt:en:COMMA_COMPOUND_SENTENCE]"> so</span> they have the same magnitude.</div><div class="clear"></div>
+<div class="linenb">&nbsp;87</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;88</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;89</div><div class="codeline">The loss function $(E+V)$ is close to a simple Mean Squared Error (MSE). MSE is one of the most basic loss function, the derivative is simple and continuous in every point. It is a strong starting point to explore the possibility of CNNs. The loss $(E_r + V_r)$ can be seen as a relative MSE.</div><div class="clear"></div>
+<div class="linenb">&nbsp;90</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;91</div><div class="codeline">The idea is that: due to the inherent statistic uncertainty over the number of collected Number of Photo Electrons (NPE), the absolute resolution $\sigma (E - E_{true})$ will be larger at higher energy than at low energy. But we expect the <span class="keyword1">\textit</span>{relative} energy resolution $\frac{\sigma(E - E_{true})}{E_true}$ to be smaller at high energy than lower energy as illustrated in Figure \ref{fig:juno:rec:qtmle}. Because of this, by using simple MSE the most important part in the loss come from the high energy part of the dataset whereas with a relative MSE, the most important part become the low energy events in the dataset. We hope that by using a relative MSE, the neural network will focus on low energy events where the reconstruction is considered the hardest.</div><div class="clear"></div>
+<div class="linenb">&nbsp;92</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;93</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;94</div><div class="codeline">The above losses and their parameters values results from fine-tuning after multiples runs and adjustments of the full random search.</div><div class="clear"></div>
+<div class="linenb">&nbsp;95</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;96</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;97</div><div class="codeline">Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{channels} = 32, \mathrm{FCDNN} = (2 * 1024), \mathrm{Loss} = (E+V))$) produce models, hereinafter referred as configurations, are then tested and compared to each other over an analysis sample.</div><div class="clear"></div>
+<div class="linenb">&nbsp;98</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;99</div><div class="codeline">On top those generated models, we define 4 hand tailored models:</div><div class="clear"></div>
+<div class="linenb">100</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">101</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathrm{Gen}_0$: $N_{blocks} = 4$, $N_{channels} = 64$, FCDNN configuration: $1024 * 2 + 512 * 2$, Loss $\equiv E+V$</div><div class="clear"></div>
+<div class="linenb">102</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathrm{Gen}_1$: $N_{blocks} = 4$, $N_{channels} = 64$, FCDNN configuration: $1024 * 2 + 512 * 2$, Loss $\equiv E_r+V_r$</div><div class="clear"></div>
+<div class="linenb">103</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathrm{Gen}_2$: $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\equiv E+V$</div><div class="clear"></div>
+<div class="linenb">104</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\mathrm{Gen}_3$: $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\equiv E_r+V_r$</div><div class="clear"></div>
+<div class="linenb">105</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">106</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">107</div><div class="codeline">For example let’s define the index of the different configurations $I_{blocks}$, $I_{channels}$, $I_{FCDNN}$ and $I_{loss}$ such as, for example, $I_{blocks} = 0$ is $N_{blocks} = 2$, $I_{blocks} = 1$ is $N_{blocks} = 3$, $\ldots$ using the order in Table \ref{tab:jcnn:hyper}. The architecture $Gen_{\alpha}$ is the architecture where:</div><div class="clear"></div>
+<div class="linenb">108</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">109</div><div class="codeline">\alpha = 36 * I_{loss} + 9 * I_{FCDNN} + 3 * I_{channels} + I_{blocks} + 4</div><div class="clear"></div>
+<div class="linenb">110</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">111</div><div class="codeline">The ``$+4$'' term at the end is to take into account the 4 handcrafted models.</div><div class="clear"></div>
+<div class="linenb">112</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">113</div><div class="codeline">For example, the index of the configuration with $N_{blocks} = 2$, $N_{channels} = 128$, the FCDNN configuration is $(3 * 2048 + 3 * 512)$ and the loss is $E + V$ has:</div><div class="clear"></div>
+<div class="linenb">114</div><div class="codeline"><span class="keyword2">\begin{align*}</span></div><div class="clear"></div>
+<div class="linenb">115</div><div class="codeline">\alpha &amp;= 36 * I_{loss} + 9 * I_{FCDNN} + 3 * I_{channels} + I_{blocks} + 4 \\</div><div class="clear"></div>
+<div class="linenb">116</div><div class="codeline">	     &amp;= 36 * 0           + 9 * 2                 + 3 * 2                   + 0              + 4 \\</div><div class="clear"></div>
+<div class="linenb">117</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= 28</div><div class="clear"></div>
+<div class="linenb">118</div><div class="codeline"><span class="keyword2">\end{align*}</span></div><div class="clear"></div>
+<div class="linenb">119</div><div class="codeline">It is thus $Gen_{28}$.</div><div class="clear"></div>
+<div class="linenb">120</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">121</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">122</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">123</div><div class="codeline">The resulting models possess between 2'041'034, for $\mathrm{Gen}_{52}$ and $\mathrm{Gen}_{53}$, and  5'759'839'242 parameters, for $\mathrm{Gen}_{26}$ and $\mathrm{Gen}_{27}$. The models of interest in this thesis, from which the results are discussed in Section \ref{sec:jcnn:results}, possess 86'197'196 parameters for $\mathrm{Gen}_{30}$ and 332'187'530 parameters for $\mathrm{Gen}_{42}$. For comparison the model of CNN developed in JUNO before posses 38'352'403 parameters \cite{qian_vertex_2021}.</div><div class="clear"></div>
+<div class="linenb">124</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">125</div><div class="codeline"><span class="keyword2">\begin{table}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">126</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">127</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{tabular}</span>{ | c | c | }</div><div class="clear"></div>
+<div class="linenb">128</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline $N_{blocks}$ &amp; \{2, 3, 4\} \\</div><div class="clear"></div>
+<div class="linenb">129</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline $N_{channels}$ &amp; \{32, 64, 128\} \\</div><div class="clear"></div>
+<div class="linenb">130</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">131</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\multirow{4}{*}{FCDNN configurations} &amp; 2 * 1024 \\</div><div class="clear"></div>
+<div class="linenb">132</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; 2 * 2048 + 2 * 1024 \\</div><div class="clear"></div>
+<div class="linenb">133</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; 3 * 2048 + 3 * 512 \\</div><div class="clear"></div>
+<div class="linenb">134</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; 2 * 4096 \\</div><div class="clear"></div>
+<div class="linenb">135</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">136</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;Loss &amp; \{$E+V$, $E_r + V_r$\} \\</div><div class="clear"></div>
+<div class="linenb">137</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\hline</div><div class="clear"></div>
+<div class="linenb">138</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{tabular}</span></div><div class="clear"></div>
+<div class="linenb">139</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Sets of hyperparameters values considered in this study.}</div><div class="clear"></div>
+<div class="linenb">140</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{tab:jcnn:hyper}</div><div class="clear"></div>
+<div class="linenb">141</div><div class="codeline"><span class="keyword2">\end{table}</span></div><div class="clear"></div>
+<div class="linenb">142</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">143</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">144</div><div class="codeline">To rank the various configuration we cannot use directly the mean loss over the validation dataset as $(E+V)$ and $(E_r + V_r)$ are not numerically comparable. We thus use the following quantities, directly related to the reconstruction performances:</div><div class="clear"></div>
+<div class="linenb">145</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">146</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The mean absolute energy error $\langle E \rangle = \langle | E - E_{true} | \rangle$. It is an indicator of the energy bias of our reconstruction.</div><div class="clear"></div>
+<div class="linenb">147</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The standard deviation of the energy error $\sigma E = \sigma (E - E_{true})$. This is the indicator on our precision in energy reconstruction.</div><div class="clear"></div>
+<div class="linenb">148</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The mean distance between the reconstructed vertex and the true vertex $\langle V \rangle = \langle | \vec{V} - \vec{V}_{true} | \rangle$. This is an indicator of the bias and precision of our vertex reconstruction.</div><div class="clear"></div>
+<div class="linenb">149</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The standard deviation of the distance between the true and reconstructed vertex $\sigma V = \sigma |\vec{V} - \vec{V}_{true}|$. This is an indicator if the precision in our vertex reconstruction.</div><div class="clear"></div>
+<div class="linenb">150</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">151</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">152</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">153</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">154</div><div class="codeline">The models were developed in Python using the Pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} GPUs. The A100 was split in two, thus the accessible GPU memory was the same as V100, 20 GB, making it impossible to train some architectures due to memory consumption.</div><div class="clear"></div>
+<div class="linenb">155</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">156</div><div class="codeline">The training was monitored in real-time by a custom tooling that was developed during this thesis, DataMo \cite{imbert_leonard-imbertdatamo_2024}.</div><div class="clear"></div>
+<div class="linenb">157</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">158</div><div class="codeline">The training of one model takes between 4h and 15h <span class="highlight" title="The verb 'to depend' requires the preposition '(up)on'.. Suggestions: [depending on] (8960) [lt:en:DEPEND_ON]">depending of</span> its size, overall training the full 72 models takes around 500 GPU hours. Even with parallel training, this random search hyper-optimization was time-consuming.</div><div class="clear"></div>
+<div class="linenb">159</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">160</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">161</div><div class="codeline"><span class="comment"><span class="comment">%Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:</span></span></div><div class="clear"></div>
+<div class="linenb">162</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">163</div><div class="codeline"><span class="comment"><span class="comment">%  \Delta V = |\vec{V} - \vec{V}_{true}| = \sqrt{\Delta X^2 + \Delta Y^2 + \Delta Z^2}; ~ \Delta X, \Delta Y, \Delta Z \sim \mathcal{N}</span></span></div><div class="clear"></div>
+<div class="linenb">164</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">165</div><div class="codeline"><span class="comment"><span class="comment">%then</span></span></div><div class="clear"></div>
+<div class="linenb">166</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">167</div><div class="codeline"><span class="comment"><span class="comment">%  \Delta V \sim \chi</span></span></div><div class="clear"></div>
+<div class="linenb">168</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">169</div><div class="codeline"><span class="comment"><span class="comment">%where $\chi$ is a Chi law which probability density function is different from 0 only in $\mathbb{R}^+$</span></span></div><div class="clear"></div>
+<div class="linenb">170</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">171</div><div class="codeline"><span class="keyword1">\subsection</span>{Data representation}</div><div class="clear"></div>
+<div class="linenb">172</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn:data}</div><div class="clear"></div>
+<div class="linenb">173</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">174</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Data is 240x240 images</span></span></div><div class="clear"></div>
+<div class="linenb">175</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">176</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Following $\theta$ and $\phi$ distribution, explain the coordinate system of JUNO</span></span></div><div class="clear"></div>
+<div class="linenb">177</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Optimized for $\approx$ 1 SPMT/pixel</span></span></div><div class="clear"></div>
+<div class="linenb">178</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> 1 Charge channel</span></span></div><div class="clear"></div>
+<div class="linenb">179</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> 1 Time channel</span></span></div><div class="clear"></div>
+<div class="linenb">180</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">181</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Discuss data format</span></span></div><div class="clear"></div>
+<div class="linenb">182</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">183</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Empty pixel ? -&gt; $Q = 0$, $T = 0$, what does it means/says ? 0 = no signal in a way</span></span></div><div class="clear"></div>
+<div class="linenb">184</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Image distortion</span></span></div><div class="clear"></div>
+<div class="linenb">185</div><div class="codeline"><span class="comment"><span class="comment">%        <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">186</div><div class="codeline"><span class="comment"><span class="comment">%          <span class="keyword1">\item</span> <span class="keyword1">\textbf</span>{Maybe speak of this in the conclusion ?} Could be done in two step:</span></span></div><div class="clear"></div>
+<div class="linenb">187</div><div class="codeline"><span class="comment"><span class="comment">%          <span class="keyword1">\item</span> 1. Reconstruct $\theta$ and $\phi$</span></span></div><div class="clear"></div>
+<div class="linenb">188</div><div class="codeline"><span class="comment"><span class="comment">%          <span class="keyword1">\item</span> 2. "Rotate" the image so the event is at the center of the image -&gt; Prevent distortion + reconstruction E and R become pseudo rotational invariant (as they should be)</span></span></div><div class="clear"></div>
+<div class="linenb">189</div><div class="codeline"><span class="comment"><span class="comment">%        <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">190</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">191</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">192</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">193</div><div class="codeline">This data is represented as $240 \times 240$ images with a charge $Q$ channel and a time $t$ channel. The SPMTs are then projected on the plane as illustrated in Figure \ref{fig:jcnn:pmt_rep} using the coordinate system presented in \ref{fig:jcnn:corrdinate_system}. The $P_y$ coordinate, the row corresponding to the SPMT in the projection, is proportional to $\theta$. The $P_x$ coordinate, the column corresponding to the SPMT in the projection, is defined by $\phi \sin{\theta}$ in spherical coordinates. $\theta = 0$ is defined as being the top of the detector and $\phi = 0$ is defined as an arbitrary direction in the detector. In practice, $\phi = 0$ is given by the MC simulation.</div><div class="clear"></div>
+<div class="linenb">194</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">195</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">196</div><div class="codeline">&nbsp;&nbsp;P_y &amp;= \bigg\lfloor \frac{\theta \cdot H}{\pi} \bigg\rfloor, ~ \theta \in [0, \pi[ \\</div><div class="clear"></div>
+<div class="linenb">197</div><div class="codeline">&nbsp;&nbsp;P_x &amp;= \bigg\lfloor \frac{(\phi + \pi) \sin{\theta} \cdot W}{2\pi}\bigg\rfloor, ~ \phi \in [-\pi, \pi[, ~ \theta \in [0, \pi[</div><div class="clear"></div>
+<div class="linenb">198</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">199</div><div class="codeline"><span class="highlight" title="This sentence does not start with an uppercase letter.. Suggestions: [Where] (9717) [lt:en:UPPERCASE_SENTENCE_START]">where</span> $H$ is the height of the image, $W$ the width of the image and $(0,0)$ the top left corner of the image.</div><div class="clear"></div>
+<div class="linenb">200</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">201</div><div class="codeline">This projection keep the SPMT position in the image proportional to their spherical coordinates while keeping the neighboring information. This proportionality allows us to keep the specificities of the detector structure, the vertical bands visible in \ref{fig:jcnn:pmt_rep}.</div><div class="clear"></div>
+<div class="linenb">202</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">203</div><div class="codeline">When two SPMTs in the same pixel are hit in the event time window, the charges are summed and the lowest of the hit-time is chosen. The time window depends on the datasets and are detailed in Section \ref{sec:jcnn:data}. The SPMTs being located close to each other, we expect the time difference between two successive physics signals, two photons being collected, to be small. The first hit time is <span class="highlight" title="This word has been used in one of the immediately preceding sentences. Using a synonym could make your text more interesting to read, unless the repetition is intentional.. Suggestions: [decided, selected, picked] (10458) [lt:en:EN_REPEATEDWORDS]">chosen</span> because it can be considered as the relative propagation time of the photons that went the ``straightest'', i.e.\ that went under the less perturbation of the two. The timing is thus more representative of the event location.</div><div class="clear"></div>
+<div class="linenb">204</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">205</div><div class="codeline">The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a physics signal on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant, and we lose the timing information for this part of the detector.</div><div class="clear"></div>
+<div class="linenb">206</div><div class="codeline">As illustrated in Figure \ref{fig:jcnn:pmt_rep} the image dimension have been optimized so that at most two SPMTs are in the same pixel while keeping the number of empty pixels relatively low to prevent this kind of issue.</div><div class="clear"></div>
+<div class="linenb">207</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">208</div><div class="codeline">While it could be possible to use larger images (more pixel) to prevent overlapping, keeping image small images gives multiple advantages:</div><div class="clear"></div>
+<div class="linenb">209</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">210</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> As presented in Section \ref{sec:jcnn:model}, the convolution filter we use are $3 \times 3$ convolution filter, meaning that if SPMTs would be separated by more than one pixel, the first filter would only see one SPMT per filter. This behavior would be kind of counterproductive as the first convolution block would basically be a transmission layer and would just induce noise in the data.</div><div class="clear"></div>
+<div class="linenb">211</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> It keeps the network relatively small, while this do not impact the convolution layers, the flatten operation just before the FCDNN make the number parameters in the first layer of it dependent on the size of the image.</div><div class="clear"></div>
+<div class="linenb">212</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> It reduces the number of empty pixel in the image.</div><div class="clear"></div>
+<div class="linenb">213</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">214</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">215</div><div class="codeline">\hfill</div><div class="clear"></div>
+<div class="linenb">216</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">217</div><div class="codeline">The question of empty pixel is an important question in this data representation. There is two kind of empty pixels in the data.</div><div class="clear"></div>
+<div class="linenb">218</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">219</div><div class="codeline">The first kind is pixel that contain a SPMT but the SPMT did not get hit nor registered any dark noise during the event. In this case, the charge channel is zero, which have a physical meaning but then come the question of the time layer. One could argue that the correct time would be infinity (or the largest number our memory allows us) because the hit ``never'' happened, so extremely far from the time of the event. This cause numerical problem as large number, in the linear operation that are happening in the convolution layers, are more significant than smaller value. We could try to encode this feature in another way but no number have any significance due to our time being relative to the trigger of the experiment so $-1$ for example is out of question. Float and Double gives us access to special value such as NaN (Not a Number) \cite{noauthor_ieee_2019} but the behavior is to propagate the NaN which leaves us with NaN for energy and position. We choose to keep the value 0 because it's the absorbing element of multiplication, absorbing the ``information'' of the parameter it would be multiplied by. It also can be though as no activation in the ReLU activation function. It's important to keep in mind the fact that a part of the detector that has not been hit is also an information: There is no signal in this part of the detector. This problematic will be explored in more details in Chapter \ref{sec:jgnn}.</div><div class="clear"></div>
+<div class="linenb">220</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">221</div><div class="codeline">The second kind of pixels are the one that do not represent parts of the detector such as the corners of the image. The question is basically the same, what to put in the charge and the time channel. The decision is to set the charge and time to 0 following the above reasoning.</div><div class="clear"></div>
+<div class="linenb">222</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">223</div><div class="codeline">Another problematic that happens with this representation, and this is not dependent of the chosen projection, is the deformation in the edges of the image and the loss of the neighboring information in the for the SPMTs at the edge of the image $\phi \sim 180^\circ$. This deformation and neighboring loss could be partially circumvented as explained in Section \ref{sec:jcnn:prospect}</div><div class="clear"></div>
+<div class="linenb">224</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">225</div><div class="codeline"><span class="keyword1">\subsection</span>{Dataset}</div><div class="clear"></div>
+<div class="linenb">226</div><div class="codeline"><span class="comment"><span class="comment">% 1 Millions MC e+ events for training (900k for train, 50k for validation and 50k for test)</span></span></div><div class="clear"></div>
+<div class="linenb">227</div><div class="codeline"><span class="comment"><span class="comment">%   <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">228</div><div class="codeline"><span class="comment"><span class="comment">%     <span class="keyword1">\item</span> MC for the moment, will need to retrain with mix of calibration data (Good question, is the CNN PID agnostic ?)</span></span></div><div class="clear"></div>
+<div class="linenb">229</div><div class="codeline"><span class="comment"><span class="comment">%     <span class="keyword1">\item</span> 47 IBD/day -&gt; 1M event is 21k days of data (for reference, 6 years of data is 94k events)</span></span></div><div class="clear"></div>
+<div class="linenb">230</div><div class="codeline"><span class="comment"><span class="comment">%     <span class="keyword1">\item</span> Events are "optimistic"</span></span></div><div class="clear"></div>
+<div class="linenb">231</div><div class="codeline"><span class="comment"><span class="comment">%       <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">232</div><div class="codeline"><span class="comment"><span class="comment">%         <span class="keyword1">\item</span> No pile-up</span></span></div><div class="clear"></div>
+<div class="linenb">233</div><div class="codeline"><span class="comment"><span class="comment">%         <span class="keyword1">\item</span> w/o neutrons</span></span></div><div class="clear"></div>
+<div class="linenb">234</div><div class="codeline"><span class="comment"><span class="comment">%         <span class="keyword1">\item</span> time window is decided by electronics</span></span></div><div class="clear"></div>
+<div class="linenb">235</div><div class="codeline"><span class="comment"><span class="comment">%       <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">236</div><div class="codeline"><span class="comment"><span class="comment">%   <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">237</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">238</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">239</div><div class="codeline">In this study we will discuss two datasets of one million prompt signal of IBD events.</div><div class="clear"></div>
+<div class="linenb">240</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">241</div><div class="codeline"><span class="highlight-sh" title="A section title should not be written in all caps. The LaTeX stylesheet takes care of rendering titles in caps if needed. [sh:003]"><span class="keyword1">\subsubsection</span>{J21}</span></div><div class="clear"></div>
+<div class="linenb">242</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">243</div><div class="codeline">The first one comes from the JUNO official Monte Carlo simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the classical SPMT reconstruction algorithm was developed. This SPMT classical method is based on the time likelihood presented Section \ref{sec:juno:reco} for the vertex reconstruction, and compute the energy by correcting the detector effect on the ration $N_{pe}/E_{dep}$. It is detailed in <span class="highlight-sh" title="Do not refer to chapters using hard-coded numbers. Use \ref instead. [sh:hccha]">Chapter 4</span> of \cite{lebrin_towards_2022}.</div><div class="clear"></div>
+<div class="linenb">244</div><div class="codeline"><span class="highlight" title="Three successive sentences begin with the same word. Consider rewording the sentence or use a thesaurus to find a synonym. (14710) [lt:en:ENGLISH_WORD_REPEAT_BEGINNING_RULE]">This</span> dataset is used as a reference for comparison to classical algorithm performances.</div><div class="clear"></div>
+<div class="linenb">245</div><div class="codeline">The data in this dataset is <span class="keyword1">\textit</span>{Detsim} level (see Section \ref{sec:juno:software})  which includes no digitization, no DAQ  and therefore no reconstruction of PMT signals. Only the number of PEs that hit a PMT and the hit times are provided. A fast simulation based on Gaussian drawings produces charges, with bias and variability, and the equivalent for times. The drawings parameters were adjusted based on  \cite{cao_mass_2021, abusleme_mass_2022}.</div><div class="clear"></div>
+<div class="linenb">246</div><div class="codeline">Because there is no charge reconstruction, the timing on the event is based on the Geant4 simulation, and so $t=0$ is the moment the positron is created in the CD. To prevent correlation between the numerical value of the time of the first hit $t_0$ and the radius of the event, we offset all time by this first hit time. Without simulation of the charge reconstruction, we cannot simulate the event trigger, we thus add an arbitrary time cut at <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (15625) [lt:en:EN_A_VS_AN]">a</span> $t_0 + 1000$ ns.</div><div class="clear"></div>
+<div class="linenb">247</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">248</div><div class="codeline"><span class="highlight-sh" title="A section title should not be written in all caps. The LaTeX stylesheet takes care of rendering titles in caps if needed. [sh:003]"><span class="keyword1">\subsubsection</span>{J23}</span></div><div class="clear"></div>
+<div class="linenb">249</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">250</div><div class="codeline">The second comes from the JUNO official Monte Carlo simulations<span class="highlight-sh" title="There should be a space after a period. If you are writing a URL or a filename, use the \url{} or \verb markup. [sh:d:002]"> J23.0.1-rc8.dc</span>1 (released the 7th January 2024). The data is <span class="keyword1">\textit</span>{Calib} level (see Section \ref{sec:juno:software}). Here the charge comes from the waveform integration, the time window resolution and trigger decision are all simulated inside the software.</div><div class="clear"></div>
+<div class="linenb">251</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">252</div><div class="codeline">To put in perspective this amount of data, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amounts to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.</div><div class="clear"></div>
+<div class="linenb">253</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">254</div><div class="codeline">While we expect and hope the MC simulation to give use a realistic representation of the detector, there could be effect, even after the fine-tuning on calibration data, that the simulation cannot handle. Thus, once the calibration will be available, we will need to evaluate, and if needed retrain, the network on calibration data to establish definitive performances.</div><div class="clear"></div>
+<div class="linenb">255</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">256</div><div class="codeline">The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distributions are used so that the CNN does not learn a potential energy distribution, favoring some part of the energy spectrum instead of others.</div><div class="clear"></div>
+<div class="linenb">257</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">258</div><div class="codeline"><span class="keyword1">\subsection</span>{Data characteristics}</div><div class="clear"></div>
+<div class="linenb">259</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">260</div><div class="codeline">To delve a bit into the kind of data we will use, you can find in Figure \ref{fig:jcnn:pmt_rep} the distribution of the SPMTs in the image. The color represent the number of SPMTs per pixel.</div><div class="clear"></div>
+<div class="linenb">261</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">262</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">263</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">264</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">265</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/juno/spherical_coordinate_system.png}</div><div class="clear"></div>
+<div class="linenb">266</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Spherical coordinate system used in JUNO for reconstruction.}</div><div class="clear"></div>
+<div class="linenb">267</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:corrdinate_system}</div><div class="clear"></div>
+<div class="linenb">268</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">269</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">270</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">271</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/pmt_repartition.png}</div><div class="clear"></div>
+<div class="linenb">272</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel.}</div><div class="clear"></div>
+<div class="linenb">273</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:pmt_rep}</div><div class="clear"></div>
+<div class="linenb">274</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">275</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">276</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">277</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">278</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">279</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">280</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">281</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_0_charge.png}</div><div class="clear"></div>
+<div class="linenb">282</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">283</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">284</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">285</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">286</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_0_time.png}</div><div class="clear"></div>
+<div class="linenb">287</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">288</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Example of a high energy, radial event. We see a concentration of the charge on the bottom right of the image, clear indication of a high radius event. <span class="keyword1">\textbf</span>{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. <span class="keyword1">\textbf</span>{On the right}: The time channel in nanoseconds.}</div><div class="clear"></div>
+<div class="linenb">289</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:event:hrhe}</div><div class="clear"></div>
+<div class="linenb">290</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">291</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">292</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">293</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">294</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">295</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_1_charge.png}</div><div class="clear"></div>
+<div class="linenb">296</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">297</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">298</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">299</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">300</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_1_time.png}</div><div class="clear"></div>
+<div class="linenb">301</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">302</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Example of a low energy, radial event. The signal here is way less explicit, we can kind of guess that the event is located in the top middle of the image. <span class="keyword1">\textbf</span>{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. <span class="keyword1">\textbf</span>{On the right}: The time channel in nanoseconds.}</div><div class="clear"></div>
+<div class="linenb">303</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:event:hrle}</div><div class="clear"></div>
+<div class="linenb">304</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">305</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">306</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">307</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">308</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_2_charge.png}</div><div class="clear"></div>
+<div class="linenb">309</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">310</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">311</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">312</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">313</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_2_time.png}</div><div class="clear"></div>
+<div class="linenb">314</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">315</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Example of a high energy, central event. In this image we can see a lot of signal but uniformly spread, this is indicative of a central event. <span class="keyword1">\textbf</span>{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. <span class="keyword1">\textbf</span>{On the right}: The time channel in nanoseconds.}</div><div class="clear"></div>
+<div class="linenb">316</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:event:lrhe}</div><div class="clear"></div>
+<div class="linenb">317</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">318</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">319</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">320</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">321</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_3_charge.png}</div><div class="clear"></div>
+<div class="linenb">322</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">323</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">324</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">325</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">326</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/illustration_3_time.png}</div><div class="clear"></div>
+<div class="linenb">327</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">328</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Example of a low energy, central event. Here there is no clear signal, the uniformity of the distribution should make it central. <span class="keyword1">\textbf</span>{On the left}: the charge channel. The color is the charge in each pixel in NPE equivalent. <span class="keyword1">\textbf</span>{On the right}: The time channel in nanoseconds.}</div><div class="clear"></div>
+<div class="linenb">329</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:event:lrle}</div><div class="clear"></div>
+<div class="linenb">330</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">331</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">332</div><div class="codeline">See also Figures \ref{fig:jcnn:event:hrhe} to \ref{fig:jcnn:event:lrle} - and the explanation in their captions -  which present events from J23 for different positions and energies. We see some characteristics, and can instinctively understand how the CNN could discriminate different situations.</div><div class="clear"></div>
+<div class="linenb">333</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">334</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">335</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">336</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">337</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/pe_mev.png}</div><div class="clear"></div>
+<div class="linenb">338</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of PE/MeV in the J23 Dataset. This distribution is profiled and fitted using equation \ref{eq:jcnn:pe_per_mev}.}</div><div class="clear"></div>
+<div class="linenb">339</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:pe_per_mev}</div><div class="clear"></div>
+<div class="linenb">340</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">341</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">342</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">343</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">344</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\textwidth]{images/jcnn/pe_vs_mev.png}</div><div class="clear"></div>
+<div class="linenb">345</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{<span class="keyword1">\textbf</span>{On top}: Distribution of PE vs Energy. <span class="keyword1">\textbf</span>{On bottom}: Using the values extracted in \ref{fig:jcnn:pe_per_mev}, we calculate the ration signal over background + signal.}</div><div class="clear"></div>
+<div class="linenb">346</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:pe_vs_mev}</div><div class="clear"></div>
+<div class="linenb">347</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">348</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">349</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">350</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">351</div><div class="codeline">To give an idea of the strength of the signal in comparison to the dark noise background, Figure \ref{fig:jcnn:pe_per_mev} present the distribution of the ratio of NPE per deposited energy. Assuming a linear response of the LS we can model:</div><div class="clear"></div>
+<div class="linenb">352</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">353</div><div class="codeline">&nbsp;&nbsp;NPE_{tot} &amp;= E_{dep} \cdot P_{mev} + D_{N} \\</div><div class="clear"></div>
+<div class="linenb">354</div><div class="codeline">&nbsp;&nbsp;\frac{NPE_{tot}}{E_{dep}} &amp;= P_{mev} + \frac{D_{N}}{E_{dep}} <span class="keyword1">\label</span>{eq:jcnn:pe_per_mev}</div><div class="clear"></div>
+<div class="linenb">355</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">356</div><div class="codeline">where $NPE_{tot}$ is the total number of PE detected by the event, $P_{mev}$ is the mean number of PE detected per MeV and $D_{N}$ is the dark noise contribution that is considered energy independent. In the case where the readout time window is dependent of the energy the dark noise contribution become energy dependent, also the LS response is realistically energy dependent but Figure \ref{fig:jcnn:pe_per_mev} shows that we hare heavily dominated by the stochastic behavior of light emission and detection.</div><div class="clear"></div>
+<div class="linenb">357</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">358</div><div class="codeline">The fit shows a light yield of 40.78 PE/MeV and a dark noise contribution of 4.29 NPE. As shown in Figure \ref{fig:jcnn:pe_vs_mev}, the physics makes for 90\% of the signal at low energy.</div><div class="clear"></div>
+<div class="linenb">359</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">360</div><div class="codeline"><span class="keyword1">\section</span>{Training}</div><div class="clear"></div>
+<div class="linenb">361</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">362</div><div class="codeline">The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e^{-8}$). The learning rate was reduced exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the meta-iteration.</div><div class="clear"></div>
+<div class="linenb">363</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">364</div><div class="codeline">Following the lifecycle presented in Section \ref{sec:ml:train}, the training used a batch size of 64 events meaning that, each step, the loss is computed on 64 events before updating the NN parameters. A meta-iteration is composed of 10k steps, thus each meta-iteration, the NN see 640k events. The training last for 30 meta-iterations, so overall the NN go through 19.2 millions events or 19.2 times the dataset.</div><div class="clear"></div>
+<div class="linenb">365</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">366</div><div class="codeline">The number of meta-iterations, batch size, learning rate and its decay where fine-tuned during the development of the CNN.</div><div class="clear"></div>
+<div class="linenb">367</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">368</div><div class="codeline"><span class="keyword1">\section</span>{Results}</div><div class="clear"></div>
+<div class="linenb">369</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn:results}</div><div class="clear"></div>
+<div class="linenb">370</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">371</div><div class="codeline">Before presenting the results, let's discuss the different observable.</div><div class="clear"></div>
+<div class="linenb">372</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">373</div><div class="codeline">The events are considered point like in this study. The target truth position, or vertex, is the mean position of the energy deposits of the positron and the two annihilation gammas. This approximation for point like interaction is also used for the likelihood study presented in Section \ref{sec:juno:reco} and in previous ML studies presented in Section \ref{sec:juno:ml} \cite{qian_vertex_2021}.</div><div class="clear"></div>
+<div class="linenb">374</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">375</div><div class="codeline">Due to the symmetries of the detector, we mainly consider and discuss the bias and precision evolution depending on the radius $R$, but we will still monitor the performances depending on the spherical angle $\theta$ and $\phi$. From the detector construction and effect we expect dependency in radius due to the TR area effect presented in Section \ref{sec:juno:reco} and the possibility for the positron or the gammas to escape from the CD for positrons interacting near the edge. We also expect dependency on $\theta$, the top of the experiment being non-instrumented due to the filling chimney. It is also to be noted that the events in the dataset are uniformly distributed in the CD, and so are uniformly distributed in $R^3$ and $\phi$. The $\theta$ distribution is not uniform, and we will have more event for $\theta \sim 90^{\circ}$ that $\theta \sim 0^{\circ}$ or $\theta \sim 180^{\circ}$.</div><div class="clear"></div>
+<div class="linenb">376</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">377</div><div class="codeline">We define multiple energy in JUNO:</div><div class="clear"></div>
+<div class="linenb">378</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">379</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $E_\nu$: The energy of the neutrino.</div><div class="clear"></div>
+<div class="linenb">380</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $E_k$: The kinetic energy of the resulting positron from the IBD.</div><div class="clear"></div>
+<div class="linenb">381</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $E_{dep}$: The deposited energy of the positron and the two annihilation gammas.</div><div class="clear"></div>
+<div class="linenb">382</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $E_{vis}$: The equivalent visible energy, so $E_{dep}$ after the detector effect such as the LS response non-linearity.</div><div class="clear"></div>
+<div class="linenb">383</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $E_{rec}$: The reconstructed energy by the reconstruction algorithm. The expected value depends on the algorithm we discuss. For example the algorithm presented in Section \ref{sec:juno:reco} reconstruct $E_{vis}$ while the ones presented in Section \ref{sec:juno:ml} reconstruct $E_{dep}$.</div><div class="clear"></div>
+<div class="linenb">384</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">385</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">386</div><div class="codeline">In this study, we will set $E_{dep}$ as our target for energy reconstruction. This choice is motivated by the ease with which we can retrieve this information in the Monte Carlo data while $E_{vis}$ is less trivial to retrieve.</div><div class="clear"></div>
+<div class="linenb">387</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">388</div><div class="codeline"><span class="keyword1">\subsection</span>{J21 results}</div><div class="clear"></div>
+<div class="linenb">389</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">390</div><div class="codeline">The best results come from the $\mathrm{Gen}_{30}$ model, meaning then 30th model generated using the Table \ref{tab:jcnn:hyper}: $\mathrm{Gen}_{30}$: $N_{blocks} = 3$, $N_{channels} = 32$, FCDNN configuration: 2048 * 2 + 1024 * 2, Loss $\equiv E+V$.</div><div class="clear"></div>
+<div class="linenb">391</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">392</div><div class="codeline">The performances of its reconstruction are presented in blue in Figure \ref{fig:jcnn:vic_cnn}. Superimposed in black is the performances of the classical algorithm from \cite{lebrin_towards_2022}.</div><div class="clear"></div>
+<div class="linenb">393</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">394</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Energy reconstruction}</div><div class="clear"></div>
+<div class="linenb">395</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">396</div><div class="codeline">By looking at the Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution. Important biases, however, appear at low and high energy.</div><div class="clear"></div>
+<div class="linenb">397</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">398</div><div class="codeline">This is explained by looking at the true and reconstructed energy distributions in Figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies before 8 MeV, but there is an excess of event reconstructed with energies around 9 MeV while a lack of them for 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.</div><div class="clear"></div>
+<div class="linenb">399</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">400</div><div class="codeline">The first observation is a physics phenomenon: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. <span class="highlight" title="Consider using the plural verb form for the plural noun 'events'.. Suggestions: [There are] (22326) [lt:en:THERE_IS_A_LOT_OF]">There is</span> a few events with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy of the event.</div><div class="clear"></div>
+<div class="linenb">401</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">402</div><div class="codeline">The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (Figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region, thus a small variance but the bias become very high (Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).</div><div class="clear"></div>
+<div class="linenb">403</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">404</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">405</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">406</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">407</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">408</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">409</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvETC.png}</div><div class="clear"></div>
+<div class="linenb">410</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">411</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}</div><div class="clear"></div>
+<div class="linenb">412</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">413</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">414</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">415</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">416</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">417</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}</div><div class="clear"></div>
+<div class="linenb">418</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">419</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">420</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">421</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvETC.png}</div><div class="clear"></div>
+<div class="linenb">422</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">423</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}</div><div class="clear"></div>
+<div class="linenb">424</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">425</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">426</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">427</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">428</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">429</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">430</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">431</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}</div><div class="clear"></div>
+<div class="linenb">432</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">433</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">434</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">435</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvTTC.png}</div><div class="clear"></div>
+<div class="linenb">436</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\theta$.}</div><div class="clear"></div>
+<div class="linenb">437</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC}</div><div class="clear"></div>
+<div class="linenb">438</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">439</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">440</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">441</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvPTC.png}</div><div class="clear"></div>
+<div class="linenb">442</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\phi$.}</div><div class="clear"></div>
+<div class="linenb">443</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}</div><div class="clear"></div>
+<div class="linenb">444</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">445</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the $\mathrm{Gen}_{30}$ model on J21 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">446</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn}</div><div class="clear"></div>
+<div class="linenb">447</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">448</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">449</div><div class="codeline">This behavior also explain the heavy bias at low energy in Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}. The energy bias of the CNN if fairly constant over the energy range, it is interesting to note that the energy bias depending on the radius is a bit worse than the classical method.</div><div class="clear"></div>
+<div class="linenb">450</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">451</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Vertex reconstruction}</div><div class="clear"></div>
+<div class="linenb">452</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">453</div><div class="codeline">For the vertex reconstruction we do not study $x$, $y$ and $z$ independently<span class="highlight" title="Use a comma before 'but' if it connects two independent clauses (unless they are closely connected and short).. Suggestions: [, but] (23363) [lt:en:COMMA_COMPOUND_SENTENCE]"> but</span> we use $R$ as a proxy observable. Figure \ref{fig:jcnn:vic_cnn:cnn_perf} shows the residual distribution of the different vertex coordinates. We see that $R$ errors and biases are slightly superior to the Cartesian coordinates, thus $R$ is a conservative proxy observable to discuss the subject of vertex reconstruction.</div><div class="clear"></div>
+<div class="linenb">454</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">455</div><div class="codeline">The comparison of radius reconstruction between the classical algorithm and $\mathrm{Gen}_{30}$ are presented in the Figures \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}. The resolution obtained by the CNN is twice worse in average, and worse in all studied regions.</div><div class="clear"></div>
+<div class="linenb">456</div><div class="codeline">In energy, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 20 cm over the energy range.</div><div class="clear"></div>
+<div class="linenb">457</div><div class="codeline">When looking over the true event radius, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 30 and 45 cm of resolution. The performances are the best for central and radial event.</div><div class="clear"></div>
+<div class="linenb">458</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">459</div><div class="codeline">The precision also worsen when looking at the edge of the image $\theta \approx 0$, $\theta \approx 2\pi$ respectively the top and bottom of the image, and when $\phi \approx -\pi$ and $\phi \approx \pi$ respectively the left and right side of the image.</div><div class="clear"></div>
+<div class="linenb">460</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">461</div><div class="codeline">The bias in radius reconstruction is about the same order of magnitude depending on the energy but is of opposite sign. As for the energy, this behavior is studied in more details in Section \ref{sec:jcnn:combination}. Over radius, $\theta$ and $\phi$ the bias is inconsistent, sometimes event better than the classical reconstruction but can also be much worse than the classical method. This could come from the specialization of some filters in the convolutional layers for specific part of the detector that would still work ``correctly'' for other parts but with much less precision.</div><div class="clear"></div>
+<div class="linenb">462</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">463</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">464</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">465</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">466</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">467</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_x.png}</div><div class="clear"></div>
+<div class="linenb">468</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $x$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">469</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_x}</div><div class="clear"></div>
+<div class="linenb">470</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">471</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">472</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">473</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_y.png}</div><div class="clear"></div>
+<div class="linenb">474</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $y$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">475</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_y}</div><div class="clear"></div>
+<div class="linenb">476</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">477</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">478</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">479</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_z.png}</div><div class="clear"></div>
+<div class="linenb">480</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $z$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">481</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_z}</div><div class="clear"></div>
+<div class="linenb">482</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">483</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">484</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">485</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">486</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">487</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_r.png}</div><div class="clear"></div>
+<div class="linenb">488</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $R$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">489</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_r}</div><div class="clear"></div>
+<div class="linenb">490</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">491</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">492</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">493</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_theta.png}</div><div class="clear"></div>
+<div class="linenb">494</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $\theta$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">495</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_theta}</div><div class="clear"></div>
+<div class="linenb">496</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">497</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">498</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">499</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_phi.png}</div><div class="clear"></div>
+<div class="linenb">500</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of the error on reconstructed $\phi$ by $\mathrm{Gen}_{30}$.}</div><div class="clear"></div>
+<div class="linenb">501</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_delta_phi}</div><div class="clear"></div>
+<div class="linenb">502</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">503</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Residual distribution of the different component of the vertex by $\mathrm{Gen}_{30}$. The reconstructed component are $x$, $y$ and $z$ but we see similar behavior in the error of $R$, $\theta$ and $\phi$.}</div><div class="clear"></div>
+<div class="linenb">504</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:cnn_perf}</div><div class="clear"></div>
+<div class="linenb">505</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">506</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">507</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">508</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">509</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">510</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">511</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/e_dis.png}</div><div class="clear"></div>
+<div class="linenb">512</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of $\mathrm{Gen}_{30}$ reconstructed energy and true energy of the analysis dataset (J21).}</div><div class="clear"></div>
+<div class="linenb">513</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:edis}</div><div class="clear"></div>
+<div class="linenb">514</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">515</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">516</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">517</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/e_dis_42.png}</div><div class="clear"></div>
+<div class="linenb">518</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Distribution of $\mathrm{Gen}_{42}$ reconstructed energy and true energy of the analysis dataset (J23).}</div><div class="clear"></div>
+<div class="linenb">519</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:edis42}</div><div class="clear"></div>
+<div class="linenb">520</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">521</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">522</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">523</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">524</div><div class="codeline">As mentioned in the introduction of this chapter, this CNN initially served as a tool for learning about machine learning and JUNO's detector and software. It eventually became necessary for use as an SPMT reconstruction tool in Chapter \ref{sec:joint_fit}, so we made some optimizations. However, we did not invest much time in fully addressing its issues.</div><div class="clear"></div>
+<div class="linenb">525</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">526</div><div class="codeline"><span class="keyword1">\subsection</span>{J21 Combination of classic and ML estimator}</div><div class="clear"></div>
+<div class="linenb">527</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn:combination}</div><div class="clear"></div>
+<div class="linenb">528</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">529</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">530</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> We want to reconstruct the E from $\bar{\nu_e}$</span></span></div><div class="clear"></div>
+<div class="linenb">531</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Difference between multiple E -&gt; $E_{vis}$, $E_{rec}$, $E_k$</span></span></div><div class="clear"></div>
+<div class="linenb">532</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Comparison with victor results</span></span></div><div class="clear"></div>
+<div class="linenb">533</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> <span class="keyword1">\textbf</span>{More details when I'll look into the retrained data}</span></span></div><div class="clear"></div>
+<div class="linenb">534</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Discuss of the differences</span></span></div><div class="clear"></div>
+<div class="linenb">535</div><div class="codeline"><span class="comment"><span class="comment">%  <span class="keyword1">\item</span> Discuss of the principle of error decorelation</span></span></div><div class="clear"></div>
+<div class="linenb">536</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\begin{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">537</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Possible improvements</span></span></div><div class="clear"></div>
+<div class="linenb">538</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Combining algorithms</span></span></div><div class="clear"></div>
+<div class="linenb">539</div><div class="codeline"><span class="comment"><span class="comment">%      <span class="keyword1">\item</span> Average sum</span></span></div><div class="clear"></div>
+<div class="linenb">540</div><div class="codeline"><span class="comment"><span class="comment">%    <span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">541</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{itemize}</span></span></span></div><div class="clear"></div>
+<div class="linenb">542</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">543</div><div class="codeline">As it has been presented in previous section, there are instances where the reconstructed energy and vertex behaves differently between the neural network and  the classic algorithm. For instance, if we look at Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the radius at low energy while the classical algorithm seems to underestimate it. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are respectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.</div><div class="clear"></div>
+<div class="linenb">544</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">545</div><div class="codeline">&nbsp;&nbsp;E[\theta_{N}] = \mu_N + X; ~&amp;~ \mathrm{Var}[\theta_{N}] = \sigma^2_{N} \\</div><div class="clear"></div>
+<div class="linenb">546</div><div class="codeline">&nbsp;&nbsp;E[\theta_{C}] = \mu_C + X; ~&amp;~ \mathrm{Var}[\theta_{C}] = \sigma^2_{C}</div><div class="clear"></div>
+<div class="linenb">547</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">548</div><div class="codeline">where $\mu$ is the bias of the estimator and $\sigma^2$ its variance.</div><div class="clear"></div>
+<div class="linenb">549</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">550</div><div class="codeline">Now if we were to combine the two estimators using a simple mean</div><div class="clear"></div>
+<div class="linenb">551</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">552</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:jcnn:combi}</div><div class="clear"></div>
+<div class="linenb">553</div><div class="codeline">&nbsp;&nbsp;\hat{\theta}(X) = \frac{1}{2} ( \theta_{N}(X) + \theta_{C}(X) ) \\</div><div class="clear"></div>
+<div class="linenb">554</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">555</div><div class="codeline">then the variance and mean would follow</div><div class="clear"></div>
+<div class="linenb">556</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">557</div><div class="codeline">&nbsp;&nbsp;E[\hat{\theta}] &amp; = \frac{1}{2}E[\theta_N] + \frac{1}{2}E[\theta_X]\\</div><div class="clear"></div>
+<div class="linenb">558</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; = \frac{1}{2}(\mu_N + X + \mu_C + X) \\</div><div class="clear"></div>
+<div class="linenb">559</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; = \frac{1}{2}(\mu_N + \mu_C) + X</div><div class="clear"></div>
+<div class="linenb">560</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">561</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">562</div><div class="codeline">&nbsp;&nbsp;\mathrm{Var}[\hat{\theta}] &amp; = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + 2 \cdot \frac{1}{4} \cdot \sigma_{NC} \\</div><div class="clear"></div>
+<div class="linenb">563</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + \frac{1}{2} \cdot \sigma_{NC} \\</div><div class="clear"></div>
+<div class="linenb">564</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp; = \frac{1}{4}\sigma^2_N + \frac{1}{4}\sigma^2_C + \frac{1}{2} \cdot \sigma_{N} \sigma_C \rho_{NC}</div><div class="clear"></div>
+<div class="linenb">565</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">566</div><div class="codeline">Where $\sigma_{NC}$ is the covariance between $\theta_N$ and $\theta_C$ and $\rho_{NC}$ their correlation.</div><div class="clear"></div>
+<div class="linenb">567</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">568</div><div class="codeline">We see immediately that if the two estimators are of opposite bias, the bias of the resulting estimator is reduced. For the variance, it depends on $\rho_{NC}$ but in this case if $\sigma^2_C$ is close to $\sigma^2_N$ then even for $\rho_{NC} \lneq 1$ then we can gain in resolution.</div><div class="clear"></div>
+<div class="linenb">569</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">570</div><div class="codeline">By generalizing the equation \ref{eq:jcnn:combi} to</div><div class="clear"></div>
+<div class="linenb">571</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">572</div><div class="codeline">&nbsp;&nbsp;\hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C</div><div class="clear"></div>
+<div class="linenb">573</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">574</div><div class="codeline">we can determine an optimal $\alpha$ for two combined estimators. The estimators with the smallest variance</div><div class="clear"></div>
+<div class="linenb">575</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">576</div><div class="codeline">&nbsp;&nbsp;\alpha = \frac{\sigma_C^2 - \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2\sigma_N \sigma_C \rho_{NC}}</div><div class="clear"></div>
+<div class="linenb">577</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">578</div><div class="codeline">and the estimator without bias</div><div class="clear"></div>
+<div class="linenb">579</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">580</div><div class="codeline">&nbsp;&nbsp;\alpha = \frac{\mu_C}{\mu_C - \mu_N}</div><div class="clear"></div>
+<div class="linenb">581</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">582</div><div class="codeline">See annex \ref{sec:annex:jcnn:alpha} for demonstration.</div><div class="clear"></div>
+<div class="linenb">583</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">584</div><div class="codeline">We present in this section the result of the estimator with the smallest variance.</div><div class="clear"></div>
+<div class="linenb">585</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">586</div><div class="codeline">It's pretty clear from the results shown in Figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results as illustrated in \ref{fig:jcnn:vic_cnn:res_map}.</div><div class="clear"></div>
+<div class="linenb">587</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">588</div><div class="codeline">The map we are using are composed of 20 bins for $R^3$ going from 0 to 5400 m$^3$ (17.54 m) and 50 bins in energy ranging from 1.022 to 10.022 MeV. In the case where we are outside the grid, we use the closest cell.</div><div class="clear"></div>
+<div class="linenb">589</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">590</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">591</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">592</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">593</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/vic_r_bias.png}</div><div class="clear"></div>
+<div class="linenb">594</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">595</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">596</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">597</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/vic_r_res.png}</div><div class="clear"></div>
+<div class="linenb">598</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">599</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Radius bias (<span class="keyword1">\textbf</span>{on the left}) and resolution(<span class="keyword1">\textbf</span>{on the right}) of the classical algorithm in a $E$, $R^3$ grid.}</div><div class="clear"></div>
+<div class="linenb">600</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:res_map}</div><div class="clear"></div>
+<div class="linenb">601</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">602</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">603</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">604</div><div class="codeline">The performance of this weighted mean is presented in Figure \ref{fig:jcnn:vic_cnn:Cx30}. We can see that even when the CNN resolution is much worse than the classical algorithm, it can still bring some information thus improving the resolution. This comes from the correlation of the reconstruction error to be smaller than 1 as presented in Figure \ref{fig:jcnn:vic_cnn:corr}. We even see some anticorrelation in the radius reconstruction for High radius, high energy, event.</div><div class="clear"></div>
+<div class="linenb">605</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">606</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">607</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">608</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">609</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">610</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">611</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvETC.png}</div><div class="clear"></div>
+<div class="linenb">612</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">613</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvETC}</div><div class="clear"></div>
+<div class="linenb">614</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">615</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">616</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">617</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">618</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">619</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvRTC}</div><div class="clear"></div>
+<div class="linenb">620</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">621</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">622</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">623</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvETC.png}</div><div class="clear"></div>
+<div class="linenb">624</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">625</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvETC}</div><div class="clear"></div>
+<div class="linenb">626</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">627</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">628</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">629</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">630</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">631</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">632</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">633</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvRTC}</div><div class="clear"></div>
+<div class="linenb">634</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">635</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">636</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">637</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvTTC.png}</div><div class="clear"></div>
+<div class="linenb">638</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\theta$.}</div><div class="clear"></div>
+<div class="linenb">639</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvTTC}</div><div class="clear"></div>
+<div class="linenb">640</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">641</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">642</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">643</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvPTC.png}</div><div class="clear"></div>
+<div class="linenb">644</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\phi$.}</div><div class="clear"></div>
+<div class="linenb">645</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvPTC}</div><div class="clear"></div>
+<div class="linenb">646</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">647</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the $\mathrm{Gen}_{30}$ model on J21, the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022} and the combination of both using weighted mean. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">648</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">649</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:Cx30}</div><div class="clear"></div>
+<div class="linenb">650</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">651</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">652</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">653</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">654</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">655</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/vic_cnn_e_corr.png}</div><div class="clear"></div>
+<div class="linenb">656</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">657</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">658</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">659</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/vic_cnn_r_corr.png}</div><div class="clear"></div>
+<div class="linenb">660</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">661</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Correlation between CNN and classical method reconstruction (<span class="keyword1">\textbf</span>{on the left}) for energy and (<span class="keyword1">\textbf</span>{on the right}) for radius in a $E$, $R^3$ grid.}</div><div class="clear"></div>
+<div class="linenb">662</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:corr}</div><div class="clear"></div>
+<div class="linenb">663</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">664</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">665</div><div class="codeline">This technique is not suited for realistic reconstruction, we rely too much on the knowledge of the resolution, bias and correlation between the two methods. While this is possible to determine using simulated data or calibration sources, the real data might differ from our model, and we would need to really well understand the behavior of the two system. But this is a good tool to detect that algorithms don't all use the same information, and is a first step to identify new information that could be brought to the best algorithms, to improve their performance.</div><div class="clear"></div>
+<div class="linenb">666</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">667</div><div class="codeline"><span class="keyword1">\subsection</span>{J23 results}</div><div class="clear"></div>
+<div class="linenb">668</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">669</div><div class="codeline">We needed for Chapter \ref{sec:joint_fit} a SPMT reconstruction tool to run the comparison with LPMT. We thus retrained the SPMT CNN on newer, more realistic data.</div><div class="clear"></div>
+<div class="linenb">670</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">671</div><div class="codeline">The J21 simulation is fairly old and newer version, such as J23, include refined measurements of the light yield, reflection indices of materials of the detector, structural elements such as the connecting structure and more realistic dark noise. Additionally, the trigger, waveform integration and time window are defined using the algorithms that will ultimately be used by the collaboration to process real physics events.</div><div class="clear"></div>
+<div class="linenb">672</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">673</div><div class="codeline">We retrained the models defined in \ref{sec:jcnn:model} on the J23 data and used the same hyperparameter optimization procedure. The results from the best architecture, $\mathrm{Gen}_{42}$, are presented in Figure \ref{fig:jcnn:vic_cnn:gen42}. Following the Table \ref{tab:jcnn:hyper}, $\mathrm{Gen}_{42}$: $N_{blocks} = 3$, $N_{channels} = 64$, FCDNN configuration: 4096 * 2, Loss $\equiv E+V$.</div><div class="clear"></div>
+<div class="linenb">674</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">675</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Energy reconstruction}</div><div class="clear"></div>
+<div class="linenb">676</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">677</div><div class="codeline">The results of the energy reconstruction are presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}. The resolution is close to the one of the classical algorithm except the start and end of the spectrum. This is the same effect that we saw with $\mathrm{Gen}_{30}$, events are pulled from the edge of the distribution, resulting in smaller resolution but heavy biases.</div><div class="clear"></div>
+<div class="linenb">678</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">679</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Vertex reconstruction}</div><div class="clear"></div>
+<div class="linenb">680</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">681</div><div class="codeline">The vertex reconstruction, presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC} is not yet to the level of the classical reconstruction, but the degradation is smaller than for $\mathrm{Gen}_{30}$ being at most a difference of 15 cm of resolution and closing to the performance of the classical algorithm in the most favorable condition. $\mathrm{Gen}_{42}$ has also very little bias in comparison with the classical method except the transition to the TR area and at the very edge of the detector.</div><div class="clear"></div>
+<div class="linenb">682</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">683</div><div class="codeline">With a more realistic description of the propagation and collection of scintillation photons, of the charge and time resolutions, of the DN and of the trigger, it seems new features can be identified by the CNN.</div><div class="clear"></div>
+<div class="linenb">684</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">685</div><div class="codeline">Unfortunately could not rerun the classical algorithm over the J23 data, as the algorithm was <span class="highlight" title="Do not mix variants of the same word ('optimise' and 'optimize') within a single text.. Suggestions: [optimized] (29949) [lt:en:EN_WORD_COHERENCY]">optimised</span> for J21 and was not included and maintained over J23. The combination method need for the two estimators to be run on the same set of event, which was impossible without the classical algorithm being maintained for J23.</div><div class="clear"></div>
+<div class="linenb">686</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">687</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">688</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">689</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">690</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">691</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvETC.png}</div><div class="clear"></div>
+<div class="linenb">692</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">693</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC}</div><div class="clear"></div>
+<div class="linenb">694</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">695</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">696</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">697</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">698</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of energy reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">699</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}</div><div class="clear"></div>
+<div class="linenb">700</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">701</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">702</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">703</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvETC.png}</div><div class="clear"></div>
+<div class="linenb">704</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs energy.}</div><div class="clear"></div>
+<div class="linenb">705</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}</div><div class="clear"></div>
+<div class="linenb">706</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">707</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">708</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">709</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">710</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">711</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvRTC.png}</div><div class="clear"></div>
+<div class="linenb">712</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs radius.}</div><div class="clear"></div>
+<div class="linenb">713</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}</div><div class="clear"></div>
+<div class="linenb">714</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">715</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">716</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">717</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvTTC.png}</div><div class="clear"></div>
+<div class="linenb">718</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\theta$.}</div><div class="clear"></div>
+<div class="linenb">719</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC}</div><div class="clear"></div>
+<div class="linenb">720</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">721</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.32\linewidth}</div><div class="clear"></div>
+<div class="linenb">722</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">723</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvPTC.png}</div><div class="clear"></div>
+<div class="linenb">724</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\caption</span>{Resolution and bias of radius reconstruction vs $\phi$.}</div><div class="clear"></div>
+<div class="linenb">725</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC}</div><div class="clear"></div>
+<div class="linenb">726</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">727</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Reconstruction performance of the $\mathrm{Gen}_{42}$ model on J23 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}</div><div class="clear"></div>
+<div class="linenb">728</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:jcnn:vic_cnn:gen42}</div><div class="clear"></div>
+<div class="linenb">729</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">730</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">731</div><div class="codeline"><span class="keyword1">\section</span>{Conclusion and prospect}</div><div class="clear"></div>
+<div class="linenb">732</div><div class="codeline"><span class="keyword1">\label</span>{sec:jcnn:prospect}</div><div class="clear"></div>
+<div class="linenb">733</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">734</div><div class="codeline">In this chapter we have developed a CNN for the reconstruction of IBD prompt signals. This work was the opportunity to learn about machine learning and neural networks, and familiarize ourselves with JUNO's detector and software.</div><div class="clear"></div>
+<div class="linenb">735</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">736</div><div class="codeline">This work was revisited for the needs of Chapter \ref{sec:joint_fit}, providing a reconstruction tools for the SPMT.</div><div class="clear"></div>
+<div class="linenb">737</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">738</div><div class="codeline">The CNN we developed suffers limitations in its performance. We think one of the reasons for this lies in the data representation. First, a lot of training time and resources is consumed going and optimizing over pixels with no physical meaning, notably the time information in case of no hit. This problem origin from the planar projection and is also a specificity of the SPMT system, where a low number of PMT fire per event resulting in empty pixels. To overcome this problematic, i.e.\ what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would result in an image with multiple charge channels, each one representing the charge sum in a time interval.</div><div class="clear"></div>
+<div class="linenb">739</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">740</div><div class="codeline">Even the best CNN design should at some point hit another limitation: the necessity to project the spherical image on a sphere. It would then need to optimize itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution. We could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event. Another possibility is to use a kind of algorithm that does not impose a planar projection, like a GNN. It has other advantages, as will be presented in the next chapter, where we propose a GNN to reconstruct IBD's with the LPMT and SPMT systems.</div><div class="clear"></div>
+<div class="linenb">741</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">742</div><div class="codeline">The CNN we developed suffers limitations in its performance. We think one of the  reasons for this lies in  the data representation. A lot of training time and resources is consumed going and optimizing over pixel with no physical meaning, the NN needs to optimized itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution.</div><div class="clear"></div>
+<div class="linenb">743</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">744</div><div class="codeline">Those problems could be circumvented, we could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event.</div><div class="clear"></div>
+<div class="linenb">745</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">746</div><div class="codeline">To overcome the time problematic, i.e.\ what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would result in an image with multiple charge channels, each one representing the charge sum in a time interval.</div><div class="clear"></div>
+<div class="linenb">747</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">748</div><div class="codeline">Another possibility is to use  a kind of algorithm that does not impose a planar projection, like a GNN. It has other advantages, as will be presented in the next chapter, where we propose a GNN to reconstruct IBD's with the LPMT system.</div><div class="clear"></div>
+<div class="linenb">749</div><div class="codeline"><span class="keyword2">\end{document}</span></div><div class="clear"></div>
+</div>
+<hr/>
+Output produced by TeXtidote v0.8.4, &copy; 2018-2022 Sylvain Hall&eacute; - All rights reserved.<br/>
+See the <a href="https://sylvainhalle.github.io/textidote">TeXtidote website</a> for more information.
+</body>
+</html>

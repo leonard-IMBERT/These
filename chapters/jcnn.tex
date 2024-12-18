@@ -14,12 +14,12 @@
 
 \minitoc
 
-As explained in Chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) system and the Small Photomultiplier (SPMT) system. Both of them observe the same physics events inside of the same medium but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see Section \ref{sec:juno:LPMT}), a thousands versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
+As explained in Chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) system and the Small Photomultiplier (SPMT) system. Both of them observe the same physics events inside the same medium, but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see Section \ref{sec:juno:LPMT}), a thousand versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
 
 
 The SPMT system is essential to the deployment of the Dual Calorimetry techniques, already mentioned in Section \ref{sec:juno:reco} and described in \cite{han_dual_2021, juno_collaboration_calibration_2021, cabrera_multi-calorimetry_2023}.
-It is indeed less subject than the LPMTs to charge non linearity effects (QNL).  This topic will be studied in more detail in Chapter \ref{sec:joint_fit}, where the potential of one of the Dual Calorimetry techniques is explored. It consists on combined oscillation analyses based on two antineutrino energy spectra : one reconstructed with the LPMT system, the other one with the SPMT system.
-For that purpose, it is therefore necessary to have reconstruction tools available. Well maintained tools using the LPMT are available in the collaboration's official software. This is not the case concerning the SPMT system, where algorithms were developed more sporadically. This is one of the reasons why we developped the CNN described in this chapter.
+It is indeed less subject than the LPMTs to charge non-linearity effects (QNL).  This topic will be studied in more detail in Chapter \ref{sec:joint_fit}, where the potential of one of the Dual Calorimetry techniques is explored. It consists on combined oscillation analyses based on two antineutrino energy spectra: one reconstructed with the LPMT system, the other one with the SPMT system.
+For that purpose, it is therefore necessary to have reconstruction tools available. Well maintained tools using the LPMT are available in the collaboration's official software. This is not the case concerning the SPMT system, where algorithms were developed more sporadically. This is one of the reasons why we developed the CNN described in this chapter.
 
 Our efforts on it were limited to the early months of this thesis: it was above all a way to learn about ML and about JUNO's  detector and software.
 We benchmarked its performance against a classical algorithm developed in Chapter 4 of \cite{lebrin_towards_2022} but not yet implemented in JUNO's software.
@@ -33,10 +33,10 @@ We benchmarked its performance against a classical algorithm developed in Chapte
 %  \item Comparison, difference in behavior
 %\end{itemize}
 
-As discussed in Chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling highly dimensional data from a given dataset. In our case, we have access to complete monte-carlo simulation of our detector to produce large datasets that could represent multiple years of data taking.
+As discussed in Chapter \ref{sec:ml}, Machine Learning (ML) algorithms shine when modeling highly dimensional data from a given dataset. In our case, we have access to complete Monte Carlo simulation of our detector to produce large datasets that could represent multiple years of data taking.
 Ideally ML algorithms would be able to consider the entirety of the information in the detector and converge on the best parameters to yield optimal results.
 
-The difference between this ideal and what can be achieved in reality is an important subject. In particular, we wonder if an exhaustive usage of the information present in the detector could lead to use informations that are mismodelled in our simulated training samples (or present only in these samples) and therefore lead to biases when the algorithm is applied to real data.
+The difference between this ideal and what can be achieved in reality is an important subject. In particular, we wonder if an exhaustive usage of the information present in the detector could lead to use information that are mismodelled in our simulated training samples (or present only in these samples) and therefore lead to biases when the algorithm is applied to real data.
 A simple way to start addressing this reliability issue is to try to evaluate to which extent various reconstruction methods use the same information. An attempt at this is presented at the end of this chapter. This is also the subject of Chapter \ref{sec:janne}.
 
 % We have access to a very detailed simulation of the detector (Section \ref{sec:juno:software}) that will allow us to simulate large datasets while giving access to the all the physics parameters of the event. Those parameters include the target of our reconstruction algorithms: the vertex and energy of our event. As introduced above, we hope that the ML algorithm will be able to used all the informations in the event, but that could lead that potential mismodelings in our simulation could be exploited by the algorithm. This specific subject will be studied in Chapter \ref{sec:janne}.
@@ -55,11 +55,11 @@ A simple way to start addressing this reliability issue is to try to evaluate to
 %    \end{itemize}
 %\end{itemize}
 
-One of simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their repartition is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface. It is then tempting to represent the detector as a spherical image with the PMTs in place of pixels. Two events with two different energy or position would produce two different images.
+One of the simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their distribution is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface. It is then tempting to represent the detector as a spherical image with the PMTs in place of pixels. Two events with two different energy or position would produce two different images.
 
 The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see Section \ref{sec:ml:cnn}) and has proven its relevance in image processing.
 
-Some CNN are developed to process spherical images \cite{cohen_spherical_2018} but for the sake of simplicity and as a first approach we decided to go with a planar projection of the detector, approach that has proven its efficiency using the LPMT system (see Section \ref{sec:juno:ml}). The details about this planar projection will be discussed in section \ref{sec:jcnn:data}.
+Some CNNs are developed to process spherical images \cite{cohen_spherical_2018} but for the sake of simplicity and as a first approach we decided to go with a planar projection of the detector, approach that has proven its efficiency using the LPMT system (see Section \ref{sec:juno:ml}). The details about this planar projection will be discussed in Section \ref{sec:jcnn:data}.
 
 \begin{figure}[ht]
   \centering
@@ -71,11 +71,11 @@ Some CNN are developed to process spherical images \cite{cohen_spherical_2018} b
 \subsection{Model}
 \label{sec:jcnn:model}
 
-The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in Figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters that will define the size, complexity and computational power of the NN. The chose hyperparameters are detailed below and their values are presented in table \ref{tab:jcnn:hyper}.
+The architecture we use is derived from the VGG-16 architecture \cite{simonyan_very_2015} illustrated in Figure \ref{fig:jcnn:vgg16}. We define a set of hyperparameters that will define the size, complexity and computational power of the NN. The chose hyperparameters are detailed below and their values are presented in Table \ref{tab:jcnn:hyper}.
 \begin{itemize}
   \item $\mathbf{N_{blocks}}$: the number of convolution blocks, a block being composed of two convolutional layers with $3\times3$ filters using ReLU activation function, a $3\times3$ kernel max-pooling layer  (except for the last block).
   \item $\mathbf{N_{channels}}$: The number of channels in the first block. The number of channels in the subsequent blocks is computed using $N^i_{channels} = i * N_{channels}, i \in [1..N_{blocks}]$.
-  \item \textbf{FCDNN configuration}: The result of the last convolution layer is flattened then fed to a FCDNN. Its configuration is expressed as the ouputs of sequenced fully connected linear layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers which output is 1024 followed by 2 other layers with an output of 512. Finally the last layer is alinear layer outputing 4 features wihtout activation function. Each feature of the last layer represent a component of the interaction vertex: Energy, X, Y, Z.
+  \item \textbf{FCDNN configuration}: The result of the last convolution layer is flattened then fed to a FCDNN. Its configuration is expressed as the outputs of sequenced fully connected linear layer using the PReLU activation function. For example $2 * 1024 + 2 * 512$ is the sequence of 2 layers which output is 1024 followed by 2 other layers with an output of 512. Finally, the last layer is a linear layer outputting 4 features without activation function. Each feature of the last layer represent a component of the interaction vertex: Energy, X, Y, Z.
   \item \textbf{Loss}: The loss function. In this work we study two different loss function $(E+V)$ and $(E_r + V_r)$ detailed below.
 \end{itemize}
 
@@ -94,7 +94,7 @@ The idea is that: due to the inherent statistic uncertainty over the number of c
 The above losses and their parameters values results from fine-tuning after multiples runs and adjustments of the full random search.
 
 
-Each combinations of those hyperparameters (for example $(N_{blocks} = 2, N_{channels} = 32, \mathrm{FCDNN} = (2 * 1024), \mathrm{Loss} = (E+V))$) produce models, hereinafter referred as configurations, are then tested and compared to each other over an analysis sample.
+Each combination of those hyperparameters (for example $(N_{blocks} = 2, N_{channels} = 32, \mathrm{FCDNN} = (2 * 1024), \mathrm{Loss} = (E+V))$) produce models, hereinafter referred as configurations, are then tested and compared to each other over an analysis sample.
 
 On top those generated models, we define 4 hand tailored models:
 \begin{itemize}
@@ -104,7 +104,7 @@ On top those generated models, we define 4 hand tailored models:
   \item $\mathrm{Gen}_3$: $N_{blocks} = 5$, $N_{channels} = 64$, FCDNN configuration: $4096 * 2 + 1024 * 2$, Loss $\equiv E_r+V_r$
 \end{itemize}
 
-For examplem let’s define the index of the different configurations $I_{blocks}$, $I_{channels}$, $I_{FCDNN}$ and $I_{loss}$ such as, for example, $I_{blocks} = 0$ is $N_{blocks} = 2$, $I_{blocks} = 1$ is $N_{blocks} = 3$, … using the order in table \ref{tab:jcnn:hyper}. The architecture $Gen_{\alpha}$ is the architecture where:
+For example let’s define the index of the different configurations $I_{blocks}$, $I_{channels}$, $I_{FCDNN}$ and $I_{loss}$ such as, for example, $I_{blocks} = 0$ is $N_{blocks} = 2$, $I_{blocks} = 1$ is $N_{blocks} = 3$, $\ldots$ using the order in Table \ref{tab:jcnn:hyper}. The architecture $Gen_{\alpha}$ is the architecture where:
 \begin{equation*}
 \alpha = 36 * I_{loss} + 9 * I_{FCDNN} + 3 * I_{channels} + I_{blocks} + 4
 \end{equation*}
@@ -136,26 +136,26 @@ The resulting models possess between 2'041'034, for $\mathrm{Gen}_{52}$ and $\ma
     Loss & \{$E+V$, $E_r + V_r$\} \\
     \hline
   \end{tabular}
-  \caption{Sets of hyperparameters values considered in this study}
+  \caption{Sets of hyperparameters values considered in this study.}
   \label{tab:jcnn:hyper}
 \end{table}
 
 
-To rank the various configuration we cannot used directly the mean loss over the validation dataset as $(E+V)$ and $(E_r + V_r)$ are not numerically comparable. We thus use the following quantities, directly related to the reconstruction performances:
+To rank the various configuration we cannot use directly the mean loss over the validation dataset as $(E+V)$ and $(E_r + V_r)$ are not numerically comparable. We thus use the following quantities, directly related to the reconstruction performances:
 \begin{itemize}
   \item The mean absolute energy error $\langle E \rangle = \langle | E - E_{true} | \rangle$. It is an indicator of the energy bias of our reconstruction.
-  \item The standard deviation of the energy error $\sigma E = \sigma (E - E_{true})$. This the indicator on our precision in energy reconstruction.
-  \item The mean distance between the reconstructed vertex and the true vertex $\langle V \rangle = \langle | \vec{V} - \vec{V}_{true} | \rangle$. This an indicator of the bias and precision of our vertex reconstruction.
+  \item The standard deviation of the energy error $\sigma E = \sigma (E - E_{true})$. This is the indicator on our precision in energy reconstruction.
+  \item The mean distance between the reconstructed vertex and the true vertex $\langle V \rangle = \langle | \vec{V} - \vec{V}_{true} | \rangle$. This is an indicator of the bias and precision of our vertex reconstruction.
   \item The standard deviation of the distance between the true and reconstructed vertex $\sigma V = \sigma |\vec{V} - \vec{V}_{true}|$. This is an indicator if the precision in our vertex reconstruction.
 \end{itemize}
 
 \hfill
 
-The models were developped in Python using the Pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} gpus. The A100 was split in two, thus the accessible gpu memory was the same as V100, 20 Gb, making it impossible to train some of the architectures due to memory consumption.
+The models were developed in Python using the Pytorch framework \cite{ansel_pytorch_2024} using  NVIDIA A100 \cite{noauthor_nvidia_nodate-1} and NVIDIA V100 \cite{noauthor_nvidia_nodate-2} GPUs. The A100 was split in two, thus the accessible GPU memory was the same as V100, 20 GB, making it impossible to train some architectures due to memory consumption.
 
-The training was monitored in realtime by a custom tooling that was developed during this thesis, DataMo \cite{imbert_leonard-imbertdatamo_2024}.
+The training was monitored in real-time by a custom tooling that was developed during this thesis, DataMo \cite{imbert_leonard-imbertdatamo_2024}.
 
-The training of one model takes between 4h and 15h depending of its size, overall training the full 72 models takes around 500 GPU hours. Even with parallel training, this random search hyper-optimisation was time consuming.
+The training of one model takes between 4h and 15h depending of its size, overall training the full 72 models takes around 500 GPU hours. Even with parallel training, this random search hyper-optimization was time-consuming.
 
 
 %Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
@@ -198,18 +198,18 @@ This data is represented as $240 \times 240$ images with a charge $Q$ channel an
 \end{align}
 where $H$ is the height of the image, $W$ the width of the image and $(0,0)$ the top left corner of the image.
 
-This projection keep the SPMT position in the image proportional to their spherical coordinates while keeping the neighbouring information. This proportionality allow us to keep the specificities of the detector structure, the vertical bands visible in \ref{fig:jcnn:pmt_rep}.
+This projection keep the SPMT position in the image proportional to their spherical coordinates while keeping the neighboring information. This proportionality allows us to keep the specificities of the detector structure, the vertical bands visible in \ref{fig:jcnn:pmt_rep}.
 
-When two SPMTs in the same pixel are hit in the event time window, the charges are summed and the lowest of the hit-time is chosen. The time window depends on the datasets and are detailed in Section \ref{sec:jcnn:data}. The SPMTs being located close to each other, we expect the time difference between two successive physics signals, two photons being collected, to be small. The first hit time is chosen because it can be considered as the relative propagation time of the photons that went the "straightest", i.e. that went under the less perturbation of the two. The timing is thus more representative of the event location.
+When two SPMTs in the same pixel are hit in the event time window, the charges are summed and the lowest of the hit-time is chosen. The time window depends on the datasets and are detailed in Section \ref{sec:jcnn:data}. The SPMTs being located close to each other, we expect the time difference between two successive physics signals, two photons being collected, to be small. The first hit time is chosen because it can be considered as the relative propagation time of the photons that went the ``straightest'', i.e.\ that went under the less perturbation of the two. The timing is thus more representative of the event location.
 
-The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a physics signal on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant and we lose the timing information for this part of the detector.
+The only potential problem in using this first time come from the Dark Noise (DN). Its time distribution is uniform over the signal and could come before a physics signal on the other SPMT in the pixel. In that case, the time information in the pixel become irrelevant, and we lose the timing information for this part of the detector.
 As illustrated in Figure \ref{fig:jcnn:pmt_rep} the image dimension have been optimized so that at most two SPMTs are in the same pixel while keeping the number of empty pixels relatively low to prevent this kind of issue.
 
 While it could be possible to use larger images (more pixel) to prevent overlapping, keeping image small images gives multiple advantages:
 \begin{itemize}
-  \item As presented in Section \ref{sec:jcnn:model}, the convolution filter we use are $3 \times 3$ convolution filter, meaning that if SPMTs would be separated by more that one pixel, the first filter would only see one SPMT per filter. This behavior would be kind of counterproductive as the first convolution block would basically be a transmission layer and would just induce noise in the data.
-  \item It keep the network relatively small, while this do not impact the convolution layers, the flatten operation just before the FCDNN make the number parameters in the first layer of it dependent on the size of the image.
-  \item It reduce the number of empty pixel in the image.
+  \item As presented in Section \ref{sec:jcnn:model}, the convolution filter we use are $3 \times 3$ convolution filter, meaning that if SPMTs would be separated by more than one pixel, the first filter would only see one SPMT per filter. This behavior would be kind of counterproductive as the first convolution block would basically be a transmission layer and would just induce noise in the data.
+  \item It keeps the network relatively small, while this do not impact the convolution layers, the flatten operation just before the FCDNN make the number parameters in the first layer of it dependent on the size of the image.
+  \item It reduces the number of empty pixel in the image.
 \end{itemize}
 
 \hfill
@@ -220,7 +220,7 @@ The first kind is pixel that contain a SPMT but the SPMT did not get hit nor reg
 
 The second kind of pixels are the one that do not represent parts of the detector such as the corners of the image. The question is basically the same, what to put in the charge and the time channel. The decision is to set the charge and time to 0 following the above reasoning.
 
-Another problematic that happens with this representation, and this is not dependent of the chosen projection, is the deformation in the edges of the image and the loss of the neighbouring information in the for the SPMTs at the edge of the image $\phi \sim 180^\circ$. This deformation and neighbouring loss could be partially circumvented as explained in Section \ref{sec:jcnn:prospect}
+Another problematic that happens with this representation, and this is not dependent of the chosen projection, is the deformation in the edges of the image and the loss of the neighboring information in the for the SPMTs at the edge of the image $\phi \sim 180^\circ$. This deformation and neighboring loss could be partially circumvented as explained in Section \ref{sec:jcnn:prospect}
 
 \subsection{Dataset}
 % 1 Millions MC e+ events for training (900k for train, 50k for validation and 50k for test)
@@ -236,40 +236,40 @@ Another problematic that happens with this representation, and this is not depen
 %   \end{itemize}
 
 
-In this study we will discuss two datasets of one millions prompt signal of IBD events.
+In this study we will discuss two datasets of one million prompt signal of IBD events.
 
 \subsubsection{J21}
 
-The first one comes from the JUNO official MC simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the classical SPMT reconstruction algorithm was developed. This classical methods is based on the time likelihood presented Section \ref{sec:juno:reco} for the vertex reconstruction, and compute the energy by correcting the detector effect on the ration $N_{pe}/E_{dep}$. It is detailed in Chapter 4 of \cite{lebrin_towards_2022}.
+The first one comes from the JUNO official Monte Carlo simulation J21v1r0-Pre2 (released the 18th August 2021). This historical version is the one on which the classical SPMT reconstruction algorithm was developed. This SPMT classical method is based on the time likelihood presented Section \ref{sec:juno:reco} for the vertex reconstruction, and compute the energy by correcting the detector effect on the ration $N_{pe}/E_{dep}$. It is detailed in Chapter 4 of \cite{lebrin_towards_2022}.
 This dataset is used as a reference for comparison to classical algorithm performances.
-The data in this dataset is \textit{detsim} level (see Section \ref{sec:juno:software})  which includes no digitization, no DAQ  and therefore no reconstruction of PMT signals. Only the number of PEs that hit a PMT and the hit times are provided. A fast simulation based on gaussian drawings produces charges, with bias and variability, and the equivalent for times. The drawings parameters were adjusted based on  \cite{cao_mass_2021, abusleme_mass_2022}.
+The data in this dataset is \textit{Detsim} level (see Section \ref{sec:juno:software})  which includes no digitization, no DAQ  and therefore no reconstruction of PMT signals. Only the number of PEs that hit a PMT and the hit times are provided. A fast simulation based on Gaussian drawings produces charges, with bias and variability, and the equivalent for times. The drawings parameters were adjusted based on  \cite{cao_mass_2021, abusleme_mass_2022}.
 Because there is no charge reconstruction, the timing on the event is based on the Geant4 simulation, and so $t=0$ is the moment the positron is created in the CD. To prevent correlation between the numerical value of the time of the first hit $t_0$ and the radius of the event, we offset all time by this first hit time. Without simulation of the charge reconstruction, we cannot simulate the event trigger, we thus add an arbitrary time cut at a $t_0 + 1000$ ns.
 
 \subsubsection{J23}
 
-The second comes from the JUNO official monte-carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). The data is \textit{calib} level (see Section \ref{sec:juno:software}). Here the charge comes from the waveform integration, the time window resolution and trigger decision are all simulated inside the software.
+The second comes from the JUNO official Monte Carlo simulations J23.0.1-rc8.dc1 (released the 7th January 2024). The data is \textit{Calib} level (see Section \ref{sec:juno:software}). Here the charge comes from the waveform integration, the time window resolution and trigger decision are all simulated inside the software.
 
-To put in perspective this amount of data, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amount to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.
+To put in perspective this amount of data, the expected IBD rate in JUNO is 47 / days. Taking into account the calibration time, and the source reactor shutdown, it amounts to $\sim 94'000$ IBD events in 6 years. With this million of event, we are training the equivalent of $\sim 10$ years of data. With this amount we reach a density of $4783 \frac{\mathrm{event}}{\mathrm{m}^3\cdot\mathrm{MeV}}$, meaning our dataset is representative of the multiple event scenarios that could be happening in the detector.
 
 While we expect and hope the MC simulation to give use a realistic representation of the detector, there could be effect, even after the fine-tuning on calibration data, that the simulation cannot handle. Thus, once the calibration will be available, we will need to evaluate, and if needed retrain, the network on calibration data to establish definitive performances.
 
-The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distributions are used so that the CNN does not learn a potential energy distribution, favoring some part of the energy spectrum instead of other.
+The simulated data is composed of positron events, uniformly distributed in the CD volume and in kinetic energy over $E_k \in [0; 9]$ MeV producing a deposited energy $E_{dep} \in [1.022; 10.022]$ MeV. This is done to mimic the signal produced by the IBD prompt signal. Uniform distributions are used so that the CNN does not learn a potential energy distribution, favoring some part of the energy spectrum instead of others.
 
 \subsection{Data characteristics}
 
-To delve a bit into the kind of data we will use, you can find in Figure \ref{fig:jcnn:pmt_rep} the repartition of the SPMTs in the image. The color represent the number of SPMTs per pixel.
+To delve a bit into the kind of data we will use, you can find in Figure \ref{fig:jcnn:pmt_rep} the distribution of the SPMTs in the image. The color represent the number of SPMTs per pixel.
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[height=6cm]{images/juno/spherical_coordinate_system.png}
-    \caption{Spherical coordinate system used in JUNO for reconstruction}
+    \caption{Spherical coordinate system used in JUNO for reconstruction.}
     \label{fig:jcnn:corrdinate_system}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\textwidth]{images/jcnn/pmt_repartition.png}
-    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel}
+    \caption{Repartition of SPMTs in the image projection. The color scale is the number of SPMTs per pixel.}
     \label{fig:jcnn:pmt_rep}
   \end{subfigure}
   \caption{}
@@ -329,20 +329,20 @@ To delve a bit into the kind of data we will use, you can find in Figure \ref{fi
   \label{fig:jcnn:event:lrle}
 \end{figure}
 
-See also Figures \ref{fig:jcnn:event:hrhe} to \ref{fig:jcnn:event:lrle} - and the explanation in their captions -  which present events from J23 for different positions and energies. We see some characteristics and we can instinctively understand how the CNN could discriminate different situations.
+See also Figures \ref{fig:jcnn:event:hrhe} to \ref{fig:jcnn:event:lrle} - and the explanation in their captions -  which present events from J23 for different positions and energies. We see some characteristics, and can instinctively understand how the CNN could discriminate different situations.
 
 \begin{figure}[ht]
   \begin{subfigure}[t]{0.48\linewidth}
     \centering
     \includegraphics[width=\textwidth]{images/jcnn/pe_mev.png}
-    \caption{Distribution of PE/MeV in the J23 Dataset. This distribution is profiled and fitted using equation \ref{eq:jcnn:pe_per_mev}}
+    \caption{Distribution of PE/MeV in the J23 Dataset. This distribution is profiled and fitted using equation \ref{eq:jcnn:pe_per_mev}.}
     \label{fig:jcnn:pe_per_mev}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\linewidth}
     \centering
     \includegraphics[width=\textwidth]{images/jcnn/pe_vs_mev.png}
-    \caption{\textbf{On top}: Distribution of PE vs Energy. \textbf{On bottom}: Using the values extracted in \ref{fig:jcnn:pe_per_mev}, we calculate the ration signal over background + signal}
+    \caption{\textbf{On top}: Distribution of PE vs Energy. \textbf{On bottom}: Using the values extracted in \ref{fig:jcnn:pe_per_mev}, we calculate the ration signal over background + signal.}
     \label{fig:jcnn:pe_vs_mev}
   \end{subfigure}
   \caption{}
@@ -353,13 +353,13 @@ To give an idea of the strength of the signal in comparison to the dark noise ba
   NPE_{tot} &= E_{dep} \cdot P_{mev} + D_{N} \\
   \frac{NPE_{tot}}{E_{dep}} &= P_{mev} + \frac{D_{N}}{E_{dep}} \label{eq:jcnn:pe_per_mev}
 \end{align}
-where $NPE_{tot}$ is the total number of PE detected by the event, $P_{mev}$ is the mean number of PE detected per MeV and $D_{N}$ is the dark noise contribution that is considered energy independent. In the case where the readout time window is dependent of the energy the dark noise contribution become energy dependant, also the LS response is realistically energy dependant but Figure \ref{fig:jcnn:pe_per_mev} shows that we hare heavily dominated by the stochastic behavior of light emission and detection.
+where $NPE_{tot}$ is the total number of PE detected by the event, $P_{mev}$ is the mean number of PE detected per MeV and $D_{N}$ is the dark noise contribution that is considered energy independent. In the case where the readout time window is dependent of the energy the dark noise contribution become energy dependent, also the LS response is realistically energy dependent but Figure \ref{fig:jcnn:pe_per_mev} shows that we hare heavily dominated by the stochastic behavior of light emission and detection.
 
 The fit shows a light yield of 40.78 PE/MeV and a dark noise contribution of 4.29 NPE. As shown in Figure \ref{fig:jcnn:pe_vs_mev}, the physics makes for 90\% of the signal at low energy.
 
 \section{Training}
 
-The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e^{-8}$). The learning rate was reduce exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the meta-iteration.
+The optimizer used for the training is the Adam \cite{kingma_adam_2017} optimizer, with a learning rate $\lambda$ of 1e-3. The other hyperparameters were left to their default value ($\beta_1= 0.9$, $\beta_2 = 0.999$ and $\epsilon = 1e^{-8}$). The learning rate was reduced exponentially during the training at a rate of $\gamma = 0.95$, thus $\lambda_{i+1} = 0.95\lambda_i$ where $i$ is the meta-iteration.
 
 Following the lifecycle presented in Section \ref{sec:ml:train}, the training used a batch size of 64 events meaning that, each step, the loss is computed on 64 events before updating the NN parameters. A meta-iteration is composed of 10k steps, thus each meta-iteration, the NN see 640k events. The training last for 30 meta-iterations, so overall the NN go through 19.2 millions events or 19.2 times the dataset.
 
@@ -368,11 +368,11 @@ The number of meta-iterations, batch size, learning rate and its decay where fin
 \section{Results}
 \label{sec:jcnn:results}
 
-Before presenting the results, lets discuss the different observables.
+Before presenting the results, let's discuss the different observable.
 
-The event are considered point like in this study. The target truth position, or vertex, is the mean position of the energy deposits of the positron and the two annihilation gammas. This approximation for point like interaction is also used for the likelihood study presented in Section \ref{sec:juno:reco} and in previous ML studies presented in section \ref{sec:juno:ml} \cite{qian_vertex_2021}.
+The events are considered point like in this study. The target truth position, or vertex, is the mean position of the energy deposits of the positron and the two annihilation gammas. This approximation for point like interaction is also used for the likelihood study presented in Section \ref{sec:juno:reco} and in previous ML studies presented in Section \ref{sec:juno:ml} \cite{qian_vertex_2021}.
 
-Due to the symmetries of the detector, we mainly consider and discuss the bias and precision evolution depending of the radius $R$ but we will still monitor the performances depending of the spheric angle $\theta$ and $\phi$. From the detector construction and effect we expect dependency in radius due to the TR area effect presented in Section \ref{sec:juno:reco} and the possibility for the positron or the gammas to escape from the CD for positrons interacting near the edge. We also expect dependency on $\theta$, the top of the experiment being non-instrumented due to the filling chimney. It is also to be noted that the events in the dataset are uniformly distributed in the CD, and so are uniformly distributed in $R^3$ and $\phi$. The $\theta$ distribution is not uniform and we will have more event for $\theta \sim 90^{\circ}$ that $\theta \sim 0^{\circ}$ or $\theta \sim 180^{\circ}$.
+Due to the symmetries of the detector, we mainly consider and discuss the bias and precision evolution depending on the radius $R$, but we will still monitor the performances depending on the spherical angle $\theta$ and $\phi$. From the detector construction and effect we expect dependency in radius due to the TR area effect presented in Section \ref{sec:juno:reco} and the possibility for the positron or the gammas to escape from the CD for positrons interacting near the edge. We also expect dependency on $\theta$, the top of the experiment being non-instrumented due to the filling chimney. It is also to be noted that the events in the dataset are uniformly distributed in the CD, and so are uniformly distributed in $R^3$ and $\phi$. The $\theta$ distribution is not uniform, and we will have more event for $\theta \sim 90^{\circ}$ that $\theta \sim 0^{\circ}$ or $\theta \sim 180^{\circ}$.
 
 We define multiple energy in JUNO:
 \begin{itemize}
@@ -380,14 +380,14 @@ We define multiple energy in JUNO:
   \item $E_k$: The kinetic energy of the resulting positron from the IBD.
   \item $E_{dep}$: The deposited energy of the positron and the two annihilation gammas.
   \item $E_{vis}$: The equivalent visible energy, so $E_{dep}$ after the detector effect such as the LS response non-linearity.
-  \item $E_{rec}$: The reconstructed energy by the reconstruction algorithm. The expected value depend on the algorithm we discuss about. For example the algorithm presented in Section \ref{sec:juno:reco} reconstruct $E_{vis}$ while the ones presented in section \ref{sec:juno:ml} reconstruct $E_{dep}$.
+  \item $E_{rec}$: The reconstructed energy by the reconstruction algorithm. The expected value depends on the algorithm we discuss. For example the algorithm presented in Section \ref{sec:juno:reco} reconstruct $E_{vis}$ while the ones presented in Section \ref{sec:juno:ml} reconstruct $E_{dep}$.
 \end{itemize}
 
-In this study, we will set $E_{dep}$ as our target for energy reconstruction. This choice is motivated by the ease with which we can retrieve this information in the monte-carlo data while $E_{vis}$ is less trivial to retrieve.
+In this study, we will set $E_{dep}$ as our target for energy reconstruction. This choice is motivated by the ease with which we can retrieve this information in the Monte Carlo data while $E_{vis}$ is less trivial to retrieve.
 
 \subsection{J21 results}
 
-The best results comes from the $\mathrm{Gen}_{30}$ model, meaning then 30th model generated using the table \ref{tab:jcnn:hyper}: $\mathrm{Gen}_{30}$: $N_{blocks} = 3$, $N_{channels} = 32$, FCDNN configuration: 2048 * 2 + 1024 * 2, Loss $\equiv E+V$.
+The best results come from the $\mathrm{Gen}_{30}$ model, meaning then 30th model generated using the Table \ref{tab:jcnn:hyper}: $\mathrm{Gen}_{30}$: $N_{blocks} = 3$, $N_{channels} = 32$, FCDNN configuration: 2048 * 2 + 1024 * 2, Loss $\equiv E+V$.
 
 The performances of its reconstruction are presented in blue in Figure \ref{fig:jcnn:vic_cnn}. Superimposed in black is the performances of the classical algorithm from \cite{lebrin_towards_2022}.
 
@@ -395,11 +395,11 @@ The performances of its reconstruction are presented in blue in Figure \ref{fig:
 
 By looking at the Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}, the CNN has similar performances in its energy resolution. Important biases, however, appear at low and high energy.
 
-This is explained by looking at the true and reconstructed energy distributions in Figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies before 8 MeV but there is an excess of event reconstructed with energies around 9 MeV while a lack of them for 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
+This is explained by looking at the true and reconstructed energy distributions in Figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies before 8 MeV, but there is an excess of event reconstructed with energies around 9 MeV while a lack of them for 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
 
-The first observation is a physics phenomena: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few event with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy of the event.
+The first observation is a physics phenomenon: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few events with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy of the event.
 
-The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (Figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region , thus a small variance but the bias become very high (Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
+The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (Figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region, thus a small variance but the bias become very high (Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
 
 
 \begin{figure}[ht]
@@ -407,19 +407,19 @@ The second observation is indeed true in this dataset but has no physical meanin
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvETC.png}
-    \caption{Resolution and bias of energy reconstruction vs energy}
+    \caption{Resolution and bias of energy reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MESBvRTC.png}
-    \caption{Resolution and bias of energy reconstruction vs radius}
+    \caption{Resolution and bias of energy reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvETC.png}
-    \caption{Resolution and bias of radius reconstruction vs energy}
+    \caption{Resolution and bias of radius reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}
   \end{subfigure}
 
@@ -427,19 +427,19 @@ The second observation is indeed true in this dataset but has no physical meanin
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvRTC.png}
-    \caption{Resolution and bias of radius reconstruction vs radius}
+    \caption{Resolution and bias of radius reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvTTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_MSBvPTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}
   \end{subfigure}
   \caption{Reconstruction performance of the $\mathrm{Gen}_{30}$ model on J21 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}
@@ -450,34 +450,34 @@ This behavior also explain the heavy bias at low energy in Figure \ref{fig:jcnn:
 
 \subsubsection{Vertex reconstruction}
 
-For the vertex reconstruction we do not study $x$, $y$ and $z$ independently but we use $R$ as a proxy observable. Figure \ref{fig:jcnn:vic_cnn:cnn_perf} shows the residual distribution of the different vertex coordinates. We see that $R$ errors and biases are slightly superior to the cartesian coordinates, thus $R$ is a conservative proxy observable to discuss the subject of vertex reconstruction.
+For the vertex reconstruction we do not study $x$, $y$ and $z$ independently but we use $R$ as a proxy observable. Figure \ref{fig:jcnn:vic_cnn:cnn_perf} shows the residual distribution of the different vertex coordinates. We see that $R$ errors and biases are slightly superior to the Cartesian coordinates, thus $R$ is a conservative proxy observable to discuss the subject of vertex reconstruction.
 
 The comparison of radius reconstruction between the classical algorithm and $\mathrm{Gen}_{30}$ are presented in the Figures \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvPTC}. The resolution obtained by the CNN is twice worse in average, and worse in all studied regions.
-In energy, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 20cm over the energy range.
-When looking over the true event radius, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 30 and 45cm of resolution. The performances are the best for central and radial event.
+In energy, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, where we see a degradation of almost 20 cm over the energy range.
+When looking over the true event radius, Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvRTC}, we lose between 30 and 45 cm of resolution. The performances are the best for central and radial event.
 
 The precision also worsen when looking at the edge of the image $\theta \approx 0$, $\theta \approx 2\pi$ respectively the top and bottom of the image, and when $\phi \approx -\pi$ and $\phi \approx \pi$ respectively the left and right side of the image.
 
-The bias in radius reconstruction is about the same order of magnitude depending of the energy but is of opposite sign. As for the energy, this behavior is studied in more details in Section \ref{sec:jcnn:combination}. Over radius, $\theta$ and $\phi$ the bias is inconsistent, sometimes event better than the classical reconstruction but can also be much worse than the classical method. This could come from the specialisation of some filters in the convolutional layers for specific part of the detector that would still work ``correctly'' for other parts but with much less precision.
+The bias in radius reconstruction is about the same order of magnitude depending on the energy but is of opposite sign. As for the energy, this behavior is studied in more details in Section \ref{sec:jcnn:combination}. Over radius, $\theta$ and $\phi$ the bias is inconsistent, sometimes event better than the classical reconstruction but can also be much worse than the classical method. This could come from the specialization of some filters in the convolutional layers for specific part of the detector that would still work ``correctly'' for other parts but with much less precision.
 
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_x.png}
-    \caption{Distribution of the error on reconstructed $x$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $x$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_x}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_y.png}
-    \caption{Distribution of the error on reconstructed $y$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $y$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_y}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_z.png}
-    \caption{Distribution of the error on reconstructed $z$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $z$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_z}
   \end{subfigure}
 
@@ -485,19 +485,19 @@ The bias in radius reconstruction is about the same order of magnitude depending
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_r.png}
-    \caption{Distribution of the error on reconstructed $R$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $R$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_r}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_theta.png}
-    \caption{Distribution of the error on reconstructed $\theta$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $\theta$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_theta}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/cnn_delta_phi.png}
-    \caption{Distribution of the error on reconstructed $\phi$ by $\mathrm{Gen}_{30}$}
+    \caption{Distribution of the error on reconstructed $\phi$ by $\mathrm{Gen}_{30}$.}
     \label{fig:jcnn:vic_cnn:cnn_delta_phi}
   \end{subfigure}
   \caption{Residual distribution of the different component of the vertex by $\mathrm{Gen}_{30}$. The reconstructed component are $x$, $y$ and $z$ but we see similar behavior in the error of $R$, $\theta$ and $\phi$.}
@@ -509,13 +509,13 @@ The bias in radius reconstruction is about the same order of magnitude depending
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/e_dis.png}
-    \caption{Distribution of $\mathrm{Gen}_{30}$ reconstructed energy and true energy of the analysis dataset (J21)}
+    \caption{Distribution of $\mathrm{Gen}_{30}$ reconstructed energy and true energy of the analysis dataset (J21).}
     \label{fig:jcnn:edis}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/e_dis_42.png}
-    \caption{Distribution of $\mathrm{Gen}_{42}$ reconstructed energy and true energy of the analysis dataset (J23)}
+    \caption{Distribution of $\mathrm{Gen}_{42}$ reconstructed energy and true energy of the analysis dataset (J23).}
     \label{fig:jcnn:edis42}
   \end{subfigure}
   \caption{}
@@ -540,14 +540,14 @@ As mentioned in the introduction of this chapter, this CNN initially served as a
 %    \end{itemize}
 %\end{itemize}
 
-As it has been presented in previous section, there is instances where the reconstructed energy and vertex behaves differently between the neural network and  the classic algorithm. For instance, if we look at Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the radius at low energy while the classical algorithm seems to underestimate it. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are respectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.
+As it has been presented in previous section, there are instances where the reconstructed energy and vertex behaves differently between the neural network and  the classic algorithm. For instance, if we look at Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MSBvETC}, we see that while the CNN tend to overestimate the radius at low energy while the classical algorithm seems to underestimate it. Let's designate the two reconstruction algorithms as estimator of $X$, the truth about the event in the phase space $(E, x, y, z)$. The CNN and the classical algorithm are respectively designated as $\theta_{N}(X)$ and $\theta_{C}(X)$.
 \begin{align}
   E[\theta_{N}] = \mu_N + X; ~&~ \mathrm{Var}[\theta_{N}] = \sigma^2_{N} \\
   E[\theta_{C}] = \mu_C + X; ~&~ \mathrm{Var}[\theta_{C}] = \sigma^2_{C}
 \end{align}
 where $\mu$ is the bias of the estimator and $\sigma^2$ its variance.
 
-Now if we were to combine the two esitmators using a simple mean
+Now if we were to combine the two estimators using a simple mean
 \begin{equation}
   \label{eq:jcnn:combi}
   \hat{\theta}(X) = \frac{1}{2} ( \theta_{N}(X) + \theta_{C}(X) ) \\
@@ -565,9 +565,9 @@ then the variance and mean would follow
 \end{align}
 Where $\sigma_{NC}$ is the covariance between $\theta_N$ and $\theta_C$ and $\rho_{NC}$ their correlation.
 
-We see immediately that if the two estimators are of opposite bias, the bias of the resulting estimator is reduced. For the variance, it depends of $\rho_{NC}$ but in this case if $\sigma^2_C$ is close to $\sigma^2_N$ then even for $\rho_{NC} \lneq 1$ then we can gain in resolution.
+We see immediately that if the two estimators are of opposite bias, the bias of the resulting estimator is reduced. For the variance, it depends on $\rho_{NC}$ but in this case if $\sigma^2_C$ is close to $\sigma^2_N$ then even for $\rho_{NC} \lneq 1$ then we can gain in resolution.
 
-By generalising the equation \ref{eq:jcnn:combi} to
+By generalizing the equation \ref{eq:jcnn:combi} to
 \begin{equation}
   \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C
 \end{equation}
@@ -583,7 +583,7 @@ See annex \ref{sec:annex:jcnn:alpha} for demonstration.
 
 We present in this section the result of the estimator with the smallest variance.
 
-Its pretty clear from the results shown in Figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results as illustrated in \ref{fig:jcnn:vic_cnn:res_map}.
+It's pretty clear from the results shown in Figure \ref{fig:jcnn:vic_cnn} that the bias, variances and correlation are not constant across the $(E, R^3)$ phase space. We thus compute those parameters in a grid in $E$ and $R^3$ for the following results as illustrated in \ref{fig:jcnn:vic_cnn:res_map}.
 
 The map we are using are composed of 20 bins for $R^3$ going from 0 to 5400 m$^3$ (17.54 m) and 50 bins in energy ranging from 1.022 to 10.022 MeV. In the case where we are outside the grid, we use the closest cell.
 
@@ -596,7 +596,7 @@ The map we are using are composed of 20 bins for $R^3$ going from 0 to 5400 m$^3
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_r_res.png}
   \end{subfigure}
-  \caption{Radius bias (\textbf{on the left}) and resolution(\textbf{on the right}) of the classical algorithm in a $E$, $R^3$ grid}
+  \caption{Radius bias (\textbf{on the left}) and resolution(\textbf{on the right}) of the classical algorithm in a $E$, $R^3$ grid.}
   \label{fig:jcnn:vic_cnn:res_map}
 \end{figure}
 
@@ -609,19 +609,19 @@ The performance of this weighted mean is presented in Figure \ref{fig:jcnn:vic_c
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvETC.png}
-    \caption{Resolution and bias of energy reconstruction vs energy}
+    \caption{Resolution and bias of energy reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvETC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MESBvRTC.png}
-    \caption{Resolution and bias of energy reconstruction vs radius}
+    \caption{Resolution and bias of energy reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MESBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvETC.png}
-    \caption{Resolution and bias of radius reconstruction vs energy}
+    \caption{Resolution and bias of radius reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvETC}
   \end{subfigure}
 
@@ -629,19 +629,19 @@ The performance of this weighted mean is presented in Figure \ref{fig:jcnn:vic_c
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvRTC.png}
-    \caption{Resolution and bias of radius reconstruction vs radius}
+    \caption{Resolution and bias of radius reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvTTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvTTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_cnn_Cx30_MSBvPTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$.}
     \label{fig:jcnn:vic_cnn:multi_vic_cnn_Cx30_MSBvPTC}
   \end{subfigure}
   \caption{Reconstruction performance of the $\mathrm{Gen}_{30}$ model on J21, the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022} and the combination of both using weighted mean. The top part of each plot is the resolution and the bottom part is the bias.}
@@ -658,11 +658,11 @@ The performance of this weighted mean is presented in Figure \ref{fig:jcnn:vic_c
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/vic_cnn_r_corr.png}
   \end{subfigure}
-  \caption{Correlation between CNN and classical method reconstruction (\textbf{on the left}) for energy and (\textbf{on the right}) for radius in a $E$, $R^3$ grid}
+  \caption{Correlation between CNN and classical method reconstruction (\textbf{on the left}) for energy and (\textbf{on the right}) for radius in a $E$, $R^3$ grid.}
   \label{fig:jcnn:vic_cnn:corr}
 \end{figure}
 
-This technique is not suited for realistic reconstruction, we rely too much on the knowledge of the resolution, bias and correlation between the two methods. While this is possible to determine using simulated data or calibration sources, the real data might differ from our model and we would need to really well understand the behavior of the two system. But this is a good tool to detect that algorithms don't all use the same information, and is a first step to identify new information that could be brought to the best algorithms, to improve their performance.
+This technique is not suited for realistic reconstruction, we rely too much on the knowledge of the resolution, bias and correlation between the two methods. While this is possible to determine using simulated data or calibration sources, the real data might differ from our model, and we would need to really well understand the behavior of the two system. But this is a good tool to detect that algorithms don't all use the same information, and is a first step to identify new information that could be brought to the best algorithms, to improve their performance.
 
 \subsection{J23 results}
 
@@ -670,15 +670,15 @@ We needed for Chapter \ref{sec:joint_fit} a SPMT reconstruction tool to run the 
 
 The J21 simulation is fairly old and newer version, such as J23, include refined measurements of the light yield, reflection indices of materials of the detector, structural elements such as the connecting structure and more realistic dark noise. Additionally, the trigger, waveform integration and time window are defined using the algorithms that will ultimately be used by the collaboration to process real physics events.
 
-We retrained the models defined in \ref{sec:jcnn:model} on the J23 data and used the same hyperparameter optimisation procedure. The results from the best architecture, $\mathrm{Gen}_{42}$, are presented in Figure \ref{fig:jcnn:vic_cnn:gen42}. Following the table \ref{tab:jcnn:hyper}, $\mathrm{Gen}_{42}$: $N_{blocks} = 3$, $N_{channels} = 64$, FCDNN configuration: 4096 * 2, Loss $\equiv E+V$.
+We retrained the models defined in \ref{sec:jcnn:model} on the J23 data and used the same hyperparameter optimization procedure. The results from the best architecture, $\mathrm{Gen}_{42}$, are presented in Figure \ref{fig:jcnn:vic_cnn:gen42}. Following the Table \ref{tab:jcnn:hyper}, $\mathrm{Gen}_{42}$: $N_{blocks} = 3$, $N_{channels} = 64$, FCDNN configuration: 4096 * 2, Loss $\equiv E+V$.
 
 \subsubsection{Energy reconstruction}
 
-The results of the energy reconstruction are presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}. The resolution is close to the one of the classical algorithm with the exception of the start and end of the spectrum. This is the same effect that we saw with $\mathrm{Gen}_{30}$, events are pulled from the edge of the distribution, resulting in smaller resolution but heavy biases.
+The results of the energy reconstruction are presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}. The resolution is close to the one of the classical algorithm except the start and end of the spectrum. This is the same effect that we saw with $\mathrm{Gen}_{30}$, events are pulled from the edge of the distribution, resulting in smaller resolution but heavy biases.
 
 \subsubsection{Vertex reconstruction}
 
-The vertex reconstruction, presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC} is not yet to the level of the classical reconstruction but the degradation is smaller than for $\mathrm{Gen}_{30}$ being at most a difference of 15cm of resolution and closing to the performance of the classical algorithm in the most favourable condition. $\mathrm{Gen}_{42}$ has also very little bias in comparison with the classical method with the exception of the transition to the TR area and at the very edge of the detector.
+The vertex reconstruction, presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}, \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC} and \ref{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC} is not yet to the level of the classical reconstruction, but the degradation is smaller than for $\mathrm{Gen}_{30}$ being at most a difference of 15 cm of resolution and closing to the performance of the classical algorithm in the most favorable condition. $\mathrm{Gen}_{42}$ has also very little bias in comparison with the classical method except the transition to the TR area and at the very edge of the detector.
 
 With a more realistic description of the propagation and collection of scintillation photons, of the charge and time resolutions, of the DN and of the trigger, it seems new features can be identified by the CNN.
 
@@ -689,19 +689,19 @@ Unfortunately could not rerun the classical algorithm over the J23 data, as the 
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvETC.png}
-    \caption{Resolution and bias of energy reconstruction vs energy}
+    \caption{Resolution and bias of energy reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MESBvETC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MESBvRTC.png}
-    \caption{Resolution and bias of energy reconstruction vs radius}
+    \caption{Resolution and bias of energy reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MESBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvETC.png}
-    \caption{Resolution and bias of radius reconstruction vs energy}
+    \caption{Resolution and bias of radius reconstruction vs energy.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvETC}
   \end{subfigure}
 
@@ -709,19 +709,19 @@ Unfortunately could not rerun the classical algorithm over the J23 data, as the 
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvRTC.png}
-    \caption{Resolution and bias of radius reconstruction vs radius}
+    \caption{Resolution and bias of radius reconstruction vs radius.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvRTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvTTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\theta$}
+    \caption{Resolution and bias of radius reconstruction vs $\theta$.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvTTC}
   \end{subfigure}
   \begin{subfigure}[t]{0.32\linewidth}
     \centering
     \includegraphics[width=\linewidth]{images/jcnn/vic_cnn/multi_vic_42_MSBvPTC.png}
-    \caption{Resolution and bias of radius reconstruction vs $\phi$}
+    \caption{Resolution and bias of radius reconstruction vs $\phi$.}
     \label{fig:jcnn:vic_cnn:multi_vic_42_MSBvPTC}
   \end{subfigure}
   \caption{Reconstruction performance of the $\mathrm{Gen}_{42}$ model on J23 data and it's comparison to the performances of the classic algorithm ``Classical algorithm'' from \cite{lebrin_towards_2022}. The top part of each plot is the resolution and the bottom part is the bias.}
@@ -731,19 +731,19 @@ Unfortunately could not rerun the classical algorithm over the J23 data, as the 
 \section{Conclusion and prospect}
 \label{sec:jcnn:prospect}
 
-In this chapter we have developed a CNN for the reconstruction of IBD prompt signals. This work was the opportunity to learn about machine learning and neural networks, and familiarise ourselves with JUNO's detector and software.
+In this chapter we have developed a CNN for the reconstruction of IBD prompt signals. This work was the opportunity to learn about machine learning and neural networks, and familiarize ourselves with JUNO's detector and software.
 
 This work was revisited for the needs of Chapter \ref{sec:joint_fit}, providing a reconstruction tools for the SPMT.
 
-The CNN we developed suffers limitations in its performance. We think one of the reasons for this lies in the data representation. First, a lot of training time and resources is consumed going and optimizing over pixels with no physical meaning, notably the time information in case of no hit. This problem origin from the planar projection and is also a specificity of the SPMT system, where a low number of PMT fire per event resulting in empty pixels. To overcome this problematic, i.e. what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would results in an image with multiple charge channels, each one representing the charge sum in a time interval.
+The CNN we developed suffers limitations in its performance. We think one of the reasons for this lies in the data representation. First, a lot of training time and resources is consumed going and optimizing over pixels with no physical meaning, notably the time information in case of no hit. This problem origin from the planar projection and is also a specificity of the SPMT system, where a low number of PMT fire per event resulting in empty pixels. To overcome this problematic, i.e.\ what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would result in an image with multiple charge channels, each one representing the charge sum in a time interval.
 
-Even the best CNN design should at some point hit another limitation : the necessity to project the spherical image on a sphere. It would then need to optimize itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution. we could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event. Another possibility is to use a kind of algorithm that does not impose a planar projection, like a GNN. It has other advantages, as will be presented in the next chapter, where we propose a GNN to reconstruct IBD's with the LPMT and SPMT systems.
+Even the best CNN design should at some point hit another limitation: the necessity to project the spherical image on a sphere. It would then need to optimize itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution. We could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event. Another possibility is to use a kind of algorithm that does not impose a planar projection, like a GNN. It has other advantages, as will be presented in the next chapter, where we propose a GNN to reconstruct IBD's with the LPMT and SPMT systems.
 
 The CNN we developed suffers limitations in its performance. We think one of the  reasons for this lies in  the data representation. A lot of training time and resources is consumed going and optimizing over pixel with no physical meaning, the NN needs to optimized itself to take into account edges cases such as event at the edge of the image and deformation of the charge distribution.
 
 Those problems could be circumvented, we could imagine a two part CNN where the first part reconstruct the $\theta$ and $\phi$ spherical coordinates and then rotate the image to locate the event in the center of the image. The second part, from this rotated image, would reconstruct the radius and energy of the event.
 
-To overcome the time problematic, i.e. what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would results in an image with multiple charge channels, each one representing the charge sum in a time interval.
+To overcome the time problematic, i.e.\ what is the time of a PMT that was never hit, we could transform this channel into a dimension. This would result in an image with multiple charge channels, each one representing the charge sum in a time interval.
 
 Another possibility is to use  a kind of algorithm that does not impose a planar projection, like a GNN. It has other advantages, as will be presented in the next chapter, where we propose a GNN to reconstruct IBD's with the LPMT system.
 \end{document}

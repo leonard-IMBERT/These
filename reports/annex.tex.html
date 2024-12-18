@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TeXtidote analysis</title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.highlight, .highlight-sh, .highlight-spelling {
+  padding: 2pt;
+  border-radius: 4pt;
+  cursor: help;
+  opacity: 0.7;
+  border: dashed 1px;
+}
+.highlight {
+  background-color: orange;
+  color: black;
+}
+.highlight-sh {
+  background-color: yellow;
+  color: black;
+}
+.highlight-spelling {
+  background-color: red;
+  color: white;
+}
+div.original-file {
+  font-family: monospace;
+  font-size: 11pt;
+  background-color: #f8f8ff;
+  padding: 20pt;
+  border-radius: 6pt;
+}
+.textidote {
+  	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiICAgd2lkdGg9IjEwMC4wOTEwNW1tIiAgIGhlaWdodD0iMTguMjA5MDk5bW0iICAgdmlld0JveD0iMCAwIDEwMC4wOTEwNSAxOC4yMDkwOTkiICAgdmVyc2lvbj0iMS4xIiAgIGlkPSJzdmc4IiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTEgcjEzNzI1IiAgIHNvZGlwb2RpOmRvY25hbWU9InRleHRpZG90ZS5zdmciPiAgPGRlZnMgICAgIGlkPSJkZWZzMiIgLz4gIDxzb2RpcG9kaTpuYW1lZHZpZXcgICAgIGlkPSJiYXNlIiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiICAgICBib3JkZXJvcGFjaXR5PSIxLjAiICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIgICAgIGlua3NjYXBlOnpvb209IjEiICAgICBpbmtzY2FwZTpjeD0iLTI1NC4yNTMwOSIgICAgIGlua3NjYXBlOmN5PSItMjc4LjM3NTkxIiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIiAgICAgc2hvd2dyaWQ9ImZhbHNlIiAgICAgZml0LW1hcmdpbi10b3A9IjAiICAgICBmaXQtbWFyZ2luLWxlZnQ9IjAiICAgICBmaXQtbWFyZ2luLXJpZ2h0PSIwIiAgICAgZml0LW1hcmdpbi1ib3R0b209IjAiICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMDIxIiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMjY1IiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4gIDxtZXRhZGF0YSAgICAgaWQ9Im1ldGFkYXRhNSI+ICAgIDxyZGY6UkRGPiAgICAgIDxjYzpXb3JrICAgICAgICAgcmRmOmFib3V0PSIiPiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+ICAgICAgICA8ZGM6dHlwZSAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4gICAgICAgIDxkYzp0aXRsZSAvPiAgICAgIDwvY2M6V29yaz4gICAgPC9yZGY6UkRGPiAgPC9tZXRhZGF0YT4gIDxnICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIgICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiICAgICBpZD0ibGF5ZXIxIiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI5LjczODA5NSwtNzAuNTc3NzUxKSI+ICAgIDxnICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjIwLjkyODk0NTU0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgaWQ9InRleHQ4MzYiPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSAzMC43MjY4NjQsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzODYiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDQyLjMzNTg4OCw3NS43NzU1NjQgMTEuMDQ1ODMyLDAgMCw3LjgxMzQ3MyAtNS44MTM1OTYsMCAwLDAuNjA0NjE0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw0LjIwOTA0MyAwLjU4MTM2LDAgMCwtMC42MDQ2MTQgLTAuNTgxMzYsMCAwLDAuNjA0NjE0IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzg4IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA1My45NDQ5MTIsNzUuNzc1NTY0IDUuMjMyMjM2LDAgMCwzLjYwNDQyOSAtNS4yMzIyMzYsMCAwLC0zLjYwNDQyOSB6IG0gNS44MTM1OTYsMCA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIC01LjgxMzU5Niw4LjQxODA4NyA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIDUuODEzNTk2LDAgNS4yMzIyMzYsMCAwLDMuNjA0NDI5IC01LjIzMjIzNiwwIDAsLTMuNjA0NDI5IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzkwIiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA2NS41NTM5MzYsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzOTIiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDc3LjE2Mjk2LDc1Ljc3NTU2NCA1LjIzMjIzNiwwIDAsMTIuMDIyNTE2IC01LjIzMjIzNiwwIDAsLTEyLjAyMjUxNiB6IG0gMCwtNC4yMDkwNDQgNS4yMzIyMzYsMCAwLDMuNjA0NDMgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MyB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5NCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gODIuOTY3NDcyLDc1Ljc3NTU2NCA1LjgxMzU5NiwwIDAsLTQuMjA5MDQ0IDUuMjMyMjM2LDAgMCwxNi4yMzE1NiAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw4LjQxODA4NyAwLjU4MTM2LDAgMCwtNC44MTM2NTggLTAuNTgxMzYsMCAwLDQuODEzNjU4IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzk2IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA5NC41NzY0OTYsNzUuNzc1NTY0IDExLjA0NTgzNCwwIDAsMTIuMDIyNTE2IC0xMS4wNDU4MzQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjM3LDguNDE4MDg3IDAuNTgxMzU3LDAgMCwtNC44MTM2NTggLTAuNTgxMzU3LDAgMCw0LjgxMzY1OCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5OCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTA2LjE4NTUyLDcxLjU2NjUyIDUuMjMyMjQsMCAwLDQuMjA5MDQ0IDUuODEzNTksMCAwLDMuNjA0NDI5IC01LjgxMzU5LDAgMCw0LjgxMzY1OCA1LjgxMzU5LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMsMCAwLC0xNi4yMzE1NiB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTE3Ljc5NDU0LDc1Ljc3NTU2NCAxMS4wNDU4NCwwIDAsNy44MTM0NzMgLTUuODEzNiwwIDAsMC42MDQ2MTQgNS44MTM2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjQsNC4yMDkwNDMgMC41ODEzNiwwIDAsLTAuNjA0NjE0IC0wLjU4MTM2LDAgMCwwLjYwNDYxNCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMiIgLz4gICAgPC9nPiAgPC9nPjwvc3ZnPg==);
+}
+h2.filename {
+  font-family: monospace;
+}
+h1.textidote {
+  width: 378px;
+  height: 68px;
+  display: block;
+}
+.keyword1 {
+  font-weight: bold;
+  color: green;
+}
+.keyword2 {
+  font-weight: bold;
+  color: darkblue;
+}
+.comment, .comment * {
+  color: darkred;
+  font-weight: normal;
+}
+.linenb {
+  font-style: italic;
+  color: lightgrey;
+  width: 30pt;
+  float: left;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.codeline {
+  margin-left: -30pt;
+  padding-left: 60pt;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+}
+.no-text {
+  display: none;
+}
+.clear {
+  clear: both;
+}
+</style>
+</head>
+<body>
+<a href="https://sylvainhalle.github.io/textidote"><h1 class="textidote"><span class="no-text">Results of TeXtidote analysis</span></h1></a>
+<p>Here is the result of analyzing your file(s) with TeXtidote. Hover the mouse over highlighted portions of the document to read a tooltip that gives you some writing advice.</p>
+<p>Found 53 warning(s)</p>
+<div class="original-file">
+<div class="linenb">&nbsp;&nbsp;1</div><div class="codeline"><span class="keyword1">\documentclass</span>[../main.tex]{subfiles}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;2</div><div class="codeline">\graphicspath{{\subfix{..}}}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;3</div><div class="codeline"><span class="keyword2">\begin{document}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;4</div><div class="codeline">\<span class="highlight-sh" title="This chapter is very short (about 144 words). You should consider merging it with another section or make it longer. [sh:seclen]">chapter</span>{Calculation of optimal $\alpha$ for estimator combination}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;5</div><div class="codeline"><span class="keyword1">\label</span>{sec:annex:jcnn:alpha}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;6</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;7</div><div class="codeline">This annex the details of the determination of the optimal $\alpha$ for estimator combination presented in <span class="highlight-sh" title="Use a capital letter when referring to a specific section: 'Section X' [sh:secmag]">section \ref</span>{sec:jcnn:combination}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;8</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;9</div><div class="codeline">As a reminder, the combined estimator $\hat{\theta}$ of $X$ is defined as</div><div class="clear"></div>
+<div class="linenb">&nbsp;10</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;11</div><div class="codeline">&nbsp;&nbsp;\hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C</div><div class="clear"></div>
+<div class="linenb">&nbsp;12</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;13</div><div class="codeline">where $\theta_N$ and $\theta_C$ are both estimator of X.</div><div class="clear"></div>
+<div class="linenb">&nbsp;14</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;15</div><div class="codeline"><span class="keyword1">\section</span>{Unbiased estimator}</div><div class="clear"></div>
+<div class="linenb">&nbsp;16</div><div class="codeline"><span class="keyword1">\label</span>{sec:annex:jcnn:unbiased}</div><div class="clear"></div>
+<div class="linenb">&nbsp;17</div><div class="codeline">For the unbiased estimator, it is straight-forward. We search $\alpha$ such as $E[\hat{\theta}] = X$</div><div class="clear"></div>
+<div class="linenb">&nbsp;18</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;19</div><div class="codeline">&nbsp;&nbsp;E[\hat{\theta}] &amp;= E[\alpha \theta_N + (1-\alpha) \theta_C] \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;20</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= E[\alpha \theta_N] + E[(1-\alpha) \theta_C] \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;21</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= \alpha E[\theta_N] + (1-\alpha) E[\theta_C] \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;22</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= \alpha (\mu_N + X) + (1-\alpha) (\mu_C + X) \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;23</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X &amp;= \alpha \mu_N + \mu_C - \alpha \mu_C + X \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;24</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 &amp;= \alpha (\mu_N - \mu_C) + \mu_C \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;25</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\</div><div class="clear"></div>
+<div class="linenb">&nbsp;26</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\Rightarrow \alpha &amp;= \frac{\mu_C}{\mu_C - \mu_N}</div><div class="clear"></div>
+<div class="linenb">&nbsp;27</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;28</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;29</div><div class="codeline"><span class="keyword1">\section</span>{Optimal variance estimator}</div><div class="clear"></div>
+<div class="linenb">&nbsp;30</div><div class="codeline"><span class="keyword1">\label</span>{sec:annex:jcnn:variance}</div><div class="clear"></div>
+<div class="linenb">&nbsp;31</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;32</div><div class="codeline">The $\alpha$ for this estimator is a bit more tricky. By expanding the variance we get</div><div class="clear"></div>
+<div class="linenb">&nbsp;33</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;34</div><div class="codeline">&nbsp;&nbsp;\mathrm{Var}[\hat{\theta}] &amp;= \mathrm{Var}[\alpha \theta_N + (1-\alpha) \theta_C] \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;35</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= \mathrm{Var}[\alpha \theta_N] + \mathrm{Var}[(1-\alpha) \theta_C] + \mathrm{Cov}[\alpha(1-\alpha) \theta_N \theta_C] \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;36</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= \alpha^2 \sigma_N^2 + (1 - \alpha)^2 \sigma_C^2 + 2\alpha(1-\alpha) \sigma_N \sigma_C \rho_{NC}</div><div class="clear"></div>
+<div class="linenb">&nbsp;37</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;38</div><div class="codeline">where, as a reminder, $\rho_{NC}$ is the correlation factor between $\theta_C$ and $\theta_N$.</div><div class="clear"></div>
+<div class="linenb">&nbsp;39</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;40</div><div class="codeline">Now we try to find the minima of $\mathrm{Var}[\hat{\theta}]$ with respect to $\alpha$. For this we evaluate the derivative</div><div class="clear"></div>
+<div class="linenb">&nbsp;41</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;42</div><div class="codeline">&nbsp;&nbsp;\frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &amp;= 2\alpha \sigma_N^2 - 2(1-\alpha) \sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} (1- 2\alpha) \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;43</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;= 2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC}</div><div class="clear"></div>
+<div class="linenb">&nbsp;44</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;45</div><div class="codeline">then find the minima and maxima of this derivative by evaluating</div><div class="clear"></div>
+<div class="linenb">&nbsp;46</div><div class="codeline"><span class="keyword2">\begin{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;47</div><div class="codeline">&nbsp;&nbsp;\frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &amp;= 0 \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;48</div><div class="codeline">&nbsp;&nbsp;2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} &amp; = 0 \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;49</div><div class="codeline">&nbsp;&nbsp;2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) &amp;= 2\sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC} \\</div><div class="clear"></div>
+<div class="linenb">&nbsp;50</div><div class="codeline">&nbsp;&nbsp;\alpha &amp; = \frac{\sigma_C^2 -  \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}} <span class="keyword1">\label</span>{eq:annex:jcnn:sing}</div><div class="clear"></div>
+<div class="linenb">&nbsp;51</div><div class="codeline"><span class="keyword2">\end{align}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;52</div><div class="codeline">This equation shows only one solution which is <span class="highlight" title="The plural noun 'minima' cannot be used with the article 'a'. Did you mean 'a minimum'?. Suggestions: [a minimum] (738) [lt:en:A_NNS]">a minima</span>. From Eq. \ref{eq:annex:jcnn:sing} arise two singularities:</div><div class="clear"></div>
+<div class="linenb">&nbsp;53</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;54</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\sigma_N = \sigma_C = 0$. This is not a problem because as physicists we never measure with an absolute precision, neither us <span class="highlight" title="Use 'nor' with neither.. Suggestions: [nor] (890) [lt:en:NEITHER_NOR]">or</span> our detectors are perfect.</div><div class="clear"></div>
+<div class="linenb">&nbsp;55</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> $\sigma_N = \sigma_C$ and $\rho_{CN} = 1$. In this case $\theta_C$ and $\theta_N$ are the same estimator <span class="highlight" title="Did you mean the commonly used phrase 'in terms of'?. Suggestions: [in terms of] (975) [lt:en:IN_TERM_OF_PHRASE]">in term of</span> variance thus any value for $\alpha$ yield the same result: an estimator with the same <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [variance] (1066) [lt:en:MORFOLOGIK_RULE_EN_US]">varianve</span> as the original ones.</div><div class="clear"></div>
+<div class="linenb">&nbsp;56</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;57</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;58</div><div class="codeline">\chapter{Charge spherical harmonics analysis}</div><div class="clear"></div>
+<div class="linenb">&nbsp;59</div><div class="codeline"><span class="keyword1">\label</span>{sec:annex:jgnn:harms}</div><div class="clear"></div>
+<div class="linenb">&nbsp;60</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;61</div><div class="codeline">When looking at JUNO events we can clearly see some pattern in the charge <span class="highlight-spelling" title="Possible spelling mistake found. (1211) [lt:en:MORFOLOGIK_RULE_EN_US]">repartition</span> based on the event radius as illustrated in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:events}. When dealing with identifying features and pattern on a spherical plane, the astrophysics community have been using, with success, the spherical harmonic decomposition. The principle is similar to a frequency analysis via Fourier transform. It comes to saying that a function $f(r, \theta, \phi)$, here our charge <span class="highlight-spelling" title="Possible spelling mistake found. (1572) [lt:en:MORFOLOGIK_RULE_EN_US]">repartition</span> of the spherical plane constructed by our PMTs, can be expressed</div><div class="clear"></div>
+<div class="linenb">&nbsp;62</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;63</div><div class="codeline">&nbsp;&nbsp;f(r, \theta, \phi) = \sum_{l=0}^{\infty} \sum_{m=-l}^l a^m_l r^l Y^m_l(\theta, \phi)</div><div class="clear"></div>
+<div class="linenb">&nbsp;64</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;65</div><div class="codeline">where $a^m_l$ are constants complex factor, $Y^m_l(\theta, \phi) = Ne^{im\phi}P^m_l(\cos\theta)$ are the spherical harmonics of degree $l$ and order $m$ and $P^m_l$ their associated Legendre Polynomials. Those harmonics are illustrated in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:ill}. By reducing the problem to the unit sphere $r=1$, we get rid of the term $r^l$. The <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [Heal pix] (1907) [lt:en:MORFOLOGIK_RULE_EN_US]">Healpix</span> library \cite{gorski_healpix_2005} offer function to efficiently find the $a^m_l$ factor from a given <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [Heal pix] (1988) [lt:en:MORFOLOGIK_RULE_EN_US]">Healpix</span> map.</div><div class="clear"></div>
+<div class="linenb">&nbsp;66</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;67</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;68</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">&nbsp;69</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=7cm]{images/jgnn/harmonic/harmonics_ill.png}</div><div class="clear"></div>
+<div class="linenb">&nbsp;70</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{Illustration of the real part of the spherical harmonics}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;71</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:ill}</div><div class="clear"></div>
+<div class="linenb">&nbsp;72</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;73</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;74</div><div class="codeline">For the above decomposition, we will define the <span class="keyword1">\textit</span>{Power} of <span class="highlight" title="Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.. Suggestions: [a] (2060) [lt:en:EN_A_VS_AN]">an</span> harmonic as</div><div class="clear"></div>
+<div class="linenb">&nbsp;75</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;76</div><div class="codeline">&nbsp;&nbsp;S_{ff}(l) = \frac{1}{2l + 1} \sum_{m=-l}^l |a_l^m|^2</div><div class="clear"></div>
+<div class="linenb">&nbsp;77</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;78</div><div class="codeline">and the <span class="keyword1">\textit</span>{Relative Power} as:</div><div class="clear"></div>
+<div class="linenb">&nbsp;79</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;80</div><div class="codeline">&nbsp;&nbsp;P^h_l = \frac{S_{ff}(l)}{\sum_l S_{ff}(l)}</div><div class="clear"></div>
+<div class="linenb">&nbsp;81</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;82</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;83</div><div class="codeline">For this study we will use 10k positron events with $E_{kin} \in [0; 9]$ MeV uniformly distributed in the CD from the JUNO official simulation version<span class="highlight-sh" title="There should be a space after a period. If you are writing a URL or a filename, use the \url{} or \verb markup. [sh:d:002]"> J23.0.1-rc8.dc</span>1 (released the 7th January 2024). All the event are <span class="keyword1">\textit</span>{<span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [Caleb, Cali, Calif, Carib, ca lib] (2302) [lt:en:MORFOLOGIK_RULE_EN_US]">calib</span>} level, with simulation of the physics, electronics, digitizations and triggers. We first take a sub-set of 1k events and look at the power and relative power distribution depending on the radius and harmonic degree $l$. The results are shown in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:radius_dependent}. While don't see any pattern in absolute power, it is pretty clear that there is a correlation between the relative power of $l=0$ and the radius of the event.</div><div class="clear"></div>
+<div class="linenb">&nbsp;84</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;85</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">&nbsp;86</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">&nbsp;87</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">&nbsp;88</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/abs_power_radius_dependency.png}</div><div class="clear"></div>
+<div class="linenb">&nbsp;89</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;90</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">&nbsp;91</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">&nbsp;92</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/power_radius_dependency.png}</div><div class="clear"></div>
+<div class="linenb">&nbsp;93</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;94</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Scatter plot of the absolute and relative power, respectively on the left and right plot, of each harmonic degree $l$. The color indicate the radius of the event.}</div><div class="clear"></div>
+<div class="linenb">&nbsp;95</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:radius_dependent}</div><div class="clear"></div>
+<div class="linenb">&nbsp;96</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;97</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;98</div><div class="codeline">When applying the same study but dependent on the energy, no clear correlation appear. The results for the $l=0$ harmonic are presented in the <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:energy_dependent}. Thus, in this study we will focus on the radial dependency of the relative power of each harmonic.</div><div class="clear"></div>
+<div class="linenb">&nbsp;99</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">100</div><div class="codeline">In figures \ref{fig:annex:jgnn:harmonic:fit1} and \ref{fig:annex:jgnn:harmonic:fit2} are presented the distribution of the relative power of each harmonic for $l \in [0, 11]$. The relation between the radius and the relative power become even more clear, especially for the first harmonics $l \in [0, 4]$. After that for $l &gt; 4$ their relative power is close to 0 for central event, thus loosing power. <span class="highlight" title="A verb may be missing.. Suggestions: [It is, It was] (3271) [lt:en:PRP_RB_JJ]">It</span> also interesting to note the change of behavior in the TR area, clearly visible for $l = 1$ and $l = 2$.</div><div class="clear"></div>
+<div class="linenb">101</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">102</div><div class="codeline">As an <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [rats, eats, eras, treats, greats, Croats, erupts, brats, errata, ersatz, expats, Erato, erects, groats, frats, erratas, eructs, prats] (3374) [lt:en:MORFOLOGIK_RULE_EN_US]">erzats</span> of reconstruction algorithm, we fit each of <span class="highlight" title="The plural demonstrative 'those' does not agree with the singular noun 'distribution'.. Suggestions: [this distribution, those distributions] (3425) [lt:en:THIS_NNS]">those distribution</span> with a 9th degree polynomial which give us the relation</div><div class="clear"></div>
+<div class="linenb">103</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">104</div><div class="codeline">&nbsp;&nbsp;F(R^3) \longmapsto P^h_l</div><div class="clear"></div>
+<div class="linenb">105</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">106</div><div class="codeline">We do it this way because <span class="highlight" title="If the text is a generality, 'of the' is not necessary.. Suggestions: [some] (3526) [lt:en:SOME_OF_THE]">some of the</span> distribution have multiple solution for a given relative power, for example $l = 1$, while each radius give only one power. We now <span class="keyword1">\textit</span>{just} need to find</div><div class="clear"></div>
+<div class="linenb">107</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">108</div><div class="codeline">&nbsp;&nbsp;F^{-1}(P^h_l) \longmapsto R^3</div><div class="clear"></div>
+<div class="linenb">109</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">110</div><div class="codeline">Inverting a 9th degree polynomial is hard, if not impossible. The presence of multiple roots for the same power <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [complexity] (3793) [lt:en:MORFOLOGIK_RULE_EN_US]">complexify</span> the task even more. To circumvent this problem, we reconstruct the radius by locating the minima of $(F(R^3) - \hat{P}^h_l)^2$ where $\hat{P}^h_l$ is the measured power fraction.</div><div class="clear"></div>
+<div class="linenb">111</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">112</div><div class="codeline">To distinguish between multiple possible minima, we use as a starting point the radius given by the procedure on $l = 0$ that, by looking at the fit in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:fit1}, should only present <span class="highlight" title="Don't use the number 'one' with plural words. Did you mean 'one minimum', 'a minimum', or simply 'minima'?. Suggestions: [one minimum, a minimum, minima] (4123) [lt:en:ONE_PLURAL]">one minima</span>. For $l &gt; 0$ we also impose bound on the possible reconstructed $R^3$ as $R^3 \in [R^3_0 - 100, R^3_0 + 100]$ where $R^3_0$ is the reconstructed $R^3$ by the harmonic $l=0$.</div><div class="clear"></div>
+<div class="linenb">113</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">114</div><div class="codeline">The minimization algorithm used are the Bent algorithm for $l=0$ and the Bounded algorithm for $l &gt; 0$ provided by the <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [SciPy, City, Ships, Script, Ship, Copy, Scope, Slip, Spy, Sicily, Sci, Shiny, Skip, Slips, Spicy, Spiny, Scipio, Scaly, Scary, Scion, Scrip, Sip, Skips, Slimy, Snipe, Spiky, Swipe, Skimpy, Soapy, Skippy, Sappy, Sips, Snip, Snips, Icily, Soppy, Soupy, Scrips, Slippy, Snippy, Stripy, Spiry, ACIPA, CCIP, CIP, CIPD, IPY, SCEP, SCI, SCIFI, SCIM, SCP, SCPC, SCPI, SIP, SIPC, SIPP, SKIP, Saiph, BSCIP, SCID, SCMP, SCPs, SCTP, Scrapy] (4359) [lt:en:MORFOLOGIK_RULE_EN_US]">Scipy</span> library \cite{virtanen_scipy_2020}. We then do the mean of the reconstructed radius from the different harmonics. The reconstruction results are shown in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:reco}. The performance seems correct<span class="highlight" title="Use a comma before 'but' if it connects two independent clauses (unless they are closely connected and short).. Suggestions: [, but] (4535) [lt:en:COMMA_COMPOUND_SENTENCE]"> but</span> we see heavy fluctuation in the bias. To really be used as a reconstruction algorithm, the method needs to be refined as discussed in the next section.</div><div class="clear"></div>
+<div class="linenb">115</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">116</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">117</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">118</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/jgnn/harmonic/Radius_reco.png}</div><div class="clear"></div>
+<div class="linenb">119</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{Error on the reconstructed radius vs the true radius by the harmonic method}</span></div><div class="clear"></div>
+<div class="linenb">120</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:reco}</div><div class="clear"></div>
+<div class="linenb">121</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">122</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">123</div><div class="codeline"><span class="keyword1">\section</span>*{Conclusion}</div><div class="clear"></div>
+<div class="linenb">124</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">125</div><div class="codeline">We have clearly shown in this analysis the relevance the of relative harmonic power for radius reconstruction, and provided an <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [rats, eats, eras, treats, greats, Croats, erupts, brats, errata, ersatz, expats, Erato, erects, groats, frats, erratas, eructs, prats] (4833) [lt:en:MORFOLOGIK_RULE_EN_US]">erzats</span> of a reconstruction algorithm. We will not delve further in this thesis but if we wanted to refine this algorithm multiple paths can be explored:</div><div class="clear"></div>
+<div class="linenb">126</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">127</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> No energy signature in the harmonics: This is surprising that there is no correlation between the energy and the amplitude of the harmonics. We know that the energy is heavily correlated with the total number of photoelectrons collected, it would be unintuitive that we see no relation.</div><div class="clear"></div>
+<div class="linenb">128</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Localization of the event: We <span class="highlight" title="A verb ('be' or 'have') is missing before the past participle.. Suggestions: [have shown, showed] (5308) [lt:en:PRP_PAST_PART]">shown</span> here the relation between the relative power of the harmonic and the radius but don't get any information about the $\theta$ and $\phi$ spherical coordinates. This information is probably hidden in the individual power of each order $m$ of the degree $l$. This intuition comes from the <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:jgnn:harmonic:ill} where in the higher degree $l$ we see that the order $m$ are oriented. Intuitively, the order should be able to indicate a direction where the signal is more powerful.</div><div class="clear"></div>
+<div class="linenb">129</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Combination of the degree power: Here we combined the radius reconstructed by the different degree via a simple mean but we <span class="highlight" title="A verb ('be' or 'have') is missing before the past participle.. Suggestions: [have shown, showed] (5883) [lt:en:PRP_PAST_PART]">shown</span> in <span class="highlight-sh" title="Use a capital letter when referring to a specific section: 'Section X' [sh:secmag]">section \ref</span>{sec:jcnn:combination} and annex \ref{sec:annex:jcnn:alpha} that this is note the optimal way to combine estimator. A more refined algorithm probably <span class="highlight" title="The verb form 'exist' does not seem to match the subject 'algorithm'.. Suggestions: [exists, existed, will exist] (6004) [lt:en:SUBJECT_VERB_AGREEMENT]">exist</span> to take into account the predicting power of each order.</div><div class="clear"></div>
+<div class="linenb">130</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">131</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">132</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">133</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">134</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">135</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_0.png}</div><div class="clear"></div>
+<div class="linenb">136</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">137</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">138</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">139</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">140</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_10.png}</div><div class="clear"></div>
+<div class="linenb">141</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">142</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">143</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">144</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">145</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">146</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_300.png}</div><div class="clear"></div>
+<div class="linenb">147</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">148</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">149</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">150</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">151</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_500.png}</div><div class="clear"></div>
+<div class="linenb">152</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">153</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">154</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">155</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">156</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">157</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_600.png}</div><div class="clear"></div>
+<div class="linenb">158</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">159</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">160</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">161</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">162</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_700.png}</div><div class="clear"></div>
+<div class="linenb">163</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">164</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">165</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">166</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">167</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">168</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">169</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_750.png}</div><div class="clear"></div>
+<div class="linenb">170</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">171</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">172</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">173</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">174</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/event_idx_999.png}</div><div class="clear"></div>
+<div class="linenb">175</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{}</span></div><div class="clear"></div>
+<div class="linenb">176</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">177</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">178</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Charge repartition in JUNO as seen by the Healpix segmentation. Those are Healpix map of order 5 (<span class="highlight-sh" title="Use a backslash or comma after the second period; otherwise LaTeX will think it is a full stop ending a sentence. [sh:011]">i.e. </span>12288 pixels). The color represent the summed charge of the PMTs in each pixels. The color scale is logarithmic. The view have been centered to prevent event deformations.}</div><div class="clear"></div>
+<div class="linenb">179</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:events}</div><div class="clear"></div>
+<div class="linenb">180</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">181</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">182</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">183</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">184</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">185</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/power_energy_dependency.png}</div><div class="clear"></div>
+<div class="linenb">186</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">187</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">188</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">189</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/rel_power_energy_dependency.png}</div><div class="clear"></div>
+<div class="linenb">190</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">191</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Scatter plot of the absolute and relative power, respectively on the left and right plot, of the $l=0$ harmonic. The color indicate the radius of the event.}</div><div class="clear"></div>
+<div class="linenb">192</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:energy_dependent}</div><div class="clear"></div>
+<div class="linenb">193</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">194</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">195</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">196</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">197</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/power_fit.png}</div><div class="clear"></div>
+<div class="linenb">198</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. <span class="keyword1">\textbf</span>{Part 1}}</span></div><div class="clear"></div>
+<div class="linenb">199</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:fit1}</div><div class="clear"></div>
+<div class="linenb">200</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">201</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">202</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">203</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=\linewidth]{images/jgnn/harmonic/power_fit_pt2.png}</div><div class="clear"></div>
+<div class="linenb">204</div><div class="codeline">&nbsp;&nbsp;<span class="highlight-sh" title="A caption should end with a period [sh:capperiod]"><span class="keyword1">\caption</span>{Plot of the distribution of the relative power of each harmonic dependent on $R^3$ (on the left). The Total Reflection (TR) area is represented by the horizontal blue line. The distribution are fitted using a 9th degree polynomial (red curve). The relative power error between the distribution and the fit is represented on the left. <span class="keyword1">\textbf</span>{Part 2}}</span></div><div class="clear"></div>
+<div class="linenb">205</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:jgnn:harmonic:fit2}</div><div class="clear"></div>
+<div class="linenb">206</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">207</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">208</div><div class="codeline"><span class="comment"><span class="comment">%\chapter{Additional spectrum smearing}</span></span></div><div class="clear"></div>
+<div class="linenb">209</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword1">\label</span>{sec:annex:oversmearing}</span></span></div><div class="clear"></div>
+<div class="linenb">210</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">211</div><div class="codeline"><span class="comment"><span class="comment">%In this section we demonstrate that a spectrum $S$ smeared by a gaussian $G$ parametrized by its varianse $\sigma_1^2$ can be smeared by a gaussian parametrized by the variance $\sigma_2^2$ from the the smeared spectrum $K(E, \sigma_1) = S(E) \star G(E, \sigma_1)$ under the condition that $\sigma_2^2 &gt; \sigma_1^2$.</span></span></div><div class="clear"></div>
+<div class="linenb">212</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">213</div><div class="codeline"><span class="comment"><span class="comment">%Let $K'(E,\sigma_2) = S(E) \star G(E, \sigma_2)$ the target spectrum we can expand</span></span></div><div class="clear"></div>
+<div class="linenb">214</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">215</div><div class="codeline"><span class="comment"><span class="comment">%  K'(E, \sigma_2) &amp;= S(E) \star G(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2) \\</span></span></div><div class="clear"></div>
+<div class="linenb">216</div><div class="codeline"><span class="comment"><span class="comment">%                  &amp;= K(E, \sigma_1) \star G^{-1}(E, \sigma_1) \star G(E, \sigma_2)</span></span></div><div class="clear"></div>
+<div class="linenb">217</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">218</div><div class="codeline"><span class="comment"><span class="comment">%where $G^{-1}(E, \sigma_1)$ is defined as $G(E, \sigma_1) \star G^{-1}(E, \sigma_1) = \delta(E)$.</span></span></div><div class="clear"></div>
+<div class="linenb">219</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">220</div><div class="codeline"><span class="comment"><span class="comment">%By moving into Fourier space we can express</span></span></div><div class="clear"></div>
+<div class="linenb">221</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">222</div><div class="codeline"><span class="comment"><span class="comment">%  G(E, \sigma_1) \star G^{-1}(E, \sigma_1) &amp;= \delta(E) \\</span></span></div><div class="clear"></div>
+<div class="linenb">223</div><div class="codeline"><span class="comment"><span class="comment">%  F[G(E, \sigma_1)](\nu) \times F[G^{-1}(E, \sigma_1)](\nu) &amp;= 1</span></span></div><div class="clear"></div>
+<div class="linenb">224</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">225</div><div class="codeline"><span class="comment"><span class="comment">%with $F[G(E, \sigma_1)](\nu)$ the fourier transform of $G$</span></span></div><div class="clear"></div>
+<div class="linenb">226</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">227</div><div class="codeline"><span class="comment"><span class="comment">%  F[G(E, \sigma_1)](\nu) = e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}</span></span></div><div class="clear"></div>
+<div class="linenb">228</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">229</div><div class="codeline"><span class="comment"><span class="comment">%we have</span></span></div><div class="clear"></div>
+<div class="linenb">230</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">231</div><div class="codeline"><span class="comment"><span class="comment">%  F[G^{-1}(E, \sigma_1)(\nu) = \big( F[G(E, \sigma_1)](\nu) \big)^{-1} &amp;= \big( e^{-\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \big)^{-1} \\</span></span></div><div class="clear"></div>
+<div class="linenb">232</div><div class="codeline"><span class="comment"><span class="comment">%                                                                       &amp;= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2}</span></span></div><div class="clear"></div>
+<div class="linenb">233</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">234</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">235</div><div class="codeline"><span class="comment"><span class="comment">%Thus we express</span></span></div><div class="clear"></div>
+<div class="linenb">236</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">237</div><div class="codeline"><span class="comment"><span class="comment">%  F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)] &amp;= e^{\frac{\sigma_1^2(2\pi)^2}{2}\nu^2} \times e^{-\frac{\sigma_2^2(2\pi)^2}{2}\nu^2} \\</span></span></div><div class="clear"></div>
+<div class="linenb">238</div><div class="codeline"><span class="comment"><span class="comment">%                                              &amp;= e^{\frac{(2\pi)^2}{2}(\sigma_1^2 - \sigma^2_2)\nu^2} \\</span></span></div><div class="clear"></div>
+<div class="linenb">239</div><div class="codeline"><span class="comment"><span class="comment">%                                              &amp;= e^{\frac{(2\pi)^2}{2}\Delta\sigma^2\nu^2}; ~ \Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2)</span></span></div><div class="clear"></div>
+<div class="linenb">240</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{align}</span></span></span></div><div class="clear"></div>
+<div class="linenb">241</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">242</div><div class="codeline"><span class="comment"><span class="comment">%We see that $F^{-1}[F[G^{-1}(E, \sigma_1) \star G(E, \sigma_2)]]$ is solvable if $\Delta\sigma^2 = (\sigma_1^2 - \sigma^2_2) &lt; 0 \Rightarrow \sigma_2 &gt; \sigma_1$. In that case</span></span></div><div class="clear"></div>
+<div class="linenb">243</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\begin{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">244</div><div class="codeline"><span class="comment"><span class="comment">%  G^{-1}(E, \sigma_1) \star G(E, \sigma_2) = \frac{1}{\sqrt{|\Delta \sigma^2|}\sqrt{2\pi}} e^{-\frac{E^2}{2|\Delta \sigma^2|}}</span></span></div><div class="clear"></div>
+<div class="linenb">245</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword2">\end{equation}</span></span></span></div><div class="clear"></div>
+<div class="linenb">246</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">247</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">248</div><div class="codeline">\chapter{Correction of $E_{vis}$ bias}</div><div class="clear"></div>
+<div class="linenb">249</div><div class="codeline"><span class="keyword1">\label</span>{sec:annex:evis}</div><div class="clear"></div>
+<div class="linenb">250</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">251</div><div class="codeline">The reconstruction algorithms that are presented in this thesis in Chapters \ref{sec:jcnn} and \ref{sec:jgnn} do not reconstruct the same energy as the classical algorithms presented in <span class="highlight-sh" title="Use a capital letter when referring to a specific section: 'Section X' [sh:secmag]">section \ref</span>{sec:juno:reco}. Our algorithms reconstruct the <span class="keyword1">\textit</span>{deposited} energy $E_{dep}$ while the classical algorithms reconstruct a <span class="keyword1">\textit</span>{visible} energy $E_{vis}$.</div><div class="clear"></div>
+<div class="linenb">252</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">253</div><div class="codeline">To understand <span class="highlight" title="The demonstrative 'this' may not agree with the plural noun 'phenomena'. Did you mean 'these'?. Suggestions: [these] (6396) [lt:en:THIS_NNS]">this</span> phenomena, let's look at the equation \ref{eq:juno:reco:charge_est}:</div><div class="clear"></div>
+<div class="linenb">254</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">255</div><div class="codeline">&nbsp;&nbsp;\hat{\mu}(r, \theta, \theta_{pmt}, E_{vis}) = \frac{1}{E_{vis}} \frac{1}{M} \sum_i^M\frac{\frac{\bar{q}_i}{\hat{Q}_i} - \mu_i^D}{\mathrm{DE}_i}, ~ \mu_i^D = \mathrm{DNR}_i \cdot L</div><div class="clear"></div>
+<div class="linenb">256</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">257</div><div class="codeline">which define the expected $N_{pe}/E$. This <span class="highlight" title="The verb 'define' is plural. Did you mean: 'defines'? Did you use a verb instead of a noun?. Suggestions: [defines] (6476) [lt:en:PLURAL_VERB_AFTER_THIS]">define</span> a linear relation between the number of photoelectrons and the energy. <span class="highlight" title="A comma may be missing after the conjunctive/linking adverb 'However'.. Suggestions: [However,] (6554) [lt:en:SENT_START_CONJUNCTIVE_LINKING_ADVERB_COMMA]">However</span> we discussed in sections \ref{sec:juno:CD} and \ref{sec:juno:calib} that the number of photoelectrons collected by the LPMT system do not follow a linear relationship. <span class="highlight" title="A comma may be missing after the conjunctive/linking adverb 'Thus'.. Suggestions: [Thus,] (6695) [lt:en:SENT_START_CONJUNCTIVE_LINKING_ADVERB_COMMA]">Thus</span> this visible energy is not linear with the deposited energy. This effect is corrected in physics analysis and in Chapter \ref{sec:joint_fit} by applying the calibrated non-linearity profile the energy spectrum.</div><div class="clear"></div>
+<div class="linenb">258</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">259</div><div class="codeline">When we need to compare our algorithm that reconstruct the deposited energy to the classical algorithms we need to correct this non-linearity. For this we fit the systematic bias of the classical algorithm using a 5th degree polynomial</div><div class="clear"></div>
+<div class="linenb">260</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">261</div><div class="codeline">&nbsp;&nbsp;\frac{E_{dep}}{E_{evis}} = \sum_{i=0}^5 P_i E_{dep}^i</div><div class="clear"></div>
+<div class="linenb">262</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">263</div><div class="codeline">The fitted distribution and the corresponding fit is presented in <span class="highlight-sh" title="Use a capital letter when referring to a specific figure: 'Figure X' [sh:figmag]">figure \ref</span>{fig:annex:evis:e_rec_correction}. The value fitted for this correction are presented in <span class="highlight-sh" title="Use a capital letter when referring to a specific table: 'Table X' [sh:tabmag]">table \ref</span>{tab:annex:evis:omil_params}.</div><div class="clear"></div>
+<div class="linenb">264</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">265</div><div class="codeline"><span class="keyword2">\begin{table}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">266</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">267</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{tabular}</span>{|l|r|}</div><div class="clear"></div>
+<div class="linenb">268</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_0$                        &amp;      1.24541   +/-   0.00585121  \\</div><div class="clear"></div>
+<div class="linenb">269</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_1$                        &amp;    -0.168079   +/-   0.00716387  \\</div><div class="clear"></div>
+<div class="linenb">270</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_2$                        &amp;    0.0489947   +/-   0.00312875  \\</div><div class="clear"></div>
+<div class="linenb">271</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_3$                        &amp;  -0.00747111   +/-   0.000622003 \\</div><div class="clear"></div>
+<div class="linenb">272</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_4$                        &amp;  0.000570998   +/-   5.7296e-05  \\</div><div class="clear"></div>
+<div class="linenb">273</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;$P_5$                        &amp; -1.72588e-05   +/-   1.98355e-06 \\</div><div class="clear"></div>
+<div class="linenb">274</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{tabular}</span></div><div class="clear"></div>
+<div class="linenb">275</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Parameters of the 5th degree polynomial used to correct Omilrec reconstructed energy.}</div><div class="clear"></div>
+<div class="linenb">276</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{tab:annex:evis:omil_params}</div><div class="clear"></div>
+<div class="linenb">277</div><div class="codeline"><span class="keyword2">\end{table}</span></div><div class="clear"></div>
+<div class="linenb">278</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">279</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">280</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">281</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/jgnn/e_rec_e_true_comp.png}</div><div class="clear"></div>
+<div class="linenb">282</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Comparison between Omilrec reconstructed $E_{vis}$ and the deposited energy $E_{dep}$. The profile of the distribution $E_{vis}/E_{dep}$ vs $E_{dep}$ is fitted with a 5th degree polynomial.}</div><div class="clear"></div>
+<div class="linenb">283</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:annex:evis:e_rec_correction}</div><div class="clear"></div>
+<div class="linenb">284</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">285</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">286</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">287</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">288</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">289</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">290</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">291</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">292</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">293</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">294</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">295</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">296</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">297</div><div class="codeline"><span class="keyword2">\end{document}</span></div><div class="clear"></div>
+</div>
+<hr/>
+Output produced by TeXtidote v0.8.4, &copy; 2018-2022 Sylvain Hall&eacute; - All rights reserved.<br/>
+See the <a href="https://sylvainhalle.github.io/textidote">TeXtidote website</a> for more information.
+</body>
+</html>

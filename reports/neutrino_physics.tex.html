@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TeXtidote analysis</title>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+}
+.highlight, .highlight-sh, .highlight-spelling {
+  padding: 2pt;
+  border-radius: 4pt;
+  cursor: help;
+  opacity: 0.7;
+  border: dashed 1px;
+}
+.highlight {
+  background-color: orange;
+  color: black;
+}
+.highlight-sh {
+  background-color: yellow;
+  color: black;
+}
+.highlight-spelling {
+  background-color: red;
+  color: white;
+}
+div.original-file {
+  font-family: monospace;
+  font-size: 11pt;
+  background-color: #f8f8ff;
+  padding: 20pt;
+  border-radius: 6pt;
+}
+.textidote {
+  	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiICAgd2lkdGg9IjEwMC4wOTEwNW1tIiAgIGhlaWdodD0iMTguMjA5MDk5bW0iICAgdmlld0JveD0iMCAwIDEwMC4wOTEwNSAxOC4yMDkwOTkiICAgdmVyc2lvbj0iMS4xIiAgIGlkPSJzdmc4IiAgIGlua3NjYXBlOnZlcnNpb249IjAuOTEgcjEzNzI1IiAgIHNvZGlwb2RpOmRvY25hbWU9InRleHRpZG90ZS5zdmciPiAgPGRlZnMgICAgIGlkPSJkZWZzMiIgLz4gIDxzb2RpcG9kaTpuYW1lZHZpZXcgICAgIGlkPSJiYXNlIiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiICAgICBib3JkZXJvcGFjaXR5PSIxLjAiICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMC4wIiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIgICAgIGlua3NjYXBlOnpvb209IjEiICAgICBpbmtzY2FwZTpjeD0iLTI1NC4yNTMwOSIgICAgIGlua3NjYXBlOmN5PSItMjc4LjM3NTkxIiAgICAgaW5rc2NhcGU6ZG9jdW1lbnQtdW5pdHM9Im1tIiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ibGF5ZXIxIiAgICAgc2hvd2dyaWQ9ImZhbHNlIiAgICAgZml0LW1hcmdpbi10b3A9IjAiICAgICBmaXQtbWFyZ2luLWxlZnQ9IjAiICAgICBmaXQtbWFyZ2luLXJpZ2h0PSIwIiAgICAgZml0LW1hcmdpbi1ib3R0b209IjAiICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMDIxIiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMjY1IiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4gIDxtZXRhZGF0YSAgICAgaWQ9Im1ldGFkYXRhNSI+ICAgIDxyZGY6UkRGPiAgICAgIDxjYzpXb3JrICAgICAgICAgcmRmOmFib3V0PSIiPiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+ICAgICAgICA8ZGM6dHlwZSAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4gICAgICAgIDxkYzp0aXRsZSAvPiAgICAgIDwvY2M6V29yaz4gICAgPC9yZGY6UkRGPiAgPC9tZXRhZGF0YT4gIDxnICAgICBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSIgICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiICAgICBpZD0ibGF5ZXIxIiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTI5LjczODA5NSwtNzAuNTc3NzUxKSI+ICAgIDxnICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjIwLjkyODk0NTU0cHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgaWQ9InRleHQ4MzYiPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSAzMC43MjY4NjQsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzODYiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDQyLjMzNTg4OCw3NS43NzU1NjQgMTEuMDQ1ODMyLDAgMCw3LjgxMzQ3MyAtNS44MTM1OTYsMCAwLDAuNjA0NjE0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw0LjIwOTA0MyAwLjU4MTM2LDAgMCwtMC42MDQ2MTQgLTAuNTgxMzYsMCAwLDAuNjA0NjE0IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzg4IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA1My45NDQ5MTIsNzUuNzc1NTY0IDUuMjMyMjM2LDAgMCwzLjYwNDQyOSAtNS4yMzIyMzYsMCAwLC0zLjYwNDQyOSB6IG0gNS44MTM1OTYsMCA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIC01LjgxMzU5Niw4LjQxODA4NyA1LjIzMjIzNiwwIDAsMy42MDQ0MjkgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MjkgeiBtIDUuODEzNTk2LDAgNS4yMzIyMzYsMCAwLDMuNjA0NDI5IC01LjIzMjIzNiwwIDAsLTMuNjA0NDI5IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzkwIiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA2NS41NTM5MzYsNzEuNTY2NTIgNS4yMzIyMzYsMCAwLDQuMjA5MDQ0IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtNS44MTM1OTYsMCAwLDQuODEzNjU4IDUuODEzNTk2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMyLDAgMCwtMTYuMjMxNTYgeiIgICAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LWZhbWlseTpUdXRvcjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOlR1dG9yO2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MS45Nzc1MzgyMztzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZSIgICAgICAgICBpZD0icGF0aDMzOTIiIC8+ICAgICAgPHBhdGggICAgICAgICBkPSJtIDc3LjE2Mjk2LDc1Ljc3NTU2NCA1LjIzMjIzNiwwIDAsMTIuMDIyNTE2IC01LjIzMjIzNiwwIDAsLTEyLjAyMjUxNiB6IG0gMCwtNC4yMDkwNDQgNS4yMzIyMzYsMCAwLDMuNjA0NDMgLTUuMjMyMjM2LDAgMCwtMy42MDQ0MyB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5NCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gODIuOTY3NDcyLDc1Ljc3NTU2NCA1LjgxMzU5NiwwIDAsLTQuMjA5MDQ0IDUuMjMyMjM2LDAgMCwxNi4yMzE1NiAtMTEuMDQ1ODMyLDAgMCwtMTIuMDIyNTE2IHogbSA1LjIzMjIzNiw4LjQxODA4NyAwLjU4MTM2LDAgMCwtNC44MTM2NTggLTAuNTgxMzYsMCAwLDQuODEzNjU4IHoiICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1mYW1pbHk6VHV0b3I7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpUdXRvcjtmaWxsOiNmZmZmZmY7c3Ryb2tlOiMwMDAwMDA7c3Ryb2tlLXdpZHRoOjEuOTc3NTM4MjM7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmUiICAgICAgICAgaWQ9InBhdGgzMzk2IiAvPiAgICAgIDxwYXRoICAgICAgICAgZD0ibSA5NC41NzY0OTYsNzUuNzc1NTY0IDExLjA0NTgzNCwwIDAsMTIuMDIyNTE2IC0xMS4wNDU4MzQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjM3LDguNDE4MDg3IDAuNTgxMzU3LDAgMCwtNC44MTM2NTggLTAuNTgxMzU3LDAgMCw0LjgxMzY1OCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzM5OCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTA2LjE4NTUyLDcxLjU2NjUyIDUuMjMyMjQsMCAwLDQuMjA5MDQ0IDUuODEzNTksMCAwLDMuNjA0NDI5IC01LjgxMzU5LDAgMCw0LjgxMzY1OCA1LjgxMzU5LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODMsMCAwLC0xNi4yMzE1NiB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMCIgLz4gICAgICA8cGF0aCAgICAgICAgIGQ9Im0gMTE3Ljc5NDU0LDc1Ljc3NTU2NCAxMS4wNDU4NCwwIDAsNy44MTM0NzMgLTUuODEzNiwwIDAsMC42MDQ2MTQgNS44MTM2LDAgMCwzLjYwNDQyOSAtMTEuMDQ1ODQsMCAwLC0xMi4wMjI1MTYgeiBtIDUuMjMyMjQsNC4yMDkwNDMgMC41ODEzNiwwIDAsLTAuNjA0NjE0IC0wLjU4MTM2LDAgMCwwLjYwNDYxNCB6IiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtZmFtaWx5OlR1dG9yOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246VHV0b3I7ZmlsbDojZmZmZmZmO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjk3NzUzODIzO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lIiAgICAgICAgIGlkPSJwYXRoMzQwMiIgLz4gICAgPC9nPiAgPC9nPjwvc3ZnPg==);
+}
+h2.filename {
+  font-family: monospace;
+}
+h1.textidote {
+  width: 378px;
+  height: 68px;
+  display: block;
+}
+.keyword1 {
+  font-weight: bold;
+  color: green;
+}
+.keyword2 {
+  font-weight: bold;
+  color: darkblue;
+}
+.comment, .comment * {
+  color: darkred;
+  font-weight: normal;
+}
+.linenb {
+  font-style: italic;
+  color: lightgrey;
+  width: 30pt;
+  float: left;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.codeline {
+  margin-left: -30pt;
+  padding-left: 60pt;
+  margin-top: 1pt;
+  margin-bottom: 1pt;
+}
+.no-text {
+  display: none;
+}
+.clear {
+  clear: both;
+}
+</style>
+</head>
+<body>
+<a href="https://sylvainhalle.github.io/textidote"><h1 class="textidote"><span class="no-text">Results of TeXtidote analysis</span></h1></a>
+<p>Here is the result of analyzing your file(s) with TeXtidote. Hover the mouse over highlighted portions of the document to read a tooltip that gives you some writing advice.</p>
+<p>Found 19 warning(s)</p>
+<div class="original-file">
+<div class="linenb">&nbsp;&nbsp;1</div><div class="codeline"><span class="keyword1">\documentclass</span>[../main.tex]{subfiles}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;2</div><div class="codeline">\graphicspath{{\subfix{..}}}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;3</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;4</div><div class="codeline"><span class="keyword2">\begin{document}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;5</div><div class="codeline">\chapter{Neutrino physics}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;6</div><div class="codeline"><span class="keyword1">\label</span>{sec:neutrino}</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;7</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;8</div><div class="codeline">\epigraph{I have done a terrible thing, I have postulated a particle that cannot be<span class="highlight-sh" title="There should be a space after a period. If you are writing a URL or a filename, use the \url{} or \verb markup. [sh:d:002]"> detected.}{<span class="highlight" title="Add a space between sentences.. Suggestions: [ Wolfgang] (102) [lt:en:SENTENCE_WHITESPACE]">Wo</span>lfgang</span> Pauli -- ``Foreword'' by Frederick Reines to ``Spaceship Neutrino'' by Christine Sutton, (p. xi), 1992. }</div><div class="clear"></div>
+<div class="linenb">&nbsp;&nbsp;9</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;10</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword1">\textit</span>{In chapter 1, I'll remind briefly the SM, its limitations, and give a short introduction to neutrino physics, with a reminder of the present important questions and a state of the art.}</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;11</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;12</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;13</div><div class="codeline">\minitoc</div><div class="clear"></div>
+<div class="linenb">&nbsp;14</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;15</div><div class="codeline">Our understanding of the universe describes it as composed of elementary components called elementary particles; the study of these particles is therefore particle physics. The best established theoretical model describing these particles and their interactions is the Standard Model (SM).</div><div class="clear"></div>
+<div class="linenb">&nbsp;16</div><div class="codeline">The SM has successfully described many phenomena observed in particle physics over the past decades. However, a certain number of limitations affect the SM and suggest it is the manifestation at presently accessible energies of a more fundamental physics, which we call Physics Beyond the SM (BSM).</div><div class="clear"></div>
+<div class="linenb">&nbsp;17</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;18</div><div class="codeline">In this chapter, I describe briefly the Standard Model and its limitations in Section \ref{sec:neutrinos:sm}, then delve a bit further into the specifics of neutrino physics in Section \ref{sec:neutrino:th}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;19</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;20</div><div class="codeline"><span class="keyword1">\section</span>{Introduction to the Standard model}</div><div class="clear"></div>
+<div class="linenb">&nbsp;21</div><div class="codeline"><span class="keyword1">\label</span>{sec:neutrinos:sm}</div><div class="clear"></div>
+<div class="linenb">&nbsp;22</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;23</div><div class="codeline">The SM categorizes elementary particles into two categories: the <span class="keyword1">\textit</span>{fermions} constituting matter and the <span class="keyword1">\textit</span>{bosons} that mediate their interactions. The fermions are themselves divided into two categories, the <span class="keyword1">\textit</span>{quarks} and the <span class="keyword1">\textit</span>{leptons}. Figure \ref{fig:neutrino:sm} shows the elementary particles and their classification. Each one of these particles is characterized by the value of their quantum numbers, the main ones being their mass $m$, spin $J$, electric charge $Q$, and the quantum numbers playing an analogue role for the weak (weak isospin) and strong interactions (color). The leptons also possess a lepton quantum number $L = 1$ and a flavor quantum number $L_{e,\mu,\tau}$ corresponding to their family: electron, muon, or tau. The leptons are thus split into three families: the electron $L_e = 1 \rightarrow (e, \nu_e)$, muon $L_\mu = 1 \rightarrow (\mu, \nu_\mu)$, and tau $L_\tau = 1 \rightarrow (\tau, \nu_\tau)$ families, each composed of a charged particle $Q = 1$ and a neutral particle $Q = 0$. The neutral leptons are named the <span class="keyword1">\textit</span>{neutrinos}, represented by the character $\nu$.</div><div class="clear"></div>
+<div class="linenb">&nbsp;24</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;25</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;26</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">&nbsp;27</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=6cm]{images/neutrinos/sm.png}</div><div class="clear"></div>
+<div class="linenb">&nbsp;28</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{List of the elementary particles in the Standard Model. The antiparticles are not displayed.}</div><div class="clear"></div>
+<div class="linenb">&nbsp;29</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrino:sm}</div><div class="clear"></div>
+<div class="linenb">&nbsp;30</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;31</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;32</div><div class="codeline">Each fermion also possesses an antiparticle of opposite charges and opposite lepton and flavor quantum numbers. Thus, the antiparticle of the electron $e (Q=1, L=1, L_e=1)$, the positron, is defined as $e^+ (Q=-1, L=-1, L_e=-1)$.</div><div class="clear"></div>
+<div class="linenb">&nbsp;33</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;34</div><div class="codeline">The particles of the SM interact with each other via four interactions or forces. Three of these are described by the SM through the exchange of a boson:</div><div class="clear"></div>
+<div class="linenb">&nbsp;35</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;36</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The strong force, described by the exchange of a gluon. Only quarks are sensitive to it. This force is very short-range, $\sim 10^{-15}$ m, the size of a nucleus. It's the strong force that allows the cohesion of nuclei inside atoms. As its name indicates, it is the strongest of the four interactions. This interaction has two important properties. It increases with the distance, causing quark confinement: the quarks are never observed individually but uncolored quark combinations, the hadrons, are not affected. It decreases at short distance, creating the asymptotic freedom: the interaction strength become arbitrarily small as the distance between particles decrease.</div><div class="clear"></div>
+<div class="linenb">&nbsp;37</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;38</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The electromagnetic force is described by the exchange of a photon. This force has unlimited range, and all the charged particles -- quarks and charged leptons -- are sensitive to it. It is responsible for every electromagnetic effect, like the bonding of electrons to the nucleus. Its relative strength compared to the strong force is 1/137.</div><div class="clear"></div>
+<div class="linenb">&nbsp;39</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;40</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The weak force, carried by the $Z^0$ and $W^{\pm}$ bosons. Every fermion is sensitive to it. Its range is $\sim 10^{-18}$ m, about 0.1\% the size of a proton. Its relative strength to the strong force is $10^{-6}$, explaining its name. It is responsible, for instance, of nuclear beta decay many particles decays. We distinguish two types of weak interaction: through neutral currents -- exchange of <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (3663) [lt:en:EN_A_VS_AN]">a</span> $Z^0$ -- and charged currents -- exchange of <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (3706) [lt:en:EN_A_VS_AN]">a</span> $W^{\pm}$ boson.</div><div class="clear"></div>
+<div class="linenb">&nbsp;41</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;42</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;43</div><div class="codeline">The final force, not described by the Standard Model, is the gravitational force. Its range is infinite and concerns every massive ($m \neq 0$) particle. Its relative strength compared to the strong force is $6\times 10^{-39}$. Extensions to the SM propose a supplementary boson, the graviton, that would be the carrier of the gravitational force, but it has yet to be detected \cite{ParticleDataGroup:2024cfk, carney_graviton_2024}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;44</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;45</div><div class="codeline"><span class="keyword1">\subsection</span>{Interactions and symmetries}</div><div class="clear"></div>
+<div class="linenb">&nbsp;46</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;47</div><div class="codeline">Symmetries are fundamental components of modern particle physics. As described in Noether's theorem \cite{noether_invariant_1971}, the invariance or non-invariance of the physics laws under transformations (translation, rotation, etc.), represented by the formal invariance of the SM Lagrangian ${\cal L}$ under those transformations, implies the conservation of a quantity.</div><div class="clear"></div>
+<div class="linenb">&nbsp;48</div><div class="codeline">This Lagrangian is the mathematical object that allows us to make quantitative predictions.</div><div class="clear"></div>
+<div class="linenb">&nbsp;49</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;50</div><div class="codeline">The invariance of ${\cal L}$ under translation in space characterizes the conservation of the momentum, while rotational invariance in space leads to the conservation of the angular momentum and invariance under translation in time the conservation of energy, etc. If the transformation is continuous, the sum of the quantum numbers is conserved in an interaction.</div><div class="clear"></div>
+<div class="linenb">&nbsp;51</div><div class="codeline">Following here again Noether's theorem after having observed that interactions seem to conserve quantities (like the electric charge or the weak isospin), its form is guided by the necessity to be invariant under a local gauge transformation, namely under the $SU(3)_C \bigotimes SU(2)_L \bigotimes U(1)_Y$ gauge group.</div><div class="clear"></div>
+<div class="linenb">&nbsp;52</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;53</div><div class="codeline">Invariance under discrete transformations also conserve quantum numbers. Three discrete transformations are important for the SM:</div><div class="clear"></div>
+<div class="linenb">&nbsp;54</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;55</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The parity $P$ symmetry transforms $(\vec{x}, t) \rightarrow (-\vec{x}, t)$, reversing the handedness of space. The momentum therefore becomes $\vec{p} \rightarrow -\vec{p}$ and the helicity $\frac{\vec{p} \cdot \vec{s}}{|\vec{p}|}$, where $\vec{s}$ is the spin, changes sign.</div><div class="clear"></div>
+<div class="linenb">&nbsp;56</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;57</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Time reversal $T$ where $(\vec{x}, t) \rightarrow (\vec{x}, -t)$, inverting the initial and final states of an interaction. For example, $A + B \rightarrow C$ becomes $C \rightarrow A + B$. The momentum and the spin both change sign, leaving the helicity unchanged.</div><div class="clear"></div>
+<div class="linenb">&nbsp;58</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;59</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Charge conjugation $C$, which replaces the particles by their antiparticles counterpart and vice-versa, leaving the momentum, spin and helicity unchanged.</div><div class="clear"></div>
+<div class="linenb">&nbsp;60</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;61</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;62</div><div class="codeline">The C, P and their combination CP symmetry were believed to be conserved until 1956, the discovery of their violation \cite{lee_question_1956, wu_experimental_1957, christenson_evidence_1964} in weak interactions revealed the non-triviality of its nature.</div><div class="clear"></div>
+<div class="linenb">&nbsp;63</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;64</div><div class="codeline">The strong and electromagnetic interactions are invariant under all discrete and combined CP transformations. The weak interaction is only invariant under CPT.</div><div class="clear"></div>
+<div class="linenb">&nbsp;65</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;66</div><div class="codeline">The fundamental symmetry CPT -- the combination of C, P and T symmetries --, is an exact symmetry in the SM. This means that any process where the particles are switched with their anti-particles, their helicity is reversed and initial and final state are swapped, must occur with the same probability as the initial process. This implies that the mass, life times, absolute values of electric charge and magnetic moments of particles and antiparticles must be the same. To date, there's no experimental sign of CPT violation.</div><div class="clear"></div>
+<div class="linenb">&nbsp;67</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;68</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Higgs mechanism}</div><div class="clear"></div>
+<div class="linenb">&nbsp;69</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;70</div><div class="codeline">The SM Lagrangian is actually the sum of several parts. The first is the simplest Lagrangian that can be built to respect the Gauge invariance mentioned above and to provide a <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [normalizable] (6878) [lt:en:MORFOLOGIK_RULE_EN_US]">renormalizable</span> theory. It describes the interaction between fermions and gauge bosons. But alone, this Lagrangian can only describe the interaction of massless particles. This applies in particular to fermions. Indeed, the weak interaction treating differently left-handed and right-handed states, the Lagrangian cannot account for fermion masses via simple terms coupling linearly only right and left-handed fermion fields. Since these fields transform differently under $SU(2)_L$, such terms would break gauge invariance.</div><div class="clear"></div>
+<div class="linenb">&nbsp;71</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;72</div><div class="codeline">Solving this problem requires the spontaneous breaking of the $SU(2)_L \bigotimes U(1)_Y$ gauge symmetry. The second term of the Lagrangian, the Higgs Lagrangian, is introduced by hand for that purpose. The so-called Higgs mechanism introduces the Higgs field, whose non-zero vacuum expectation value breaks the electroweak symmetry, giving masses to the $W$ and $Z$ bosons while keeping the photon massless, and preserving at accessible energies the $U(1)$ gauge symmetry associated with electrodynamics.</div><div class="clear"></div>
+<div class="linenb">&nbsp;73</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;74</div><div class="codeline">Finally, a third Lagrangian term is introduced ad-hoc to account for fermion masses. The Yukawa Lagrangian is designed to couple right-handed and left-handed fermion fields to produce mass terms in a way that preserves gauge invariance and <span class="highlight-spelling" title="Possible spelling mistake found. (8107) [lt:en:MORFOLOGIK_RULE_EN_US]">renormalisability</span>. This is achieved via a coupling of the fermions with the Higgs field. After spontaneous symmetry breaking, mass terms appear, proportional to the Higgs field vacuum expectation value and Yukawa couplings, which also describe the coupling of fermions to the Higgs boson. The existence and role of the Higgs field, proposed by Peter Higgs, François Englert, and Robert Brout in 1964 \cite{englert_broken_1964, higgs_broken_1964, higgs_broken_1964-1, guralnik_global_1964}, was experimentally confirmed with the discovery of the Higgs boson by the ATLAS and CMS collaborations at CERN in 2012 \cite{aad_observation_2012, chatrchyan_observation_2012}.</div><div class="clear"></div>
+<div class="linenb">&nbsp;75</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;76</div><div class="codeline">\<span class="highlight-sh" title="This subsubsection is very short (about 133 words). You should consider merging it with another section or make it longer. [sh:seclen]">subsubsection</span>{Flavor Mixing}</div><div class="clear"></div>
+<div class="linenb">&nbsp;77</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;78</div><div class="codeline">Nothing in the fundamental principles governing the weak interaction obliges the fermion mass <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [apostates, reinstates, acetates, agitates, annotates, gestates, instates, eigenspace, eigensystem] (8746) [lt:en:MORFOLOGIK_RULE_EN_US]">eigenstates</span> to coincide with the interaction <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [apostates, reinstates, acetates, agitates, annotates, gestates, instates, eigenspace, eigensystem] (8791) [lt:en:MORFOLOGIK_RULE_EN_US]">eigenstates</span>. Experimental facts actually push to consider the latter are a superposition of the former. It allows quarks of a given flavor to interact with a flavor of another family (for instance b quarks decaying into c or u quarks), and neutrinos to oscillate by spontaneously change their initial flavor into another one. Flavor mixing in these two sectors are described via the Cabibbo-Kobayashi-Maskawa (CKM) matrix \cite{kobayashi_cp-violation_1973} and Pontecorvo-Maki-Nakagawa-Sakata matrix \cite{maki_remarks_1962} matrices, respectively.</div><div class="clear"></div>
+<div class="linenb">&nbsp;79</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;80</div><div class="codeline">In the case of neutrinos, This topic will be addressed in further details in Section \ref{sec:th:osc}. With 3 generations of particles, these 3*3 matrices have to contain complex terms via which the SM accounts for CP violation.</div><div class="clear"></div>
+<div class="linenb">&nbsp;81</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;82</div><div class="codeline"><span class="comment"><span class="comment">% Decrire le model standard -&gt; Regarder theses LHC / Olga Kochebina</span></span></div><div class="clear"></div>
+<div class="linenb">&nbsp;83</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;84</div><div class="codeline"><span class="keyword1">\subsection</span>{Limits of the standard model}</div><div class="clear"></div>
+<div class="linenb">&nbsp;85</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;86</div><div class="codeline">The SM has been successful at describing many of phenomena observed in experiments. However, some questions remain unanswered, among which:</div><div class="clear"></div>
+<div class="linenb">&nbsp;87</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;88</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;89</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Dark matter and dark energy. Cosmological observations -- such as the acceleration of the expansion of the universe and the rotational speed of galaxies, for example -- indicate the presence of unknown energy and matter in the universe. The $\Lambda$CDM model \cite{bull_beyond_2016, perivolaropoulos_challenges_2022} indicates that only 4.5\% of the total energy in the universe is described by the SM. The supplementary mass -- dark matter -- accounts for 22.5\% of the missing energy and the rest is dark energy.</div><div class="clear"></div>
+<div class="linenb">&nbsp;90</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Baryon Asymmetry of the universe. The universe is mainly made of matter. The Sakharov theory \cite{sakharov_violation_1991} to explain the deficit of antimatter require the breaking of the C and CP symmetries. The CP violation is allowed in the strong sector, but not to the magnitude necessary to explain the quasi absence of baryon anti-matter. Other mechanism must exist to explain this deficit.</div><div class="clear"></div>
+<div class="linenb">&nbsp;91</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Fermion masses. The large mass difference between the fermions is not explained by the SM.</div><div class="clear"></div>
+<div class="linenb">&nbsp;92</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The SM includes 26 numerical parameters, the values of which are determined only through experimental measurements. At least 20 of these parameters are related to flavor physics. In electroweak theory nothing dictates the values of the interaction couplings and masses. This reflects a deeper limitation of the model, as it provides no theoretical explanation for the values of these parameters, which suggests that a more fundamental theory may be required.</div><div class="clear"></div>
+<div class="linenb">&nbsp;93</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Strong CP problem. Theoretically it is possible to have violation of CP symmetry in strong interactions. Experimentally, however, no such asymmetry has been found, implying that the coefficient of this term is very close to zero. This fine-tuning is considered unnatural.</div><div class="clear"></div>
+<div class="linenb">&nbsp;94</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Non-unification of couplings. The gauge couplings of the SU(3), SU(2) and U(1) groups are independent quantities. Due to higher-order corrections, each of these is actually a function of the typical energy scale $Q$ relevant to the process. In many grand unified theories the three gauge couplings are predicted to meet at some high energy unification. However, this unification does not occur when the couplings are extrapolated using the SM model expression.</div><div class="clear"></div>
+<div class="linenb">&nbsp;95</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Gravitation. The SM do not include the Gravitational interaction and is incompatible with the general relativity.</div><div class="clear"></div>
+<div class="linenb">&nbsp;96</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">&nbsp;97</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;98</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">&nbsp;99</div><div class="codeline"><span class="comment"><span class="comment">% \marginpar{Limite du model standard - Interessant/justifier etudier les neutrinos -&gt; violation de CP ? Pb des masses ?}</span></span></div><div class="clear"></div>
+<div class="linenb">100</div><div class="codeline"><span class="keyword1">\section</span>{The Neutrinos}</div><div class="clear"></div>
+<div class="linenb">101</div><div class="codeline"><span class="keyword1">\label</span>{sec:neutrino:th}</div><div class="clear"></div>
+<div class="linenb">102</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">103</div><div class="codeline">As introduced in the previous section, the neutrino are the neutral leptons of the Standard Model (SM). They were first theorized by Wolfgang Ernst Pauli in 1978 \cite{pauli_dear_1978} to solve the problem of the $\beta$-decay continuous spectrum. Indeed, if the $\beta$-decay was a two body reaction $^A_Z X \rightarrow ^A_{Z + 1}Y + e^{-}$, the conservation of momentum would force the charged lepton to be mono-energetic, but the measured spectrum was continuous. To solve this problem Pauli theorized the emission of a neutral particle $^A_Z X \rightarrow ^A_{Z + 1}Y + e^{\pm} + \nu$, the neutrino. This particle had to be light, neutral, and interact weakly with matter.</div><div class="clear"></div>
+<div class="linenb">104</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">105</div><div class="codeline">We must wait 1956 for a collaboration led by Frederick Reines and Clyde Cowan for the first observation of the neutrino \cite{reines_neutrino_1956, cowan_detection_1956} via the Inverse Beta Decay (IBD) reaction</div><div class="clear"></div>
+<div class="linenb">106</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">107</div><div class="codeline">&nbsp;&nbsp;\bar{\nu} + p \rightarrow e^+ + n</div><div class="clear"></div>
+<div class="linenb">108</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">109</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">110</div><div class="codeline">Following this discovery, numerous experiments were set up to study its properties. Some notable discoveries include the discovery in 1962, by a collaboration led by Leon Lederman, Melvin Schwartz and Jack Steinberger, of the muon neutrino flavor \cite{danby_observation_1962}.</div><div class="clear"></div>
+<div class="linenb">111</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">112</div><div class="codeline">Soon after, the Homestake experiment, which was measuring the neutrino produced by the proton-proton fusion cycle in the sun, reported a deficit of factor $\sim 3$ \cite{davis_review_1994} in comparison to the Standard Solar Model predictions. This anomaly, referred as the <span class="keyword1">\textit</span>{solar neutrino problem} remained unexplained until the neutrino oscillation was theorized and proven. Bruno Pontecorvo first suggested <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (13292) [lt:en:EN_A_VS_AN]">a</span> $\nu \leftrightarrow \bar{\nu}$ oscillation \cite{pontecorvo_mesonium_1957}, later revisited by Maki et al.\ to a two flavor oscillation $\nu_e \leftrightarrow \nu_\mu$ \cite{maki_remarks_1962}. The discovery of the $\tau$ lepton 1976 \cite{perl_evidence_1975} and its associated neutrino $\nu_\tau$ \cite{kodama_observation_2001} led to the extension to three flavor oscillation.</div><div class="clear"></div>
+<div class="linenb">113</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">114</div><div class="codeline">This three flavor oscillation was confirmed by the observation of the $\nu_\mu \leftrightarrow \nu_\tau$ oscillation \cite{fukuda_evidence_1998} in 1998 by the Super-Kamiokande experiment.</div><div class="clear"></div>
+<div class="linenb">115</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">116</div><div class="codeline"><span class="keyword1">\subsection</span>{Coupling and interactions}</div><div class="clear"></div>
+<div class="linenb">117</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">118</div><div class="codeline">The SM, as originally defined, contains no right-handed neutrino (right helicity) since only left-handed neutrinos have been observed \cite{goldhaber_helicity_1958}, implying that the neutrinos are massless. Neutrinos actually do have a very small mass, with the current best limit $m_\nu &lt; 0.45$ eV at 90\% confidence level, obtained from the measurement of the electron energy spectrum in tritium beta decay by the KATRIN experiment \cite{aker_direct_2024}. They only couple -- interact -- through the $W^{\pm}$ and $Z^0$ bosons. The coupling with <span class="highlight" title="Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'.. Suggestions: [an] (14142) [lt:en:EN_A_VS_AN]">a</span> $W^{\pm}$ boson is the <span class="keyword1">\textit</span>{charged current}, a charge is exchanged via the $W$ boson, and coupling with $Z^0$ is the neutral current, no charge is exchanged. The Feynman diagrams representing those interactions are presented in Figure \ref{fig:neutrinos:currents}.</div><div class="clear"></div>
+<div class="linenb">119</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">120</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">121</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">122</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">123</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">124</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\feynmandiagram[horizontal=a to b] {</div><div class="clear"></div>
+<div class="linenb">125</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a -- [boson, edge label=\(W^{\pm}\)] b,</div><div class="clear"></div>
+<div class="linenb">126</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f1 [particle=\(\nu_l\)] -- [fermion] b -- [fermion] f2 [particle=\(l\)]</div><div class="clear"></div>
+<div class="linenb">127</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;};</div><div class="clear"></div>
+<div class="linenb">128</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">129</div><div class="codeline">&nbsp;&nbsp;\hfill</div><div class="clear"></div>
+<div class="linenb">130</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">131</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">132</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\feynmandiagram[horizontal=a to b] {</div><div class="clear"></div>
+<div class="linenb">133</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a -- [boson, edge label=\(Z^0\)] b,</div><div class="clear"></div>
+<div class="linenb">134</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f1 [particle=\(\nu\)] -- [fermion] b -- [fermion] f2 [particle=\(\nu\)]</div><div class="clear"></div>
+<div class="linenb">135</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;};</div><div class="clear"></div>
+<div class="linenb">136</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">137</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Feynman diagrams of the charged current (<span class="keyword1">\textbf</span>{on the left}) and the neutral current (<span class="keyword1">\textbf</span>{on the right}) for a lepton $l$ and it corresponding neutrino $\nu_l$.}</div><div class="clear"></div>
+<div class="linenb">138</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrinos:currents}</div><div class="clear"></div>
+<div class="linenb">139</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">140</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">141</div><div class="codeline">As explained in Section \ref{sec:neutrinos:sm}, those interactions preserve the lepton quantum number $L$. In the absence of neutrino mass, the lepton flavor numbers $L_e$, $L_\mu$ and $L_\tau$ are also exactly conserved. However, the existence of neutrino masses allow for lepton flavor violating transition such as the oscillation $\nu_\alpha \rightarrow \nu_{\beta \neq \alpha}$ but also process such as $\mu^+ \rightarrow e^+ + \gamma$ or $\mu^+ \rightarrow e^+ e^+ e^-$. The latter that are heavily suppressed -- their probability of occurring is extremely low in comparison to other processes -- in the absence of new physics \cite{glashow_weak_1970}.</div><div class="clear"></div>
+<div class="linenb">142</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">143</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">144</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword1">\subsubsection</span>{First theories}</span></span></div><div class="clear"></div>
+<div class="linenb">145</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">146</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword1">\subsubsection</span>{Discovery}</span></span></div><div class="clear"></div>
+<div class="linenb">147</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">148</div><div class="codeline"><span class="comment"><span class="comment">%<span class="keyword1">\subsubsection</span>{Milestones and anomalies}</span></span></div><div class="clear"></div>
+<div class="linenb">149</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">150</div><div class="codeline"><span class="keyword1">\subsection</span>{Oscillation}</div><div class="clear"></div>
+<div class="linenb">151</div><div class="codeline"><span class="keyword1">\label</span>{sec:th:osc}</div><div class="clear"></div>
+<div class="linenb">152</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">153</div><div class="codeline">Neutrino oscillations occur due to the fact that the flavor states, in which neutrinos are produced and detected, are quantum superposition of mass <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [apostates, reinstates, acetates, agitates, annotates, gestates, instates, eigenspace, eigensystem] (15021) [lt:en:MORFOLOGIK_RULE_EN_US]">eigenstates</span>. This results in neutrinos changing their flavor as they propagate, with the oscillation parameters depending on the differences in the squared masses of the mass <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [apostates, reinstates, acetates, agitates, annotates, gestates, instates, eigenspace, eigensystem] (15196) [lt:en:MORFOLOGIK_RULE_EN_US]">eigenstates</span>. More strictly speaking, their mass induces a mismatch between the <span class="keyword1">\textit</span>{flavor states} $\ket{\nu_e}$, $\ket{\nu_\mu}$ and $\ket{\nu_\tau}$ which are the state in which the particle interacts -- the states in the diagrams in Figure \ref{fig:neutrinos:currents} -- and the <span class="keyword1">\textit</span>{mass states} $\ket{\nu_1}$, $\ket{\nu_2}$ and $\ket{\nu_3}$ which hold the momentum and mass of the particle.</div><div class="clear"></div>
+<div class="linenb">154</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">155</div><div class="codeline">Thus, the flavor state $\ket{\nu_\alpha}$ is a quantum superposition of mass <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [apostates, reinstates, acetates, agitates, annotates, gestates, instates, eigenspace, eigensystem] (15539) [lt:en:MORFOLOGIK_RULE_EN_US]">eigenstates</span>, and can be written</div><div class="clear"></div>
+<div class="linenb">156</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">157</div><div class="codeline">&nbsp;&nbsp;\ket{\nu_\alpha} = \sum_{i=1}^3 U_{\alpha, i} \ket{\nu_i}</div><div class="clear"></div>
+<div class="linenb">158</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">159</div><div class="codeline">and reciprocally</div><div class="clear"></div>
+<div class="linenb">160</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">161</div><div class="codeline">&nbsp;&nbsp;\ket{\nu_i} = \sum_{\alpha \in e,\mu,\tau} U^*_{\alpha, i} \ket{\nu_\alpha}</div><div class="clear"></div>
+<div class="linenb">162</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">163</div><div class="codeline">where<span class="highlight" title="The personal pronoun 'I' should be uppercase.. Suggestions: [I] (15594) [lt:en:I_LOWERCASE]"> $i$</span> indexes the mass states, $\alpha$ the flavor states and the $U_{\alpha, i}$ are the mixing elements that govern the probability amplitudes for the neutrino flavor transitions. In the three-families framework, this mixing is represented by the $3 \times 3$ Pontecorvo-Maki-Nakagawa-Sakata matrix \cite{maki_remarks_1962} $U_{\text{PMNS}}$</div><div class="clear"></div>
+<div class="linenb">164</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">165</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">166</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_e} \\</div><div class="clear"></div>
+<div class="linenb">167</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_\mu} \\</div><div class="clear"></div>
+<div class="linenb">168</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_\tau}</div><div class="clear"></div>
+<div class="linenb">169</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span> = U_{\text{PMNS}} <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">170</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_1} \\</div><div class="clear"></div>
+<div class="linenb">171</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_2} \\</div><div class="clear"></div>
+<div class="linenb">172</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_3}</div><div class="clear"></div>
+<div class="linenb">173</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span> = <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">174</div><div class="codeline">&nbsp;&nbsp;U_{e1} &amp; U_{e2} &amp; U_{e3} \\</div><div class="clear"></div>
+<div class="linenb">175</div><div class="codeline">&nbsp;&nbsp;U_{\mu 1} &amp; U_{\mu 2} &amp; U_{\mu 3} \\</div><div class="clear"></div>
+<div class="linenb">176</div><div class="codeline">&nbsp;&nbsp;U_{\tau 1} &amp; U_{\tau 2} &amp; U_{\tau 3}</div><div class="clear"></div>
+<div class="linenb">177</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span> <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">178</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_1} \\</div><div class="clear"></div>
+<div class="linenb">179</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_2} \\</div><div class="clear"></div>
+<div class="linenb">180</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\ket{\nu_3}</div><div class="clear"></div>
+<div class="linenb">181</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">182</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">183</div><div class="codeline">This matrix is considered to be unitary, but this property still needs to be corroborated \cite{parke_unitarity_2016}. Now, considering a neutrino produced as $\ket{\nu_\alpha}$ that propagates over a distance $x$ during a time $t$, the Schrödinger equation \cite{schrodinger_undulatory_1926} can be written as:</div><div class="clear"></div>
+<div class="linenb">184</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">185</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:neutrino:schro}</div><div class="clear"></div>
+<div class="linenb">186</div><div class="codeline">&nbsp;&nbsp;\ket{\nu_\alpha(x, t)} = \sum_{i=1}^3 U_{\alpha, i} e^{-i(E_it-p_ix)} \ket{\nu_i}</div><div class="clear"></div>
+<div class="linenb">187</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">188</div><div class="codeline">where $E_i$ and $p_i$ stand for the energy and momentum of the neutrino mass states respectively. By going back from the mass space to the flavor space, Eq. \ref{eq:neutrino:schro} becomes:</div><div class="clear"></div>
+<div class="linenb">189</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">190</div><div class="codeline">&nbsp;&nbsp;\ket{\nu_\alpha(x, t)} = \sum_{\beta \in e,\mu,\tau} U^*_{\beta, i} \left( \sum_{i=1}^3 U_{\alpha, i} e^{-i(E_it-p_ix)} \right) \ket{\nu_\beta}</div><div class="clear"></div>
+<div class="linenb">191</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">192</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">193</div><div class="codeline">A neutrino created as $\nu_\alpha$ thus propagates as the linear superposition of the three flavor states. Because the mass of the neutrino is <span class="highlight" title="Consider using an extreme adjective for 'small'.. Suggestions: [tiny, minimal, minuscule] (16394) [lt:en:EXTREME_ADJECTIVES]">extremely small</span>, we can consider that they are ultra-relativistic ($E \sim p &gt;&gt; m$). Using natural units $(c = \hbar = 1)$:</div><div class="clear"></div>
+<div class="linenb">194</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">195</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:neutrino:e_eq_p}</div><div class="clear"></div>
+<div class="linenb">196</div><div class="codeline">&nbsp;&nbsp;E_i = \sqrt{p^2 + m_i^2} \simeq p + \frac{m_i^2}{2p} \simeq E + \frac{m_i^2}{2E}</div><div class="clear"></div>
+<div class="linenb">197</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">198</div><div class="codeline">then the probability to observe a neutrino produced in state $\ket{\nu_\alpha}$ in a state $\ket{\nu_\beta}$ can be written \footnote{Actually Eq. \ref{eq:neutrino:e_eq_p} and \ref{eq:neutrino:prob} make a few more assumptions, such as the fact that every mass state has the same momentum. ``Paradoxes of Neutrino Oscillations'' from Akhmedov and Smirnov \cite{akhmedov_paradoxes_2009} go through them and demonstrate the validity of the method presented in this chapter.}:</div><div class="clear"></div>
+<div class="linenb">199</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">200</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{eq:neutrino:prob}</div><div class="clear"></div>
+<div class="linenb">201</div><div class="codeline">&nbsp;&nbsp;P_{\nu_\alpha \rightarrow \nu_\beta} = | \braket{\nu_\beta}{\nu_\alpha} |^2 = \sum_{i,j=1}^3 U^*_{\alpha,i} U_{\beta,i} U^*_{\alpha, j} U_{\beta, j} e^{-i \frac{\Delta m^2_{ji} L}{2E}}</div><div class="clear"></div>
+<div class="linenb">202</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">203</div><div class="codeline">where $L = ct$ is the propagation distance of the neutrino, $E$ is the neutrino energy and $\Delta m^2_{ji} = m^2_j - m^2_i$ is the <span class="keyword1">\textit</span>{mass splitting}, the difference between the square of the eigenvalues of two mass states.</div><div class="clear"></div>
+<div class="linenb">204</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">205</div><div class="codeline">Under unitary assumptions, the PMNS matrix can also be decomposed in three rotational matrices:</div><div class="clear"></div>
+<div class="linenb">206</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">207</div><div class="codeline">&nbsp;&nbsp;U_{\text{PMNS}} = <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">208</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;1 &amp; 0 &amp; 0 \\</div><div class="clear"></div>
+<div class="linenb">209</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;0 &amp; \cos \theta_{23} &amp; \sin \theta_{23} \\</div><div class="clear"></div>
+<div class="linenb">210</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;0 &amp; -\sin \theta_{23} &amp; \cos \theta_{23} \\</div><div class="clear"></div>
+<div class="linenb">211</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span> <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">212</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\cos \theta_{13} &amp; 0 &amp; \sin \theta_{13} e^{-i\delta_{\text{CP}}}\\</div><div class="clear"></div>
+<div class="linenb">213</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;0 &amp; 1 &amp; 0 \\</div><div class="clear"></div>
+<div class="linenb">214</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;-\sin \theta_{13} e^{i\delta_{\text{CP}}} &amp; 0 &amp;  \cos \theta_{13} \\</div><div class="clear"></div>
+<div class="linenb">215</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span> <span class="keyword2">\begin{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">216</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\cos \theta_{12} &amp; \sin \theta_{12} &amp; 0 \\</div><div class="clear"></div>
+<div class="linenb">217</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;-\sin \theta_{12} &amp; \cos \theta_{12} &amp; 0 \\</div><div class="clear"></div>
+<div class="linenb">218</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;0 &amp; 0 &amp; 1 \\</div><div class="clear"></div>
+<div class="linenb">219</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{pmatrix}</span></div><div class="clear"></div>
+<div class="linenb">220</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">221</div><div class="codeline">where the parameters $\theta_{12}$, $\theta_{23}$, $\theta_{13}$ are the <span class="keyword1">\textit</span>{mixing angles}. The parameter $\delta_{\text{CP}}$ is a CP violation phase that quantifies the matter-antimatter asymmetry in the lepton sector. The parameters $\theta_{12}$ and $\Delta m^2_{21}$ are commonly attributed to a so-called <span class="keyword1">\textit</span>{solar sector}, while the parameters $\theta_{13}$ and $\Delta m^2_{31}$ belong to the <span class="keyword1">\textit</span>{reactor sector} and $\theta_{23}$ and $\Delta m^2_{32}$ the <span class="keyword1">\textit</span>{atmospheric sector}. The neutrino oscillation is thus characterized by 7 parameters: the three mixing angles $(\theta_{12}, \theta_{13}, \theta_{23})$, the three mass splitting $(\Delta m^2_{21}, \Delta m^2_{31}, \Delta m^2_{32})$ and the CP violation phase $\delta$.</div><div class="clear"></div>
+<div class="linenb">222</div><div class="codeline">These three mass splittings are constrained by the relation</div><div class="clear"></div>
+<div class="linenb">223</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">224</div><div class="codeline">&nbsp;&nbsp;\Delta m^2_{21} + \Delta m^2_{32} - \Delta m^2_{31} = 0</div><div class="clear"></div>
+<div class="linenb">225</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">226</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">227</div><div class="codeline">The neutrinos interact weakly with matter. But even so, the travel through dense matter, such as the Earth's crust, can impact their propagation probability. These <span class="keyword1">\textit</span>{matter effects} where introduced by Lincoln Wolfenstein, Stanislas Mikheyev and Alexei Smirnov in 1978 \cite{wolfenstein_neutrino_1978}. They result from forward elastics scattering of neutrinos with the medium (the momentum of the neutrino is unchanged). The charged and neutral current Feynman diagrams are presented in Figure \ref{fig:neutrinos:msw}. This results in a supplementary potential in the Hamiltonian, impacting the oscillation probability.</div><div class="clear"></div>
+<div class="linenb">228</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">229</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">230</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">231</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">232</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">233</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">234</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\feynmandiagram[vertical=a to b] {</div><div class="clear"></div>
+<div class="linenb">235</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f1 [particle=\(\nu_e\)] -- [fermion] a -- [fermion] o1 [particle=\(e^{-}\)],</div><div class="clear"></div>
+<div class="linenb">236</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a -- [boson, edge label=\(W^{-}\)] b,</div><div class="clear"></div>
+<div class="linenb">237</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f2 [particle=\(\nu_e\)] -- [anti fermion] b -- [anti fermion] o2 [particle=\(e^{-}\)]</div><div class="clear"></div>
+<div class="linenb">238</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;};</div><div class="clear"></div>
+<div class="linenb">239</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">240</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\begin{subfigure}</span>[t]{0.48\linewidth}</div><div class="clear"></div>
+<div class="linenb">241</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">242</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;\feynmandiagram[vertical=a to b] {</div><div class="clear"></div>
+<div class="linenb">243</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f1 [particle=\(\nu_{e, \mu, \tau}\)] -- [fermion] a -- [fermion] o1 [particle=\(\nu_{e, \mu, \tau}\)],</div><div class="clear"></div>
+<div class="linenb">244</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a -- [boson, edge label=\(Z^{0}\)] b,</div><div class="clear"></div>
+<div class="linenb">245</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f2 [particle={$e^{-},p,n$}] -- [anti fermion] b -- [anti fermion] o2 [particle={$e^{-},p,n$}]</div><div class="clear"></div>
+<div class="linenb">246</div><div class="codeline">&nbsp;&nbsp;&nbsp;&nbsp;};</div><div class="clear"></div>
+<div class="linenb">247</div><div class="codeline">&nbsp;&nbsp;<span class="keyword2">\end{subfigure}</span></div><div class="clear"></div>
+<div class="linenb">248</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Feynman diagrams of the of charged current matter effect (<span class="keyword1">\textbf</span>{on the left}) and the neutral current matter effect (<span class="keyword1">\textbf</span>{on the right}). Only the electronic neutrino is sensitive to charged current, whereas every neutrinos are sensitive to neutral current.}</div><div class="clear"></div>
+<div class="linenb">249</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrinos:msw}</div><div class="clear"></div>
+<div class="linenb">250</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">251</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">252</div><div class="codeline"><span class="keyword1">\subsection</span>{Phenomenology}</div><div class="clear"></div>
+<div class="linenb">253</div><div class="codeline"><span class="keyword1">\label</span>{sec:neutrino:pheno}</div><div class="clear"></div>
+<div class="linenb">254</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">255</div><div class="codeline">The neutrinos experiments can be divided into two main categories: the disappearance experiments, which observe a deficit of a specific flavor of neutrinos in the detector compared with the expected source flux, and the appearance experiments that search for an excess of a flavor. By placing them at different distances -- baselines -- we can favor the appearance or disappearance of different neutrino flavors. As an illustration of the effect of the baseline, the survival probability of $\bnue$ with respect to the baseline is presented in Figure \ref{fig:neutrino:baseline_effect}.</div><div class="clear"></div>
+<div class="linenb">256</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">257</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">258</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">259</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=7cm]{images/neutrinos/baseline_effect.png}</div><div class="clear"></div>
+<div class="linenb">260</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Survival probability of $\bar{\nu}_e$ as a function of the baseline. The energy of the neutrinos is 3 MeV. The baseline of Double-Chooz, JUNO and KamLAND are reported. Figure taken from Ref. \cite{lebrin_towards_2022}.}</div><div class="clear"></div>
+<div class="linenb">261</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrino:baseline_effect}</div><div class="clear"></div>
+<div class="linenb">262</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">263</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">264</div><div class="codeline">The experiments are also characterized by the neutrino sources they observe. For neutrino studies, the common sources are solar neutrinos, atmospheric neutrino produced from the interactions of high energy particles in the upper atmosphere, accelerators by firing particle beams on a target, and nuclear power plant reactors.</div><div class="clear"></div>
+<div class="linenb">265</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">266</div><div class="codeline">One of the major questions right now is the Mass Ordering (MO), the sign of the mass splitting terms $\Delta m^2_{31}$, and thus $\Delta m^2_{32}$, is not known. We consider two hypotheses: Normal Ordering (NO) where $m_1 &lt; m_2 &lt; m_3$ and the Inverted Ordering (IO) where $m_3 &lt; m_1 &lt; m_2$. An illustration of the MO is presented in Figure \ref{fig:neutrino:nmo}. This topic will be further discussed in Section \ref{sec:neutrino:questions}.</div><div class="clear"></div>
+<div class="linenb">267</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">268</div><div class="codeline"><span class="keyword2">\begin{figure}</span></div><div class="clear"></div>
+<div class="linenb">269</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">270</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[height=7cm]{images/neutrinos/nmo.png}</div><div class="clear"></div>
+<div class="linenb">271</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Illustration of the Mass Ordering, on the left the Normal Ordering and on the right the Inverted Ordering.}</div><div class="clear"></div>
+<div class="linenb">272</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrino:nmo}</div><div class="clear"></div>
+<div class="linenb">273</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">274</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">275</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Solar sector ($\theta_{12}$, $\Delta m^2_{21}$)}</div><div class="clear"></div>
+<div class="linenb">276</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">277</div><div class="codeline">The measurement of the solar sector parameters $\theta_{12}$ and $\Delta m^2_{21}$ has been done in two different ways. From the measurements of the solar neutrino flux in experiments like Super Kamiokande \cite{super-kamiokande_collaboration_solar_2016} and by extracting the parameter from the reactor $\bnue$ spectrum, as done by the KamLand-Zen experiment \cite{suzuki_results_2005, kamland_collaboration_reactor_2013}. Those results are further constrained by measurements of short-baseline experiments and accelerator data. The Particle Data Group (PDG) in its latest edition \cite{ParticleDataGroup:2024cfk} reports the value from global fit efforts from \cite{super-kamiokande_collaboration_solar_2016, kamland_collaboration_reactor_2013}</div><div class="clear"></div>
+<div class="linenb">278</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">279</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">280</div><div class="codeline">&nbsp;&nbsp;\sin^2\theta_{12} = 0.307^{+0.013}_{-0.012}</div><div class="clear"></div>
+<div class="linenb">281</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">282</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">283</div><div class="codeline">&nbsp;&nbsp;\Delta m^2_{21} = 7.53 \pm 0.18 \cdot 10^{-5} \text{ eV}^2</div><div class="clear"></div>
+<div class="linenb">284</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">285</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">286</div><div class="codeline">The intervals are 68\% confidence level. The CPT invariance is assumed.</div><div class="clear"></div>
+<div class="linenb">287</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">288</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Reactor sector ($\theta_{13}$)}</div><div class="clear"></div>
+<div class="linenb">289</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">290</div><div class="codeline">Direct measurements of $\theta_{13}$ are currently derived from the reactor $\bnue$ disappearance at short baseline $L \sim 1$ km. Alternatively, limits can also be obtained from solar neutrino data or accelerator based $\nu_\mu \rightarrow \nu_e$ experiments. The PDG reports its best value as the average of the results T2K \cite{abe_measurements_2023}, DayaBay \cite{daya_bay_collaboration_precision_2023, daya_bay_collaboration_new_2016}, Double-Chooz \cite{de_kerret_double_2020} and Reno \cite{shin_observation_2020, reno_collaboration_measurement_2018}</div><div class="clear"></div>
+<div class="linenb">291</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">292</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">293</div><div class="codeline">&nbsp;&nbsp;\sin^2\theta_{13} = 2.19 \pm 0.07</div><div class="clear"></div>
+<div class="linenb">294</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">295</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">296</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">297</div><div class="codeline">The intervals are 68\% confidence level. The CPT invariance is assumed.</div><div class="clear"></div>
+<div class="linenb">298</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">299</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Atmospheric sector ($\theta_{23}$, $\Delta m^2_{32}$) and $\delta_{\text{CP}}$)}</div><div class="clear"></div>
+<div class="linenb">300</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">301</div><div class="codeline">The parameters $\theta_{23}$ and $\Delta m^2_{32}$ are currently constrained by the measurements the relative fluxes of atmospheric neutrino flavors and by accelerator-based experiments. The mass splitting term can also be extracted from the $\bnue$ spectrum at short baselines. The PDG uses the results of IceCube \cite{icecube_collaboration_measurement_2023}, T2K \cite{abe_measurements_2023}, NOvA \cite{the_nova_collaboration_improved_2022}, MINOS \cite{minos_collaboration_precision_2020} and Super Kamiokande (SK) \cite{super-kamiokande_collaboration_atmospheric_2018} for $\theta_{13}$. For $\Delta m^2_{31}$, they also use the data from Daya Bay \cite{daya_bay_collaboration_precision_2023} and RENO \cite{reno_collaboration_measurement_2018}.</div><div class="clear"></div>
+<div class="linenb">302</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">303</div><div class="codeline"><span class="keyword1">\textbf</span>{Assuming normal ordering}</div><div class="clear"></div>
+<div class="linenb">304</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">305</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">306</div><div class="codeline">&nbsp;&nbsp;\sin^2\theta_{23} = 0.553^{+0.016}_{-0.024}</div><div class="clear"></div>
+<div class="linenb">307</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">308</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">309</div><div class="codeline">&nbsp;&nbsp;\Delta m^2_{32} = 2.445 \pm 0.028 \cdot 10^{-3} \text{ eV}^2</div><div class="clear"></div>
+<div class="linenb">310</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">311</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">312</div><div class="codeline"><span class="keyword1">\textbf</span>{Assuming inverted ordering}</div><div class="clear"></div>
+<div class="linenb">313</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">314</div><div class="codeline">&nbsp;&nbsp;\sin^2\theta_{23} = 0.558^{+0.015}_{-0.021}</div><div class="clear"></div>
+<div class="linenb">315</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">316</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">317</div><div class="codeline">&nbsp;&nbsp;\Delta m^2_{32} = -2.529 \pm 0.029 \cdot 10^{-3} \text{ eV}^2</div><div class="clear"></div>
+<div class="linenb">318</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">319</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">320</div><div class="codeline">The CP violation phase $\delta_{\text{CP}}$ is measured from the $\nu_e$ appearance in atmospheric and accelerator experiments. PDG uses the data from T2K \cite{abe_measurements_2023}, NOVA \cite{the_nova_collaboration_improved_2022} and Super Kamiokande \cite{super-kamiokande_collaboration_atmospheric_2018}. The reported value is in $\pi$ radians with $0 &lt; \delta_{\text{CP}} &lt; 2 \pi$. This value of $\delta_{\text{CP}}$ assumes Normal Ordering.</div><div class="clear"></div>
+<div class="linenb">321</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">322</div><div class="codeline"><span class="keyword2">\begin{equation*}</span></div><div class="clear"></div>
+<div class="linenb">323</div><div class="codeline">&nbsp;&nbsp;\delta_{\text{CP}} = 1.19 \pm 0.22</div><div class="clear"></div>
+<div class="linenb">324</div><div class="codeline"><span class="keyword2">\end{equation*}</span></div><div class="clear"></div>
+<div class="linenb">325</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">326</div><div class="codeline">The intervals are 68\% confidence level. The CPT invariance is assumed.</div><div class="clear"></div>
+<div class="linenb">327</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">328</div><div class="codeline"><span class="keyword1">\subsection</span>{Open questions}</div><div class="clear"></div>
+<div class="linenb">329</div><div class="codeline"><span class="keyword1">\label</span>{sec:neutrino:questions}</div><div class="clear"></div>
+<div class="linenb">330</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">331</div><div class="codeline">Neutrino experiments have continued to produce more and more precise and refined results over the last 25 years. However, some questions remain unanswered and will be at the center of attention of the neutrino physics community for the years to come. Some of them are reviewed in this section.</div><div class="clear"></div>
+<div class="linenb">332</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">333</div><div class="codeline"><span class="comment"><span class="comment">% Majorana vs dirac</span></span></div><div class="clear"></div>
+<div class="linenb">334</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">335</div><div class="codeline"><span class="comment"><span class="comment">% absolute neutrino mass scale</span></span></div><div class="clear"></div>
+<div class="linenb">336</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">337</div><div class="codeline"><span class="comment"><span class="comment">% Mass ordering</span></span></div><div class="clear"></div>
+<div class="linenb">338</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">339</div><div class="codeline"><span class="comment"><span class="comment">% \theta_{23} octant</span></span></div><div class="clear"></div>
+<div class="linenb">340</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">341</div><div class="codeline"><span class="comment"><span class="comment">% CP symmetrie</span></span></div><div class="clear"></div>
+<div class="linenb">342</div><div class="codeline"><span class="comment"><span class="comment">%</span></span></div><div class="clear"></div>
+<div class="linenb">343</div><div class="codeline"><span class="comment"><span class="comment">% sterile</span></span></div><div class="clear"></div>
+<div class="linenb">344</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">345</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Nature of the neutrino}</div><div class="clear"></div>
+<div class="linenb">346</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">347</div><div class="codeline">The particles in the SM are Dirac particles (i.e.\ there is a distinction between particles and antiparticles). The modern model of neutrino interaction and oscillation has been developed under this postulate. However, Ettore Majorana in 1937 formulated another way to introduce mass terms in the SM Lagrangian \cite{majorana_teoria_1937}. The condition for this mass term is only applicable to the neutrino. If the neutrino is a Majorana particle, meaning it is its own antiparticle, lepton number violation would occur during certain processes such as neutrinoless double beta decay. This violation is predicted because in Majorana interactions, neutrinos can annihilate themselves, violating lepton number conservation by two units. To determine the nature of the neutrino (Majorana or Dirac nature), physicist observe the rare phenomenon of $\beta\beta$ decay -- double beta decay:</div><div class="clear"></div>
+<div class="linenb">348</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">349</div><div class="codeline">&nbsp;&nbsp;^{A}_{Z}X \rightarrow ^{A}_{Z+2}Y + e^- + e^- + \bnue + \bnue</div><div class="clear"></div>
+<div class="linenb">350</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">351</div><div class="codeline">In this scenario, if the neutrino are Majorana particles, one could observe a theoretically rarer event $0\nu\beta\beta$ decay:</div><div class="clear"></div>
+<div class="linenb">352</div><div class="codeline"><span class="keyword2">\begin{equation}</span></div><div class="clear"></div>
+<div class="linenb">353</div><div class="codeline">&nbsp;&nbsp;^{A}_{Z}X \rightarrow ^{A}_{Z+2}Y + e^- + e^-</div><div class="clear"></div>
+<div class="linenb">354</div><div class="codeline"><span class="keyword2">\end{equation}</span></div><div class="clear"></div>
+<div class="linenb">355</div><div class="codeline">where the two neutrinos annihilate in the interaction. The signature would be the presence of quasi mono-energetic events at the higher end of the $\beta\beta$ decay energy spectrum.</div><div class="clear"></div>
+<div class="linenb">356</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">357</div><div class="codeline">The implication of the Majorana nature of the neutrino implies, among others:</div><div class="clear"></div>
+<div class="linenb">358</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">359</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The lepton number violation.</div><div class="clear"></div>
+<div class="linenb">360</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">361</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Possible explanation of small neutrino masses via seesaw mechanism \cite{yanagida_horizontal_1980}.</div><div class="clear"></div>
+<div class="linenb">362</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">363</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> Open the possibility of generating the baryon asymmetry via leptogenesis.</div><div class="clear"></div>
+<div class="linenb">364</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">365</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">366</div><div class="codeline">As of today, the nature of the neutrino hasn't been established.</div><div class="clear"></div>
+<div class="linenb">367</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">368</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Absolute mass of the neutrino}</div><div class="clear"></div>
+<div class="linenb">369</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">370</div><div class="codeline">Studies of neutrino oscillation allow us to measure the mass splitting terms $\Delta m^2_{ij} = m^2_{i} - m^2_{j}$ but do not provide information about the absolute mass scale of the neutrinos.</div><div class="clear"></div>
+<div class="linenb">371</div><div class="codeline">The most stringent upper limits on the absolute neutrino mass come from the KATRIN experiment, which measures the electron energy spectrum in tritium beta decay. By precisely studying the tail of this spectrum, where small energy differences due to the neutrino mass can manifest, KATRIN is able to constrain the neutrino mass with a high degree of sensitivity. The latest result gives an upper limit at a 90\% confidence level of $m_\nu &lt; 0.45$ eV \cite{aker_direct_2024}.</div><div class="clear"></div>
+<div class="linenb">372</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">373</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Neutrino Mass Ordering (NMO)}</div><div class="clear"></div>
+<div class="linenb">374</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">375</div><div class="codeline">As introduced in Section \ref{sec:neutrino:pheno}, current experiments are only sensitive to $|\Delta m^2_{32}|$, blinded to the sign of the mass split. We are thus unable to differentiate between the Normal Ordering (NO) $m_1 &lt; m_2 &lt; m_3$ and the Inverted Ordering (IO) $m_3 &lt; m_1 &lt; m_2$. The nature of the NMO has important implications:</div><div class="clear"></div>
+<div class="linenb">376</div><div class="codeline"><span class="keyword2">\begin{itemize}</span></div><div class="clear"></div>
+<div class="linenb">377</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> It will help in the determination of the lower limit of the mass scale.</div><div class="clear"></div>
+<div class="linenb">378</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The nature of the neutrino mass ordering has significant implications for various experiments, particularly neutrinoless double beta decay ($0\nu\beta\beta$). If the mass ordering is inverted, the effective mass for $0\nu\beta\beta$ is likely to be higher, which would increase the decay's detectability. Conversely, a normal ordering would imply a lower effective mass, making detection more challenging.</div><div class="clear"></div>
+<div class="linenb">379</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> The current $\delta_{\text{CP}}$ measurements have different minima depending on the mass ordering as illustrated in Figure \ref{fig:neutrino:chi2_proj}.</div><div class="clear"></div>
+<div class="linenb">380</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\item</span> More broadly, knowledge of the mass ordering and the neutrino mass scale have impacts on the generation of lepton in early universe and cosmology \cite{hannestad_cosmology_2016}.</div><div class="clear"></div>
+<div class="linenb">381</div><div class="codeline"><span class="keyword2">\end{itemize}</span></div><div class="clear"></div>
+<div class="linenb">382</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">383</div><div class="codeline"><span class="keyword2">\begin{figure}</span>[ht]</div><div class="clear"></div>
+<div class="linenb">384</div><div class="codeline">&nbsp;&nbsp;\centering</div><div class="clear"></div>
+<div class="linenb">385</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\includegraphics</span>[width=8cm]{images/neutrinos/chi2_proj.jpg}</div><div class="clear"></div>
+<div class="linenb">386</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\caption</span>{Global 3$\nu$ oscillation analysis. The red (blue) curves are for Normal (Inverted) Ordering. The solid (dashed) lines are obtained without (with) the inclusion of the tabulated atmospheric $\chi^2$ data from SK and IC. As atmospheric mass-squared splitting we use $\Delta m^2_{31}$ for NO and $\Delta m^2_{32}$for IO. Analysis and plots from the NuFit analysis group \cite{esteban_nufit-60_2024, noauthor_nufit_nodate}.}</div><div class="clear"></div>
+<div class="linenb">387</div><div class="codeline">&nbsp;&nbsp;<span class="keyword1">\label</span>{fig:neutrino:chi2_proj}</div><div class="clear"></div>
+<div class="linenb">388</div><div class="codeline"><span class="keyword2">\end{figure}</span></div><div class="clear"></div>
+<div class="linenb">389</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">390</div><div class="codeline">The determination of the mass ordering will probably be solved in the next decade. Multiple experiments under construction have this topic as part of their main physics program, notably the Jiangmen Underground Neutrino Observatory (JUNO) \cite{juno_collaboration_juno_2022} -- the subject of this thesis -- via the measurement of the $\bnue$ spectrum from nuclear reactors; the long-baseline DUNE experiment \cite{abi_long-baseline_2020} which will detect neutrinos from the Fermilab accelerator; KM3Net/ORCA and Hyper-Kamiokande through the measurements of the atmospheric neutrino flux \cite{aiello_determining_2021, abe_hyper-kamiokande_2018}.</div><div class="clear"></div>
+<div class="linenb">391</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">392</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Octant of $\theta_{23}$}</div><div class="clear"></div>
+<div class="linenb">393</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">394</div><div class="codeline">The latest results from the NuFit analysis group \cite{esteban_nufit-60_2024} show two minima for $\theta_{13}$ (Fig. \ref{fig:neutrino:chi2_proj}), one in the lower octant $\theta_{23} &lt; \pi/4$ and one in the upper octant $\theta_{23} &gt; \pi/4$. This octant has implications for the oscillation and neutrino mass theories. It will be measured by future neutrino experiments such as DUNE and HK.</div><div class="clear"></div>
+<div class="linenb">395</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">396</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Breaking of CP symmetry in the lepton sector}</div><div class="clear"></div>
+<div class="linenb">397</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">398</div><div class="codeline">The CP symmetry is known to be broken in the baryon sector \cite{christenson_evidence_1964} however its violation in the lepton sector is still unknown. The CP violation exists if the PMNS matrix possesses an imaginary part, i.e.\ if $\text{Im}(e^{i\delta_{CP}}) \neq 0$. The latest measurements (Fig. \ref{fig:neutrino:chi2_proj}) do not give any certainties about the value of $\delta_{CP}$; it will be determined by future experiments such as DUNE and HK. The violation of CP in the <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [tectonic, Teutonic, lepton, leptons] (26007) [lt:en:MORFOLOGIK_RULE_EN_US]">leptonic</span> sector has strong implications for the matter-antimatter asymmetry in the universe.</div><div class="clear"></div>
+<div class="linenb">399</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">400</div><div class="codeline"><span class="keyword1">\subsubsection</span>{Sterile neutrino}</div><div class="clear"></div>
+<div class="linenb">401</div><div class="codeline"></div><div class="clear"></div>
+<div class="linenb">402</div><div class="codeline">Sterile neutrinos are hypothetical particles that extend the Standard Model by introducing a fourth, non-interacting neutrino family. They have been proposed to explain certain anomalies observed in short-baseline neutrino experiments, such as the LSND \cite{lsnd_collaboration_evidence_2001} and <span class="highlight-spelling" title="Possible spelling mistake found. (26380) [lt:en:MORFOLOGIK_RULE_EN_US]">MiniBooNE</span> \cite{miniboone_collaboration_significant_2018} experiments, where observed oscillations cannot be accounted for by the known three neutrino flavors.</div><div class="clear"></div>
+<div class="linenb">403</div><div class="codeline">This sterile neutrino would not interact with the other particles of the SM except via gravity and could be observed only via the oscillations of $\nu_e,\nu_\mu,\nu_\tau \rightarrow \nu_s$ where $\nu_s$ would be this hypothetical fourth sterile family. This theory has been proposed multiple times to explain anomalies in the oscillation's data, but for now no studies have concluded on the existence of the sterile neutrino. One of the possible probes for this fourth family would be the measurement of the <span class="highlight-spelling" title="Possible spelling mistake found.. Suggestions: [non-linearity] (26957) [lt:en:MORFOLOGIK_RULE_EN_US]">non-unitarity</span> of the PMNS matrix, meaning that $\nu_e$ is a linear combination of $\nu_1, \nu_2, \nu_2$ and a theoretical $\nu_4$. This unitarity test can be done via precise measurements of the mixing angles.</div><div class="clear"></div>
+<div class="linenb">404</div><div class="codeline"><span class="keyword2">\end{document}</span></div><div class="clear"></div>
+</div>
+<hr/>
+Output produced by TeXtidote v0.8.4, &copy; 2018-2022 Sylvain Hall&eacute; - All rights reserved.<br/>
+See the <a href="https://sylvainhalle.github.io/textidote">TeXtidote website</a> for more information.
+</body>
+</html>

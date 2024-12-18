@@ -16,7 +16,7 @@ For example, in our case, it could be an algorithm that would differentiate the 
 
 It extracts essential features from a highly complex and multidimensional dataset that describe the physical interactions: a three body energy deposition (the positron and two annihilation gammas) and the single deposit from an electron.
 
-Ideally, the algorithm would learn to recognize those information on its own, regardless of the input size and complexity. In practice, however, these algorithms are guided by human design through their architectures and training conditions. We can still hope that they use more thoroughly the detector information while traditional methods are often subject to assumptions or simplifications to make the task easier (see for instance the algorithm in Section \ref{sec:juno:reco}).
+Ideally, the algorithm would learn to recognize this information on its own, regardless of the input size and complexity. In practice, however, these algorithms are guided by human design through their architectures and training conditions. We can still hope that they use more thoroughly the detector information while traditional methods are often subject to assumptions or simplifications to make the task easier (see for instance the algorithm in Section \ref{sec:juno:reco}).
 
 The role of machine learning algorithms has expanded rapidly in the past decade, either as the main or secondary algorithm for a wide variety of tasks: event reconstruction, event classification, waveform reconstruction and so on. In particular in domains where the underlying physic and detector processes are complex and highly dimensional, and when large amount of data must be processed quickly.
 
@@ -47,11 +47,11 @@ During the training phase the prediction of the BDT is compared to a known truth
 \subsection{Artificial Neural Network (NN)}
 \label{sec:ml:nn}
 
-One of the modern ML family is the Neural Network, historical name as their design was inspired by the behaviour of biological neurons in the brain.
+One of the modern ML family is the Neural Network, historical name as their design was inspired by the behavior of biological neurons in the brain.
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/ml/nn_explications.png}
-  \caption{Schema of a simple neural network}
+  \caption{Schema of a simple neural network.}
   \label{fig:ml:schema_nn}
 \end{figure}
 As schematized in Figure \ref{fig:ml:schema_nn}, the input, output and steps inside the NN is described as neuron \textit{layers}. The neurons of the layers take as input a set of values from the preceding layer, here the $a_i$ takes every information of the $x_i$ input layer, and aggregate those values following learnable \textit{parameters} $w_{ij}$. In the example in Figure \ref{fig:ml:schema_nn}, fully connected layers are used, meaning that each neuron in one layer is connected to every neuron in the previous layer.
@@ -205,7 +205,7 @@ To detect overfitting, techniques like monitoring the validation loss, early sto
 Overtraining can be fought in multiple ways, for example:
 \begin{itemize}
   \item \textbf{More data}. By having more data in the training dataset, the network will not be able the specificities of every data.
-  \item \textbf{Fewer parameters}. By reducing the number of parameters, we reduce the computing and learning capacities of the network. This will force it to fall back to generalist behaviours.
+  \item \textbf{Fewer parameters}. By reducing the number of parameters, we reduce the computing and learning capacities of the network. This will force it to fall back to generalist behaviors.
   \item \textbf{Dropout}. This technique implies to randomly set some neurons to 0, i.e.\ cutting the relation between two neurons in a layer. By doing this, we force the network to allocate more of its parameter to the features learning, preventing those parameters to be used for overtraining.
   \item \textbf{Early stopping}. During the training we monitor the network performance over a validation dataset. The network does not train on this dataset and thus cannot learn its specificities. If the loss on the training dataset diverge too much from the loss on the validation dataset, we can stop the training earlier to prevent it from overtraining.
 \end{itemize}
@@ -229,6 +229,7 @@ Overtraining can be fought in multiple ways, for example:
 \end{figure}
 
 \subsubsection{Gradient vanishing}
+
 Gradient vanishing is the effect of the gradient being so small for the early layers that the parameters are barely updated after each step. This cause the network to be unable to converge to the minima.
 
 This comes from the way the gradient descent is calculated. Imagine a simple network composed of three fully connected layers: the input layer, an intermediate layer and the output layer. Let $L$ be the loss, $\theta_1$ the parameter between the input and the intermediate layer and $\theta_2$ the parameter between the intermediate and output layer. This network is schematized in Figure \ref{fig:ml:vanishing}.
@@ -250,18 +251,19 @@ Multiple actions can be taken to prevent this effect such as:
 \end{figure}
 
 \subsubsection{Gradient explosion}
+
 Gradient explosion occurs when gradients grow exponentially during back-propagation, causing parameter values to increase dramatically. This is particularly problematic in deep networks where the product of large gradients across layers can lead to unstable updates. In practice, gradient explosion is often caused by large learning rates, poor weight initialization, or non-linearities in the network.
 For illustration, consider that the loss dependency in $\theta$ follow
 \begin{align*}
   \mathcal{L}(\theta) &= \frac{\theta^2}{2} + e^{4\theta} \\
   \frac{\partial \mathcal{L}}{\partial \theta} &= \theta + 4e^{4\theta}
 \end{align*}
-The explosion is illustrated in Figure \ref{fig:ml:explosion} where we can see that the loss degrade with each step of optimization. In this illustration it is clear that reducing the learning rate suffice, but this behaviour can happen in the middle of the training where the learning rate schedule does not permit reactivity.
+The explosion is illustrated in Figure \ref{fig:ml:explosion} where we can see that the loss degrade with each step of optimization. In this illustration it is clear that reducing the learning rate suffice, but this behavior can happen in the middle of the training where the learning rate schedule does not permit reactivity.
 
 There exist solutions to prevent these explosions:
 \begin{itemize}
   \item \textbf{Gradient clipping}: Is this case we work on the gradient so that the norm of gradient vector does not exceed a certain threshold. In our illustration in Figure \ref{fig:ml:explosion} the gradient for $\theta > 0$ could be clipped at 3 for example.
-  \item \textbf{Batch normalization}: For the same reasons as for gradient vanishing, normalizing the input data help reduce erratic behaviour.
+  \item \textbf{Batch normalization}: For the same reasons as for gradient vanishing, normalizing the input data help reduce erratic behavior.
 \end{itemize}
 
 
@@ -288,7 +290,7 @@ This architecture is the stack of multiple fully connected layers as presented i
     0 & \mathrm{otherwise}
   \end{cases}
 \end{equation}
-is used as activation function. Prelu and Sigmoid are also popular choices:
+is used as activation function. PReLU and Sigmoid are also popular choices:
 
 
 \begin{minipage}{0.5\linewidth}
@@ -336,7 +338,7 @@ It's not trivial to describe in text the principles of Convolutional Neural Netw
 
 Convolutional Neural Networks are a family of neural networks that use discrete convolution filters, as illustrated in an example in Figure \ref{fig:ml:conv_filter}, to process the input data, often images. They are commonly used in image recognition \cite{russakovsky_imagenet_2015} for classification or regression problematics. Concretely, you multiply element-wise a portion of the input data, in the case of an image, a small part of the image, with a kernel of same dimension. In Figure \ref{fig:ml:conv_filter}, we multiply the $3\times3$ pixels sub-image with the $3\times3$ kernel.
 
-Their filters scan the input data, highlighting patterns of interest, this scanning procedure making them translation-invariant. In the concrete case of Figure \ref{fig:ml:conv_filter}, for each pixel of the input image, we group it with the 8 neighbours pixel and produce a new pixel that correspond to the output image. For the pixel on the edges that do not have neighbours, we either create ``imaginary'' pixel with the value 0, or we just ignore them. If we ignore them, the output image will possess fewer pixels than the input image. We see that the operation do not care where is the pattern of interest in the images, the filter output will be \textit{invariant} whatever \textit{translation} is applied to the image.
+Their filters scan the input data, highlighting patterns of interest, this scanning procedure making them translation-invariant. In the concrete case of Figure \ref{fig:ml:conv_filter}, for each pixel of the input image, we group it with the 8 neighbors pixel and produce a new pixel that correspond to the output image. For the pixel on the edges that do not have neighbors, we either create ``imaginary'' pixel with the value 0, or we just ignore them. If we ignore them, the output image will possess fewer pixels than the input image. We see that the operation do not care where is the pattern of interest in the images, the filter output will be \textit{invariant} whatever \textit{translation} is applied to the image.
 
 This invariance mean that they are capable of detecting oriented features independently of their location on the image.
 These filters scan the input, highlighting important features like edges or textures, which in JUNO's case could represent spatial correlations in the timing and charge data across the detector. As the network goes deeper, it can capture more complex and abstract features, making it ideal for detecting nuanced particle interactions.
@@ -354,7 +356,7 @@ The results of the convolution filters is commonly then flattened and feed to a 
   \label{fig:ml:conv_filter}
 \end{figure}
 
-As an example, let's take the Pytorch \cite{ansel_pytorch_2024} example for the MNIST \cite{lecun_gradient-based_1998}, a dataset of black and white images of handwritten digits. Those images are $28 \times 28$ pixels with only one channel corresponding to the grey level of the pixel. Example of images from this dataset are presented in Figure \ref{fig:ml:mnist}
+As an example, let's take the Pytorch \cite{ansel_pytorch_2024} example for the MNIST \cite{lecun_gradient-based_1998}, a dataset of black and white images of handwritten digits. Those images are $28 \times 28$ pixels with only one channel corresponding to the gray level of the pixel. Example of images from this dataset are presented in Figure \ref{fig:ml:mnist}
 
 A schema of the CNN used in the Pytorch example is presented in Figure \ref{fig:ml:cnn_mnist}. Using this schema as a reference, the trained network is made of:
 \begin{enumerate}
@@ -363,10 +365,10 @@ A schema of the CNN used in the Pytorch example is presented in Figure \ref{fig:
   \item Then comes a $(2\times2)$ max pool layer with a stride of 1 meaning that for each channel the max value of pixels in a $(2\times2)$ block is condensed in a single resulting pixel. The resulting image is $(12 \times 12 \times 64)$.
   \item This image goes through a dropout layer which will set the pixel to 0 with a probability of 0.25. This layer helps prevent overtraining the neural network (see Section \ref{sec:ml:pitfall} for more details).
   \item The data is the flattened i.e.\ condensed into a vector of $(12 \times 12 \times 64) = 9216$ values.
-  \item Then comes a fully connected linear layer (Eq. \ref{eq:ml:fully-connected}) with a ReLU activation that output 128 features. It requires $(9216 \cdot 128)+ 128 = 1'179'776$ parameters.
+  \item Then comes a fully connected linear layer (Eq.\ \ref{eq:ml:fully-connected}) with a ReLU activation that output 128 features. It requires $(9216 \cdot 128)+ 128 = 1'179'776$ parameters.
   \item This 128 item vector goes through another dropout layer with a probability of $0.5$
   \item The vector is then transformed through a linear layer with ReLU activation. It output 10 values, one for each digit class ($0, 1, 2, \dots, 9$). It requires $(128 \cdot 10) + 128 = 1408$ parameters.
-  \item Finally, the 10 values are normalized using a log softmax function $\mathrm{LogSoftmax}(x_i) = \log \bigg(\frac{\exp(x_i)}{\sum_j \exp(x_j)}\bigg)$. Each of those values are the probability of the input image to be a certain digit.
+  \item Finally, the 10 values are normalized using a log Softmax function $\mathrm{LogSoftmax}(x_i) = \log \bigg(\frac{\exp(x_i)}{\sum_j \exp(x_j)}\bigg)$. Each of those values are the probability of the input image to be a certain digit.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -391,7 +393,7 @@ The final network requires 1'182'144 parameters or, if we consider each paramete
 \subsection{Graph Neural Network (GNN)}
 \label{sec:ml:gnn}
 
-In GNNs, data is represented as nodes and edges in a graph, which allows us to model the JUNO detector as a network of PMTs, where each PMT is a node and the edges represent relationships such as spatial distance or timing correlations between PMTs. This flexibility enables GNNs to capture complex interactions across the detector geometry that would be difficult to represent with a CNN, as the CNN neighbouring scheme is stuck to the pixels indexing -- the position in the matrix representing the image.
+In GNNs, data is represented as nodes and edges in a graph, which allows us to model the JUNO detector as a network of PMTs, where each PMT is a node and the edges represent relationships such as spatial distance or timing correlations between PMTs. This flexibility enables GNNs to capture complex interactions across the detector geometry that would be difficult to represent with a CNN, as the CNN neighboring scheme is stuck to the pixels indexing -- the position in the matrix representing the image.
 
 Furthermore, GNNs excel at processing non-Euclidean data, making them a natural fit for the irregular layout of the PMTs in JUNO.
 In this thesis, GNNs are applied to model the spatial and temporal relationships between PMTs, enabling more precise event classification and reconstruction. By leveraging the message-passing framework, the GNN can aggregate information from neighboring PMTs, allowing it to detect subtle patterns in the detector's data.
@@ -419,17 +421,17 @@ More figuratively, using the example in Figure \ref{fig:ml:gnn:graph}, we have a
 \end{figure}
 
 To process such object we need specific machine learning algorithms we call Graph neural network.
-To efficiently manipulate graph we need to structurally encode their property in the neural network computing architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbours, $\ldots$ One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
+To efficiently manipulate graph we need to structurally encode their property in the neural network computing architecture: each node is equivalent (as opposite to ordered data in a vector), each node has a set of neighbors, $\ldots$ One of this method is the message passing algorithm presented historically in ``Neural Message Passing for Quantum Chemistry'' \cite{gilmer_neural_2017}. In this algorithm, with each layer of message passing a new set of features is computed for each node following
 \begin{equation}
   n_i^{k+1} = \phi_u (n_i^k, \Box_j \phi_m(n_i^k, n_j^k, e^k_{ij})); ~ n_j \in \mathcal{N}'_i
 \end{equation}
-where $\phi_u$ is a differentiable \textit{update} function, $\Box_j$ is a differentiable \textit{aggregation} function and $\phi_m$ is a differentiable \textit{message} function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbours of $n_i$, i.e.\ the nodes $n_j$ from which it exists an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. The update function need also a few other properties if we want to keep the graph property, most notably the permutation invariance of its parameters (example: mean, std, sum, ...). The different message, update and aggregation functions can really be any kind of function if they follow the constraint presented before, even small Neural Network.
+where $\phi_u$ is a differentiable \textit{update} function, $\Box_j$ is a differentiable \textit{aggregation} function and $\phi_m$ is a differentiable \textit{message} function. $\mathcal{N}'_i = \{n_j \in \mathcal{N} | (n_i, n_j) \in \mathcal{E}\}$ is the set of neighbors of $n_i$, i.e.\ the nodes $n_j$ from which it exists an edge $e_{i,j} \rightarrow (n_i, n_j)$. $k$ is the layer on which the message passing algorithm is applied. The update function need also a few other properties if we want to keep the graph property, most notably the permutation invariance of its parameters (example: mean, std, sum, $\ldots$). The different message, update and aggregation functions can really be any kind of function if they follow the constraint presented before, even small Neural Network.
 
 The edges features can also be updated, either by directly taking the results of $\phi_m$ or by using another message function $\phi_e$.
 
 To explain this process, let's take the situation presented in Figure \ref{fig:ml:gnn:message_passing}. We start with an input graph on left, in this case the message passing algorithm is mixing the color on each node and produce nodes of mixed color. For simplicity, the $\phi_m$ and $\phi_u$ function are the identity, they take a color and output the same color.
 
-Let's look at what's happening in the node 4. It has 3 neighbours and is a neighbour of itself. The four resulting $\phi_m$ extract the color of each node and then feed them to the $\Box$ function. The $\Box$ function just equally distribute the color in the node. Finally the $\phi_u$ function just update the node with the output of $\Box$.
+Let's look at what's happening in the node 4. It has 3 neighbors and is a neighbor of itself. The four resulting $\phi_m$ extract the color of each node and then feed them to the $\Box$ function. The $\Box$ function just equally distribute the color in the node. Finally, the $\phi_u$ function just update the node with the output of $\Box$.
 
 Interestingly we see that the new node 4 does not have any yellow, the color of node 1. But if we were to run the message passing algorithm again, it would get some as node 2 is now partially yellow. If color here represent information, we see that multiple step are needed so that each node is ``aware'' of the information the other nodes possess.
 
@@ -502,7 +504,7 @@ The time based algorithm use the distribution of the time of flight corrections 
     \end{equation}
     where $\vec{r}_0$ is the vertex position at the beginning of this iteration, $\vec{r}_i$ is the position of the $i$-th PMT. To minimize the effect of scattering, dark noise and reflection, only the pulse happening in a time window (-10 ns, +5 ns) around $\Delta t^{\mathrm{peak}}$ are considered. $N^{\mathrm{peak}}$ is the number of PE collected in this time-window.
 
-  \item if $\vec{\delta} [\vec{r}(j)] < 1 \mathrm{mm}$ or $j \geq 100$, stop the iteration. Otherwise, $\vec{r}_0 (j + 1) = \vec{r}_0 (j) + \vec{\delta} [\vec{r}(j)]$ and go to step \ref{alg:rec:tba}.
+  \item If $\vec{\delta} [\vec{r}(j)] < 1 \mathrm{mm}$ or $j \geq 100$, stop the iteration. Otherwise, $\vec{r}_0 (j + 1) = \vec{r}_0 (j) + \vec{\delta} [\vec{r}(j)]$ and go to step \ref{alg:rec:tba}.
 \end{enumerate}
 
 \begin{figure}
@@ -541,7 +543,7 @@ In a first order approximation, the scintillator time response Probability Densi
 \begin{equation}
   f(t_{\mathrm{res}}) = \sum_k \frac{\rho_k}{\tau_k} e^{\frac{-t_{\mathrm{res}}}{\tau_k}}, ~ \sum_k \rho_k = 1
 \end{equation}
-as the sum of the $k$ component that emit light in the LS each one characterised by its decay time $\tau_k$ and intensity fraction $\rho_k$. The TTS component is expressed as a Gaussian convolution
+as the sum of the $k$ component that emit light in the LS each one characterized by its decay time $\tau_k$ and intensity fraction $\rho_k$. The TTS component is expressed as a Gaussian convolution
 \begin{equation}
   g(t_{\mathrm{res}}) = \frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-(t_{\mathrm{res}} - \nu)^2}{2\sigma^2}} \cdot f(t_{\mathrm{res}})
 \end{equation}
@@ -570,7 +572,7 @@ The parameter of Eq.\ \ref{eq:juno:juno:tim_like:dn} can be measured experimenta
 
 Similarly to the time likelihood algorithms that use a timing PDF, the charge likelihood algorithm use a PE PDF for each PMT depending on the energy and position of the event. With $\mu(\vec{r}_0, E)$ the mean expected number of PE detected by each PMT, the probability to observe $N_{pe}$ in a PMT follow a Poisson distribution. Thus
 \begin{itemize}
-  \item The probability to observe no hit ($N_{pe} = 0$) in the $j$th PMT is $P^{j}_{nohit} (\vec{r}_0, E) = e^{-\mu_j}$
+  \item The probability to observe no hit ($N_{pe} = 0$) in the $j$-th PMT is $P^{j}_{nohit} (\vec{r}_0, E) = e^{-\mu_j}$
   \item The probability to observe $N_{pe} \neq 0$ in the $i$-th PMT is $P^{i}_{hit} (\vec{r}_0, E) = \frac{\mu^{N^i_{pe}} e^{-\mu_i}}{N^i_{pe}!}$
 \end{itemize}
 
@@ -592,7 +594,7 @@ In principle, $\mu_i(\vec{r}_0, E)$ could be expressed
 \end{equation}
 where $Y$ is the energy scale factor, $\Omega(\vec{r}_0, r_i)$ is the solid angle of the $i$-th PMT, $\epsilon_i$ is its detection efficiency, $f(\theta_i)$ its angular response, $\zeta_m$ is the attenuation length in the materials and $\delta_i$ the expected number of dark noise.
 
-However, Eq.\ \ref{eq:juno:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to use data driven methods to produce the Probablility Density Function (PDF) by using the calibrations sources and position described in Section \ref{sec:juno:calib}. In the results presented in Figures \ref{fig:juno:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
+However, Eq.\ \ref{eq:juno:rec:mu_i} assume that the scintillation light yield is linear with energy and describe poorly the contribution of indirect light, shadow effect due to the supporting structure and the total reflection effects. The solution is to use data driven methods to produce the Probability Density Function (PDF) by using the calibrations sources and position described in Section \ref{sec:juno:calib}. In the results presented in Figures \ref{fig:juno:rec:time_charge_results}, the PDF was produced using MC simulation and 29 specific calibrations position \cite{li_event_2021} along the Z-axis of the detector.
 \begin{figure}[ht]
   \centering
   \begin{subfigure}[b]{0.48\linewidth}
@@ -720,11 +722,11 @@ Data driven methods prove to be performant in the energy and vertex reconstructi
 \subsection{Machine learning for reconstruction}
 \label{sec:juno:ml}
 
-The power of ML is the ability to model complex response to a specific problem. In JUNO the reconstruction problematic can be expressed as follows: knowing that each PMT, large or small, detected a given number of PE $Q$ at a given time $t$ and their position is $x,y,z$, where did the energy was deposited ? And how much energy was it ? The NN will model a function that naively goes:
+The power of ML is the ability to model complex response to a specific problem. In JUNO the reconstruction problematic can be expressed as follows: knowing that each PMT, large or small, detected a given number of PE $Q$ at a given time $t$ and their position is $x,y,z$, where was the energy deposited? And how much energy was it? The NN will model a function that naively goes:
 \begin{equation}
     \mathbb{R}^{5 \times N_{pmt}} \longmapsto \mathbb{R}^4
 \end{equation}
-It is worth pointing that while this is already a lot in information, this is not the rawest representation of the experiment. We could indeed replace the charge and time by the waveform in the time window of the event, but that would lead to an input representation size that would exceed our computational limits. Also, due to those computational limits, most of the ML algorithm reduce this input phase space either by structurally encoding the information (pictures, graph), by aggregating it (mean, variance, ...) or by exploiting invariance and equivariance of the experiment (rotational invariance due to the sphericity, ...).
+It is worth pointing that while this is already a lot in information, this is not the rawest representation of the experiment. We could indeed replace the charge and time by the waveform in the time window of the event, but that would lead to an input representation size that would exceed our computational limits. Also, due to those computational limits, most of the ML algorithm reduce this input phase space either by structurally encoding the information (pictures, graph), by aggregating it (mean, variance, $\ldots$) or by exploiting invariance and equivariance of the experiment (rotational invariance due to the sphericity, $\ldots$).
 
 For machine learning to converge to performant algorithm, a large dataset exploring all the phase space of interest is needed. For the following studies, data from the Monte Carlo simulation presented in Section \ref{sec:juno:software} are used for training. When the detector will be finished, data from calibrations sources will additionally be used.
 
@@ -748,7 +750,7 @@ For vertex and energy reconstruction a BDT was developed using the aggregated in
 \end{table}
 Its reconstruction performances are presented in Figure \ref{fig:juno:rec:ml_res}.
 
-A second and more advanced BDT, subsequently named BDTE, that only reconstruct energy use a different set of features \cite{gavrikov_energy_2022}. They are presented in table \ref{tab:juno:rec:bdte}
+A second and more advanced BDT, subsequently named BDTE, that only reconstruct energy use a different set of features \cite{gavrikov_energy_2022}. They are presented in Table \ref{tab:juno:rec:bdte}
 
 \begin{table}
   \centering
@@ -783,7 +785,7 @@ The CNN are using 2D projection of the detector representing it as an image with
 
 Using 2D have the upside of encoding a large part of the information structurally but loose the rotational invariance of the detector. It also gives undefined information to the neural network (what is a pixel without PMT? What should be its charge and time?), cause deformation in the representation of the detector (sides of projection) and lose topological information.
 
-One of the way to present structurally the sphericity of JUNO to a NN is to use a graph: A collection of objects $V$ called nodes and relations $E$ called edges, each relation associated to a couple ${v_1, v_2}$ forming the graph $G(E, V)$. Nodes and edges can hold informations or features. In \cite{qian_vertex_2021} the nodes, are geometrical region of the detector as defined by the HealPix \cite{gorski_healpix_2005-1}. The features of the nodes are aggregated informations from the PMTs it contains. The edges contains geographic informations of the nodes relative positions.
+One of the way to present structurally the sphericity of JUNO to a NN is to use a graph: A collection of objects $V$ called nodes and relations $E$ called edges, each relation associated to a couple ${v_1, v_2}$ forming the graph $G(E, V)$. Nodes and edges can hold information or features. In \cite{qian_vertex_2021} the nodes, are geometrical region of the detector as defined by the HealPix \cite{gorski_healpix_2005-1}. The features of the nodes are aggregated information from the PMTs it contains. The edges contain geographic information of the nodes relative positions.
 
 This data representation has the advantages to keep the topology of the detector intact. It also allows the use of rotational invariant algorithms for the NN, thus taking advantage of the symmetries of the detector.
 
@@ -811,8 +813,8 @@ Overall ML algorithms show similar performances as classical algorithms in terms
 
 That these first DL algorithms tried at JUNO to reconstruct IBDs do not outperform the classical method can be explained. They constitute a first exploration of these methods potential, as do the original GNN we describe in Chapter \ref{sec:jgnn}. Indeed, the likelihood method is also based on the full list of the charges ($Q$) and times ($t$) all PMTs, and the PDF's design accounts for an advanced knowledge of the detector (with a lot of human expertise). The fact that the methods presented in this chapter can learn enough from just the $Q,t$ list, to reach similar performance, is already an interesting result. But this is not decisive yet, in my opinion.
 
-Actually, is there hope that one day DL methods reach better results at JUNO than classical's? This is not a trivial question. A possibility would be to let them start from an even rawer level (involving a number of variables which would make a likelihood intractable). This would mean, instead of $Q$ and $t$, the full waveform in each PMT. With such a quantity of input information to analyse to identify patterns, even DL methods can be limited. The choice of architecture is then important, to guide the algorithm towards pertinent features. We doubt whether CNN's would be the best choice here. We bet that GNN's could be better tools, with more flexibility to hierarchise information (the choice of which PMTs to link already helps here, as well as the possible usage of higher order quantities). The first GNN developed in JUNO (described above, \cite{qian_vertex_2021}) does not do that. It's still only based on $(Q,t)$ couples and link only neighbour PMTs in its first layer. It serves essentially as a way to avoid the problems encountered by CNNs due to the planar projection of a spherical image.
+Actually, is there hope that one day DL methods reach better results at JUNO than classical's? This is not a trivial question. A possibility would be to let them start from an even rawer level (involving a number of variables which would make a likelihood intractable). This would mean, instead of $Q$ and $t$, the full waveform in each PMT. With such a quantity of input information to analyze to identify patterns, even DL methods can be limited. The choice of architecture is then important, to guide the algorithm towards pertinent features. We doubt whether CNN's would be the best choice here. We bet that GNN's could be better tools, with more flexibility to hierarchize information (the choice of which PMTs to link already helps here, as well as the possible usage of higher order quantities). The first GNN developed in JUNO (described above, \cite{qian_vertex_2021}) does not do that. It's still only based on $(Q,t)$ couples and link only neighbor PMTs in its first layer. It serves essentially as a way to avoid the problems encountered by CNNs due to the planar projection of a spherical image.
 
-In Chapter \ref{sec:jgnn}, we tried an original GNN architecture. The goal was not yet to include a rawer information, but to see if this architecture would perform as well as the one described above when using $Q$'s and $t$'s as the rawest information. If so, then there is hope that when rawer information will be included, this original architecture will able perform even better.
+In Chapter \ref{sec:jgnn}, we tried an original GNN architecture. The goal was not yet to include a rawer information, but to see if this architecture would perform as well as the one described above when using $Q$'s and $t$'s as the rawest information. If so, then there is hope that when rawer information will be included, this original architecture will be able to perform even better.
 
 \end{document}

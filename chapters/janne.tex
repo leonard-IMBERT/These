@@ -20,21 +20,21 @@
 % \textit{We conclude this chapter by explaining that this first ANN prototype does not manage to generate perturbations that affect IBD events more than control sample events.  However, this exploration taught us several things, among which : it is very difficult to design an ANN able to introduce perturbations at the individual PMT level; some physics-informed guidance will be necessary to obtain an operational tool in the future.}
 %
 % \rule{\textwidth}{0.4pt}
-As explained in previous chapters, JUNO is a precision experiment where a very precise understanding of the reconstruction effects is crucial. JUNO is a high-precision experiment, and any discrepancies in the understanding of reconstruction effects can significantly impact the neutrino mass ordering (NMO) determination. Particular attention must be paid to potential biases arising from energy scale mis-calibration, charge non-linearity, and differences between real and simulated detector responses, which could skew the oscillation results.
+As explained in previous chapters, JUNO is a precision experiment where a very precise understanding of the reconstruction effects is crucial. JUNO is a high-precision experiment, and any discrepancies in the understanding of reconstruction effects can significantly impact the neutrino mass ordering (NMO) determination. Particular attention must be paid to potential biases arising from energy scale miscalibration, charge non-linearity, and differences between real and simulated detector responses, which could skew the oscillation results.
 
-While the liquid scintillator technology is well known, this is the first time it is deployed to such scale, and for such precision. This novelty bring makes this task difficult : a lot of effects should ideally be understood better that in previous experiments.
-We already know that a bad knowledge of the energy scale can have consequences as serious as excluding the wrong NMO. It must be known at the 1\% level to reach the desired sensitivity. The present chapter is motivated by a specific question : even very small differences between reconstruction effects in real data and in the models used in oscillation fits could alter this sensitivity or bias the results. Reconstruction algorithms developed in JUNO, in particular those based on ML, try to use the information present in the detector as exhaustively as possible. This might apply even more to future algorithms. There is here a risk that some of the used information is not similar is real data and in the detector's model, leading to the problem above mentioned. We worked on two ways to address this problem.
+While the liquid scintillator technology is well known, this is the first time it is deployed to such scale, and for such precision. This novelty bring makes this task difficult: a lot of effects should ideally be understood better that in previous experiments.
+We already know that a bad knowledge of the energy scale can have consequences as serious as excluding the wrong NMO. It must be known at the 1\% level to reach the desired sensitivity. The present chapter is motivated by a specific question: even very small differences between reconstruction effects in real data and in the models used in oscillation fits could alter this sensitivity or bias the results. Reconstruction algorithms developed in JUNO, in particular those based on ML, try to use the information present in the detector as exhaustively as possible. This might apply even more to future algorithms. There is here a risk that some used information is not similar is real data and in the detector's model, leading to the problem mentioned above. We worked on two ways to address this concern.
 
-We think the simpler way to study this reliability issue is to compare algorithm with each other. Differences between various reconstructed spectra of the same sample provide an envelope to evaluate the scale of a potential problem. Comparisons on the event per event basis allows to show that 2 algorithms do not use the same information, and is a first step to characterize this difference.
-We already shown a large variety of reconstruction algorithms, OMILREC for LPMT reconstruction in Section \ref{sec:juno:reco}, numerous machine learning algorithms in Section \ref{sec:juno:ml} and our own work in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}. Those algorithms were compared to each others based on their performance as in \cite{qian_vertex_2021} but we are the first that looked into the correlation between the reconstruction. The combinations of algorithms shown in Section \ref{sec:jcnn:combination} show that some information elude the algorithms. To efficiently compare algorithms between each other, they need to be publicly available to the collaboration to studies their differences event by event.
-Nothing of that kind was possible in JUNO up to now. I imported in JUNO's official software some tools necessary to ML algorithms, and I implemented a first algorithms :  a for energy reconstruction, named BDTE which was developed by Gavrikov et al. \cite{gavrikov_energy_2022}, another JUNO's research team. We paved the way for this movement to continue, so that all ML algorithms be available to any JUNO analyst.The details of this implementation and its combination with OMILREC are presented in Section \ref{sec:janne:BDTE}.
+We think the simpler way to study this reliability issue is to compare algorithm with each other. Differences between various reconstructed spectra of the same sample provide an envelope to evaluate the scale of a potential problem. Comparisons on the event per event basis allows showing that 2 algorithms do not use the same information, and is a first step to characterize this difference.
+We already showed a large variety of reconstruction algorithms, OMILREC for LPMT reconstruction in Section \ref{sec:juno:reco}, numerous machine learning algorithms in Section \ref{sec:juno:ml} and our own work in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}. Those algorithms were compared to each other based on their performance as in \cite{qian_vertex_2021} but we are the first that looked into the correlation between the reconstruction. The combinations of algorithms shown in Section \ref{sec:jcnn:combination} show that some information elude the algorithms. To efficiently compare algorithms between each other, they need to be publicly available to the collaboration to studies their differences, event by event.
+Nothing of that kind was possible in JUNO up to now. I imported in JUNO's official software some tools necessary to ML algorithms, and I implemented a first algorithm:  a for energy reconstruction, named BDTE which was developed by Gavrikov et al.\ \cite{gavrikov_energy_2022}, another JUNO's research team. We paved the way for this movement to continue, so that all ML algorithms be available to any JUNO analyst. The details of this implementation and its combination with OMILREC are presented in Section \ref{sec:janne:BDTE}.
 
-The other way we have explored to study reliability is to challenge reconstruction algorithms with physically plausible perturbations in the PMT charge and time information. More specifically: these perturbations embody differences between the real detector and its model,  and we want to identify perturbation patterns which  would be too subtle to be detected via data/MC comparisons in calibration data or in control samples from physics data, but which would still be able to alter the oscillation analysis result.  We could try to design such perturbations "by hand", based on our knowledge of JUNO. However, with as much as 17600 LPMT, finding subtle perturbations that affecting undefined combinations of PMT would be an endless process.
+The other way we have explored to study reliability is to challenge reconstruction algorithms with physically plausible perturbations in the PMT charge and time information. More specifically: these perturbations embody differences between the real detector and its model,  and we want to identify perturbation patterns which  would be too subtle to be detected via data/MC comparisons in calibration data or in control samples from physics data, but which would still be able to alter the oscillation analysis result.  We could try to design such perturbations ``by hand'', based on our knowledge of JUNO. However, with as much as 17600 LPMT, finding subtle perturbations that affecting undefined combinations of PMT would be an endless process.
 
 We propose leveraging machine learning by developing an Adversarial Neural Network (ANN) to introduce perturbations reflecting discrepancies between the real detector and its model. However, one challenge with ANN-based approaches is ensuring that the generated perturbations remain physically plausible and are not overly sensitive to random noise or edge effects in the detector.
 
 In Section \ref{sec:janne:method}, I describe the method behind the algorithm. In Section \ref{sec:janne:arch} I detail the architecture of our algorithm.
-The training and the results of our method are presented in Section \ref{sec:janne:arch:training} . Finally, in section \ref{sec:janne:conclusion}, I conclude and discuss the prospects and possible improvements to bring to this work.
+The training and the results of our method are presented in Section \ref{sec:janne:arch:training}. Finally, in Section \ref{sec:janne:conclusion}, I conclude and discuss the prospects and possible improvements to bring to this work.
 
 
 \section{First implementation of ML methods in JUNO's software}
@@ -45,8 +45,8 @@ To study the reliability of reconstruction algorithms it's necessary to be able 
 This framework is modular, with each module being a C++ class bound in Python. The execution of successive algorithms is orchestrated via Python scripts.
 
 
-We could have implemented the algorithms presented in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}, but since these are themselves not trivial, we chose to start with a simpler ML algorithm that presents similar energy reconstruction performances as OMILREC: a Boosted Decision Tree (BDT) for energy reconstruction developed by Gavrikov Arsenii et al. \cite{gavrikov_energy_2022}.
-This BDT, named BDTE, is based on an aggregated features approach where instead of providing a ML algorithm with low level information, namely the full list of $(Q,t)$ in LPMTs, a set of higher-level variables is designed based on physicist's common knowledge and then fed to the BDT. The list of the aggregated features used by the BDT is presented in Table \ref{tab:janne:bdte:features}. These higher-order variables are extracted from the charge $Q$ and hit time $t$ distribution. It also depends on two straightforward interaction vertex estimators.
+We could have implemented the algorithms presented in Chapters \ref{sec:jcnn} and \ref{sec:jgnn}, but since these are themselves not trivial, we chose to start with a simpler ML algorithm that presents similar energy reconstruction performances as OMILREC: a Boosted Decision Tree (BDT) for energy reconstruction developed by Gavrikov Arsenii et al.\ \cite{gavrikov_energy_2022}.
+This BDT, named BDTE, is based on an aggregated features approach where instead of providing an ML algorithm with low level information, namely the full list of $(Q,t)$ in LPMTs, a set of higher-level variables is designed based on physicist's common knowledge and then fed to the BDT. The list of the aggregated features used by the BDT is presented in Table \ref{tab:janne:bdte:features}. These higher-order variables are extracted from the charge $Q$ and hit time $t$ distribution. It also depends on two straightforward interaction vertex estimators.
 
 
 The first one is the charge barycenter
@@ -54,14 +54,14 @@ The first one is the charge barycenter
   \label{eq:janne:bdte:cc}
   \vec{r}_{cc} = \frac{\sum_i \vec{r}_{PMT,i} Q_i}{\sum_i Q_i}
 \end{equation}
-where $i$ index the fired PMT, $\vec{r}_{PMT, i}$ is the position vector of the $i$th PMT and $Q_i$ is the charge it collected.
+where $i$ index the fired PMT, $\vec{r}_{PMT, i}$ is the position vector of the $i$-th PMT and $Q_i$ is the charge it collected.
 
 The second estimator is the hit time barycenter
 \begin{equation}
   \label{eq:janne:bdt:cht}
   \vec{r}_{ht} = \frac{1}{\sum_i \frac{1}{t_i + c}} \sum_i \frac{\vec{r}_{PMT, i}}{t_i + c}
 \end{equation}
-where $t_i$ is the time of collection of the $i$th PMT and $c = 50$ ns a constant to prevent divergence when $t_i$ is 0.
+where $t_i$ is the time of collection of the $i$-th PMT and $c = 50$ ns a constant to prevent divergence when $t_i$ is 0.
 
 \begin{table}[ht]
   \centering
@@ -87,15 +87,15 @@ where $t_i$ is the time of collection of the $i$th PMT and $c = 50$ ns a constan
     $\text{ht}_{30\%-25\%}$ & Difference between the 30\% and 25\% percentiles of the hit time distribution \\
     \hline
   \end{tabular}
-  \caption{Summary of the aggregated features used by the BDT to reconstruct the IBD energy. The charge barycenter and hit time barycenter vertex estimators are detailed in Eq. \ref{eq:janne:bdte:cc} and \ref{eq:janne:bdt:cht} respectively}
+  \caption{Summary of the aggregated features used by the BDT to reconstruct the IBD energy. The charge barycenter and hit time barycenter vertex estimators are detailed in Eq. \ref{eq:janne:bdte:cc} and \ref{eq:janne:bdt:cht} respectively.}
   \label{tab:janne:bdte:features}
 \end{table}
 
-The performance of this BDT, as published by Gavrikov Arsenii et. al, is reported in Figure \ref{fig:janne:bdte:orignal_perf}. This BDT is developed in Python using the XGBoost \cite{chen_xgboost_2016} library and originally consisted of a collection of Python scripts for the training and the evaluation.
+The performance of this BDT, as published by Gavrikov Arsenii et al., is reported in Figure \ref{fig:janne:bdte:orignal_perf}. This BDT is developed in Python using the XGBoost \cite{chen_xgboost_2016} library and originally consisted of a collection of Python scripts for the training and the evaluation.
 
-As stated before, JUNO software is composed of C++ modules orchestrated through Python scripts. The technical challenge was to extract the data from the internal representation of the event in JUNO software, the Event Data Model (EDM), into a comprehensible format for Python. This task, which was previously done via data pre-processing by Python scripts, had to be internalized within the software. The computation of the aggregated features was migrated from the Python scripts into C++ modules. The final step was to fetch the reconstruction results of the algorithm into the C++ framework to save the results in the EDM. Some of the Python libraries were missing, notably XGBoost. A request to the collaboration was issued for the packaging of these libraries with the common software. As a workaround, the documentation of the algorithm contains the procedure to locally install the missing libraries.
+As stated before, JUNO software is composed of C++ modules orchestrated through Python scripts. The technical challenge was to extract the data from the internal representation of the event in JUNO software, the Event Data Model (EDM), into a comprehensible format for Python. This task, which was previously done via data pre-processing by Python scripts, had to be internalized within the software. The computation of the aggregated features was migrated from the Python scripts into C++ modules. The final step was to fetch the reconstruction results of the algorithm into the C++ framework to save the results in the EDM. Some Python libraries were missing, notably XGBoost. A request to the collaboration was issued for the packaging of these libraries with the common software. As a workaround, the documentation of the algorithm contains the procedure to locally install the missing libraries.
 
-We validated the consistency of the aggregated features between the original Python implementation and the JUNO software by comparing 1,000 events with the help of Arsenii. For the majority of the features, the relative difference between his and ours was either 0 or of the order of $10^{-15}$, with the exception of three features: $R_{cc}$, $R_{ht}$, and $z_{cc}$. For these three features, the relative difference is about $10^{-6}$, which, while small, is still surprisingly high for numerical computation. The distributions of the relative differences for these features are presented in Figure \ref{fig:janne:feat_diff}.
+We validated the consistency of the aggregated features between the original Python implementation and the JUNO software by comparing 1,000 events with the help of Arsenii. For the majority of the features, the relative difference between his and ours was either 0 or of the order of $10^{-15}$, except features: $R_{cc}$, $R_{ht}$, and $z_{cc}$. For these three features, the relative difference is about $10^{-6}$, which, while small, is still surprisingly high for numerical computation. The distributions of the relative differences for these features are presented in Figure \ref{fig:janne:feat_diff}.
 
 We investigated the source of these discrepancies. The difference in computation environments -- Python using Numpy \cite{harris_array_2020} and C++ using the standard library in our case -- is most likely the cause. Since the discrepancies arise from the computation of the barycenter in Eq. \ref{eq:janne:bdte:cc} and \ref{eq:janne:bdt:cht}, they may result from differences in compiler optimization during the weighted sum calculation. We consider that these differences are still small enough that the performance of the BDT is unaffected.
 
@@ -113,11 +113,11 @@ We investigated the source of these discrepancies. The difference in computation
   \begin{subfigure}[t]{0.32\linewidth}
     \includegraphics[width=\linewidth]{images/janne/bdte/z_cc_diff.png}
   \end{subfigure}
-  \caption{Relative difference between the features computed by Gavrikov et. al (superscripted Paper) and our implementation (superscripted Implementation)}
+  \caption{Relative difference between the features computed by Gavrikov et al.\ (superscripted Paper) and our implementation (superscripted Implementation).}
   \label{fig:janne:feat_diff}
 \end{figure}
 
-The performance of our implementation of BDTE compared to the results presented in \cite{gavrikov_energy_2022} are presented in figure \ref{fig:janne:bdte:implementation_perf}.
+The performance of our implementation of BDTE compared to the results presented in \cite{gavrikov_energy_2022} are presented in Figure \ref{fig:janne:bdte:implementation_perf}.
 \begin{itemize}
   \item At 1 MeV, the relative resolution is reported by the publication is just below 3\%/MeV. Our implementation show a relative resolution of 2.8\%. The relative bias is reported at -0.1\%, same as for our implementation.
   \item At 4 MeV, the reported relative resolution is 1.5\%, our implementation show 1.45\%. The relative bias is about 0.05\% in both results.
@@ -142,7 +142,7 @@ The performance are considered compatibles.
   \label{fig:janne:bdte:perf}
 \end{figure}
 
-The reconstruction using BDTE was implemented in JUNO's common software but Gavrikov et al. also detail the training and hyper-optimization. JUNO Monte Carlo is likely to evolve during the construction phase and will be further adjusted using calibration. The implementation of those procedures, the training and optimization, will be required as BDTE re-training and re-optimisation will be required with each JUNO software update.
+The reconstruction using BDTE was implemented in JUNO's common software but Gavrikov et al.\ also detail the training and hyper-optimization. JUNO Monte Carlo is likely to evolve during the construction phase and will be further adjusted using calibration. The implementation of those procedures, the training and optimization, will be required as BDTE re-training and re-optimization will be required with each JUNO software update.
 
 Figure \ref{fig:janne:bdte:implementation_perf} shows that the resolution of BDTE is very close to OMILREC. We measured the correlation between their reconstructions, focusing on the residuals with respect to the common true deposited energy:
 \begin{equation}
@@ -150,7 +150,7 @@ Figure \ref{fig:janne:bdte:implementation_perf} shows that the resolution of BDT
 \mathrm{Corr}(E_{BDTE} - E_{dep}, E_{OMILREC} - E_{dep})
 \end{equation}
 
-If the correlation is small enough, it indicates that these two reconstruction algorithms do not use the same information. As a corollary, it indicates that these algorithms can in principle be improved. The correlation between errors for different energy and event radius in the detector is presented in Figure \ref{fig:janne:bdte:corr}. We see that for the vast majority of the $(R^3, E)$ phase space, the correlation is > 0.995, down to $\sim$ 0.98 in the $R \approx 9$ m and $R > 17$ m regions. Such high correlations indicates that these algorithms are very close to using the same information. No difference can be found here, that could be used to improve them. Maybe the situation will be different when other ML algorithms are implemented in JUNO's software and the same exercise carried out. The fact that  BDTE and OMILREC are so correlated, and their performance so similar, is interesting : it suggests that using the full $(Q, t)$ list as inputs does not allow major improvements. This is in line with  some of the conclusions we expressed in previous chapters : to improve  JUNO's reconstruction by starting from low level variables might requires to use rawer variables than $(Q,t)$, like the full waveforms.
+If the correlation is small enough, it indicates that these two reconstruction algorithms do not use the same information. As a corollary, it indicates that these algorithms can in principle be improved. The correlation between errors for different energy and event radius in the detector is presented in Figure \ref{fig:janne:bdte:corr}. We see that for the vast majority of the $(R^3, E)$ phase space, the correlation is > 0.995, down to $\sim$ 0.98 in the $R \approx 9$ m and $R > 17$ m regions. Such high correlations indicate that these algorithms are very close to using the same information. No difference can be found here, that could be used to improve them. Maybe the situation will be different when other ML algorithms are implemented in JUNO's software and the same exercise carried out. The fact that  BDTE and OMILREC are so correlated, and their performance so similar, is interesting: it suggests that using the full $(Q, t)$ list as inputs does not allow major improvements. This is in line with some conclusions we expressed in previous chapters: to improve  JUNO's reconstruction by starting from low level variables might require to use rawer variables than $(Q,t)$, like the full waveforms.
 
 \begin{figure}
   \centering
@@ -173,12 +173,12 @@ If the correlation is small enough, it indicates that these two reconstruction a
 As introduced at the beginning of the chapter, JUNO needs a very good understanding of the biases and effects affecting its reconstruction, and small discrepancies between the real detector and its model could be an issue, in particular when ML algorithms are used. Calibration data will be used to study reconstruction effects and to tune the simulation so that the detector model matches as well as possible the real one. JUNO relies on multiple sources that can be deployed at various positions in the detector. The calibration strategy is already discussed in Section \ref{sec:juno:calib} and shows calibration sources of gammas, neutrons, and positrons (Table \ref{tab:juno:calib_source}), with the catch that the positrons will annihilate inside the encapsulation and only the two 511 keV gammas will deposit energy in the LS.
 
 None of the calibration sources considered are positron events. While electrons and positron events should be pretty similar in their interaction with the electronic cloud of the LS atoms,
-electron events are missing the two annihilation gammas. The topology of the event is therefore not the same: electron events display a single interaction site, up to a few cm long, where a few MeV is deposited; positron events display a similar main site, accompanied with several other low energy (< 300 keV) sites, typically spread over more than 20 cm, due to the Compton interactions of the annihilation gammas. Other differences appear due to the fraction of the positrons that will  form a positronium : it causes a delay of a few nanoseconds between  energy deposition and the positronium annihilation, to be compared to the PMT  transit time spread between 3 and 6 ns, depending on the PMT type \cite{rodphai_20-inch_2021, liao_study_2017, li_characterization_2018}. Therefore, subtle effects might be present in positron events that the analysis of electron events samples cannot capture. Moreover, not all positions can be reached by calibration sources (effects affecting events close to the border of the detector can't be studied perfectly then), and calibration run are punctual in time, and therefore can't witness finely of time evolutions in the detector.
+electron events are missing the two annihilation gammas. The topology of the event is therefore not the same: electron events display a single interaction site, up to a few cm longs, where a few MeV is deposited; positron events display a similar main site, accompanied by several others low energy (< 300 keV) sites, typically spread over more than 20 cm, due to the Compton interactions of the annihilation gammas. Other differences appear due to the fraction of the positrons that will  form a positronium: it causes a delay of a few nanoseconds between  energy deposition and the positronium annihilation, to be compared to the PMT  transit time spread between 3 and 6 ns, depending on the PMT type \cite{rodphai_20-inch_2021, liao_study_2017, li_characterization_2018}. Therefore, subtle effects might be present in positron events that the analysis of electron events samples cannot capture. Moreover, not all positions can be reached by calibration sources (effects affecting events close to the border of the detector can't be studied perfectly then), and calibration run are punctual in time, and therefore can't witness finely of time evolutions in the detector.
 
-The two last issues presented above do not affect a natural source of calibration such as $^{12}B$ events. The $^{12}B$ is a cosmogenically produced isotope through the passage of muons inside the LS. The $^{12}B$ decays via $\beta^-$ emissions with a Q value of 13.5 MeV, with more than 98\% of the decay resulting in ground state $^{12}C$. This results into the e- energy spectrum shown on Fig. \ref{fig:juno:nl:boron}. The energy regime involved here is similar to that of reactor IBDs. The $^{12}B$ events will be cleanly identified by looking for delayed high-energy $\beta$ events after an energetic muon. The $^{12}B$ events will be uniformly distributed in the detector: moreover, $^{12}B$ events are produced continuously, and therefore can be used to follow finally time variations in the detector behavior. As with calibration sources, energy spectra obtained with measured and simulated $^{12}B$ events can be compared to control the accuracy of the detector model. This \textit{physics control sample} still presents the disadvantage to be an electron source.
+The two last issues presented above do not alter a natural source of calibration such as $^{12}B$ events. The $^{12}B$ is a cosmogenically produced isotope through the passage of muons inside the LS. The $^{12}B$ decays via $\beta^-$ emissions with a Q value of 13.5 MeV, with more than 98\% of the decay resulting in ground state $^{12}C$. This results into the e- energy spectrum shown on Fig. \ref{fig:juno:nl:boron}. The energy regime involved here is similar to that of reactor IBDs. The $^{12}B$ events will be cleanly identified by looking for delayed high-energy $\beta$ events after an energetic muon. The $^{12}B$ events will be uniformly distributed in the detector: moreover, $^{12}B$ events are produced continuously, and therefore can be used to follow finally time variations in the detector behavior. As with calibration sources, energy spectra obtained with measured and simulated $^{12}B$ events can be compared to control the accuracy of the detector model. This \textit{physics control sample} still presents the disadvantage to be an electron source.
 
 The limitations of the calibration and control samples mentioned above could hide subtle data/MC discrepancies that might be able to bias the results of the oscillation analysis. We fear this problem in particular when ML algorithms are used, due to their ability to use exhaustively the information present in the detector.
-But, while we have an idea of where the issues could come from, the manual production of event perturbations that go unseen when using these samples would be very time consuming. That's why we propose to use the power of ML for an automated generation of adequate perturbation scenarios. We choose to develop an Adversarial Neural Network (ANN) to produce those perturbations if they exist. A schematic of the concept is presented in Figure \ref{fig:janne:method:schema}. We try here to extend to a large scale detector the concept introduced in \cite{nachman_ai_2019}.
+But, while we have an idea of where the issues could come from, the manual production of event perturbations that go unseen when using these samples would be very time-consuming. That's why we propose to use the power of ML for an automated generation of adequate perturbation scenarios. We choose to develop an Adversarial Neural Network (ANN) to produce those perturbations if they exist. A schematic of the concept is presented in Figure \ref{fig:janne:method:schema}. We try here to extend to a large scale detector the concept introduced in \cite{nachman_ai_2019}.
 
 \begin{figure}[ht]
   \centering
@@ -196,7 +196,7 @@ For this study, we consider a ``physics'' dataset composed of 1M positron events
 
 We use a second ``control'' dataset of 1M electron events from J23, also uniformly distributed in the detector and over the same energy range. They mimic the energy deposition of $^{12}B$ decay and are used as the sample to compute the control observables.
 
-This work is a collaboration with an engineer from Subatech Gilles Grasseau. We, the JUNO's Subatech group, developed the idea and the global method design and the results interpretation. Me and Gilles developed the ANN architecture, and Gilles the FFNN architecture. Gilles was in charge of the Python implementation and I provided the MC samples and readers to read the ROOT data into Python.
+This work is a collaboration with an engineer from Subatech Gilles Grasseau. We, the JUNO's Subatech group, developed the idea and the global method design and the result interpretation. Gilles and I developed the ANN architecture, and Gilles the FFNN architecture. Gilles was in charge of the Python implementation and I provided the MC samples and readers to read the ROOT data into Python.
 
 
 
@@ -211,7 +211,7 @@ We can describe the goal of the ANN by using following loss function:
   \label{eq:janne:loss}
   \mathcal{L} = \mathcal{L}_{adv} + \mathcal{L}_{reg}
 \end{equation}
-where $\mathcal{L}_{adv}$ is the adversarial loss, which is minimal when the reconstruction is ``broken'', i.e. when the delta perturbations introduced on Fig \ref{fig:janne:method:schema} are at work. We thus need to define what is a \textit{wrong} reconstruction. We choose to define it through the correlation between the reconstructed and deposited energy
+where $\mathcal{L}_{adv}$ is the adversarial loss, which is minimal when the reconstruction is ``broken'', i.e.\ when the delta perturbations introduced on Fig \ref{fig:janne:method:schema} are at work. We thus need to define what is a \textit{wrong} reconstruction. We choose to define it through the correlation between the reconstructed and deposited energy
 \begin{equation}
   \label{eq:janne:ladv}
   \mathcal{L}_{adv} = |\mathrm{Corr}(E_{rec}, E_{dep})|
@@ -219,12 +219,12 @@ where $\mathcal{L}_{adv}$ is the adversarial loss, which is minimal when the rec
 where $E_{rec}$ and $E_{dep}$ are the reconstructed energy and the true deposited energy respectively.
 This loss is positive or null and is minimal when the reconstructed energy after perturbation is decorrelated with the true deposited energy. If this loss is below 1, there is a chance that the delta perturbations imposed on each PMT alter the result of the oscillation analysis. This loss is evaluated on the physics dataset.
 
-The term $\mathcal{L}_{reg}$ is the regularisation term, which is minimal when the control variables are correctly reconstructed
+The term $\mathcal{L}_{reg}$ is the regularization term, which is minimal when the control variables are correctly reconstructed
 \begin{equation}
   \mathcal{L}_{reg} = \sum_\lambda (O^{rec}_\lambda - O^{th}_\lambda)^2
 \end{equation}
 where $\lambda$ index the different control observables that will be considered in this study. It's minimal when the control observables after perturbation $O^{rec}_\lambda$ are coherent with their expected values $O^{th}_\lambda$.
-In this exploratory work, we choose as the control observable the difference between the reconstructed position and energy and the ground truth from the Monte Carlo simulation. When this loss is minimal, there is a chance that the perturbations will not be seen in data/MC  studies using this control sample, which is one of the goals of the algorithm.
+In this exploratory work, we pick as the control observable the difference between the reconstructed position and energy and the ground truth from the Monte Carlo simulation. When this loss is minimal, there is a chance that the perturbations will not be seen in data/MC  studies using this control sample, which is one of the goals of the algorithm.
 \begin{equation}
   \label{eq:janne:lreg}
   \mathcal{L}_{reg} = \sum_{\lambda \in \{x, y, z, E\}} (\lambda_{rec} - \lambda_{true})^2
@@ -237,13 +237,12 @@ To these two loss, we adjoin a penalty term $P$
 \end{equation}
 This penalty $P$ is here to prevent the ANN from producing event too different from the initial event. It will be further detailed in Section \ref{sec:janne:arch:ann}. This loss is evaluated on both datasets.
 
-We see that the final loss is an equilibrium between the adversarial and regularisation loss.
+We see that the final loss is an equilibrium between the adversarial and regularization loss.
 
 \subsection{Back-propagation problematic}
 \label{sec:janne:back_prop}
 
-We would like this method to be applicable to any kind of reconstruction algorithm but this is complicated considering standard training method through backward-propagation (method discussed in details in Section \ref{sec:ml:optim}) for reasons developed in this section. This force use to develop, in this exploratory work, a new NN for reconstruction. This NN is presented in section
-\ref{sec:janne:arch:reco}.
+We would like this method to be applicable to any kind of reconstruction algorithm, but this is complicated considering standard training method through backward-propagation (method discussed in details in Section \ref{sec:ml:optim}) for reasons developed in this section. This force use to develop, in this exploratory work, a new NN for reconstruction. This NN is presented in Section \ref{sec:janne:arch:reco}.
 
 For explanation, let's define the application of the reconstruction algorithm as $\mathcal{F}$ on an event $X$, resulting in the prediction $Y$, and the application of the ANN $\mathcal{G}$ on $X$ to give a perturbed event $X'$. We can parametrize the equation \ref{eq:janne:loss}
 \begin{align}
@@ -254,7 +253,7 @@ For explanation, let's define the application of the reconstruction algorithm as
 \end{equation}
 where $Y_t$ is the reconstruction target of $Y$.
 
-Now if we consider the learnable parameters $\bm{\theta}$ of the ANN on which we want to optimize $\mathcal{L}$, in the backward-propagation optimisation framework we need to compute
+Now if we consider the learnable parameters $\bm{\theta}$ of the ANN on which we want to optimize $\mathcal{L}$, in the backward-propagation optimization framework we need to compute
 \begin{equation}
   \frac{\partial \mathcal{L}(\mathcal{F}(\mathcal{G}(X)))}{\partial \bm{\theta}}
 \end{equation}
@@ -270,7 +269,7 @@ While this term comes naturally when using neural network algorithms, its comput
 
 The choice to use gradient descent, and therefore neural networks, also allowed us to keep all technical software development wrapped in the same language and framework, PyTorch \cite{ansel_pytorch_2024}.
 
-The backward-propagation introduce a second issue. At the beginning of the subsection we introduce $X' = \mathcal{G}(X)$, the event after perturbation. It's an input of the reconstruction $\mathcal{F}$, thus, let's say that the event, in its form $X$, is a list of tuples $(id, Q, t)$ which are the hit on the PMT $id$. If $\mathcal{F}$ require the information to be formatted in a specific way (graph, images, ...) via an algorithm $\tau(X)$, it means that
+The backward-propagation introduce a second issue. At the beginning of the subsection we introduce $X' = \mathcal{G}(X)$, the event after perturbation. It's an input of the reconstruction $\mathcal{F}$, thus, let's say that the event, in its form $X$, is a list of tuples $(id, Q, t)$ which are the hit on the PMT $id$. If $\mathcal{F}$ require the information to be formatted in a specific way (graph, images, $\ldots$) via an algorithm $\tau(X)$, it means that
 \begin{equation}
   \frac{\partial \mathcal{L}(\mathcal{F}(\tau(\mathcal{G}(X))))}{\partial \bm{\theta}} = \frac{\partial \mathcal{G}}{\partial \bm{\theta}} \cdot \frac{\partial \tau}{\partial \mathcal{G}} \cdot \frac{\partial \mathcal{F}}{\partial \tau} \cdot \frac{\partial \mathcal{L}}{\partial \mathcal{F}}
 \end{equation}
@@ -288,9 +287,9 @@ A more elegant solution would that $\mathcal{G}$ would also compute the transfor
 %  \item Un reseau "simpliste" a plus de chance de présenter des "défauts" que l'ANN pourrait exploiter
 %\end{itemize}
 
-As introduced just before, we need a NN algorithm for IBD reconstruction. We could have used the GNN presented in Chapter \ref{sec:jgnn} but we preferred a more simpler approach to not be constrained by the memory consumption of the reconstruction network. The memory issue do not really comes from the reconstruction network but from the ANN. The requirement to produce outputs that have the same structure and complexity as the reconstruction network makes it even more memory consuming than the reconstruction network, thus the choice for a simpler reconstruction network. This network is designated as FFNN for ``F''-Fully connected Neural Network where ``F'' is reminder to the ${\cal F}$ from previous section.
+As introduced just before, we need a NN algorithm for IBD reconstruction. We could have used the GNN presented in Chapter \ref{sec:jgnn}, but we preferred a simpler approach to not be constrained by the memory consumption of the reconstruction network. The memory issue does not really comes from the reconstruction network but from the ANN. The requirement to produce outputs that have the same structure and complexity as the reconstruction network makes it even more memory consuming than the reconstruction network, thus the choice for a simpler reconstruction network. This network is designated as FFNN for ``F''-Fully connected Neural Network where ``F'' is reminder to the ${\cal F}$ from previous section.
 
-This network takes as input a vector containing the results of the aggregation of charge and time on pixels, forming a vectorized image. We consider JUNO to be composed of 3072 pixels defined by the Healpix \cite{gorski_healpix_2005} pixelization. On each of these pixels, we sum the charges and keep the first time of hit, resulting in 3072 $(Q,t)$ tuples. To these tuples, we adjoin the position of the center of these pixels, resulting in 3072 $(Q,t,x,y,z)$ tuples. The data is finally represented as a $3072 \times 5 = 15360$ vector. In the case where the charge in a pixel is 0, the time is set to 2048 ns, which is way after the closure of the trigger window.
+This network takes as input a vector containing the results of the aggregation of charge and time on pixels, forming a vectorized image. We consider JUNO to be composed of 3072 pixels defined by the HealPix \cite{gorski_healpix_2005} pixelization. On each of these pixels, we sum the charges and keep the first time of hit, resulting in 3072 $(Q,t)$ tuples. To these tuples, we adjoin the position of the center of these pixels, resulting in 3072 $(Q,t,x,y,z)$ tuples. The data is finally represented as a $3072 \times 5 = 15360$ vector. In the case where the charge in a pixel is 0, the time is set to 2048 ns, which is way after the closure of the trigger window.
 
 The charge is expressed in $N_{pe}$ and the time of hit in nanoseconds. The time is negative, meaning that 0 ns the first hit time and -2048 ns is the latest hit time.
 
@@ -316,7 +315,7 @@ The optimizer used for its training is the Stochastic Gradient Descent with mome
 \begin{equation}
   \bm{\theta}_{t+1} = \bm{\theta}_t - \Lambda \left(\sum_{i=0} \frac{\partial \mathcal{L}}{\partial \bm{\theta}_{t - i}} \cdot 0.9^{i} \right)
 \end{equation}
-where $\bm{\theta}_t$ is vector of learnable parameters at step $t$. $\Lambda$ is the learning rate set at  $10^{-3}$. The difference with the classical SGD is the gradient term with $i > 1$. We save the gradient computed in the previous step and use them as momentum with a decaying weight. The factor 0.9 is an hyperparameter that has been selected for the training.
+where $\bm{\theta}_t$ is vector of learnable parameters at step $t$. $\Lambda$ is the learning rate set at  $10^{-3}$. The difference with the classical SGD is the gradient term with $i > 1$. We save the gradient computed in the previous step and use them as momentum with a decaying weight. The factor 0.9 is a hyperparameter that has been selected for the training.
 
 Additionally, to prevent over-fitting, we introduce a weight decay. Each step, we reduce the amplitude of the parameters $\bm{\theta}$ by $10^{-3}$:
 \begin{equation}
@@ -325,9 +324,9 @@ Additionally, to prevent over-fitting, we introduce a weight decay. Each step, w
 
 \subsubsection{Performances}
 
-The FFNN is trained independently from the ANN. The dataset is comprised of 1M positrons events uniformly distributed in the detector and in energy over $E_{dep} \in [1, 10]$ MeV. The training dataset account for 990'000 events with 10'000 events reserved for validation. The data are normalized, mean shifted to 0 and standard deviation scaled to 1, before being processed by the network.
+The FFNN is trained independently of the ANN. The dataset is composed of 1M positrons events uniformly distributed in the detector and in energy over $E_{dep} \in [1, 10]$ MeV. The training dataset account for 990'000 events with 10'000 events reserved for validation. The data are normalized, mean shifted to 0 and standard deviation scaled to 1, before being processed by the network.
 
-Each epochs goes trough the entire training datasets, with a batch size of 64. The training last for 25 epochs. The performance the FFNN are presented in Figures \ref{fig:janne:ffnn:ESB} and \ref{fig:janne:ffnn:SB}. We remind that goal of this FFNN is not to have competitive performances against classical algorithms like OMILREC but more to have a simple, NN reconstruction algorithm to run the ANN against.
+Each epoch go through the entire training datasets, with a batch size of 64. The training last for 25 epochs. The performance the FFNN are presented in Figures \ref{fig:janne:ffnn:ESB} and \ref{fig:janne:ffnn:SB}. We remind that goal of this FFNN is not to have competitive performances against classical algorithms like OMILREC but more to have a simple, NN reconstruction algorithm to run the ANN against.
 
 \begin{figure}[ht]
   \centering
@@ -338,7 +337,7 @@ Each epochs goes trough the entire training datasets, with a batch size of 64. T
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/janne/ffnn/ESBR.png}
   \end{subfigure}
-  \caption{Energy resolution of the FFNN with respect to the energy (\textbf{On the left}) and with respect to the radius (\textbf{On the right})}
+  \caption{Energy resolution of the FFNN with respect to the energy (\textbf{On the left}) and with respect to the radius (\textbf{On the right}).}
   \label{fig:janne:ffnn:ESB}
 \end{figure}
 
@@ -351,7 +350,7 @@ Each epochs goes trough the entire training datasets, with a batch size of 64. T
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/janne/ffnn/SBR.png}
   \end{subfigure}
-  \caption{Radial resolution of the FFNN with respect to the energy (\textbf{On the left}) and with respect to the radius (\textbf{On the right})}
+  \caption{Radial resolution of the FFNN with respect to the energy (\textbf{On the left}) and with respect to the radius (\textbf{On the right}).}
   \label{fig:janne:ffnn:SB}
 \end{figure}
 
@@ -363,9 +362,9 @@ Each epochs goes trough the entire training datasets, with a batch size of 64. T
 
 The ANN aims to introduce perturbations in the event data in such a way that these perturbations are not detectable in the control dataset while still degrading the energy reconstruction of the IBD dataset. For this purpose, and for the reasons detailed in Section \ref{sec:janne:back_prop}, the ANN operates on the inputs of the reconstruction network presented above, namely the FFNN. During the training, the parameters of the FFNN are \textit{frozen,} meaning they will not be updated during the ANN training. If they were free to be optimized, they would adapt to the perturbations of the ANN, which would go against the objective of this work.
 
-The FFNN takes as input a vector of $5 \times 3072$values, representing the $(x,y,z,Q,t)$ of 3072 Healpix pixels (pixelisation illustrated in Figure \ref{fig:jgnn:healpix}). Those values come from the aggregation of the PMTs belonging to those pixels.
+The FFNN takes as input a vector of $5 \times 3072$ values, representing the $(x,y,z,Q,t)$ of 3072 HealPix pixels (pixelization illustrated in Figure \ref{fig:jgnn:healpix}). Those values come from the aggregation of the PMTs belonging to those pixels.
 
-It seems unreasonable that the ANN would modify the Healpix pixel positions, as they are derived from a mathematical construction. It could, however, perturb which PMTs are assigned to specific pixels, introducing localization errors, but the position of the PMTs is carefully monitored during JUNO's construction. Such aggregation errors would likely arise from PMTs located at the edges of the pixels, yet this scenario seems unlikely. Moreover, due to the constraints mentioned in Section \ref{sec:janne:back_prop}, the ANN is required to work with the same format that the FFNN uses as input.
+It seems unreasonable that the ANN would modify the HealPix pixel positions, as they are derived from a mathematical construction. It could, however, perturb which PMTs are assigned to specific pixels, introducing localization errors, but the position of the PMTs is carefully monitored during JUNO's construction. Such aggregation errors would likely arise from PMTs located at the edges of the pixels, yet this scenario seems unlikely. Moreover, due to the constraints mentioned in Section \ref{sec:janne:back_prop}, the ANN is required to work with the same format that the FFNN uses as input.
 
 
 At the start of the project, we attempted to have it operate on both time and charge information simultaneously, but it struggled to converge. After discussions with colleagues in the collaboration, we decided that the ANN would only introduce perturbations in the charge information, as most of the energy information comes from the charge.
@@ -378,7 +377,7 @@ We decided on a Fully Connected Deep NN (DNN) ``bottleneck'' architecture for th
 \begin{figure}
   \centering
   \includegraphics[height=6cm]{images/janne/ANN_illustration.png}
-  \caption{Illustration of the ``bottleneck'' architecture of the ANN. Each block represent a fully connected layer with, on the left, the input layer and on the right the output layer. We see a first reduction of the number of neurons per layer, going from 4096 to 256, followed by an augmentation back to 4096 neurons, thus the ``bottleneck''}
+  \caption{Illustration of the ``bottleneck'' architecture of the ANN. Each block represent a fully connected layer with, on the left, the input layer and on the right the output layer. We see a first reduction of the number of neurons per layer, going from 4096 to 256, followed by an augmentation back to 4096 neurons, thus the ``bottleneck''.}
   \label{fig:janne:ann_arch}
 \end{figure}
 
@@ -386,15 +385,14 @@ The idea behind this architecture is that, by reducing the number of neurons per
 
 \subsubsection{ANN loss}
 
-As it was mentioned in the introduction of Section \ref{sec:janne:arch}, the loss of the ANN is composed of two losses, the adversarial loss ${\cal L}_{adv}$ and the regularisation loss ${\cal L}_{reg}$. To those two losses, we adjoin a penalty term that prevent the ANN from producing non-physical events.
+As it was mentioned in the introduction of Section \ref{sec:janne:arch}, the loss of the ANN is composed of two losses, the adversarial loss ${\cal L}_{adv}$ and the regularization loss ${\cal L}_{reg}$. To those two losses, we adjoin a penalty term that prevent the ANN from producing non-physical events.
 \begin{equation*}
   {\cal L} = {\cal L}_{adv} + {\cal L}_{reg} + P
 \end{equation*}
 
-The adversarial loss ${\cal L}_{adv}$ is defined as the absolute value correlation between the reconstructed energy and the energy deposit (Eq. \ref{eq:janne:ladv}). The regularisation loss ${\cal L}_{reg}$ is the MSE of the true and reconstructed energy position vector $(x, y, z, E)$ (Eq. \ref{eq:janne:lreg}).
+The adversarial loss ${\cal L}_{adv}$ is defined as the absolute value correlation between the reconstructed energy and the energy deposit (Eq. \ref{eq:janne:ladv}). The regularization loss ${\cal L}_{reg}$ is the MSE of the true and reconstructed energy position vector $(x, y, z, E)$ (Eq. \ref{eq:janne:lreg}).
 
-The penalty term is here to prevent the network from generating event that are too far from the initial event. The relevance of this term and its parameters will be further discussed in section
-\ref{sec:janne:arch:training}. The penalty $P$ is a function that takes the pixelated event $X$, its transformation after the ANN ${\cal G}(X)$ and a constraint $\epsilon$
+The penalty term is here to prevent the network from generating event that are too far from the initial event. The relevance of this term and its parameters will be further discussed in Section \ref{sec:janne:arch:training}. The penalty $P$ is a function that takes the pixelated event $X$, its transformation after the ANN ${\cal G}(X)$ and a constraint $\epsilon$
 \begin{equation}
   P(X, {\cal G}(X), \epsilon) = \sum_{i=1}^{3072} \left( ReLU(-{\cal G}(X)_i) + D_i \right)
 \end{equation}
@@ -405,16 +403,16 @@ with
     0& \text{otherwise}
   \end{cases}
 \end{equation}
-where $i$ index the Healpix pixels. The term $ReLU(-{\cal G}(X)_i$ is minimal, equal 0, when the charge after perturbation is positive. This term prevent the ANN from producing negative charge, feat impossible for the PMTs.
+where $i$ index the HealPix pixels. The term $ReLU(-{\cal G}(X)_i$ is minimal, equal 0, when the charge after perturbation is positive. This term prevents the ANN from producing negative charge, feat impossible for the PMTs.
 
 The second term $D_i$ is equal to 0 when the relative charge between the original and perturbed pixel is less than $\epsilon$. The value of $\epsilon$ will change during the training, as it will be explained in Section \ref{sec:janne:arch:training}. Otherwise, it is the square of this relative charge difference. This term penalize the ANN from producing charges too different from the original event.
 \hfill
 
 When dealing with multiple losses like this, it is important keep then of the same order of magnitude, as we do not want one term to absorb the other.
 
-The loss ${\cal L}_{adv}$ range from 0 to 1 while ${\cal L}_{reg}$ is 0 when the vertex and energy is perfectly reconstructed. It can theoretically go up to infinity. In practice we expect it to take value of the order of magnitude coherent with the reconstruction performances. In fact, if it would take higher value, it would mean that the reconstruction would reconstruct the event far away from the true vertex and energy in comparison to the expected performance. This kind of issue would be immediately be detected, even with simplistic reconstructions such as the charge barycenter, which goes against the goal of producing subtle fluctuation.
+The loss ${\cal L}_{adv}$ range from 0 to 1 while ${\cal L}_{reg}$ is 0 when the vertex and energy is perfectly reconstructed. It can theoretically go up to infinity. In practice, we expect it to take value of the order of magnitude coherent with the reconstruction performances. In fact, if it would take higher value, it would mean that the reconstruction would reconstruct the event far away from the true vertex and energy in comparison to the expected performance. This kind of issue would be immediately be detected, even with simplistic reconstructions such as the charge barycenter, which goes against the goal of producing subtle fluctuation.
 
-We evaluate ${\cal L}_{reg}$ with $(x, y, z)$ in meter and $E$ in MeV. If the event is reconstructed with a precision of 15 cm and an energy resolution of 3\% at 1 MeV, taking the reconstruction performance of the best reconstruction algorithm OMILREC (see Sections \ref{sec:juno:reco} and \ref{sec:jgnn:results}), ${\cal L}_{reg} \approx 0.3^2 + 0.03^2 = 0.0909$. We see about an order of magnitude between ${\cal L}_{adv}$ and ${\cal L}_{reg}$. To compensate for it we weight ${\cal L}_{reg}$
+We evaluate ${\cal L}_{reg}$ with $(x, y, z)$ in meter and $E$ in MeV. If the event is reconstructed with a precision of 15 cm and an energy resolution of 3\% at 1 MeV, taking the reconstruction performance of the best reconstruction algorithm OMILREC (see Sections \ref{sec:juno:reco} and \ref{sec:jgnn:results}), ${\cal L}_{reg} \approx 0.3^2 + 0.03^2 = 0.0909$. We see about an order of magnitude between ${\cal L}_{adv}$ and ${\cal L}_{reg}$. To compensate for it, we weight ${\cal L}_{reg}$
 \begin{equation}
   {\cal L} = {\cal L}_{adv} + 60\cdot{\cal L}_{reg} + P(\epsilon)
 \end{equation}
@@ -432,9 +430,9 @@ The amplitude of $P$ and the value of $\epsilon$ will be further discussed in Se
 %    \end{itemize}
 %\end{itemize}
 
-All the ANN hyperparameters presented above have been optimized through the numerous iteration the architecture went through. The training is computationally expensive as we need to host both networks on the GPU card, reaching quickly the memory limit of the GPU. The training of the ANN can takes up to 90h. The requirement of having a powerful GPU can be met locally, as Subatech possess an available A100 \cite{noauthor_nvidia_nodate-1} card with 40GB of memory. We could not port over computing center as they only possess V100 \cite{noauthor_nvidia_nodate-2} GPU with 20GB of memory.
+All the ANN hyperparameters presented above have been optimized through the numerous iteration the architecture went through. The training is computationally expensive as we need to host both networks on the GPU card, reaching quickly the memory limit of the GPU. The training of the ANN can take up to 90 h. The requirement of having a powerful GPU can be met locally, as Subatech possess an available A100 \cite{noauthor_nvidia_nodate-1} card with 40 GB of memory. We could not port over computing center as they only possess V100 \cite{noauthor_nvidia_nodate-2} GPU with 20 GB of memory.
 
-Those constraint made a random search optimization impossible. It is maybe possible, through optimisation, to reduce the memory requirements to reach the threshold to run on V100 but the challenge was deemed not worth it for an exploratory work.
+Those constraints made a random search optimization impossible. It is maybe possible, through optimization, to reduce the memory requirements to reach the threshold to run on V100 but the challenge was deemed not worth it for an exploratory work.
 
 \subsection{Training of the ANN}
 \label{sec:janne:arch:training}
@@ -445,11 +443,11 @@ Those constraint made a random search optimization impossible. It is maybe possi
 %  \item Cassage de la reconstruction
 %\end{itemize}
 
-The ANN training is divided into two phases. In the first phase, the network learns to accurately reproduce physical events, ensuring that it can handle the intrinsic variability of the detector's response. This step is crucial, as it provides the foundation for the second phase, where the network searches for subtle perturbations that can degrade the reconstruction without being detected by standard calibration procedures. Splitting the training into two phase also allow to save a version of the network that know how to reproduce the physical events. We can then ``resume'' the training from this point if we just introduce changes in Phase 2, saving the training time of Phase 1.
+The ANN training is divided into two phases. In the first phase, the network learns to accurately reproduce physical events, ensuring that it can handle the intrinsic variability of the detector's response. This step is crucial, as it provides the foundation for the second phase, where the network searches for subtle perturbations that can degrade the reconstruction without being detected by standard calibration procedures. Splitting the training into two phases also allow saving a version of the network that know how to reproduce the physical events. We can then ``resume'' the training from this point if we just introduce changes in Phase 2, saving the training time of Phase 1.
 
-For both phases, we use the both of the datasets presented in section \ref{sec:janne:method}. We use a batch size of 64 for both datasets meaning that, for each steps, the network see 128 events.
+For both phases, we use the both of the datasets presented in Section \ref{sec:janne:method}. We use a batch size of 64 for both datasets meaning that, for each step, the network see 128 events.
 
-Each epochs goes through the entirety of the training dataset.
+Each epoch go through the entirety of the training dataset.
 
 \subsubsection{First training phase: back to physics}
 \label{sec:janne:results:identity}
@@ -457,7 +455,7 @@ Each epochs goes through the entirety of the training dataset.
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/janne/training/phase_1_penal.png}
-  \caption{Evolution of the loss ${\cal L}_1 = 0.25 \cdot P(0.01)$ during the first phase of the training}
+  \caption{Evolution of the loss ${\cal L}_1 = 0.25 \cdot P(0.01)$ during the first phase of the training.}
   \label{fig:jann:train:phase_1}
 \end{figure}
 
@@ -488,7 +486,7 @@ The time and charge channels of two events, after this training phase, are prese
   \label{fig:janne:lr_le_200}
 \end{figure}
 
-We observe that for a localized event, Figure \ref{fig:janne:hr_he_200}, the ANN correctly reproduces the event, while for a more diffuse event, Figure \ref{fig:janne:lr_le_200}, it produces a more uniform charge distribution. By looking at the color scale in Figure \ref{fig:janne:lr_le_200}, we observe that the ANN does not reproduce singular high numbers of $N_{pe}$. The highest pixel in the original was 12 $N_{pe}$, whereas after the ANN, the highest pixel is 5 $N_{pe}$. Furthermore, whereas in the original event the charge repartition, while diffuse, was still concentrated in specific pixels, the ANN spreads the charges in all the pixels.
+We observe that for a localized event, Figure \ref{fig:janne:hr_he_200}, the ANN correctly reproduces the event, while for a more diffuse event, Figure \ref{fig:janne:lr_le_200}, it produces a more uniform charge distribution. By looking at the color scale in Figure \ref{fig:janne:lr_le_200}, we observe that the ANN does not reproduce singular high numbers of $N_{pe}$. The highest pixel in the original was 12 $N_{pe}$, whereas after the ANN, the highest pixel is 5 $N_{pe}$. Furthermore, whereas in the original event the charge distribution, while diffuse, was still concentrated in specific pixels, the ANN spreads the charges in all the pixels.
 
 In the next figures, we discuss the reconstruction of the FFNN (${\cal F}$) with and without the presence of the ANN $({\cal G})$ at the end of this Phase 1. The reconstruction by the FFNN of an event perturbed by the ANN is denoted $({\cal F} \circ {\cal G})$. We differentiate the reconstruction between the two datasets, presented in Section \ref{sec:janne:method}: the physics dataset, designated as IBD, and the control dataset, designated $^{12}B$.
 
@@ -501,7 +499,7 @@ At the end of this first reconstruction phase it's apparent that this explorator
 \begin{figure}[!ht]
   \centering
   \includegraphics[height=4cm]{images/janne/f_circ_over_f_200.png}
-  \caption{Ratio of the reconstructed energy spectra between $({\cal F} \circ {\cal G})$ and ${\cal F}$ at then end of Phase 1 of the training. \textbf{On the left :} For the $^{12}$B dataset. \textbf{On the right :} For the IBD dataset}
+  \caption{Ratio of the reconstructed energy spectra between $({\cal F} \circ {\cal G})$ and ${\cal F}$ at then end of Phase 1 of the training. \textbf{On the left :} For the $^{12}$B dataset. \textbf{On the right :} For the IBD dataset.}
   \label{fig:janne:f_circ_over_f_200}
 \end{figure}
 
@@ -521,7 +519,7 @@ For this we introduce the term ${\cal L}_{adv}$ and ${\cal L}_{red}$ producing a
 Adding those terms will significantly change the loss.
 The previous minima in the parameter phase space the ANN found minimizing ${\cal L}_1$ will not be the minima ${\cal L}_2$. To prevent a gradient explosion, we introduce a growing factor $\lambda$ in front of the term ${\cal L}_{adv}$ and ${\cal L}_{red}$. This factor starts at $\lambda  = 0.01$ at epoch 201 and grows $\lambda_{i+1} = \lambda_{i} + 0.01$ where $i$ indexes the epoch. It caps at $\lambda_{max} = 1$ at epoch 300 after which it stops growing.
 
-Also to ease the task of the ANN, we relax the constraint in the penalty term $P$ from $P(0.01)$ to $P(0.15)$.
+Also, to ease the task of the ANN, we relax the constraint in the penalty term $P$ from $P(0.01)$ to $P(0.15)$.
 
 The expression of the phase 2 loss ${\cal L}_2$ becomes:
 \begin{equation}
@@ -556,14 +554,14 @@ The profiles of ${\cal L}_2$, ${\cal L}_{adv}$, $60 \cdot {\cal L}_{reg}$ and $0
   \begin{subfigure}[t]{0.48\linewidth}
     \includegraphics[width=\linewidth]{images/janne/training/phase_2_penal.png}
   \end{subfigure}
-  \caption{Profile of the loss $60 \cdot {\cal L}_{reg}$ and $0.25 \cdot P(0.15)$ during the second phase of training}
+  \caption{Profile of the loss $60 \cdot {\cal L}_{reg}$ and $0.25 \cdot P(0.15)$ during the second phase of training.}
   \label{fig:janne:phase_2_2}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[height=6cm]{images/janne/training/phase_all_l.png}
-  \caption{Profile of the loss over the entirety of the training (Phase 1 and 2)}
+  \caption{Profile of the loss over the entirety of the training (Phase 1 and 2).}
   \label{fig:janne:phase_all}
 \end{figure}
 
@@ -573,9 +571,9 @@ work to recover the initial reconstruction seems incomplete since the performanc
 
 During most of the next 50 epochs of this phase, all losses are more stable before $L_{adv}$ starts decreasing, between epochs 250 and 300. It suggests $L_{adv}$  has managed to re-deteriorate the reconstruction, despite the quasi stability  (or slow decrease) of $L_{reg}$. This is the desired behavior concerning the losses.
 
-Unfortunately, as can be seen in Figs. \ref{fig:janne:f_circ_over_f_400} and \ref{fig:janne:rec_err_200}, the performance of the reconstruction is still too deteriorated : it would very probably be detected by data/MC comparisons with control samples. Also, on these figures and on on Figure \ref{fig:janne:ann_effect_400}, we can't see an indication that IBD events are affected more than $^{12}B$ events by the perturbation. A difference here is not mandatory : the same deterioration of the resolution could still be undetectable in data/MC comparison of the distributions of the energy or of the vertex position  in $^{12}B$ samples, and still be enough to alter the oscillation analysis. However, observing a difference here would have been a good sign.
+Unfortunately, as can be seen in Figs. \ref{fig:janne:f_circ_over_f_400} and \ref{fig:janne:rec_err_200}, the performance of the reconstruction is still too deteriorated: it would very probably be detected by data/MC comparisons with control samples. Also, on these figures and on Figure \ref{fig:janne:ann_effect_400}, we can't see an indication that IBD events are affected more than $^{12}B$ events by the perturbation. A difference here is not mandatory: the same deterioration of the resolution could still be undetectable in data/MC comparison of the distributions of the energy or of the vertex position  in $^{12}B$ samples, and still be enough to alter the oscillation analysis. However, observing a difference here would have been a good sign.
 
-After 200 epochs of Phase 2, the correlation in ${\cal L}_{adv}$ is still at 0.998, the penalty term $P(0.01)$ is stable and the regularisation loss ${\cal L}_{reg}$ is close to stability.
+After 200 epochs of Phase 2, the correlation in ${\cal L}_{adv}$ is still at 0.998, the penalty term $P(0.01)$ is stable and the regularization loss ${\cal L}_{reg}$ is close to stability.
 
 For illustration, events produced by the ANN after 400 epochs are displayed in Figures \ref{fig:janne:hr_he_400} and \ref{fig:janne:lr_le_400}. These are the same event as displayed in Figures \ref{fig:janne:hr_he_200} and \ref{fig:janne:lr_le_200}.
 
@@ -600,7 +598,7 @@ When looking at the distribution of ratio between the reconstructed energy distr
 \begin{figure}[!ht]
   \centering
   \includegraphics[height=4cm]{images/janne/f_circ_over_f_400.png}
-  \caption{Ratio of the reconstructed energy spectra between $({\cal F} \circ {\cal G})$ and ${\cal F}$ at then end of Phase 2 of the training. \textbf{On the left :} For the $^{12}$B dataset. \textbf{On the right :} For the IBD dataset}
+  \caption{Ratio of the reconstructed energy spectra between $({\cal F} \circ {\cal G})$ and ${\cal F}$ at then end of Phase 2 of the training. \textbf{On the left :} For the $^{12}$B dataset. \textbf{On the right :} For the IBD dataset.}
   \label{fig:janne:f_circ_over_f_400}
 \end{figure}
 
@@ -633,20 +631,19 @@ Reliability and knowledge of our reconstruction algorithms are crucial for the s
 
 \hfill
 
-Concerning the development of an ANN, we actually developed prototype which was useful to identify several of the difficulties we will have to overcome in the future to produce an ANN fulfilling the aims defined at the beginning of this chapter. First, we determined that learning individual perturbations for each of the 17600 LPMTs (meaning more than 35000 learnable parameters
-if one decides to perturbs $Q$ and $t$) is too much for our available hardware. Then, we determined that particular techniques would be necessary to solve the back propagation problems
+Concerning the development of an ANN, we actually developed prototype which was useful to identify several of the difficulties we will have to overcome in the future to produce an ANN fulfilling the aims defined at the beginning of this chapter. First, we determined that learning individual perturbations for each of the 17600 LPMTs (meaning more than 35000 learnable parameters if one decides to perturb $Q$ and $t$) is too much for our available hardware. Then, we determined that particular techniques would be necessary to solve the back propagation problems
 described in Section \ref{sec:janne:back_prop} and couple the ANN with any reconstruction algorithm pre-existing in JUNO.
 
-After having opted for a simpler prototype with 3072 learnable parameters, we faced the problem due to their random initialization and adapted by adding a new term to the loss function and splitting the training in 2 phases. Then, we experience the importance of the definition of the loss function, in particular the way to balance two antagonist terms :
+After having opted for a simpler prototype with 3072 learnable parameters, we faced the problem due to their random initialization and adapted by adding a new term to the loss function and splitting the training in 2 phases. Then, we experience the importance of the definition of the loss function, in particular the way to balance two antagonist terms:
 one (${\cal L}_{adv}$) which deteriorates the event reconstruction and one that preserves it (${\cal L}_{reg}$). The way to define each of these two terms is not trivial either. Having these notions in mind is essential before trying to develop a tool producing realist perturbation patterns at the individual PMT level.
 
-With this prototype, we manage to produce one of the desired behaviors for such an ANN : we observe ${\cal L}_{adv}$ deteriorating the reconstruction and ${\cal L}_{reg}$ reducing the deterioration. However, at the end of the training, the deterioration is too high compared to the subtle scenarios we want the ANN to produce. A solution against this could be to give a higher weight to ${\cal L}_{reg}$ or to find a more efficient penalty term $P(\epsilon)$.
+With this prototype, we manage to produce one of the desired behaviors for such an ANN: we observe ${\cal L}_{adv}$ deteriorating the reconstruction and ${\cal L}_{reg}$ reducing the deterioration. However, at the end of the training, the deterioration is too high compared to the subtle scenarios we want the ANN to produce. A solution against this could be to give a higher weight to ${\cal L}_{reg}$ or to find a more efficient penalty term $P(\epsilon)$.
 
 A smarter definition of ${\cal L}_{adv}$ could also be useful: a definition more explicitly related to our goal (biasing the oscillation analysis) might induce smaller perturbations. This could be a ${\cal L}_{adv}$ favoring a small energy dependent bias between $E_{rec}$ and $E_{dep}$ in IBD events. A smarter ${\cal L}_{adv}$ could also help to produce perturbations that affect the IBD reconstruction more than the reconstruction of $^{12}B$ or calibration events. Although this feature is not mandatory, it would be welcome. It is not achieved by the present version of the ANN.
 
-A possible explanation is the perturbations it produces seem to follow a random pattern across the 3072 pixels. It could be the result of the limited efficiency of the first phase of the training (which tries to recover from the random initialisation of these perturbations), or result from the present definition of ${\cal L}_{adv}$ (which can be minimized by random perturbations).
+A possible explanation is the perturbations it produces seem to follow a random pattern across the 3072 pixels. It could be the result of the limited efficiency of the first phase of the training (which tries to recover from the random initialization of these perturbations), or result from the present definition of ${\cal L}_{adv}$ (which can be minimized by random perturbations).
 
-The architecture of the ANN is, for now, very simple; it's a Fully Connected Deep NN with a bottleneck architecture. Previous work in developing ML for reconstruction \cite{qian_vertex_2021} and the algorithms presented in Chapters \ref{sec:jcnn} and \ref{sec:jgnn} show the relevance of convolutions in the reconstruction, and the work of Gavrikov et al. \cite{gavrikov_energy_2022} presented at the beginning of this chapter hints at the importance of the time and charge distribution. A more complex and refined architecture can probably be more effective.
+The architecture of the ANN is, for now, very simple; it's a Fully Connected Deep NN with a bottleneck architecture. Previous work in developing ML for reconstruction \cite{qian_vertex_2021} and the algorithms presented in Chapters \ref{sec:jcnn} and \ref{sec:jgnn} show the relevance of convolutions in the reconstruction, and the work of Gavrikov et al.\ \cite{gavrikov_energy_2022} presented at the beginning of this chapter hints at the importance of the time and charge distribution. A more complex and refined architecture can probably be more effective.
 
 Another architecture improvement could come from ResNet architectures \cite{he_deep_2016}. They have already proven that the introduction of residual operations helps the network reach better performance. We can imagine a network where instead of $X' = {\cal G}(X)$ we have $X' = {\cal G}(X) + X$, where the ANN ${\cal G}$ computes only the perturbation instead of a whole new event.
 
