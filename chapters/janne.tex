@@ -138,7 +138,7 @@ The performance are considered compatibles.
     \caption{}
     \label{fig:janne:bdte:implementation_perf}
   \end{subfigure}
-  \caption{Resolution of BDTE \textbf{On the left: } as reported by Gavrikov Arsenii et. al in \cite{gavrikov_energy_2022}, \textbf{On the right: } once implemented in JUNO common software. On the right plot is also reported the reconstruction performance of the OMILREC algorithm. The OMILREC algorithm $E_{vis}$ has been corrected to $E_{dep}$ following the procedure detailled in Annex \ref{sec:annex:evis}.}
+  \caption{Resolution of BDTE \textbf{On the left: } as reported by Gavrikov Arsenii et. al in \cite{gavrikov_energy_2022}, \textbf{On the right: } once implemented in JUNO common software. On the right plot is also reported the reconstruction performance of the OMILREC algorithm. The OMILREC algorithm $E_{vis}$ has been corrected to $E_{dep}$ following the procedure detailed in Section \ref{sec:jgnn:results}.}
   \label{fig:janne:bdte:perf}
 \end{figure}
 
@@ -287,7 +287,7 @@ A more elegant solution would that $\mathcal{G}$ would also compute the transfor
 %  \item Un reseau "simpliste" a plus de chance de présenter des "défauts" que l'ANN pourrait exploiter
 %\end{itemize}
 
-As introduced just before, we need a NN algorithm for IBD reconstruction. We could have used the GNN presented in Chapter \ref{sec:jgnn}, but we preferred a simpler approach to not be constrained by the memory consumption of the reconstruction network. The memory issue does not really comes from the reconstruction network but from the ANN. The requirement to produce outputs that have the same structure and complexity as the reconstruction network makes it even more memory consuming than the reconstruction network, thus the choice for a simpler reconstruction network. This network is designated as FFNN for ``F''-Fully connected Neural Network where ``F'' is reminder to the ${\cal F}$ from previous section.
+As introduced just before, we need a NN algorithm for IBD reconstruction. We could have used the GNN presented in Chapter \ref{sec:jgnn}, but we preferred a simpler approach to not be constrained by the memory consumption of the reconstruction network. The memory issue does not really come from the reconstruction network but from the ANN. The requirement to produce outputs that have the same structure and complexity as the reconstruction network makes it even more memory consuming than the reconstruction network, thus the choice for a simpler reconstruction network. This network is designated as FFNN for ``F''-Fully connected Neural Network where ``F'' is reminder to the ${\cal F}$ from previous section.
 
 This network takes as input a vector containing the results of the aggregation of charge and time on pixels, forming a vectorized image. We consider JUNO to be composed of 3072 pixels defined by the HealPix \cite{gorski_healpix_2005} pixelization. On each of these pixels, we sum the charges and keep the first time of hit, resulting in 3072 $(Q,t)$ tuples. To these tuples, we adjoin the position of the center of these pixels, resulting in 3072 $(Q,t,x,y,z)$ tuples. The data is finally represented as a $3072 \times 5 = 15360$ vector. In the case where the charge in a pixel is 0, the time is set to 2048 ns, which is way after the closure of the trigger window.
 
@@ -405,7 +405,7 @@ with
 \end{equation}
 where $i$ index the HealPix pixels. The term $ReLU(-{\cal G}(X)_i$ is minimal, equal 0, when the charge after perturbation is positive. This term prevents the ANN from producing negative charge, feat impossible for the PMTs.
 
-The second term $D_i$ is equal to 0 when the relative charge between the original and perturbed pixel is less than $\epsilon$. The value of $\epsilon$ will change during the training, as it will be explained in Section \ref{sec:janne:arch:training}. Otherwise, it is the square of this relative charge difference. This term penalize the ANN from producing charges too different from the original event.
+The second term $D_i$ is equal to 0 when the relative charge between the original and perturbed pixel is less than $\epsilon$. The value of $\epsilon$ will change during the training, as it will be explained in Section \ref{sec:janne:arch:training}. Otherwise, it is the square of this relative charge difference. This term penalizes the ANN from producing charges too different from the original event.
 \hfill
 
 When dealing with multiple losses like this, it is important keep then of the same order of magnitude, as we do not want one term to absorb the other.
@@ -530,7 +530,7 @@ The expression of the phase 2 loss ${\cal L}_2$ becomes:
 
 This second phase of the training last for 200 more epochs, up to epoch 400.
 
-The profiles of ${\cal L}_2$, ${\cal L}_{adv}$, $60 \cdot {\cal L}_{reg}$ and $0.25 \cdot P(0.15)$ during this second phase of the training are presented in Figures \ref{fig:janne:phase_2_1} and \ref{fig:janne:phase_2_2}. The profile of the loss ${\cal L}$ over entirety of the training is presented in figure \ref{fig:janne:phase_all}.
+The profiles of ${\cal L}_2$, ${\cal L}_{adv}$, $60 \cdot {\cal L}_{reg}$ and $0.25 \cdot P(0.15)$ during this second phase of the training are presented in Figures \ref{fig:janne:phase_2_1} and \ref{fig:janne:phase_2_2}. The profile of the loss ${\cal L}$ over entirety of the training is presented in Figure \ref{fig:janne:phase_all}.
 
 \begin{figure}[ht]
   \centering

@@ -219,3 +219,6 @@ deconvolution
 templating
 QNL-distorted
 fiducial
+Scipy
+XTh
+BSM

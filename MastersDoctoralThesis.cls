@@ -192,7 +192,7 @@
 %	REQUIRED PACKAGES
 %----------------------------------------------------------------------------------------
 \RequirePackage[utf8]{inputenc} 
-\RequirePackage[english,french]{babel} % Required for automatically changing names of document elements to languages besides english
+\RequirePackage[french,main=english]{babel} % Required for automatically changing names of document elements to languages besides english
 \hyphenpenalty=7000
 \exhyphenpenalty=7000
 \RequirePackage{scrbase} % Required for handling language-dependent names of sections/document elements

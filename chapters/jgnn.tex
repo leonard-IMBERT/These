@@ -118,7 +118,7 @@ The adjacency matrix representing those relations is illustrated in Figure \ref{
   \caption{}
 \end{figure}
 
-The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbors, and it guarantees that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follows the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in Figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 2, $N_{pix} = 12 \cdot 4^2 = 192$.
+The mesh segmentation is following the HealPix segmentation \cite{gorski_healpix_2005}. This segmentation offer the advantage that almost each mesh have the same number of direct neighbors, and it guarantees that each mesh represent the same extent of the detector surface. The segmentation can be infinitely subdivided to provide smaller and smaller pixels. The number of pixel follows the order $n$ with $N_{pix} = 12 \cdot 4^n$. This segmentation is illustrated in Figure \ref{fig:jgnn:healpix}. To keep the number of mesh small, we use the segmentation of order 2, $N_{pix} = 12 \cdot 4^2 = 192$.
 
 \begin{figure}
   \centering
@@ -137,7 +137,7 @@ The mesh segmentation is following the Healpix segmentation \cite{gorski_healpix
 
 We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {\color{red} fired (F)} and {\color{blue} I/O} have different set of features. The features used in the graph are presented in tables \ref{tab:jgnn:node_feat} and \ref{tab:jgnn:edge_feat}. Most of the features are low level information such as the charge or time information, but we include some high order features such as
 \begin{enumerate}
-  \item $P^h_l$: Is the normalized power of the $l$-th spherical harmonic. For more details about spherical harmonics in JUNO, see annex \ref{sec:annex:jgnn:harms}.
+  \item $P^h_l$: Is the normalized power of the $l$-th spherical harmonic. For more details about spherical harmonics in JUNO, see Annex \ref{sec:annex:jgnn:harms}.
   \item $\mathbb{A}$ and $\mathbb{B}$ are information that are related the likeliness of the interaction vertex to be on the segment between the center of two meshes.
     \begin{align}
       \mathbb{A}_{ij} &= (\vec{j} - \vec{i})\cdot\frac{l_1}{D_{ij}} + \vec{i} \\
@@ -167,7 +167,7 @@ We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {
   \caption{Features on the nodes of the graph. All charge are in [nPE], time in [ns] and position in [m]. \\
   $Q$ and $t$ are the reconstructed charge and time of the hit PMTs. $(x,y,z)$ is the position of the PMTs and the last parameter represent the type of the PMT. It's 1 for LPMT and -1 for SPMT \\
   $Q_m$ and $t_m$ is the set of charges and time of the PMT belonging the mesh $m$. $(X_m, Y_m, Z_m)$ i the position of the center of the geometric region represented by the mesh $m$ \\
-  $(\langle X \rangle, \langle Y \rangle, \langle Z \rangle)$ is the position of the charge barycenter, $\sum Q$ the sum of the collected charge in the detector and $P^h_l$ is the relative power of the $l$th harmonic. See annex \ref{sec:annex:jgnn:harms} for details.}
+  $(\langle X \rangle, \langle Y \rangle, \langle Z \rangle)$ is the position of the charge barycenter, $\sum Q$ the sum of the collected charge in the detector and $P^h_l$ is the relative power of the $l$th harmonic. See Annex \ref{sec:annex:jgnn:harms} for details.}
   \label{tab:jgnn:node_feat}
 \end{table}
 
@@ -188,7 +188,7 @@ We decided on having the different kind of nodes {\color{Dandelion} mesh (M)}, {
      & $\mathbb{B}$ & \\
     \hline
   \end{tabular}
-  \caption{Features on the edges on the graph. It use the same notation as in table \ref{tab:jgnn:node_feat}. $D^{-1}_{m1 \rightarrow m2}$ is the inverse of the distance between the mesh $m1$ and the mesh $m2$. The features $\mathbb{A}$ and $\mathbb{B}$ are detailed in Section \ref{sec:jgnn:data}.}
+  \caption{Features on the edges on the graph. It use the same notation as in Table \ref{tab:jgnn:node_feat}. $D^{-1}_{m1 \rightarrow m2}$ is the inverse of the distance between the mesh $m1$ and the mesh $m2$. The features $\mathbb{A}$ and $\mathbb{B}$ are detailed in Section \ref{sec:jgnn:data}.}
   \label{tab:jgnn:edge_feat}
 
 \end{table}
@@ -225,7 +225,7 @@ to update the nodes after each layer. Following the illustration in Figure \ref{
   \label{eq:jgnn:custom_mp}
   \phi_u \equiv I^{n'}_{i'} = I^n_i A_{i',e}^{i} W_n^{e,n'} + I^n_i S^{n'}_{n} + B^{n'}
 \end{equation}
-using the Einstein summation notation. The second order tensor, or matrix, $I^{n}_i$ is holding the nodes information with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer.
+using the Einstein summation notation. The second order tensor, or matrix, $I^{n}_i$ is holding the nodes' information with $i$ the node index and $n$ the feature index. $n$ represent the features of the previous layer and $n'$ the features of this layer.
 
 $A_{i',e}^{i}$ is the adjacency tensor, discussed in the previous section, representing the edges between the node $i'$ and the node $i$, each edge holding the features indexed by $e$. If the edge does not exist, the features are set to 0. This choice is justified by the linearity of the operation in equation \ref{eq:jgnn:custom_mp}: whatever the weights, when multiplied by 0 the results is 0 and the sum result is unchanged.
 
@@ -398,7 +398,7 @@ where the 40 configurations are compared in their ability to reconstruct the pos
   \label{fig:jgnn:histor}
 \end{figure}
 
-The spectacular improvement between early and later configurations also explains the length of this process : for long we hoped we would finally reach the classical performance, and it was tempting to test yet another configuration.
+The spectacular improvement between early and later configurations also explains the length of this process: for long we hoped we would finally reach the classical performance, and it was tempting to test yet another configuration.
 
 %Even the features on the graph went under investigation. With the addition of high level observables to the {\color{Dandelion} mesh} and {\color{blue} I/O} nodes and edge, there was too much possibility to test everything. We went with the decision to keep the raw observables in the {\color{red} fired} and for the higher order observables we tried to take the one that would be difficult for the NN to reconstruct or at least would need multiple layer to reproduce. Basically, because the operation in the JWGLayer are linear operation, any variables dependent on order  > 1 of the input would be candidates. This is why we introduce standard deviation, $\mathbb{A}$, $\mathbb{B}$ and $P^h_l$ for example.
 
@@ -459,7 +459,38 @@ The reconstruction performance of ``JWGv8.4'' are presented in Figures \ref{fig:
 
 This comparison required to use a consistent definition of $E_{true}$. This is not trivial since at JUNO, ML method reconstruct the true energy deposited by the positron+annihilation gammas (that's the target implemented in the loss function), while OMILREC, which is based on probabilities to observe a given number of PE in a given PMT, reconstruct the ``visible energy''. It reflects the total number of radiated and detectable scintillation or Cherenkov photons (and is subject to non-linear effects like quenching).
 
-The conversion we use to obtain comparable $E_{true}$ is explained in Appendix \ref{sec:annex:evis}.
+To understand this phenomenon, let's look at the equation \ref{eq:juno:reco:charge_est}:
+\begin{equation*}
+  \hat{\mu}(r, \theta, \theta_{pmt}, E_{vis}) = \frac{1}{E_{vis}} \frac{1}{M} \sum_i^M\frac{\frac{\bar{q}_i}{\hat{Q}_i} - \mu_i^D}{\mathrm{DE}_i}, ~ \mu_i^D = \mathrm{DNR}_i \cdot L
+\end{equation*}
+which define the expected $N_{pe}/E$. This defines a linear relation between the number of photoelectrons and the energy. However, we discussed in sections \ref{sec:juno:CD} and \ref{sec:juno:calib} that the number of photoelectrons collected by the LPMT system do not follow a linear relationship. Thus, this visible energy is not linear with the deposited energy. This effect is corrected in physics analysis and in Chapter \ref{sec:joint_fit} by applying the calibrated non-linearity profile the energy spectrum.
+
+When we need to compare our algorithm that reconstruct the deposited energy to the classical algorithms we need to correct this non-linearity. For this we fit the systematic bias of the classical algorithm using a 5th degree polynomial
+\begin{equation}
+  \frac{E_{dep}}{E_{evis}} = \sum_{i=0}^5 P_i E_{dep}^i
+\end{equation}
+The fitted distribution and the corresponding fit is presented in Figure \ref{fig:annex:evis:e_rec_correction}. The values fitted for this correction are presented in Table \ref{tab:annex:evis:omil_params}.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l|r|}
+    $P_0$                        &      1.24541   +/-   0.00585121  \\
+    $P_1$                        &    -0.168079   +/-   0.00716387  \\
+    $P_2$                        &    0.0489947   +/-   0.00312875  \\
+    $P_3$                        &  -0.00747111   +/-   0.000622003 \\
+    $P_4$                        &  0.000570998   +/-   5.7296e-05  \\
+    $P_5$                        & -1.72588e-05   +/-   1.98355e-06 \\
+  \end{tabular}
+  \caption{Parameters of the 5th degree polynomial used to correct Omilrec reconstructed energy.}
+  \label{tab:annex:evis:omil_params}
+\end{table}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=6cm]{images/jgnn/e_rec_e_true_comp.png}
+  \caption{Comparison between Omilrec reconstructed $E_{vis}$ and the deposited energy $E_{dep}$. The profile of the distribution $E_{vis}/E_{dep}$ vs $E_{dep}$ is fitted with a 5th degree polynomial.}
+  \label{fig:annex:evis:e_rec_correction}
+\end{figure}
 
 On Figures \ref{fig:jgnn:results_nox_1} to \ref{fig:jgnn:results_nox_3}, we notice that the best GNN does not match the performance of the OMILREC algorithm. Generically, Energy resolution is 50\% worse, while the resolution on R is three times worse. Reconstruction biases are not better either with the GNN. We have tried to understand the origin of this limited performance.
 
@@ -523,7 +554,7 @@ On Figures \ref{fig:jgnn:results_nox_1} to \ref{fig:jgnn:results_nox_3}, we noti
   \label{fig:jgnn:results_nox_3}
 \end{figure}
 
-The first action that can be carried out in this direction was to determine if some information used by OMILREC was not used properly by JWGv8.4. For that purpose, we used again the approach presented in Chapter \ref{sec:jcnn} (Sec \ref{sec:jcnn:combination} and annex \ref{sec:annex:jcnn:alpha}) to combine JWGv8.4 and OMILREC. We observe on Figures \ref{fig:jgnn:results_1} and \ref{fig:jgnn:results_2} that this combination brings no sizeable improvement  of the best of the two combined methods. The combination remains very close to OMILREC alone. This is an indication that JWGv8.4 does not use information that would be overlooked by OMILREC, and that on the contrary, that's JWGv8.4 that fails to use properly important information.
+The first action that can be carried out in this direction was to determine if some information used by OMILREC was not used properly by JWGv8.4. For that purpose, we used again the approach presented in Chapter \ref{sec:jcnn} (Sec \ref{sec:jcnn:combination}) to combine JWGv8.4 and OMILREC. We observe on Figures \ref{fig:jgnn:results_1} and \ref{fig:jgnn:results_2} that this combination brings no sizeable improvement  of the best of the two combined methods. The combination remains very close to OMILREC alone. This is an indication that JWGv8.4 does not use information that would be overlooked by OMILREC, and that on the contrary, that's JWGv8.4 that fails to use properly important information.
 
 %Overall, energy and radius resolutions are not on par with OMILREC. We see from the energy dependent energy resolution in fig \ref{fig:jgnn:MESBvETC} that our resolution is a bit more than twice the resolution of OMILREC and the combination brings no improvements. Same observation for the energy resolution depending on the radius.
 %
@@ -546,7 +577,7 @@ The first action that can be carried out in this direction was to determine if s
     \caption{Resolution and bias of energy reconstruction vs radius.}
     \label{fig:jgnn:MESBvRTC}
   \end{subfigure}
-  \caption{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in annex \ref{sec:annex:jcnn:variance}. The top part of each plot is the resolution and the bottom part is the bias.}
+  \caption{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in Section \ref{sec:jcnn:combination}. The top part of each plot is the resolution and the bottom part is the bias.}
   \label{fig:jgnn:results_1}
 \end{figure}
 \begin{figure}[ht]
@@ -562,7 +593,7 @@ The first action that can be carried out in this direction was to determine if s
     \caption{Resolution and bias of radius reconstruction vs radius.}
     \label{fig:jgnn:MSBvRTC}
   \end{subfigure}
-  \caption{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in annex \ref{sec:annex:jcnn:variance}. The top part of each plot is the resolution and the bottom part is the bias.}
+  \caption{Reconstruction performance of the OMILREC algorithm, JWGv8.4 and the combination between the two using the optimal variance estimator presented in Section \ref{sec:jcnn:combination}. The top part of each plot is the resolution and the bottom part is the bias.}
   \label{fig:jgnn:results_2}
 \end{figure}
 

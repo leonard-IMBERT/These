@@ -14,7 +14,7 @@
 
 \minitoc
 
-As explained in Chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) system and the Small Photomultiplier (SPMT) system. Both of them observe the same physics events inside the same medium, but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see Section \ref{sec:juno:LPMT}), a thousand versus a few dozen, and their front-end electronics (see section \ref{sec:juno:LPMT}).
+As explained in Chapter \ref{sec:juno}, JUNO is an experiment composed of two systems, the Large Photomultiplier (LPMT) system and the Small Photomultiplier (SPMT) system. Both of them observe the same physics events inside the same medium, but they differ in their photo-coverage, respectively 75.2\% and 2.7\%, their dynamic range (see Section \ref{sec:juno:LPMT}), a thousand versus a few dozen, and their front-end electronics (see Section \ref{sec:juno:LPMT}).
 
 
 The SPMT system is essential to the deployment of the Dual Calorimetry techniques, already mentioned in Section \ref{sec:juno:reco} and described in \cite{han_dual_2021, juno_collaboration_calibration_2021, cabrera_multi-calorimetry_2023}.
@@ -55,7 +55,7 @@ A simple way to start addressing this reliability issue is to try to evaluate to
 %    \end{itemize}
 %\end{itemize}
 
-One of the simplest way to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their distribution is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface. It is then tempting to represent the detector as a spherical image with the PMTs in place of pixels. Two events with two different energy or position would produce two different images.
+One of the simplest ways to look at JUNO data is to consider the detector as an array of geometrically distributed sensors on a sphere. Their distribution is almost homogeneous, on this sphere surface providing an almost equal amount of information per unit surface. It is then tempting to represent the detector as a spherical image with the PMTs in place of pixels. Two events with two different energy or position would produce two different images.
 
 The most common approach in machine learning for image processing and image recognition is the Convolutional Neural Network (CNN). It is widely used in research and industry \cite{simonyan_very_2015, ciresan_multi-column_2012, abbasi_convolutional_2021, maksimovic_cnns_2021} due to its strengths (see Section \ref{sec:ml:cnn}) and has proven its relevance in image processing.
 
@@ -155,7 +155,7 @@ The models were developed in Python using the Pytorch framework \cite{ansel_pyto
 
 The training was monitored in real-time by a custom tooling that was developed during this thesis, DataMo \cite{imbert_leonard-imbertdatamo_2024}.
 
-The training of one model takes between 4h and 15h depending of its size, overall training the full 72 models takes around 500 GPU hours. Even with parallel training, this random search hyper-optimization was time-consuming.
+The training of one model takes between 4h and 15h depending on its size, overall training the full 72 models takes around 500 GPU hours. Even with parallel training, this random search hyper-optimization was time-consuming.
 
 
 %Indeed, let's say we consider error on each of the component as random variable following a normal distribution. We allow ourself to use this representation as our signal possess a strong statistical uncertainty in NPE that follow a Poisson law, i.e. a Gaussian law $\mathcal{N}$ when NPE is high enough which is the case for our signal. So following:
@@ -397,7 +397,7 @@ By looking at the Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC} and \ref{
 
 This is explained by looking at the true and reconstructed energy distributions in Figure \ref{fig:jcnn:edis}. We see that the distributions are similar for energies before 8 MeV, but there is an excess of event reconstructed with energies around 9 MeV while a lack of them for 10 MeV. The neural network seems to learn the energy distribution and learn that it exist almost no event with an energy inferior to 1.022 MeV and not event with an energy superior to 10 MeV.
 
-The first observation is a physics phenomenon: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There is a few events with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy of the event.
+The first observation is a physics phenomenon: for a positron, its minimum deposited energy is the mass energy coming from its annihilation with an electron 1.022 MeV. There are a few events with energies inferior to 1.022 MeV, in those case the annihilation gammas or even the positron escape the detector. The deposited energy in the LS is thus only a fraction of the energy of the event.
 
 The second observation is indeed true in this dataset but has no physical meaning, it is an arbitrary limit because the physics region of interest is mainly between 1 and 9 MeV of deposited energy (Figure \ref{fig:juno:juno-spectrum-oscillation}). By learning the energy distribution, the CNN pull event from the border of it to more central value. That's why the energy resolution is better: the events are pulled in a small energy region, thus a small variance but the bias become very high (Figure \ref{fig:jcnn:vic_cnn:multi_vic_cnn_MESBvETC}).
 
@@ -571,15 +571,45 @@ By generalizing the equation \ref{eq:jcnn:combi} to
 \begin{equation}
   \hat{\theta}(X) = \alpha \theta_N + (1 - \alpha) \theta_C
 \end{equation}
-we can determine an optimal $\alpha$ for two combined estimators. The estimators with the smallest variance
-\begin{equation}
-  \alpha = \frac{\sigma_C^2 - \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2\sigma_N \sigma_C \rho_{NC}}
-\end{equation}
-and the estimator without bias
-\begin{equation}
-  \alpha = \frac{\mu_C}{\mu_C - \mu_N}
-\end{equation}
-See annex \ref{sec:annex:jcnn:alpha} for demonstration.
+we can determine an optimal $\alpha$ for two combined estimators. Depending on the value of $\alpha$ we describe two estimators: the unbiased estimator and the optimal variance estimator.
+
+For the unbiased estimator, it is straight-forward. We search $\alpha$ such as $E[\hat{\theta}] = X$
+\begin{align}
+  E[\hat{\theta}] &= E[\alpha \theta_N + (1-\alpha) \theta_C] \\
+                  &= E[\alpha \theta_N] + E[(1-\alpha) \theta_C] \\
+                  &= \alpha E[\theta_N] + (1-\alpha) E[\theta_C] \\
+                  &= \alpha (\mu_N + X) + (1-\alpha) (\mu_C + X) \\
+                X &= \alpha \mu_N + \mu_C - \alpha \mu_C + X \\
+                0 &= \alpha (\mu_N - \mu_C) + \mu_C \\
+                \\
+                \Rightarrow \alpha &= \frac{\mu_C}{\mu_C - \mu_N}
+\end{align}
+
+The $\alpha$ for the optimal variance estimator require a bit more computation. By expanding the variance we get
+\begin{align}
+  \mathrm{Var}[\hat{\theta}] &= \mathrm{Var}[\alpha \theta_N + (1-\alpha) \theta_C] \\
+                             &= \mathrm{Var}[\alpha \theta_N] + \mathrm{Var}[(1-\alpha) \theta_C] + \mathrm{Cov}[\alpha(1-\alpha) \theta_N \theta_C] \\
+                             &= \alpha^2 \sigma_N^2 + (1 - \alpha)^2 \sigma_C^2 + 2\alpha(1-\alpha) \sigma_N \sigma_C \rho_{NC}
+\end{align}
+where, as a reminder, $\rho_{NC}$ is the correlation factor between $\theta_C$ and $\theta_N$.
+
+Now we try to find the minima of $\mathrm{Var}[\hat{\theta}]$ with respect to $\alpha$. For this we evaluate the derivative
+\begin{align}
+  \frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &= 2\alpha \sigma_N^2 - 2(1-\alpha) \sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} (1- 2\alpha) \\
+                                                    &= 2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC}
+\end{align}
+then find the minima and maxima of this derivative by evaluating
+\begin{align}
+  \frac{\dd}{\dd \alpha} \mathrm{Var}[\hat{\theta}] &= 0 \\
+  2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) - 2\sigma_C^2 + 2 \sigma_N \sigma_C \rho_{NC} & = 0 \\
+  2\alpha (\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}) &= 2\sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC} \\
+  \alpha & = \frac{\sigma_C^2 -  \sigma_N \sigma_C \rho_{NC}}{\sigma_N^2 + \sigma_C^2 - 2 \sigma_N \sigma_C \rho_{NC}} \label{eq:annex:jcnn:sing}
+\end{align}
+This equation shows only one solution which is a minimum. From Eq.\ \ref{eq:annex:jcnn:sing} arise two singularities:
+\begin{itemize}
+  \item $\sigma_N = \sigma_C = 0$. This is not a problem because as physicists we never measure with an absolute precision, neither us nor our detectors are perfect.
+  \item $\sigma_N = \sigma_C$ and $\rho_{CN} = 1$. In this case $\theta_C$ and $\theta_N$ are the same estimator in terms of variance thus any value for $\alpha$ yield the same result: an estimator with the same variance as the original ones.
+\end{itemize}
 
 We present in this section the result of the estimator with the smallest variance.
 
@@ -682,7 +712,7 @@ The vertex reconstruction, presented in Figures \ref{fig:jcnn:vic_cnn:multi_vic_
 
 With a more realistic description of the propagation and collection of scintillation photons, of the charge and time resolutions, of the DN and of the trigger, it seems new features can be identified by the CNN.
 
-Unfortunately could not rerun the classical algorithm over the J23 data, as the algorithm was optimised for J21 and was not included and maintained over J23. The combination method need for the two estimators to be run on the same set of event, which was impossible without the classical algorithm being maintained for J23.
+Unfortunately could not rerun the classical algorithm over the J23 data, as the algorithm was optimized for J21 and was not included and maintained over J23. The combination method need for the two estimators to be run on the same set of event, which was impossible without the classical algorithm being maintained for J23.
 
 \begin{figure}[ht]
   \centering

@@ -1,0 +1,51 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{..}}}
+
+\begin{document}
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+\markboth{Résumé}{Résumé}
+\begin{otherlanguage}{french}
+
+Le Modèle Standard (SM) de la physique des particules constitue une réalisation majeure de la science moderne, capable de décrire et de prédire de nombreux phénomènes expérimentaux. Cependant, des limitations subsistent. Le SM propose un mécanisme de génération des masses mais ne peut expliquer la différence entre les masses des fermions. De même pour la violation Charge-Parité (CP), qui est prédite, mais le SM ne prédit pas une amplitude suffisante  pour justifier l'asymétrie matière-antimatière de l'Univers. Ces limites suggèrent l'existence d'une physique fondamentale au-delà du SM, connue sous le nom de ``physique au-delà du Modèle Standard'' (BSM).
+
+La physique des neutrinos offre une perspective unique sur cette physique BSM. En effet, la masse des neutrinos est à minima cinq ordres de grandeur inférieure à celle du fermion le plus léger, soulevant des questions sur le mécanisme de génération des masses. La réponse auras un impact important sur une autre grande question sur la nature des neutrinos: sont-ils des fermions de Dirac ou de Majorana? L'amplitude des mélanges de saveurs est aussi un des paramètres libres du SM, une théorie BSM pourrais être amené à expliquer la valeur de ces paramètres de mélange. Avant de pouvoir produire un tel modèle, le neutrino doit être caractérisé, et les grandes expériences de physiques des 10 prochaines années auront pour objectif de répondre à deux grandes questions: Existe-t-il une violation CP dans le secteur leptonique? Et quel est l'ordre des masses des neutrinos?
+
+\hfill
+
+C'est pour répondre à ces questions qu'à été développé l'expérience Jiangmen Underground Neutrino Observatory (JUNO) -- Observatoire de Neutrino Souterrain de Jiangmen. Ce détecteur au liquide scintillant de 20 kilotonnes en cours de construction en Chine a pour objectif principale la détermination de l'Ordre des Masses des Netrinos (NMO) avec une significance de 3$\sigma$ après 6,5 ans de prise de donnée et la mesure des paramètres d'oscillation $\theta_{12}$, $\Delta m^2_{21}$ et $\Delta m^2_{31}$ au millième près.
+
+Au c\oe{}ur du design de l'expérience JUNO se trouve trouve le système de double calorimétrie, composé de deux systèmes de tubes photo-multiplicateurs : les grands (LPMT) et petits (SPMT) photomultiplicateurs. Avoir deux systèmes permet deux mesures indépendantes des mêmes évènements 
+
+%----- I'm here --------
+
+
+Contributions principales de cette thèse
+
+Cette thèse s'inscrit dans le cadre du groupe Neutrino de Subatech et couvre plusieurs aspects clés liés aux objectifs expérimentaux de JUNO.
+1. Reconstruction énergétique par apprentissage automatique (ML)
+
+L'utilisation de l'apprentissage automatique (ML) s'est imposée ces dernières années dans les expériences de physique des particules. Des algorithmes avancés, tels que les réseaux de neurones convolutifs (CNN) et les réseaux de neurones de graphes (GNN), offrent des outils puissants pour la reconstruction énergétique et la classification des événements.
+
+Dans ce travail, un CNN a été développé pour reconstruire l'énergie des antineutrinos en utilisant uniquement le système de petits photomultiplicateurs (SPMT). Cette approche offre une alternative intéressante aux méthodes classiques et pallie l'absence d'une reconstruction officielle basée uniquement sur les SPMTs. Cependant, certaines limites, telles que la perte d'information liée à la projection plane des données sphériques du détecteur, réduisent les performances.
+
+Une avancée majeure a été l'exploration d'une architecture de GNN innovante, conçue pour mieux exploiter les données brutes du détecteur. Cette architecture utilise des graphes hétérogènes combinant plusieurs types de noeuds pour préserver les informations essentielles sur les événements. Bien que les performances obtenues n'aient pas surpassé les méthodes classiques, ces travaux soulignent les défis techniques et les perspectives pour l'amélioration future des algorithmes de reconstruction.
+2. Fiabilité des algorithmes de ML
+
+La fiabilité des algorithmes de reconstruction est cruciale, en particulier pour des expériences comme JUNO où de faibles biais peuvent compromettre les résultats sur la NMO. Deux approches ont été explorées :
+
+    Comparaison croisée des algorithmes : En comparant les résultats événement par événement entre divers algorithmes, des différences et similitudes dans l'utilisation des informations du détecteur ont été identifiées. Ces comparaisons, rendues possibles grâce à l'intégration des algorithmes ML dans le logiciel officiel de JUNO, permettent d'explorer les performances et de renforcer la confiance dans les résultats obtenus.
+
+    Exploration des biais subtils : Un réseau antagoniste génératif (ANN) a été utilisé pour générer des scénarios de perturbations physiquement plausibles qui pourraient affecter les résultats de JUNO de manière imperceptible pour les comparaisons classiques données/simulations. Bien que les résultats initiaux n'aient pas atteint les objectifs fixés, cette étude ouvre la voie à des raffinements futurs, notamment en intégrant des connaissances physiques pour guider les perturbations générées.
+
+3. Analyse calorimétrique double avec oscillations de neutrinos
+
+Une innovation clé de cette thèse est l'exploration de l'analyse calorimétrique double, qui compare les résultats des systèmes LPMT et SPMT. Cette approche vise à détecter des divergences dans les analyses d'oscillations dues à des effets instrumentaux inattendus.
+
+Quatre tests statistiques ont été développés pour évaluer la sensibilité de cette méthode à des effets tels que la non-linéarité de charge (QNL). Ces tests exploitent les corrélations entre les spectres d'énergie reconstruits par les deux systèmes, une caractéristique essentielle pour détecter des biais subtils. Les résultats montrent que, même avec des effets calibrés à 0,3\%, ces tests pourraient les détecter avec une significativité élevée après six ans de données.
+Impact et perspectives
+
+Les travaux présentés dans cette thèse démontrent l'importance des techniques ML et des analyses systématiques pour maximiser les capacités de JUNO. Les contributions incluent des avancées méthodologiques pour la reconstruction énergétique, des outils pour garantir la fiabilité des algorithmes, et des analyses innovantes basées sur la calorimétrie double. Ces efforts renforcent la précision des mesures et assurent la robustesse des conclusions sur la hiérarchie des masses des neutrinos.
+
+\end{otherlanguage}
+\end{document}
